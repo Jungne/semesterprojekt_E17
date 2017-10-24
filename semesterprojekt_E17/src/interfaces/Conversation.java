@@ -13,13 +13,14 @@ import java.util.List;
  * @author jungn
  */
 public class Conversation implements Serializable{
+    
+    private int id;
     private List<User> participants;
     private List<Message> messages;
 
-    public Conversation(List<User> participants, List<Message> messages) {
+    public Conversation(int id, List<User> participants, List<Message> messages) {
+	this.id = id;
 	this.participants = participants;
 	this.messages = messages;
     }
-    
-    
 }

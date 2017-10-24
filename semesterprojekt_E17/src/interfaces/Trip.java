@@ -13,9 +13,9 @@ import java.util.List;
  *
  * @author jungn
  */
-public class Trip implements Serializable{
+public class Trip implements Serializable {
 
-
+    private int id;
     private String title;
     private String category;
     private Date timedate;
@@ -26,8 +26,10 @@ public class Trip implements Serializable{
     private List<User> participants;
     private List<User> instructors;
     private List<User> organizers;
+    private List<String> tags;
 
-    public Trip(String title, String category, Date timedate, String location, double price, String description, List<String> gear, List<User> participants, List<User> instructors, List<User> organizers) {
+    public Trip(int id, String title, String category, Date timedate, String location, double price, String description, List<String> gear, List<User> participants, List<User> instructors, List<User> organizers, List<String> tags) {
+	this.id = id;
 	this.title = title;
 	this.category = category;
 	this.timedate = timedate;
@@ -38,12 +40,13 @@ public class Trip implements Serializable{
 	this.participants = participants;
 	this.instructors = instructors;
 	this.organizers = organizers;
+	this.tags = tags;
     }
-    
+
     public void participate(User user) {
 	participants.add(user);
     }
-    
+
     /**
      * @return the title
      */
@@ -92,5 +95,4 @@ public class Trip implements Serializable{
     public List<String> getGear() {
 	return gear;
     }
-    
 }

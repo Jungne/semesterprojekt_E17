@@ -13,16 +13,19 @@ import java.util.Date;
  * @author jungn
  */
 public class Message implements Serializable{
+    
+    private int id;
     private User sender;
     private String message;
     private Date timestamp;
 
-    public Message(User senderId, String message) {
-	this.sender = senderId;
+    public Message(int id, User sender, String message, Date timestamp) {
+	this.id = id;
+	this.sender = sender;
 	this.message = message;
-	timestamp = new Date();
+	this.timestamp = timestamp;
     }
-
+    
     public int getSenderId() {
 	return sender.getId();
     }
