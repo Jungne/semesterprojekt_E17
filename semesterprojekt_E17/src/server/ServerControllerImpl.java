@@ -8,12 +8,13 @@ import interfaces.User;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ServerControllerImpl extends UnicastRemoteObject implements IServerController {
 
-    public ServerControllerImpl() throws RemoteException{
-	
+    public ServerControllerImpl() throws RemoteException {
+
     }
 
     @Override
@@ -35,13 +36,18 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
     public List<Trip> getAllTrips() throws RemoteException {
 	ArrayList<Trip> tripList = new ArrayList<>();
 	tripList.add(new Trip(0, "First trip"));
-	
+
 	return tripList;
     }
 
     @Override
+    public List<Trip> searchTrips(String searchTitle, String category, Date timedateStart, Date timedateEnd, String location, double priceMIN, double priceMAX) throws RemoteException {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public void createTrip(Trip newTrip) throws RemoteException {
-	
+
     }
 
     @Override
@@ -93,5 +99,5 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
     public void updateConversation(Conversation conversation) throws RemoteException {
 	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

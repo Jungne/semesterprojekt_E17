@@ -9,13 +9,15 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientController {
-    
+
     private IServerController serverController;
     private User currentUser;
 
-    public ClientController() throws RemoteException{
+    public ClientController() throws RemoteException {
 	String hostname = "localhost";
 	try {
 	    Registry registry = LocateRegistry.getRegistry(hostname, 12345);
@@ -24,27 +26,35 @@ public class ClientController {
 	    ex.printStackTrace();
 	}
     }
-    
+
     public List<Trip> getAllTrips() throws RemoteException {
+
 	return serverController.getAllTrips();
     }
-    
-    public List<Trip> searchTrips() {
-	return null; //TODO
+
+    public List<Trip> searchTrips(String searchTitle, String category, Date timedateStart, Date timedateEnd, String location, double priceMIN, double priceMAX) {
+
+	try {
+	   return serverController.searchTrips(searchTitle, category, timedateStart, timedateEnd, location, priceMIN, priceMAX);
+	} catch (RemoteException ex) {
+	    Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+	}
+
+	return null;
     }
-    
+
     public Trip showTrip() {
 	return null; //TODO
     }
-    
+
     public void participateInTrip(User user) {
-	
+
     }
-    
+
     public void createTrip(int id, String title, String category, Date timedate, String location, double price, String description, List<String> gear, List<User> participants, List<User> instructors, List<User> organizers, List<String> tags) {
 	ClientTripHandler.createTrip(serverController, id, title, category, timedate, location, price, description, gear, participants, instructors, organizers, tags);
     }
-    
+
     public void modifyTrip(Trip trip) {
 	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
