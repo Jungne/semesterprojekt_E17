@@ -41,7 +41,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
     @Override
     public void createTrip(Trip newTrip) throws RemoteException {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	
     }
 
     @Override

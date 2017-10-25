@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DBManager {
 
@@ -38,19 +40,28 @@ public class DBManager {
 	return dbManager;
     }
 
-    public void execute(String query) throws SQLException {
+    public void execute(String query) {
 	try (Statement statement = connection.createStatement()) {
 	    statement.execute(query);
+	} catch (SQLException ex) {
+	    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
-    public void executeUpdate(String query) throws SQLException {
+    public void executeUpdate(String query) {
 	try (Statement statement = connection.createStatement()) {
 	    statement.executeUpdate(query);
+	} catch (SQLException ex) {
+	    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
-    public ResultSet executeQuery(String query) throws SQLException {
-	return connection.createStatement().executeQuery(query);
+    public ResultSet executeQuery(String query) {
+	try {
+	    return connection.createStatement().executeQuery(query);
+	} catch (SQLException ex) {
+	    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	return null;
     }
 }
