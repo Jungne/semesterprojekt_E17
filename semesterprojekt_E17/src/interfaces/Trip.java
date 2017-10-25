@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package interfaces;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-/**
- *
- * @author jungn
- */
 public class Trip implements Serializable {
 
     private int id;
@@ -28,6 +19,11 @@ public class Trip implements Serializable {
     private List<User> organizers;
     private List<String> tags;
 
+    public Trip(int id, String title) {
+	this.id = id;
+	this.title = title;
+    }
+    
     public Trip(int id, String title, String category, Date timedate, String location, double price, String description, List<String> gear, List<User> participants, List<User> instructors, List<User> organizers, List<String> tags) {
 	this.id = id;
 	this.title = title;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server;
 
 import interfaces.Conversation;
@@ -12,12 +7,9 @@ import interfaces.Trip;
 import interfaces.User;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author jungn
- */
 public class ServerControllerImpl extends UnicastRemoteObject implements IServerController {
 
     public ServerControllerImpl() throws RemoteException{
@@ -41,7 +33,10 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
     @Override
     public List<Trip> getAllTrips() throws RemoteException {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	ArrayList<Trip> tripList = new ArrayList<>();
+	tripList.add(new Trip(0, "First trip"));
+	
+	return tripList;
     }
 
     @Override
