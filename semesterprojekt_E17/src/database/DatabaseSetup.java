@@ -45,14 +45,22 @@ public class DatabaseSetup {
 					+ "categoryID int, "
 					+ "PRIMARY KEY (userID, categoryID), "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
-					+ "FOREIGN KEY (categoryID) REFERENCES Images(categoryID)"
+					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
 					+ ");";
+	
+	private static String createConversationsQuery
+					= "CREATE TABLE IF NOT EXISTS Conversations ("
+					+ "conversationID serial, "
+					+ "PRIMARY KEY (conversationID)"
+					+ ");";
+
 
 	private static String createUsersInConversationsQuery
 					= "CREATE TABLE IF NOT EXISTS UsersInConversations ("
 					+ "conversationID int, "
 					+ "userID int, "
 					+ "PRIMARY KEY (conversationID, userID), "
+					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
@@ -64,7 +72,7 @@ public class DatabaseSetup {
 					+ "userID int, "
 					+ "time timestamp, "
 					+ "PRIMARY KEY (messageID), "
-					+ "FOREIGN KEY (conversationID) REFERENCES UsersInConversations(conversationID), "
+					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
@@ -83,7 +91,7 @@ public class DatabaseSetup {
 					+ "PRIMARY KEY (tripID), "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
 					+ "FOREIGN KEY (locationID) REFERENCES Locations(locationID), "
-					+ "FOREIGN KEY (conversationID) REFERENCES UsersInConversations(conversationID)"
+					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID)"
 					+ ");";
 
 	private static String createUsersInTripsQuery
@@ -148,6 +156,7 @@ public class DatabaseSetup {
 		createImagesQuery,
 		createUsersQuery,
 		createInstructorsQuery,
+		createConversationsQuery,
 		createUsersInConversationsQuery,
 		createMessagesQuery,
 		createTripsQuery,

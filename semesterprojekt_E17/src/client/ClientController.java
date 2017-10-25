@@ -23,7 +23,7 @@ public class ClientController {
     }
     
     public List<Trip> getAllTrips() throws RemoteException {
-	serverController.getAllTrips();
+	return serverController.getAllTrips();
     }
     
     
