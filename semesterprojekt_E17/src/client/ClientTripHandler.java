@@ -18,4 +18,12 @@ public class ClientTripHandler {
 	    Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
+    
+    public static void deleteTrip(IServerController serverController, Trip trip) {
+        try {
+            serverController.deleteTrip(trip);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

@@ -38,11 +38,15 @@ public class Trip implements Serializable {
 	this.organizers = organizers;
 	this.tags = tags;
     }
-
+   
     public void participate(User user) {
 	participants.add(user);
     }
 
+    public int getID() {
+        return this.id;
+    }
+    
     /**
      * @return the title
      */
