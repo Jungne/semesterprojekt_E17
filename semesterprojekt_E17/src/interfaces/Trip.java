@@ -3,6 +3,7 @@ package interfaces;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javafx.scene.image.Image;
 
 public class Trip implements Serializable {
 
@@ -21,11 +22,20 @@ public class Trip implements Serializable {
 	private List<User> instructors;
 	private List<Category> categories;
 	private List<OptionalPrice> optionalPrices;
+	private Image image;
 	private List<String> tags;
 
 	public Trip(int id, String title) {
 		this.id = id;
 		this.title = title;
+	}
+
+	public Trip(int id, String title, String description, double price, Image image) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.price = price;
+		this.image = image;
 	}
 
 	public Trip(int id, String title, String description, double price, User organizer, String meetingAddress, Location location, int participantlimit, Conversation conversation, String category, List<User> participants, List<User> instructors, List<Category> categories, List<OptionalPrice> optionalPrices, List<String> tags) {
