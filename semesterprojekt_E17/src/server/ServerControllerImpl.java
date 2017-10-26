@@ -41,7 +41,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
     @Override
     public void createTrip(Trip newTrip) throws RemoteException {
-	
+			ServerTripHandler.createTrip(newTrip);
     }
 
     @Override

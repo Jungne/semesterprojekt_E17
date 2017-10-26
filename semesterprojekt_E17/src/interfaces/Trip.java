@@ -6,93 +6,160 @@ import java.util.List;
 
 public class Trip implements Serializable {
 
-    private int id;
-    private String title;
-    private String category;
-    private Date timedate;
-    private String location;
-    private double price;
-    private String description;
-    private List<String> gear;
-    private List<User> participants;
-    private List<User> instructors;
-    private List<User> organizers;
-    private List<String> tags;
+	private int id;
+	private String title;
+	private String description;
+	private double price;
+	private User organizer;
+	private Date timeStart;
+	private String meetingAddress;
+	private Location location;
+	private int participantlimit;
+	private Conversation conversation;
+	private String category;
+	private List<User> participants;
+	private List<User> instructors;
+	private List<Category> categories;
+	private List<OptionalPrice> optionalPrices;
+	private List<String> tags;
 
-    public Trip(int id, String title) {
-	this.id = id;
-	this.title = title;
-    }
-    
-    public Trip(int id, String title, String category, Date timedate, String location, double price, String description, List<String> gear, List<User> participants, List<User> instructors, List<User> organizers, List<String> tags) {
-	this.id = id;
-	this.title = title;
-	this.category = category;
-	this.timedate = timedate;
-	this.location = location;
-	this.price = price;
-	this.description = description;
-	this.gear = gear;
-	this.participants = participants;
-	this.instructors = instructors;
-	this.organizers = organizers;
-	this.tags = tags;
-    }
-   
-    public void participate(User user) {
-	participants.add(user);
-    }
+	public Trip(int id, String title) {
+		this.id = id;
+		this.title = title;
+	}
 
-    public int getID() {
-        return this.id;
-    }
-    
-    /**
-     * @return the title
-     */
-    public String getTitle() {
-	return title;
-    }
+	public Trip(int id, String title, String description, double price, User organizer, String meetingAddress, Location location, int participantlimit, Conversation conversation, String category, List<User> participants, List<User> instructors, List<Category> categories, List<OptionalPrice> optionalPrices, List<String> tags) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.price = price;
+		this.organizer = organizer;
+		this.meetingAddress = meetingAddress;
+		this.location = location;
+		this.participantlimit = participantlimit;
+		this.conversation = conversation;
+		this.category = category;
+		this.optionalPrices = optionalPrices;
+		this.participants = participants;
+		this.instructors = instructors;
+		this.categories = categories;
+		this.tags = tags;
+	}
 
-    /**
-     * @return the category
-     */
-    public String getCategory() {
-	return category;
-    }
+	public void participate(User user) {
+		getParticipants().add(user);
+	}
 
-    /**
-     * @return the timedate
-     */
-    public Date getTimedate() {
-	return timedate;
-    }
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
 
-    /**
-     * @return the location
-     */
-    public String getLocation() {
-	return location;
-    }
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
 
-    /**
-     * @return the price
-     */
-    public double getPrice() {
-	return price;
-    }
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-	return description;
-    }
+	/**
+	 * @return the price
+	 */
+	public double getPrice() {
+		return price;
+	}
 
-    /**
-     * @return the gear
-     */
-    public List<String> getGear() {
-	return gear;
-    }
+	/**
+	 * @return the organizer
+	 */
+	public User getOrganizer() {
+		return organizer;
+	}
+
+	/**
+	 * @return the timeStart
+	 */
+	public Date getTimeStart() {
+		return timeStart;
+	}
+
+	/**
+	 * @return the meetingAddress
+	 */
+	public String getMeetingAddress() {
+		return meetingAddress;
+	}
+
+	/**
+	 * @return the location
+	 */
+	public Location getLocation() {
+		return location;
+	}
+
+	/**
+	 * @return the participantlimit
+	 */
+	public int getParticipantlimit() {
+		return participantlimit;
+	}
+
+	/**
+	 * @return the conversation
+	 */
+	public Conversation getConversation() {
+		return conversation;
+	}
+
+	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+	/**
+	 * @return the prices
+	 */
+	public List<OptionalPrice> getOptionalPrices() {
+		return optionalPrices;
+	}
+
+	/**
+	 * @return the participants
+	 */
+	public List<User> getParticipants() {
+		return participants;
+	}
+
+	/**
+	 * @return the instructors
+	 */
+	public List<User> getInstructors() {
+		return instructors;
+	}
+
+	/**
+	 * @return the categories
+	 */
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	/**
+	 * @return the tags
+	 */
+	public List<String> getTags() {
+		return tags;
+	}
+
 }

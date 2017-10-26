@@ -12,7 +12,7 @@ public class ServerTripHandler {
     }
 
     public static void deleteTrip(Trip trip) {
-        String query = "DELETE FROM Trips WHERE tripID = " + trip.getID() + ";";
+        String query = "DELETE FROM Trips WHERE tripID = " + trip.getId() + ";";
 
         DBManager.getInstance().executeUpdate(query);
 
