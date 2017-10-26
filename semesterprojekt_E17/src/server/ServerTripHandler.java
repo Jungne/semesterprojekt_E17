@@ -40,6 +40,14 @@ public class ServerTripHandler {
 	query += " TRUE";
 
 	DBManager.getInstance().executeUpdate(query);
+	
+	return null;
+    }
+
+    public static void deleteTrip(Trip trip) {
+        String query = "DELETE FROM Trips WHERE tripID = " + trip.getId() + ";";
+
+        DBManager.getInstance().executeUpdate(query);
     }
 
 }

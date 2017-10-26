@@ -47,13 +47,12 @@ public class DatabaseSetup {
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
 					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
 					+ ");";
-	
+
 	private static String createConversationsQuery
 					= "CREATE TABLE IF NOT EXISTS Conversations ("
 					+ "conversationID serial, "
 					+ "PRIMARY KEY (conversationID)"
 					+ ");";
-
 
 	private static String createUsersInConversationsQuery
 					= "CREATE TABLE IF NOT EXISTS UsersInConversations ("
@@ -81,9 +80,9 @@ public class DatabaseSetup {
 					+ "tripID serial, "
 					+ "tripTitle varchar(255), "
 					+ "description varchar(255), "
+					+ "tripPrice decimal(10,2), "
 					+ "userID int, "
 					+ "timeStart timestamp, "
-					+ "timeEnd timestamp, "
 					+ "tripAddress varchar(255), "
 					+ "locationID int, "
 					+ "participantLimit int, "
@@ -114,13 +113,12 @@ public class DatabaseSetup {
 					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
 					+ ");";
 
-	private static String createPricesQuery
-					= "CREATE TABLE IF NOT EXISTS Prices ("
+	private static String createOptionalPricesQuery
+					= "CREATE TABLE IF NOT EXISTS OptionalPrices ("
 					+ "priceID serial, "
 					+ "tripID int, "
-					+ "price decimal(10,2), "
+					+ "optionalPrice decimal(10,2), "
 					+ "description varchar(255), "
-					+ "mandatory bit NOT NULL, "
 					+ "PRIMARY KEY (priceID), "
 					+ "FOREIGN KEY (tripID) REFERENCES trips(tripID)"
 					+ ");";
@@ -162,16 +160,46 @@ public class DatabaseSetup {
 		createTripsQuery,
 		createUsersInTripsQuery,
 		createInstructorsInTripsQuery,
-		createPricesQuery,
+		createOptionalPricesQuery,
 		createCategoriesInTripsQuery,
 		createTagsInTripsQuery,
 		createImagesIntripsQuery
 	};
 
+	public static String[] dropTableQueries = {
+		"DROP TABLE IF EXISTS ImagesIntrips;",
+		"DROP TABLE IF EXISTS TagsInTrips;",
+		"DROP TABLE IF EXISTS CategoriesInTrips;",
+		"DROP TABLE IF EXISTS OptionalPrices;",
+		"DROP TABLE IF EXISTS InstructorsInTrips;",
+		"DROP TABLE IF EXISTS UsersInTrips;",
+		"DROP TABLE IF EXISTS Trips;",
+		"DROP TABLE IF EXISTS Messages;",
+		"DROP TABLE IF EXISTS UsersInConversations;",
+		"DROP TABLE IF EXISTS Conversations;",
+		"DROP TABLE IF EXISTS Instructors;",
+		"DROP TABLE IF EXISTS Users;",
+		"DROP TABLE IF EXISTS Images;",
+		"DROP TABLE IF EXISTS Locations;",
+		"DROP TABLE IF EXISTS Categories;",};
+
 	public static void main(String[] args) throws SQLException {
+		//createTables();
+		//dropTables();
+	}
+
+	private static void createTables() {
 		dbm = DBManager.getInstance();
 		for (String query : createTableQueries) {
 			dbm.executeUpdate(query);
 		}
 	}
+
+	private static void dropTables() {
+		dbm = DBManager.getInstance();
+		for (String query : dropTableQueries) {
+			dbm.executeUpdate(query);
+		}
+	}
+
 }

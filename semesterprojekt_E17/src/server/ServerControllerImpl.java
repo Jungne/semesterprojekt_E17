@@ -41,15 +41,13 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
     }
 
     @Override
-    public List<Trip> searchTrips(String searchTitle, int category, Date timedateStart, int location, double priceMAX) throws RemoteException {
-	
-    return ServerTripHandler.searchTrip(searchTitle, category, timedateStart, location, priceMAX);
-	
+    public void createTrip(Trip newTrip) throws RemoteException {
+	ServerTripHandler.createTrip(newTrip);
     }
 
     @Override
-    public void createTrip(Trip newTrip) throws RemoteException {
-
+    public List<Trip> searchTrips(String searchTitle, int category, Date timedateStart, int location, double priceMAX) throws RemoteException {
+	return ServerTripHandler.searchTrip(searchTitle, category, timedateStart, location, priceMAX);
     }
 
     @Override
@@ -59,7 +57,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
     @Override
     public void deleteTrip(Trip trip) throws RemoteException {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	ServerTripHandler.deleteTrip(trip);
     }
 
     @Override
