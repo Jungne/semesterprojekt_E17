@@ -32,10 +32,10 @@ public class ClientController {
 	return serverController.getAllTrips();
     }
 
-    public List<Trip> searchTrips(String searchTitle, String category, Date timedateStart, Date timedateEnd, String location, double priceMIN, double priceMAX) {
-
+    public List<Trip> searchTrips(String searchTitle, int category, Date timedateStart, int location, double priceMAX) {
+	
 	try {
-	   return serverController.searchTrips(searchTitle, category, timedateStart, timedateEnd, location, priceMIN, priceMAX);
+	   return serverController.searchTrips(searchTitle, category, timedateStart, location, priceMAX);
 	} catch (RemoteException ex) {
 	    Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
 	}

@@ -41,8 +41,10 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
     }
 
     @Override
-    public List<Trip> searchTrips(String searchTitle, String category, Date timedateStart, Date timedateEnd, String location, double priceMIN, double priceMAX) throws RemoteException {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Trip> searchTrips(String searchTitle, int category, Date timedateStart, int location, double priceMAX) throws RemoteException {
+	
+    return ServerTripHandler.searchTrip(searchTitle, category, timedateStart, location, priceMAX);
+	
     }
 
     @Override
