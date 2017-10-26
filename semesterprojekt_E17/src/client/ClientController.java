@@ -47,8 +47,8 @@ public class ClientController {
 	return null; //TODO
     }
 
-    public void participateInTrip(User user) {
-
+    public void  participateInTrip(User user, Trip trip) {
+        ClientTripHandler.participateInTrip(user, serverController, trip);
     }
 
     public void createTrip(int id, String title, String category, Date timedate, String location, double price, String description, List<String> gear, List<User> participants, List<User> instructors, List<User> organizers, List<String> tags) {

@@ -2,6 +2,7 @@ package server;
 
 import database.DBManager;
 import interfaces.Trip;
+import interfaces.User;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.ResultSet;
@@ -88,5 +89,14 @@ public class ServerTripHandler {
 
 		DBManager.getInstance().executeUpdate(query);
 	}
+        public static void participateInTrip(Trip trip, User user){
+        int tripID= trip.getId();
+        int userID = user.getId();
+        
+    
+    String query = "INSERT INTO UsersInTrips VALUES ('"+tripID+"', '"+userID+"');";
+    DBManager.getInstance().executeUpdate(query);
+    
+    }
 
 }
