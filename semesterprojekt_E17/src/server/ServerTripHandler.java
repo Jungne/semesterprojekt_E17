@@ -3,7 +3,6 @@ package server;
 import database.DBManager;
 import interfaces.Trip;
 import interfaces.User;
-import java.util.List;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.ResultSet;
@@ -45,6 +44,31 @@ public class ServerTripHandler {
 		return conversationId;
 	}
 
+	public static Trip getTrip(int tripID) {
+		return null;
+	}
+
+	static void modifyTrip(Trip trip) {
+		Trip originalTrip = ServerTripHandler.getTrip(trip.getId());
+
+		if (originalTrip == null) {
+			return;
+		}
+
+		String query = "UPDATE trips "
+						+ "SET ";
+
+		query += trip.getTitle().equals(originalTrip.getTitle()) ? "" : "tripTitle = " + trip.getTitle();
+		query += trip.getDescription().equals(originalTrip.getDescription()) ? "" : ", tripDescription = " + trip.getDescription();
+		query += trip.getPrice() == originalTrip.getPrice() ? "" : ", tripPrice = " + trip.getPrice();
+
+		query += " WHERE tripID = " + trip.getId() + ";";
+
+		DBManager.getInstance().executeUpdate(query);
+
+		//Need to also update trip categories and users in trip
+	}
+
 	/**
 	 * This method handles searching for trips, by building a SQL query from the
 	 * given parameters.
@@ -68,7 +92,7 @@ public class ServerTripHandler {
 		}
 
 		if (category >= 0) {
-			query += " AND categoryID = '" + category + "'";
+			query += " AND categoryID = " + category + "";
 		}
 
 		if (timedateStart != null) {
@@ -76,11 +100,11 @@ public class ServerTripHandler {
 		}
 
 		if (location >= 0) {
-			query += " AND locationID = '" + location + "'";
+			query += " AND locationID = " + location + "";
 		}
 
 		if (priceMAX >= 0) {
-			query += " AND tripPrice <= " + priceMAX + "'";
+			query += " AND tripPrice <= " + priceMAX + "";
 		}
 
 		//Initializes a resultset and an ArrayList for handling the creation of trips to be returned.
