@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javafx.scene.image.Image;
 
 public class Trip implements Serializable {
 
@@ -15,15 +14,52 @@ public class Trip implements Serializable {
 	private Date timeStart;
 	private Location location;
 	private String meetingAddress;
-	private int participantlimit;
+	private int participantLimit;
 	private User organizer;
 	private List<User> participants;
-	private List<User> instructors;
+	private List<InstructorListItem> instructors;
 	private List<OptionalPrice> optionalPrices;
 	private Conversation conversation;
 	private List<Category> categories;
 	private List<String> tags;
 	private List<byte[]> images;
+
+	/**
+	 * Constructor to add all information
+	 *
+	 * @param id
+	 * @param title
+	 * @param description
+	 * @param price
+	 * @param timeStart
+	 * @param location
+	 * @param meetingAddress
+	 * @param participantLimit
+	 * @param organizer
+	 * @param participants
+	 * @param instructors
+	 * @param optionalPrices
+	 * @param conversation
+	 * @param categories
+	 * @param tags
+	 */
+	public Trip(int id, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<User> participants, List<InstructorListItem> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, List<Category> categories, List<String> tags) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.price = price;
+		this.timeStart = timeStart;
+		this.location = location;
+		this.meetingAddress = meetingAddress;
+		this.participantLimit = participantLimit;
+		this.organizer = organizer;
+		this.participants = participants;
+		this.instructors = instructors;
+		this.optionalPrices = optionalPrices;
+		this.conversation = conversation;
+		this.categories = categories;
+		this.tags = tags;
+	}
 
 	public Trip(int id, String title) {
 		this.id = id;
@@ -39,20 +75,44 @@ public class Trip implements Serializable {
 		images.add(image);
 	}
 
-	public Trip(int id, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantlimit, User organizer, List<User> participants, List<User> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, List<Category> categories, List<String> tags) {
-		this.id = id;
+	/**
+	 * Constructor used by client to create new trip and send the necessary
+	 * information to the server.
+	 *
+	 * @param title
+	 * @param description
+	 * @param price
+	 * @param timeStart
+	 * @param location
+	 * @param meetingAddress
+	 * @param participantLimit
+	 * @param organizer
+	 * @param organizerInstructorIn
+	 * @param optionalPrices
+	 * @param categories
+	 * @param tags
+	 */
+	public Trip(String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, List<String> tags) {
 		this.title = title;
 		this.description = description;
 		this.price = price;
 		this.timeStart = timeStart;
 		this.location = location;
 		this.meetingAddress = meetingAddress;
-		this.participantlimit = participantlimit;
+		this.participantLimit = participantLimit;
 		this.organizer = organizer;
-		this.participants = participants;
-		this.instructors = instructors;
+
+		//Adds the organizer to the trip automatically
+		this.participants = new ArrayList<>();
+		participants.add(organizer);
+
+		//Promotes the organizer as instructor the desired categories
+		this.instructors = new ArrayList<>();
+		for (Category category : organizerInstructorIn) {
+			this.instructors.add(new InstructorListItem(organizer, category));
+		}
+
 		this.optionalPrices = optionalPrices;
-		this.conversation = conversation;
 		this.categories = categories;
 		this.tags = tags;
 	}
@@ -113,8 +173,8 @@ public class Trip implements Serializable {
 	/**
 	 * @return the participantlimit
 	 */
-	public int getParticipantlimit() {
-		return participantlimit;
+	public int getParticipantLimit() {
+		return participantLimit;
 	}
 
 	/**
@@ -134,7 +194,7 @@ public class Trip implements Serializable {
 	/**
 	 * @return the instructors
 	 */
-	public List<User> getInstructors() {
+	public List<InstructorListItem> getInstructors() {
 		return instructors;
 	}
 

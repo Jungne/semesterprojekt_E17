@@ -55,8 +55,8 @@ public class ClientController {
 		ClientTripHandler.participateInTrip(user, serverController, trip);
 	}
 
-	public void createTrip(String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantlimit, User organizer, List<User> participants, List<User> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, List<Category> categories, List<String> tags) {
-		ClientTripHandler.createTrip(serverController, title, description, price, timeStart, location, meetingAddress, participantlimit, organizer, participants, instructors, optionalPrices, conversation, categories, tags);
+	public void createTrip(String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, List<String> tags) {
+		ClientTripHandler.createTrip(serverController, title, description, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, categories, tags);
 	}
 
 	public void modifyTrip(Trip trip) {

@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.image.Image;
 
 /**
  * This class handles creation of trip objects to be sent to the client. This
@@ -25,21 +24,25 @@ import javafx.scene.image.Image;
 public class ServerTripHandler {
 
 	public static void createTrip(Trip newTrip) {
-		//Creates a list with all participants. That is both the normal participants and the instructors
-		List<User> allParticipants = newTrip.getParticipants();
-		allParticipants.addAll(newTrip.getInstructors());
-
-		//Creates the group conversation
-		int groupconversationId = createConversation(allParticipants);
+		//Creates the group conversation and returnes the conversation id
+		int groupConversationId = createConversation(newTrip.getParticipants());
 
 		//TODO - the rest
 	}
 
 	private static int createConversation(List<User> users) {
-		int conversationId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO Conversation (conversationID) VALUES (DEFAULT);");
+		//Inserts a new conversation id into Conversations
+		int conversationId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO Conversations (conversationID) VALUES (DEFAULT);");
 
-		//TODO - insert users into the conversation also
-		return -1;
+		//Inserts all the users from the trip into UsersInConversations
+		String query = "INSERT INTO UsersInConversations (userID, conversationID) VALUES ";
+		String queryValues = "";
+		for (User user : users) {
+			queryValues += ("(" + user.getId() + ", " + conversationId + "), ");
+		}
+		query += queryValues.substring(0, queryValues.length() - 2) + ";";
+		DBManager.getInstance().executeUpdate(query);
+		return conversationId;
 	}
 
 	/**
@@ -112,11 +115,12 @@ public class ServerTripHandler {
 		String query = "INSERT INTO UsersInTrips VALUES ('" + tripID + "', '" + userID + "');";
 		DBManager.getInstance().executeUpdate(query);
 	}
-        public static void kickParticipant(Trip trip, User user) {
-                int tripID = trip.getId();
-                int userID = user.getId();
-                String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() +"AND userID = " + userID + ";";
+
+	public static void kickParticipant(Trip trip, User user) {
+		int tripID = trip.getId();
+		int userID = user.getId();
+		String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() + "AND userID = " + userID + ";";
 		DBManager.getInstance().executeUpdate(query);
-    }
+	}
 
 }
