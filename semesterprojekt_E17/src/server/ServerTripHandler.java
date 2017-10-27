@@ -3,7 +3,6 @@ package server;
 import database.DBManager;
 import interfaces.Trip;
 import interfaces.User;
-import java.util.List;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.ResultSet;
@@ -24,100 +23,126 @@ import javafx.scene.image.Image;
  */
 public class ServerTripHandler {
 
-	public static void createTrip(Trip newTrip) {
-		//Creates a list with all participants. That is both the normal participants and the instructors
-		List<User> allParticipants = newTrip.getParticipants();
-		allParticipants.addAll(newTrip.getInstructors());
+  public static void createTrip(Trip newTrip) {
+    //Creates a list with all participants. That is both the normal participants and the instructors
+    List<User> allParticipants = newTrip.getParticipants();
+    allParticipants.addAll(newTrip.getInstructors());
 
-		//Creates the group conversation
-		int groupconversationId = createConversation(allParticipants);
+    //Creates the group conversation
+    int groupconversationId = createConversation(allParticipants);
 
-		//TODO - the rest
-	}
+    //TODO - the rest
+  }
 
-	private static int createConversation(List<User> users) {
-		int conversationId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO Conversation (conversationID) VALUES (DEFAULT);");
+  public static Trip getTrip(int tripID) {
+    return null;
+  }
 
-		//TODO - insert users into the conversation also
-		return -1;
-	}
+  static void modifyTrip(Trip trip) {
+    Trip originalTrip = ServerTripHandler.getTrip(trip.getId());
 
-	/**
-	 * This method handles searching for trips, by building a SQL query from the
-	 * given parameters.
-	 *
-	 * @param searchTitle used for a regex.
-	 * @param category
-	 * @param timedateStart
-	 * @param location
-	 * @param priceMAX
-	 * @return list of trips matching search parameters.
-	 */
-	public static List<Trip> searchTrip(String searchTitle, int category, Date timedateStart, int location, double priceMAX) {
-
-		//Initializes the query string.
-		String query = "SELECT Trips.tripID, tripTitle, description, tripPrice, imageFile FROM Trips, ImagesInTrips, Images "
-						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
-
-		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
-		if (!searchTitle.equals(null)) {
-			query += " AND tripTitle LIKE '%" + searchTitle + "%'";
-		}
-
-		if (category >= 0) {
-			query += " AND categoryID = '" + category + "'";
-		}
-
-		if (timedateStart != null) {
-			query += " AND timeStart >= '" + timedateStart + "'";
-		}
-
-		if (location >= 0) {
-			query += " AND locationID = '" + location + "'";
-		}
-
-		if (priceMAX >= 0) {
-			query += " AND tripPrice <= " + priceMAX + "'";
-		}
-
-		//Initializes a resultset and an ArrayList for handling the creation of trips to be returned.
-		ResultSet searchResult = DBManager.getInstance().executeQuery(query);
-		ArrayList<Trip> searchResultTrips = new ArrayList<>();
-
-		try {
-			while (searchResult.next()) {
-				int id = searchResult.getInt(1);
-				String title = searchResult.getString(2);
-				String description = searchResult.getString(3);
-				double price = searchResult.getDouble(4);
-				InputStream inputStream = new ByteArrayInputStream(searchResult.getBytes(5));
-				Image image = new Image(inputStream);
-				searchResultTrips.add(new Trip(id, title, description, price, image));
-			}
-		} catch (SQLException ex) {
-			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		return searchResultTrips;
-	}
-
-	public static void deleteTrip(Trip trip) {
-		String query = "DELETE FROM Trips WHERE tripID = " + trip.getId() + ";";
-
-		DBManager.getInstance().executeUpdate(query);
-	}
-
-	public static void participateInTrip(Trip trip, User user) {
-		int tripID = trip.getId();
-		int userID = user.getId();
-
-		String query = "INSERT INTO UsersInTrips VALUES ('" + tripID + "', '" + userID + "');";
-		DBManager.getInstance().executeUpdate(query);
-	}
-        public static void kickParticipant(Trip trip, User user) {
-                int tripID = trip.getId();
-                int userID = user.getId();
-                String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() +"AND userID = " + userID + ";";
-		DBManager.getInstance().executeUpdate(query);
+    if (originalTrip == null) {
+      return;
     }
+
+    String query = "UPDATE trips "
+            + "SET ";
+    
+    query += trip.getTitle().equals(originalTrip.getTitle()) ? "" : "tripTitle = " + trip.getTitle();
+    query += trip.getDescription().equals(originalTrip.getDescription()) ? "" : ", tripDescription = " + trip.getDescription();
+    query += trip.getPrice() == originalTrip.getPrice() ? "" : ", tripPrice = " + trip.getPrice();
+
+    query += " WHERE tripID = " + trip.getId() + ";";
+    
+    DBManager.getInstance().executeUpdate(query);
+    
+    //Need to also update trip categories and users in trip
+  }
+
+  private static int createConversation(List<User> users) {
+    int conversationId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO Conversation (conversationID) VALUES (DEFAULT);");
+
+    //TODO - insert users into the conversation also
+    return -1;
+  }
+
+  /**
+   * This method handles searching for trips, by building a SQL query from the
+   * given parameters.
+   *
+   * @param searchTitle used for a regex.
+   * @param category
+   * @param timedateStart
+   * @param location
+   * @param priceMAX
+   * @return list of trips matching search parameters.
+   */
+  public static List<Trip> searchTrip(String searchTitle, int category, Date timedateStart, int location, double priceMAX) {
+
+    //Initializes the query string.
+    String query = "SELECT Trips.tripID, tripTitle, description, tripPrice, imageFile FROM Trips, ImagesInTrips, Images "
+            + "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
+
+    //These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
+    if (!searchTitle.equals(null)) {
+      query += " AND tripTitle LIKE '%" + searchTitle + "%'";
+    }
+
+    if (category >= 0) {
+      query += " AND categoryID = '" + category + "'";
+    }
+
+    if (timedateStart != null) {
+      query += " AND timeStart >= '" + timedateStart + "'";
+    }
+
+    if (location >= 0) {
+      query += " AND locationID = '" + location + "'";
+    }
+
+    if (priceMAX >= 0) {
+      query += " AND tripPrice <= " + priceMAX + "'";
+    }
+
+    //Initializes a resultset and an ArrayList for handling the creation of trips to be returned.
+    ResultSet searchResult = DBManager.getInstance().executeQuery(query);
+    ArrayList<Trip> searchResultTrips = new ArrayList<>();
+
+    try {
+      while (searchResult.next()) {
+        int id = searchResult.getInt(1);
+        String title = searchResult.getString(2);
+        String description = searchResult.getString(3);
+        double price = searchResult.getDouble(4);
+        InputStream inputStream = new ByteArrayInputStream(searchResult.getBytes(5));
+        Image image = new Image(inputStream);
+        searchResultTrips.add(new Trip(id, title, description, price, image));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return searchResultTrips;
+  }
+
+  public static void deleteTrip(Trip trip) {
+    String query = "DELETE FROM Trips WHERE tripID = " + trip.getId() + ";";
+
+    DBManager.getInstance().executeUpdate(query);
+  }
+
+  public static void participateInTrip(Trip trip, User user) {
+    int tripID = trip.getId();
+    int userID = user.getId();
+
+    String query = "INSERT INTO UsersInTrips VALUES ('" + tripID + "', '" + userID + "');";
+    DBManager.getInstance().executeUpdate(query);
+  }
+
+  public static void kickParticipant(Trip trip, User user) {
+    int tripID = trip.getId();
+    int userID = user.getId();
+    String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() + "AND userID = " + userID + ";";
+    DBManager.getInstance().executeUpdate(query);
+  }
 
 }
