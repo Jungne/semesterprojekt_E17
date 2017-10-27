@@ -2,19 +2,33 @@ package server;
 
 import database.DBManager;
 import interfaces.Trip;
+import interfaces.User;
+import java.util.List;
 
 public class ServerTripHandler {
 
-    public static void createTrip(Trip newTrip) {
-        String query = "INSERT INTO Trips "; //TODO
+	public static void createTrip(Trip newTrip) {
+		//Creates a list with all participants. That is both the normal participants and the instructors
+		List<User> allParticipants = newTrip.getParticipants();
+		allParticipants.addAll(newTrip.getInstructors());
 
-        DBManager.getInstance().executeUpdate(query);
-    }
+		//Creates the group conversation
+		int groupconversationId = createConversation(allParticipants);
 
-    public static void deleteTrip(Trip trip) {
-        String query = "DELETE FROM Trips WHERE tripID = " + trip.getId() + ";";
+		//TODO - the rest
+	}
 
-        DBManager.getInstance().executeUpdate(query);
+	private static int createConversation(List<User> users) {
+		int conversationId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO Conversation (conversationID) VALUES (DEFAULT);");
+		
+		//TODO - insert users into the conversation also
+		return -1;
+	}
 
-    }
+	public static void deleteTrip(Trip trip) {
+		String query = "DELETE FROM Trips WHERE tripID = " + trip.getId() + ";";
+
+		DBManager.getInstance().executeUpdate(query);
+
+	}
 }

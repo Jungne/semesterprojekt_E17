@@ -28,12 +28,13 @@ public class Trip implements Serializable {
 		this.title = title;
 	}
 
-	public Trip(int id, String title, String description, double price, User organizer, String meetingAddress, Location location, int participantlimit, Conversation conversation, String category, List<User> participants, List<User> instructors, List<Category> categories, List<OptionalPrice> optionalPrices, List<String> tags) {
+	public Trip(int id, String title, String description, double price, User organizer, Date timeStart, String meetingAddress, Location location, int participantlimit, Conversation conversation, String category, List<User> participants, List<User> instructors, List<Category> categories, List<OptionalPrice> optionalPrices, List<String> tags) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.price = price;
 		this.organizer = organizer;
+		this.timeStart = timeStart;
 		this.meetingAddress = meetingAddress;
 		this.location = location;
 		this.participantlimit = participantlimit;

@@ -56,61 +56,61 @@ public class DatabaseSetup {
 
 	private static String createUsersInConversationsQuery
 					= "CREATE TABLE IF NOT EXISTS UsersInConversations ("
-					+ "conversationID int, "
 					+ "userID int, "
-					+ "PRIMARY KEY (conversationID, userID), "
-					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
-					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
+					+ "conversationID int, "
+					+ "PRIMARY KEY (userID, conversationID), "
+					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
+					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID)"
 					+ ");";
 
 	private static String createMessagesQuery
 					= "CREATE TABLE IF NOT EXISTS Messages ("
 					+ "messageID serial, "
+					+ "userID int, "
 					+ "conversationID int, "
 					+ "message varchar(255), "
-					+ "userID int, "
 					+ "time timestamp, "
 					+ "PRIMARY KEY (messageID), "
-					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
-					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
+					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
+					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID)"
 					+ ");";
 
 	private static String createTripsQuery
 					= "CREATE TABLE IF NOT EXISTS Trips ("
 					+ "tripID serial, "
 					+ "tripTitle varchar(255), "
-					+ "description varchar(255), "
+					+ "tripDescription varchar(255), "
 					+ "tripPrice decimal(10,2), "
-					+ "userID int, "
 					+ "timeStart timestamp, "
-					+ "tripAddress varchar(255), "
 					+ "locationID int, "
+					+ "tripAddress varchar(255), "
 					+ "participantLimit int, "
+					+ "userID int, "
 					+ "conversationID int, "
 					+ "PRIMARY KEY (tripID), "
-					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
 					+ "FOREIGN KEY (locationID) REFERENCES Locations(locationID), "
+					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
 					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID)"
 					+ ");";
 
 	private static String createUsersInTripsQuery
 					= "CREATE TABLE IF NOT EXISTS UsersInTrips ("
-					+ "tripID int, "
 					+ "userID int, "
-					+ "PRIMARY KEY (tripID, userID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
-					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
+					+ "tripID int, "
+					+ "PRIMARY KEY (userID, tripID), "
+					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
 					+ ");";
 
 	private static String createInstructorsInTripsQuery
 					= "CREATE TABLE IF NOT EXISTS InstructorsInTrips ("
-					+ "tripID int, "
-					+ "userID int, "
 					+ "categoryID int, "
-					+ "PRIMARY KEY (tripID, userID, categoryID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "userID int, "
+					+ "tripID int, "
+					+ "PRIMARY KEY (categoryID, userID, tripID), "
+					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID), "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
-					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
 					+ ");";
 
 	private static String createOptionalPricesQuery
@@ -118,7 +118,7 @@ public class DatabaseSetup {
 					+ "priceID serial, "
 					+ "tripID int, "
 					+ "optionalPrice decimal(10,2), "
-					+ "description varchar(255), "
+					+ "priceDescription varchar(255), "
 					+ "PRIMARY KEY (priceID), "
 					+ "FOREIGN KEY (tripID) REFERENCES trips(tripID)"
 					+ ");";
@@ -145,7 +145,8 @@ public class DatabaseSetup {
 					+ "imageID int, "
 					+ "tripID int, "
 					+ "PRIMARY KEY (imageID), "
-					+ "FOREIGN KEY (imageID) REFERENCES Images(imageID)"
+					+ "FOREIGN KEY (imageID) REFERENCES Images(imageID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
 					+ ");";
 
 	protected static String[] createTableQueries = {
@@ -185,7 +186,7 @@ public class DatabaseSetup {
 
 	public static void main(String[] args) throws SQLException {
 		//createTables();
-		//dropTables();
+		dropTables();
 	}
 
 	private static void createTables() {

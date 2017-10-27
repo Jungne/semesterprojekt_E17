@@ -1,6 +1,10 @@
 package client;
 
+import interfaces.Category;
+import interfaces.Conversation;
 import interfaces.IServerController;
+import interfaces.Location;
+import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.rmi.RemoteException;
@@ -11,9 +15,9 @@ import java.util.logging.Logger;
 
 public class ClientTripHandler {
     
-    public static void createTrip(IServerController serverController, int id, String title, String category, Date timedate, String location, double price, String description, List<String> gear, List<User> participants, List<User> instructors, List<User> organizers, List<String> tags) {
+    public static void createTrip(IServerController serverController, String title, String description, double price, User organizer, Date timeStart, String meetingAddress, Location location, int participantlimit, Conversation conversation, String category, List<User> participants, List<User> instructors, List<Category> categories, List<OptionalPrice> optionalPrices, List<String> tags) {
 	try {
-	    serverController.createTrip(new Trip(id, title, category, timedate, location, price, description, gear, participants, instructors, organizers, tags));
+	    serverController.createTrip(new Trip(-1, title, description, price, organizer, timeStart, meetingAddress, location, participantlimit, conversation, category, participants, instructors, categories, optionalPrices, tags));
 	} catch (RemoteException ex) {
 	    Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 	}
