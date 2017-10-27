@@ -169,7 +169,7 @@ public class Trip implements Serializable {
 	/**
 	 * @return the images
 	 */
-	public List<Image> getImages() {
+	public List<byte[]> getImages() {
 		return images;
 	}
 
