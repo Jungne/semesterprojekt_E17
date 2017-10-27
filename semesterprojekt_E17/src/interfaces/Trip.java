@@ -23,19 +23,19 @@ public class Trip implements Serializable {
 	private Conversation conversation;
 	private List<Category> categories;
 	private List<String> tags;
-	private List<Image> images;
+	private List<byte[]> images;
 
 	public Trip(int id, String title) {
 		this.id = id;
 		this.title = title;
 	}
 
-	public Trip(int id, String title, String description, double price, Image image) {
+	public Trip(int id, String title, String description, double price, byte[] image) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.price = price;
-		this.images = new ArrayList<Image>();
+		this.images = new ArrayList<>();
 		images.add(image);
 	}
 
@@ -172,5 +172,5 @@ public class Trip implements Serializable {
 	public List<Image> getImages() {
 		return images;
 	}
-	
+
 }
