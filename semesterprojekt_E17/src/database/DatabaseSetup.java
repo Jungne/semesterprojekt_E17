@@ -125,11 +125,11 @@ public class DatabaseSetup {
 
 	private static String createCategoriesInTripsQuery
 					= "CREATE TABLE IF NOT EXISTS CategoriesInTrips ("
-					+ "tripID int, "
 					+ "categoryID int, "
-					+ "PRIMARY KEY (tripID, categoryID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
-					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
+					+ "tripID int, "
+					+ "PRIMARY KEY (categoryID, tripID), "
+					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
 					+ ");";
 
 	private static String createTagsInTripsQuery
@@ -186,7 +186,7 @@ public class DatabaseSetup {
 
 	public static void main(String[] args) throws SQLException {
 		//createTables();
-		dropTables();
+		//dropTables();
 	}
 
 	private static void createTables() {
