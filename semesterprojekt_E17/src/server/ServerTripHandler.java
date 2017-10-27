@@ -113,5 +113,11 @@ public class ServerTripHandler {
 		String query = "INSERT INTO UsersInTrips VALUES ('" + tripID + "', '" + userID + "');";
 		DBManager.getInstance().executeUpdate(query);
 	}
+        public static void kickParticipant(Trip trip, User user) {
+                int tripID = trip.getId();
+                int userID = user.getId();
+                String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() +"AND userID = " + userID + ";";
+		DBManager.getInstance().executeUpdate(query);
+    }
 
 }
