@@ -76,6 +76,6 @@ public class ClientController {
 	}
 
 	public void kickParticipant(Trip trip, User user) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		ClientTripHandler.kickParticipant(serverController, trip, user);
 	}
 }
