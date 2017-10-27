@@ -63,7 +63,7 @@
                   <Font size="7.0" />
                </font>
             </Text>
-            <Button layoutX="81.0" layoutY="341.0" mnemonicParsing="false" text="Search" />
+            <Button fx:id="searchButton" layoutX="81.0" layoutY="341.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Search" />
             <ListView layoutX="239.0" layoutY="60.0" prefHeight="548.0" prefWidth="392.0" />
          </children>
       </AnchorPane>
