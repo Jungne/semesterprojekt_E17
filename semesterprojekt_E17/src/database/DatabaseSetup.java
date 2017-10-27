@@ -9,14 +9,14 @@ public class DatabaseSetup {
 	private static String createCategoriesQuery
 					= "CREATE TABLE IF NOT EXISTS Categories ("
 					+ "categoryID serial, "
-					+ "categoryName varchar(255), "
+					+ "categoryName varchar(255) NOT NULL UNIQUE, "
 					+ "PRIMARY KEY (categoryID)"
 					+ ");";
 
 	private static String createLocationsQuery
 					= "CREATE TABLE IF NOT EXISTS Locations ("
 					+ "locationID serial, "
-					+ "locationName varchar(255), "
+					+ "locationName varchar(255) NOT NULL UNIQUE, "
 					+ "PRIMARY KEY (locationID)"
 					+ ");";
 
@@ -24,7 +24,7 @@ public class DatabaseSetup {
 					= "CREATE TABLE IF NOT EXISTS Images ("
 					+ "imageID serial, "
 					+ "imageTitle varchar(255), "
-					+ "imageFile bytea, "
+					+ "imageFile bytea NOT NULL, "
 					+ "PRIMARY KEY (imageID)"
 					+ ");";
 
@@ -32,15 +32,15 @@ public class DatabaseSetup {
 					= "CREATE TABLE IF NOT EXISTS Users ("
 					+ "userID serial, "
 					+ "email varchar(255) NOT NULL UNIQUE, "
-					+ "password varchar(255), "
-					+ "userName varchar(255), "
+					+ "password varchar(255) NOT NULL, "
+					+ "userName varchar(255) NOT NULL, "
 					+ "imageID int, "
 					+ "PRIMARY KEY (userID), "
 					+ "FOREIGN KEY (imageID) REFERENCES Images(imageID)"
 					+ ");";
 
-	private static String createInstructorsQuery
-					= "CREATE TABLE IF NOT EXISTS Instructors ("
+	private static String createCertificatesQuery
+					= "CREATE TABLE IF NOT EXISTS Certificates ("
 					+ "userID int, "
 					+ "categoryID int, "
 					+ "PRIMARY KEY (userID, categoryID), "
@@ -56,37 +56,36 @@ public class DatabaseSetup {
 
 	private static String createUsersInConversationsQuery
 					= "CREATE TABLE IF NOT EXISTS UsersInConversations ("
-					+ "userID int, "
 					+ "conversationID int, "
-					+ "PRIMARY KEY (userID, conversationID), "
-					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
-					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID)"
+					+ "userID int, "
+					+ "PRIMARY KEY (conversationID, userID), "
+					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
 					+ ");";
 
 	private static String createMessagesQuery
 					= "CREATE TABLE IF NOT EXISTS Messages ("
 					+ "messageID serial, "
-					+ "userID int, "
 					+ "conversationID int, "
+					+ "userID int, "
 					+ "message varchar(255), "
 					+ "time timestamp, "
 					+ "PRIMARY KEY (messageID), "
-					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
-					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID)"
+					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
+					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
 	private static String createTripsQuery
 					= "CREATE TABLE IF NOT EXISTS Trips ("
 					+ "tripID serial, "
-					+ "tripTitle varchar(255), "
+					+ "tripTitle varchar(255) NOT NULL, "
 					+ "tripDescription varchar(255), "
 					+ "tripPrice decimal(10,2), "
 					+ "timeStart timestamp, "
 					+ "locationID int, "
 					+ "tripAddress varchar(255), "
 					+ "participantLimit int, "
-					+ "userID int, "
-					+ "conversationID int, "
+					+ "userID int NOT NULL, "
+					+ "conversationID int NOT NULL, "
 					+ "PRIMARY KEY (tripID), "
 					+ "FOREIGN KEY (locationID) REFERENCES Locations(locationID), "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
@@ -95,41 +94,41 @@ public class DatabaseSetup {
 
 	private static String createUsersInTripsQuery
 					= "CREATE TABLE IF NOT EXISTS UsersInTrips ("
-					+ "userID int, "
 					+ "tripID int, "
-					+ "PRIMARY KEY (userID, tripID), "
-					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
+					+ "userID int, "
+					+ "PRIMARY KEY (tripID, userID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
 	private static String createInstructorsInTripsQuery
 					= "CREATE TABLE IF NOT EXISTS InstructorsInTrips ("
-					+ "categoryID int, "
-					+ "userID int, "
 					+ "tripID int, "
-					+ "PRIMARY KEY (categoryID, userID, tripID), "
-					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID), "
+					+ "userID int, "
+					+ "categoryID int, "
+					+ "PRIMARY KEY (tripID, userID, categoryID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
+					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
 					+ ");";
 
 	private static String createOptionalPricesQuery
 					= "CREATE TABLE IF NOT EXISTS OptionalPrices ("
 					+ "priceID serial, "
-					+ "tripID int, "
-					+ "optionalPrice decimal(10,2), "
-					+ "priceDescription varchar(255), "
+					+ "tripID int NOT NULL, "
+					+ "optionalPrice decimal(10,2) NOT NULL, "
+					+ "priceDescription varchar(255) NOT NULL, "
 					+ "PRIMARY KEY (priceID), "
 					+ "FOREIGN KEY (tripID) REFERENCES trips(tripID)"
 					+ ");";
 
 	private static String createCategoriesInTripsQuery
 					= "CREATE TABLE IF NOT EXISTS CategoriesInTrips ("
-					+ "categoryID int, "
 					+ "tripID int, "
+					+ "categoryID int, "
 					+ "PRIMARY KEY (categoryID, tripID), "
-					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
 					+ ");";
 
 	private static String createTagsInTripsQuery
@@ -154,7 +153,7 @@ public class DatabaseSetup {
 		createLocationsQuery,
 		createImagesQuery,
 		createUsersQuery,
-		createInstructorsQuery,
+		createCertificatesQuery,
 		createConversationsQuery,
 		createUsersInConversationsQuery,
 		createMessagesQuery,
@@ -178,7 +177,7 @@ public class DatabaseSetup {
 		"DROP TABLE IF EXISTS Messages;",
 		"DROP TABLE IF EXISTS UsersInConversations;",
 		"DROP TABLE IF EXISTS Conversations;",
-		"DROP TABLE IF EXISTS Instructors;",
+		"DROP TABLE IF EXISTS Certificates;",
 		"DROP TABLE IF EXISTS Users;",
 		"DROP TABLE IF EXISTS Images;",
 		"DROP TABLE IF EXISTS Locations;",
