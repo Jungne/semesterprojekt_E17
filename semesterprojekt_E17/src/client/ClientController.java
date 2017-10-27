@@ -64,7 +64,7 @@ public class ClientController {
 	}
 
 	public void deleteTrip(Trip trip) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		ClientTripHandler.deleteTrip(serverController, trip);
 	}
 
 	public boolean instructInTrip(Trip trip, User user) {
