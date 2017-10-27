@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javafx.scene.image.Image;
@@ -11,19 +12,18 @@ public class Trip implements Serializable {
 	private String title;
 	private String description;
 	private double price;
-	private User organizer;
 	private Date timeStart;
-	private String meetingAddress;
 	private Location location;
+	private String meetingAddress;
 	private int participantlimit;
-	private Conversation conversation;
-	private String category;
+	private User organizer;
 	private List<User> participants;
 	private List<User> instructors;
-	private List<Category> categories;
 	private List<OptionalPrice> optionalPrices;
-	private Image image;
+	private Conversation conversation;
+	private List<Category> categories;
 	private List<String> tags;
+	private List<Image> images;
 
 	public Trip(int id, String title) {
 		this.id = id;
@@ -35,24 +35,24 @@ public class Trip implements Serializable {
 		this.title = title;
 		this.description = description;
 		this.price = price;
-		this.image = image;
+		this.images = new ArrayList<Image>();
+		images.add(image);
 	}
 
-	public Trip(int id, String title, String description, double price, User organizer, Date timeStart, String meetingAddress, Location location, int participantlimit, Conversation conversation, String category, List<User> participants, List<User> instructors, List<Category> categories, List<OptionalPrice> optionalPrices, List<String> tags) {
+	public Trip(int id, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantlimit, User organizer, List<User> participants, List<User> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, List<Category> categories, List<String> tags) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.price = price;
-		this.organizer = organizer;
 		this.timeStart = timeStart;
-		this.meetingAddress = meetingAddress;
 		this.location = location;
+		this.meetingAddress = meetingAddress;
 		this.participantlimit = participantlimit;
-		this.conversation = conversation;
-		this.category = category;
-		this.optionalPrices = optionalPrices;
+		this.organizer = organizer;
 		this.participants = participants;
 		this.instructors = instructors;
+		this.optionalPrices = optionalPrices;
+		this.conversation = conversation;
 		this.categories = categories;
 		this.tags = tags;
 	}
@@ -90,24 +90,10 @@ public class Trip implements Serializable {
 	}
 
 	/**
-	 * @return the organizer
-	 */
-	public User getOrganizer() {
-		return organizer;
-	}
-
-	/**
 	 * @return the timeStart
 	 */
 	public Date getTimeStart() {
 		return timeStart;
-	}
-
-	/**
-	 * @return the meetingAddress
-	 */
-	public String getMeetingAddress() {
-		return meetingAddress;
 	}
 
 	/**
@@ -118,6 +104,13 @@ public class Trip implements Serializable {
 	}
 
 	/**
+	 * @return the meetingAddress
+	 */
+	public String getMeetingAddress() {
+		return meetingAddress;
+	}
+
+	/**
 	 * @return the participantlimit
 	 */
 	public int getParticipantlimit() {
@@ -125,24 +118,10 @@ public class Trip implements Serializable {
 	}
 
 	/**
-	 * @return the conversation
+	 * @return the organizer
 	 */
-	public Conversation getConversation() {
-		return conversation;
-	}
-
-	/**
-	 * @return the category
-	 */
-	public String getCategory() {
-		return category;
-	}
-
-	/**
-	 * @return the prices
-	 */
-	public List<OptionalPrice> getOptionalPrices() {
-		return optionalPrices;
+	public User getOrganizer() {
+		return organizer;
 	}
 
 	/**
@@ -160,6 +139,20 @@ public class Trip implements Serializable {
 	}
 
 	/**
+	 * @return the optionalPrices
+	 */
+	public List<OptionalPrice> getOptionalPrices() {
+		return optionalPrices;
+	}
+
+	/**
+	 * @return the conversation
+	 */
+	public Conversation getConversation() {
+		return conversation;
+	}
+
+	/**
 	 * @return the categories
 	 */
 	public List<Category> getCategories() {
@@ -173,4 +166,11 @@ public class Trip implements Serializable {
 		return tags;
 	}
 
+	/**
+	 * @return the images
+	 */
+	public List<Image> getImages() {
+		return images;
+	}
+	
 }

@@ -2,64 +2,64 @@ package interfaces;
 
 import java.io.Serializable;
 import java.util.List;
+import javafx.scene.image.Image;
 
-public class User implements Serializable{
+public class User implements Serializable {
 
-    
-    private int id;
-    private String name;
-    private List<String> interests;
-    private List<String> certificates;
+	private int id;
+	private String email;
+	private String name;
+	private List<Category> certificates;
+	private Image image;
 
-    public User(int id, String name, List<String> interests, List<String> certificates) {
-	this.id = id;
-	this.name = name;
-	this.interests = interests;
-	this.certificates = certificates;
-    }
-    
-    public void addInterest(String interest) {
-	getInterests().add(interest);
-    }
-    
-    public void removeInterest(String interest) {
-	getInterests().remove(interest); //Jeg ved ikke om det her virker.
-    }
-    
-    public void addCertificate(String certificate) {
-	getCertificates().add(certificate);
-    }
-    
-    public void removeCertificate(String certificate) {
-	getCertificates().remove(certificate); //Også her.
-    }
-    
-    /**
-     * @return the id
-     */
-    public int getId() {
-	return id;
-    }
+	public User(int id, String email, String name, List<Category> certificates) {
+		this.id = id;
+		this.email = email;
+		this.name = name;
+		this.certificates = certificates;
+	}
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-	return name;
-    }
+	public void addCertificate(Category certificate) {
+		getCertificates().add(certificate);
+	}
 
-    /**
-     * @return the interests
-     */
-    public List<String> getInterests() {
-	return interests;
-    }
+	public void removeCertificate(Category certificate) {
+		getCertificates().remove(certificate); //Don't know if this works
+	}
 
-    /**
-     * @return the certificates
-     */
-    public List<String> getCertificates() {
-	return certificates;
-    }
-    
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @return the certificates
+	 */
+	public List<Category> getCertificates() {
+		return certificates;
+	}
+
+	/**
+	 * @return the image
+	 */
+	public Image getImage() {
+		return image;
+	}
+
 }
