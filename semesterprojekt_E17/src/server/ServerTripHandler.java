@@ -56,11 +56,11 @@ public class ServerTripHandler {
 	public static List<Trip> searchTrip(String searchTitle, int category, Date timedateStart, int location, double priceMAX) {
 
 		//Initializes the query string.
-		String query = "SELECT Trips.tripID, tripTitle, description, tripPrice, imageFile FROM Trips, ImagesInTrips, Images "
+		String query = "SELECT Trips.tripID, tripTitle, tripdescription, tripPrice, imageFile FROM Trips, ImagesInTrips, Images "
 						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
 
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
-		if (!searchTitle.equals(null)) {
+		if (!searchTitle.equals("")) {
 			query += " AND tripTitle LIKE '%" + searchTitle + "%'";
 		}
 
@@ -90,8 +90,7 @@ public class ServerTripHandler {
 				String title = searchResult.getString(2);
 				String description = searchResult.getString(3);
 				double price = searchResult.getDouble(4);
-				InputStream inputStream = new ByteArrayInputStream(searchResult.getBytes(5));
-				Image image = new Image(inputStream);
+				byte[] image = searchResult.getBytes(5);
 				searchResultTrips.add(new Trip(id, title, description, price, image));
 			}
 		} catch (SQLException ex) {

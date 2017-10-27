@@ -22,7 +22,7 @@ public class Trip implements Serializable {
 	private List<User> instructors;
 	private List<Category> categories;
 	private List<OptionalPrice> optionalPrices;
-	private Image image;
+	private byte[] image;
 	private List<String> tags;
 
 	public Trip(int id, String title) {
@@ -30,7 +30,7 @@ public class Trip implements Serializable {
 		this.title = title;
 	}
 
-	public Trip(int id, String title, String description, double price, Image image) {
+	public Trip(int id, String title, String description, double price, byte[] image) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
