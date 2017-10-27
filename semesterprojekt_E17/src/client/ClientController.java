@@ -13,6 +13,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientController {
 
@@ -30,19 +32,27 @@ public class ClientController {
 	}
 
 	public List<Trip> getAllTrips() throws RemoteException {
+
 		return serverController.getAllTrips();
 	}
 
-	public List<Trip> searchTrips() {
-		return null; //TODO
+	public List<Trip> searchTrips(String searchTitle, int category, Date timedateStart, int location, double priceMAX) {
+
+		try {
+			return serverController.searchTrips(searchTitle, category, timedateStart, location, priceMAX);
+		} catch (RemoteException ex) {
+			Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		return null;
 	}
 
 	public Trip showTrip() {
 		return null; //TODO
 	}
 
-	public void participateInTrip(User user) {
-
+	public void participateInTrip(User user, Trip trip) {
+		ClientTripHandler.participateInTrip(user, serverController, trip);
 	}
 
 	public void createTrip(String title, String description, double price, User organizer, Date timeStart, String meetingAddress, Location location, int participantlimit, Conversation conversation, String category, List<User> participants, List<User> instructors, List<Category> categories, List<OptionalPrice> optionalPrices, List<String> tags) {

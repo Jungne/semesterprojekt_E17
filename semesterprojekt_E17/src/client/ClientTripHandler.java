@@ -30,4 +30,11 @@ public class ClientTripHandler {
             Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public static void participateInTrip(User user, IServerController serverController, Trip trip) {
+        try {
+            serverController.participateInTrip(trip, user);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    } 
 }
