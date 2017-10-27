@@ -3,7 +3,6 @@ package server;
 import database.DBManager;
 import interfaces.Trip;
 import interfaces.User;
-import java.util.List;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.ResultSet;
@@ -35,6 +34,31 @@ public class ServerTripHandler {
 		//TODO - the rest
 	}
 
+  public static Trip getTrip(int tripID) {
+    return null;
+  }
+
+  static void modifyTrip(Trip trip) {
+    Trip originalTrip = ServerTripHandler.getTrip(trip.getId());
+
+    if (originalTrip == null) {
+      return;
+    }
+
+    String query = "UPDATE trips "
+            + "SET ";
+    
+    query += trip.getTitle().equals(originalTrip.getTitle()) ? "" : "tripTitle = " + trip.getTitle();
+    query += trip.getDescription().equals(originalTrip.getDescription()) ? "" : ", tripDescription = " + trip.getDescription();
+    query += trip.getPrice() == originalTrip.getPrice() ? "" : ", tripPrice = " + trip.getPrice();
+
+    query += " WHERE tripID = " + trip.getId() + ";";
+    
+    DBManager.getInstance().executeUpdate(query);
+    
+    //Need to also update trip categories and users in trip
+  }
+      
 	private static int createConversation(List<User> users) {
 		int conversationId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO Conversation (conversationID) VALUES (DEFAULT);");
 
@@ -118,5 +142,54 @@ public class ServerTripHandler {
                 String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() +"AND userID = " + userID + ";";
 		DBManager.getInstance().executeUpdate(query);
     }
+
+    if (location >= 0) {
+      query += " AND locationID = '" + location + "'";
+    }
+
+    if (priceMAX >= 0) {
+      query += " AND tripPrice <= " + priceMAX + "'";
+    }
+
+    //Initializes a resultset and an ArrayList for handling the creation of trips to be returned.
+    ResultSet searchResult = DBManager.getInstance().executeQuery(query);
+    ArrayList<Trip> searchResultTrips = new ArrayList<>();
+
+    try {
+      while (searchResult.next()) {
+        int id = searchResult.getInt(1);
+        String title = searchResult.getString(2);
+        String description = searchResult.getString(3);
+        double price = searchResult.getDouble(4);
+        InputStream inputStream = new ByteArrayInputStream(searchResult.getBytes(5));
+        Image image = new Image(inputStream);
+        searchResultTrips.add(new Trip(id, title, description, price, image));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return searchResultTrips;
+  }
+
+  public static void deleteTrip(Trip trip) {
+    String query = "DELETE FROM Trips WHERE tripID = " + trip.getId() + ";";
+
+    DBManager.getInstance().executeUpdate(query);
+  }
+
+  public static void participateInTrip(Trip trip, User user) {
+    int tripID = trip.getId();
+    int userID = user.getId();
+
+    String query = "INSERT INTO UsersInTrips VALUES ('" + tripID + "', '" + userID + "');";
+    DBManager.getInstance().executeUpdate(query);
+  }
+
+  public static void kickParticipant(Trip trip, User user) {
+    int tripID = trip.getId();
+    int userID = user.getId();
+    String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() + "AND userID = " + userID + ";";
+    DBManager.getInstance().executeUpdate(query);
+  }
 
 }
