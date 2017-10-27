@@ -70,11 +70,6 @@ public class ClientController {
 	public boolean instructInTrip(Trip trip, User user) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
-
-	public void leaveTrip(Trip trip) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
 	public void kickParticipant(Trip trip, User user) {
 		ClientTripHandler.kickParticipant(serverController, trip, user);
 	}
