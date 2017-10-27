@@ -89,7 +89,7 @@ public class ServerTripHandler {
     }
 
     if (category >= 0) {
-      query += " AND categoryID = '" + category + "'";
+      query += " AND categoryID = " + category + "";
     }
 
     if (timedateStart != null) {
@@ -97,11 +97,11 @@ public class ServerTripHandler {
     }
 
     if (location >= 0) {
-      query += " AND locationID = '" + location + "'";
+      query += " AND locationID = " + location + "";
     }
 
     if (priceMAX >= 0) {
-      query += " AND tripPrice <= " + priceMAX + "'";
+      query += " AND tripPrice <= " + priceMAX + "";
     }
 
     //Initializes a resultset and an ArrayList for handling the creation of trips to be returned.

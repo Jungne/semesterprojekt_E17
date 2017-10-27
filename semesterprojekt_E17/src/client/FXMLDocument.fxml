@@ -50,7 +50,7 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <TextField layoutX="14.0" layoutY="223.0" prefHeight="27.0" prefWidth="201.0" promptText="Amount Kr." />
+            <TextField fx:id="searchTripPriceTextField" layoutX="14.0" layoutY="223.0" prefHeight="27.0" prefWidth="201.0" promptText="Amount Kr." />
             <Label layoutX="13.0" layoutY="274.0" text="Time period" />
             <DatePicker layoutX="11.0" layoutY="291.0" prefHeight="27.0" prefWidth="201.0" />
             <Text layoutX="45.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MAX.">
