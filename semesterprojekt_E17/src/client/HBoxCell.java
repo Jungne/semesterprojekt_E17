@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class HBoxCell extends HBox {
 
@@ -26,21 +27,35 @@ public class HBoxCell extends HBox {
 
 		id = trip.getId();
 
-		if (!trip.getImages().isEmpty()) {
+		if (trip.getImages().get(0).length > 0) {
 			InputStream inputStream = new ByteArrayInputStream(trip.getImages().get(0));
 			imageView.setImage(new Image(inputStream));
+			System.out.println(trip.getImages().get(0));
 		} else {
-			imageView.setImage(new Image("")); //Add default image or not.
+			imageView.setImage(new Image("default.jpg")); //Add default image or not.
 		}
 
 		title.setText(trip.getTitle());
 		title.setPrefWidth(150);
+		title.setStyle("-fx-font-weight: bold");
+		
+		description.setText(trip.getDescription());
+		description.setPrefWidth(150);
+		
+		VBox vbox1 = new VBox();
+		vbox1.getChildren().addAll(title, description);
+		
 		price.setText(Double.toString(trip.getPrice()) + "kr");
+		
+		category.setText(trip.getCategories().get(0).getName());
 
+		VBox vbox2 = new VBox();
+		vbox2.getChildren().addAll(price, category);
+		
 		imageView.setFitWidth(100);
 		imageView.setPreserveRatio(true);
 
-		this.getChildren().addAll(imageView, title, price);
+		this.getChildren().addAll(imageView, vbox1, vbox2);
 	}
 
 	public int getProductId() {
