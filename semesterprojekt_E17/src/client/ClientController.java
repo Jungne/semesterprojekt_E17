@@ -47,8 +47,9 @@ public class ClientController {
 		return null;
 	}
 
-	public Trip showTrip() {
-		return null; //TODO
+	public Trip showTrip(int tripsID) {
+            ClientTripHandler.showTrip(tripsID,serverController);
+		
 	}
 
 	public void participateInTrip(User user, Trip trip) {

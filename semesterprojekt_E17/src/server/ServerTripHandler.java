@@ -143,5 +143,10 @@ public class ServerTripHandler {
     String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() + "AND userID = " + userID + ";";
     DBManager.getInstance().executeUpdate(query);
   }
+  public static Trip showTrip(int tripsID) {
+      String query ="SELECT * FROM Trips WHERE tripID = "+tripsID+";";
+      Trip trip =(Trip)DBManager.getInstance().executeQuery(query);
+      return trip;
+  }
 
 }

@@ -46,4 +46,14 @@ public class ClientTripHandler {
 			Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+        public Trip showTrip(int tripsID,IServerController serverController) {
+          try {
+		serverController.showTrip(tripsID);
+		}catch (RemoteException ex) {
+                    
+			Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+          return null;
+}
 }

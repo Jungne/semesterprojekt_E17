@@ -39,5 +39,6 @@ public interface IServerController extends Remote {
     public void sendMessage(Message message) throws RemoteException;
     
     public void updateConversation(Conversation conversation) throws RemoteException;
+    public Trip showTrip(int tripsID) throws RemoteException;
     
 }

@@ -95,5 +95,10 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public void updateConversation(Conversation conversation) throws RemoteException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+        @Override
+        public Trip showTrip(int tripsID) throws RemoteException {
+           return ServerTripHandler.showTrip(tripsID);
+            
+        }
 
 }
