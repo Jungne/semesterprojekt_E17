@@ -50,25 +50,13 @@ public class ServerTripHandler {
 		return conversationId;
 	}
 
-	public static Trip getTrip(int tripID) {
-		return null;
-	}
-
 	static void modifyTrip(Trip trip) {
-		Trip originalTrip = ServerTripHandler.getTrip(trip.getId());
-
-		if (originalTrip == null) {
-			return;
-		}
-
 		String query = "UPDATE trips "
-						+ "SET ";
-
-		query += trip.getTitle().equals(originalTrip.getTitle()) ? "" : "tripTitle = " + trip.getTitle();
-		query += trip.getDescription().equals(originalTrip.getDescription()) ? "" : ", tripDescription = " + trip.getDescription();
-		query += trip.getPrice() == originalTrip.getPrice() ? "" : ", tripPrice = " + trip.getPrice();
-
-		query += " WHERE tripID = " + trip.getId() + ";";
+						+ "SET "
+            + "tripTitle = " + trip.getTitle() + ", "
+            + "tripDescription = " + trip.getDescription() + ", "
+            + "tripPrice = " + trip.getPrice() + " "
+            + "WHERE tripID = " + trip.getId() + ";";
 
 		DBManager.getInstance().executeUpdate(query);
 
