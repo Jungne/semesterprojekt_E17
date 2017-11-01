@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 
 public class ClientTripHandler {
 
-	public static void createTrip(IServerController serverController, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantlimit, User organizer, List<User> participants, List<User> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, List<Category> categories, List<String> tags) {
+	public static void createTrip(IServerController serverController, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, List<String> tags) {
 		try {
-			serverController.createTrip(new Trip(-1, title, description, price, timeStart, location, meetingAddress, participantlimit, organizer, participants, instructors, optionalPrices, conversation, categories, tags));
+			serverController.createTrip(new Trip(title, description, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, categories, tags));
 		} catch (RemoteException ex) {
 			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -46,14 +46,15 @@ public class ClientTripHandler {
 			Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-        public Trip showTrip(int tripsID,IServerController serverController) {
-          try {
-		serverController.showTrip(tripsID);
-		}catch (RemoteException ex) {
-                    
+
+	public Trip showTrip(int tripsID, IServerController serverController) {
+		try {
+			serverController.showTrip(tripsID);
+		} catch (RemoteException ex) {
+
 			Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
 
-                }
-          return null;
-}
+		}
+		return null;
+	}
 }

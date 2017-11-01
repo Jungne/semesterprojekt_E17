@@ -48,16 +48,16 @@ public class ClientController {
 	}
 
 	public Trip showTrip(int tripsID) {
-            ClientTripHandler.showTrip(tripsID,serverController);
-		
+		ClientTripHandler.showTrip(tripsID, serverController);
+
 	}
 
 	public void participateInTrip(User user, Trip trip) {
 		ClientTripHandler.participateInTrip(user, serverController, trip);
 	}
 
-	public void createTrip(String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantlimit, User organizer, List<User> participants, List<User> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, List<Category> categories, List<String> tags) {
-		ClientTripHandler.createTrip(serverController, title, description, price, timeStart, location, meetingAddress, participantlimit, organizer, participants, instructors, optionalPrices, conversation, categories, tags);
+	public void createTrip(String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, List<String> tags) {
+		ClientTripHandler.createTrip(serverController, title, description, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, categories, tags);
 	}
 
 	public void modifyTrip(Trip trip) {
@@ -71,6 +71,7 @@ public class ClientController {
 	public boolean instructInTrip(Trip trip, User user) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
 	public void kickParticipant(Trip trip, User user) {
 		ClientTripHandler.kickParticipant(serverController, trip, user);
 	}
