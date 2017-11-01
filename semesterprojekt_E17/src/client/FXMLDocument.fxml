@@ -24,8 +24,13 @@
             <Button mnemonicParsing="false" text="Log in/out" />
         </items>
       </ToolBar>
-      <AnchorPane layoutY="39.0" prefHeight="623.0" prefWidth="644.0" />
       <AnchorPane layoutY="39.0" prefHeight="623.0" prefWidth="644.0">
+         <children>
+            <ListView layoutX="91.0" layoutY="22.0" prefHeight="261.0" prefWidth="530.0" />
+            <Button layoutX="14.0" layoutY="22.0" mnemonicParsing="false" text="Trips" />
+            <Button layoutX="14.0" layoutY="57.0" mnemonicParsing="false" text="People" />
+         </children></AnchorPane>
+      <AnchorPane layoutY="39.0" visible="false">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
