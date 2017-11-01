@@ -48,7 +48,7 @@ public class ClientTripHandler {
 	}
         public static Trip showTrip(int tripsID,IServerController serverController) {
           try {
-		serverController.showTrip(tripsID);
+		return serverController.showTrip(tripsID);
 		}catch (RemoteException ex) {
                     
 			Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
