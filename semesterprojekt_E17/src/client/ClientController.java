@@ -48,8 +48,7 @@ public class ClientController {
 	}
 
 	public Trip showTrip(int tripsID) {
-		ClientTripHandler.showTrip(tripsID, serverController);
-
+		return ClientTripHandler.showTrip(tripsID, serverController);
 	}
 
 	public void participateInTrip(User user, Trip trip) {
