@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ public class Trip implements Serializable {
 	private int id;
 	private String title;
 	private String description;
+	private List<Category> categories;
 	private double price;
 	private Date timeStart;
 	private Location location;
@@ -20,7 +22,6 @@ public class Trip implements Serializable {
 	private List<InstructorListItem> instructors;
 	private List<OptionalPrice> optionalPrices;
 	private Conversation conversation;
-	private List<Category> categories;
 	private List<String> tags;
 	private List<byte[]> images;
 
@@ -43,10 +44,11 @@ public class Trip implements Serializable {
 	 * @param categories
 	 * @param tags
 	 */
-	public Trip(int id, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<User> participants, List<InstructorListItem> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, List<Category> categories, List<String> tags) {
+	public Trip(int id, String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<User> participants, List<InstructorListItem> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, List<String> tags) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
+		this.categories = categories;
 		this.price = price;
 		this.timeStart = timeStart;
 		this.location = location;
@@ -57,7 +59,6 @@ public class Trip implements Serializable {
 		this.instructors = instructors;
 		this.optionalPrices = optionalPrices;
 		this.conversation = conversation;
-		this.categories = categories;
 		this.tags = tags;
 	}
 
@@ -74,15 +75,15 @@ public class Trip implements Serializable {
 		this.images = new ArrayList<>();
 		images.add(image);
 	}
-	
-	public Trip(int id, String title, String description, double price, byte[] image, List<Category> categories) {
+
+	public Trip(int id, String title, String description, List<Category> categories, double price, byte[] image) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
+		this.categories = categories;
 		this.price = price;
 		this.images = new ArrayList<>();
 		images.add(image);
-		this.categories = categories;
 	}
 
 	/**
@@ -91,6 +92,7 @@ public class Trip implements Serializable {
 	 *
 	 * @param title
 	 * @param description
+	 * @param categories
 	 * @param price
 	 * @param timeStart
 	 * @param location
@@ -99,17 +101,37 @@ public class Trip implements Serializable {
 	 * @param organizer
 	 * @param organizerInstructorIn
 	 * @param optionalPrices
-	 * @param categories
 	 * @param tags
+	 * @throws java.lang.Exception
 	 */
-	public Trip(String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, List<String> tags) {
+	public Trip(String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<String> tags) throws Exception {
+		if (title == null) {
+			throw new Exception("invalid title");
+		}
 		this.title = title;
 		this.description = description;
+		this.categories = categories;
+
+		if (price < 0) {
+			throw new Exception("invalid price");
+		}
 		this.price = price;
+
+		if (timeStart.before(new Date())) {
+			throw new Exception("invalid date");
+		}
 		this.timeStart = timeStart;
 		this.location = location;
 		this.meetingAddress = meetingAddress;
+
+		if (participantLimit <= 0) {
+			throw new Exception("invalid participant limit");
+		}
 		this.participantLimit = participantLimit;
+
+		if (organizer == null) {
+			throw new Exception("invalid organizer");
+		}
 		this.organizer = organizer;
 
 		//Adds the organizer to the trip automatically
@@ -119,11 +141,13 @@ public class Trip implements Serializable {
 		//Promotes the organizer as instructor the desired categories
 		this.instructors = new ArrayList<>();
 		for (Category category : organizerInstructorIn) {
+			if (!this.categories.contains(category)) {
+				throw new Exception("invalid instructor");
+			}
 			this.instructors.add(new InstructorListItem(organizer, category));
 		}
 
 		this.optionalPrices = optionalPrices;
-		this.categories = categories;
 		this.tags = tags;
 	}
 
@@ -150,6 +174,21 @@ public class Trip implements Serializable {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * @return the categories
+	 */
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public List<Integer> getCategoryIds() {
+		ArrayList<Integer> categoryIds = new ArrayList<>();
+		for (Category category : categories) {
+			categoryIds.add(category.getId());
+		}
+		return categoryIds;
 	}
 
 	/**
@@ -220,13 +259,6 @@ public class Trip implements Serializable {
 	 */
 	public Conversation getConversation() {
 		return conversation;
-	}
-
-	/**
-	 * @return the categories
-	 */
-	public List<Category> getCategories() {
-		return categories;
 	}
 
 	/**

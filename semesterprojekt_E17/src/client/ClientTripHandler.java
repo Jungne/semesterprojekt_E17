@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 
 public class ClientTripHandler {
 
-	public static void createTrip(IServerController serverController, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, List<String> tags) {
+	public static void createTrip(IServerController serverController, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, List<String> tags) throws Exception {
 		try {
-			serverController.createTrip(new Trip(title, description, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, categories, tags));
+			serverController.createTrip(new Trip(title, description, categories, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags));
 		} catch (RemoteException ex) {
 			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}

@@ -1,6 +1,7 @@
 package server;
 
 import database.DBManager;
+import interfaces.Category;
 import interfaces.Trip;
 import interfaces.User;
 import java.io.ByteArrayInputStream;
@@ -23,21 +24,63 @@ import javafx.scene.image.Image;
  */
 public class ServerTripHandler {
 
-	public static void createTrip(Trip newTrip) {
-		//Checks if title is not null
-		//Checks if price is positive
-		//Checks if date is valid
-		//Checks if location id exists
-		//Checks if participantLimit is positive
-		//Checks if participants ids exists (maybe only organizer)
-		//Checks if category ids exists
-		//Checks if the instructor is a participant and if the trip contain the associated category (maybe only organizer)
-		//Checks if the instructor is allowed to instruct in that category (maybe only organizer)
-		//Checks if optional prices are positive and if descriptions are not null
+	/**
+	 * Creates a trip in the database by using the information in newTrip.
+	 *
+	 * @param newTrip
+	 * @return the trip id of the newly created trip or -1 if the trip failed to
+	 * be created.
+	 */
+	public static int createTrip(Trip newTrip) {
 
+		//Checks if category ids exists
+		if (!getCategoryIds().containsAll(newTrip.getCategoryIds())) {
+			return -1;
+		}
+
+		//Checks if location id exists
+		if (!getLocationIds().contains(newTrip.getLocation().getId())) {
+			return -1;
+		}
+
+		//Checks if organizer id exists
+		//Checks if the instructor is organizer and if the trip contain the associated category
+		//Checks if the organizer is allowed to instruct in that category
+		//
 		//Creates the group conversation and returnes the conversation id
 		int groupConversationId = createConversation(newTrip.getParticipants());
 
+		//TODO - create rest of trip
+		//temp return
+		return -1;
+	}
+
+	private static List<Integer> getCategoryIds() {
+		ArrayList<Integer> categoryIds = new ArrayList<>();
+		ResultSet rs = DBManager.getInstance().executeQuery("SELECT categoryID FROM Categories;");
+		try {
+			while (rs.next()) {
+				categoryIds.add(rs.getInt(1));
+			}
+			return categoryIds;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
+	}
+
+	private static List<Integer> getLocationIds() {
+		ArrayList<Integer> locationIds = new ArrayList<>();
+		ResultSet rs = DBManager.getInstance().executeQuery("SELECT locationID FROM Locations;");
+		try {
+			while (rs.next()) {
+				locationIds.add(rs.getInt(1));
+			}
+			return locationIds;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 
 	private static int createConversation(List<User> users) {
@@ -58,10 +101,10 @@ public class ServerTripHandler {
 	static void modifyTrip(Trip trip) {
 		String query = "UPDATE trips "
 						+ "SET "
-            + "tripTitle = " + trip.getTitle() + ", "
-            + "tripDescription = " + trip.getDescription() + ", "
-            + "tripPrice = " + trip.getPrice() + " "
-            + "WHERE tripID = " + trip.getId() + ";";
+						+ "tripTitle = " + trip.getTitle() + ", "
+						+ "tripDescription = " + trip.getDescription() + ", "
+						+ "tripPrice = " + trip.getPrice() + " "
+						+ "WHERE tripID = " + trip.getId() + ";";
 
 		DBManager.getInstance().executeUpdate(query);
 

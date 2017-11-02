@@ -33,15 +33,15 @@ public class FXMLDocumentController implements Initializable {
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		
+
 		//Testing HBoxCell
 		ArrayList<Trip> trips = new ArrayList<>();
 		byte[] image = "".getBytes();
 		ArrayList<Category> categories = new ArrayList<>();
 		categories.add(new Category(0, "testcategory"));
-		trips.add(new Trip(0, "Test trip", "This a test of the HBoxCell", 420.69, image, categories));
+		trips.add(new Trip(0, "Test trip", "This a test of the HBoxCell", categories, 420.69, image));
 		showTrips(trips, browseTripsListView);
-		
+
 	}
 
 	@FXML
@@ -53,7 +53,7 @@ public class FXMLDocumentController implements Initializable {
 			System.out.println(trip.getTitle());
 		}
 	}
-	
+
 	private void showTrips(ArrayList<Trip> trips, ListView listview) {
 		List<HBoxCell> list = new ArrayList<>();
 		for (Trip trip : trips) {
