@@ -12,6 +12,11 @@ public class OptionalPrice {
 		this.description = description;
 	}
 
+	public OptionalPrice(double price, String description) {
+		this.price = price;
+		this.description = description;
+	}
+
 	/**
 	 * @return the id
 	 */

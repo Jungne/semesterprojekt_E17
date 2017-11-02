@@ -24,15 +24,20 @@ import javafx.scene.image.Image;
 public class ServerTripHandler {
 
 	public static void createTrip(Trip newTrip) {
-		//Creates the group conversation and returnes the conversation id
-		int groupConversationId = createConversation(newTrip.getParticipants());
-
+		//Checks if title is not null
 		//Checks if price is positive
 		//Checks if date is valid
 		//Checks if location id exists
 		//Checks if participantLimit is positive
-		//Checks if participants ids exists
-		//Checks if
+		//Checks if participants ids exists (maybe only organizer)
+		//Checks if category ids exists
+		//Checks if the instructor is a participant and if the trip contain the associated category (maybe only organizer)
+		//Checks if the instructor is allowed to instruct in that category (maybe only organizer)
+		//Checks if optional prices are positive and if descriptions are not null
+
+		//Creates the group conversation and returnes the conversation id
+		int groupConversationId = createConversation(newTrip.getParticipants());
+
 	}
 
 	private static int createConversation(List<User> users) {
