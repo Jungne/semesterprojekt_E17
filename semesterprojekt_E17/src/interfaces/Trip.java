@@ -74,6 +74,16 @@ public class Trip implements Serializable {
 		this.images = new ArrayList<>();
 		images.add(image);
 	}
+	
+	public Trip(int id, String title, String description, double price, byte[] image, List<Category> categories) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.price = price;
+		this.images = new ArrayList<>();
+		images.add(image);
+		this.categories = categories;
+	}
 
 	/**
 	 * Constructor used by client to create new trip and send the necessary

@@ -24,13 +24,13 @@
             <Button mnemonicParsing="false" text="Log in/out" />
         </items>
       </ToolBar>
-      <AnchorPane layoutY="39.0" prefHeight="623.0" prefWidth="644.0">
+      <AnchorPane layoutY="39.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <ListView layoutX="91.0" layoutY="22.0" prefHeight="261.0" prefWidth="530.0" />
             <Button layoutX="14.0" layoutY="22.0" mnemonicParsing="false" text="Trips" />
             <Button layoutX="14.0" layoutY="57.0" mnemonicParsing="false" text="People" />
          </children></AnchorPane>
-      <AnchorPane layoutY="39.0" visible="false">
+      <AnchorPane layoutY="39.0">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -69,7 +69,7 @@
                </font>
             </Text>
             <Button fx:id="searchButton" layoutX="81.0" layoutY="341.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Search" />
-            <ListView layoutX="239.0" layoutY="60.0" prefHeight="548.0" prefWidth="392.0" />
+            <ListView fx:id="browseTripsListView" layoutX="239.0" layoutY="60.0" prefHeight="548.0" prefWidth="392.0" />
          </children>
       </AnchorPane>
    </children>
