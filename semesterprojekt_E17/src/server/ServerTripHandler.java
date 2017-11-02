@@ -2,6 +2,7 @@ package server;
 
 import database.DBManager;
 import interfaces.Category;
+import interfaces.InstructorListItem;
 import interfaces.Trip;
 import interfaces.User;
 import java.io.ByteArrayInputStream;
@@ -44,9 +45,17 @@ public class ServerTripHandler {
 		}
 
 		//Checks if organizer id exists
-		//Checks if the instructor is organizer and if the trip contain the associated category
-		//Checks if the organizer is allowed to instruct in that category
-		//
+		if (!userExists(newTrip.getOrganizer())) {
+			return -1;
+		}
+
+		//Checks if participants have the required certificates
+		for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
+			if (!certificateExists(instructorListItem)) {
+				return -1;
+			}
+		}
+
 		//Creates the group conversation and returnes the conversation id
 		int groupConversationId = createConversation(newTrip.getParticipants());
 
@@ -55,6 +64,11 @@ public class ServerTripHandler {
 		return -1;
 	}
 
+	/**
+	 * Gets all category ids from the database.
+	 *
+	 * @return a list with category ids.
+	 */
 	private static List<Integer> getCategoryIds() {
 		ArrayList<Integer> categoryIds = new ArrayList<>();
 		ResultSet rs = DBManager.getInstance().executeQuery("SELECT categoryID FROM Categories;");
@@ -69,6 +83,11 @@ public class ServerTripHandler {
 		}
 	}
 
+	/**
+	 * Gets all location ids from the database.
+	 *
+	 * @return a list with location ids.
+	 */
 	private static List<Integer> getLocationIds() {
 		ArrayList<Integer> locationIds = new ArrayList<>();
 		ResultSet rs = DBManager.getInstance().executeQuery("SELECT locationID FROM Locations;");
@@ -81,6 +100,38 @@ public class ServerTripHandler {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 			return null;
 		}
+	}
+
+	/**
+	 * Checks if the given user exists in the database.
+	 *
+	 * @param user
+	 * @return true if user exist or false if user does not exist.
+	 */
+	private static boolean userExists(User user) {
+		ResultSet rs = DBManager.getInstance().executeQuery("SELECT userID FROM Users WHERE userID = " + user.getId() + ";");
+		try {
+			if (rs.next()) {
+				return true;
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return false;
+	}
+
+	private static boolean certificateExists(InstructorListItem instructorListItem) {
+		ResultSet rs = DBManager.getInstance().executeQuery("SELECT categoryID FROM Certificates "
+						+ "WHERE userID = " + instructorListItem.getUser().getId() + " "
+						+ "AND categoryID = " + instructorListItem.getCategory().getId() + ";");
+		try {
+			if (rs.next()) {
+				return true;
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return false;
 	}
 
 	private static int createConversation(List<User> users) {
