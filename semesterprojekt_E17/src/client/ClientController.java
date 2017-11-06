@@ -31,7 +31,10 @@ public class ClientController {
 		}
 	}
         
+	public User signUp(User user, String password) throws RemoteException {
+		return serverController.signUp(user, password);
 	}
+
 	public User signIn(String username, String password) throws RemoteException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}

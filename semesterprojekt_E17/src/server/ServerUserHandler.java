@@ -15,8 +15,65 @@ import java.util.logging.Logger;
 
 public class ServerUserHandler {
 
+	public static User createUser(User newUser, String password) {
+		try {
+			String newUserEmail = newUser.getEmail();
+			String newUserName = newUser.getName();
+			List<Category> newUserCertificates = newUser.getCertificates();
+			byte[] newUserImage = newUser.getImage();
 
+			Connection connection = DBManager.getInstance().getConnection();
 
+			//Inserts the imageFile
+			String imageQuery = "INSERT INTO Images (imageTitle, imageFile) VALUES ('" + newUserName + "Image', ?)";
+			PreparedStatement imageStatement = connection.prepareStatement(imageQuery, Statement.RETURN_GENERATED_KEYS);
+			imageStatement.setBytes(1, newUserImage);
+			imageStatement.executeUpdate();
+			int imageId;
+			ResultSet imageRs = imageStatement.getGeneratedKeys();
+			if (imageRs.next()) {
+				imageId = imageRs.getInt(1);
+			} else {
+				imageId = -1;
+			}
 
+			String query = "INSERT INTO Users(email, password, userName, imageId) "
+							+ "VALUES(?, ?, ?, ?)";
+			PreparedStatement userStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
+			userStatement.setString(0, newUserEmail);
+			userStatement.setString(1, password);
+			userStatement.setString(2, newUserName);
+			userStatement.setInt(3, imageId);
+
+			userStatement.executeQuery();
+
+			int newUserId;
+			ResultSet userIdRs = userStatement.getGeneratedKeys();
+
+			if (userIdRs.next()) {
+				newUserId = imageRs.getInt(1);
+			} else {
+				newUserId = -1;
+			}
+
+			String getUserQuery = "SELECT userId, email, userName, imageFile "
+							+ "FROM Users, Images "
+							+ "WHERE userId = " + newUserId + " AND Users.imageId = Images.imageId";
+
+			ResultSet userRs = DBManager.getInstance().executeQuery(getUserQuery);
+
+			int userId = userRs.getInt(1);
+			String userEmail = userRs.getString(2);
+			String userName = userRs.getString(3);
+			byte[] userImage = userRs.getBytes(4);
+
+			User user = new User(userId, userEmail, userName, userImage);
+
+			return user;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
 }
