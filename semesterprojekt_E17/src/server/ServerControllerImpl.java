@@ -18,8 +18,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public User signUp(User user) throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public User signUp(User user, String password) throws RemoteException {
+		return ServerUserHandler.createUser(user, password);
 	}
 
 	@Override

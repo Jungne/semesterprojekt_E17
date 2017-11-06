@@ -30,7 +30,15 @@ public class ClientController {
 			ex.printStackTrace();
 		}
 	}
+        
+	}
+	public User signIn(String username, String password) throws RemoteException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 
+	public void signOut() throws RemoteException {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	public List<Trip> getAllTrips() throws RemoteException {
 
 		return serverController.getAllTrips();

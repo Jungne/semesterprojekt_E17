@@ -8,7 +8,7 @@ import java.util.List;
 public interface IServerController extends Remote {
 
     //User functions
-    public User signUp(User user) throws RemoteException;
+    public User signUp(User user, String password) throws RemoteException;
     
     public User signIn(String username, String password) throws RemoteException;
     
