@@ -1,14 +1,10 @@
 package server;
 
 import database.DBManager;
-import interfaces.Category;
 import interfaces.InstructorListItem;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.image.Image;
 
 /**
  * This class handles creation of trip objects to be sent to the client. This
