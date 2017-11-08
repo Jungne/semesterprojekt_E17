@@ -10,13 +10,20 @@ public class User implements Serializable {
 	private String email;
 	private String name;
 	private List<Category> certificates;
-	private Image image;
+	private byte[] image;
 
 	public User(int id, String email, String name, List<Category> certificates) {
 		this.id = id;
 		this.email = email;
 		this.name = name;
 		this.certificates = certificates;
+	}
+
+	public User(int id, String email, String name, byte[] image) {
+		this.id = id;
+		this.email = email;
+		this.name = name;
+		this.image = image;
 	}
 
 	public void addCertificate(Category certificate) {
@@ -58,7 +65,7 @@ public class User implements Serializable {
 	/**
 	 * @return the image
 	 */
-	public Image getImage() {
+	public byte[] getImage() {
 		return image;
 	}
 

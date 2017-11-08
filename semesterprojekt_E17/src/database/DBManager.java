@@ -57,7 +57,7 @@ public class DBManager {
 			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	public ResultSet executeQuery(String query) {
 		try {
 			return connection.createStatement().executeQuery(query);
@@ -65,6 +65,10 @@ public class DBManager {
 			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return null;
+	}
+
+	public Connection getConnection() {
+		return connection;
 	}
 
 	public int executeInsertAndGetId(String query) {
