@@ -60,6 +60,7 @@ public class DatabaseSetup {
 					+ "userID int, "
 					+ "PRIMARY KEY (conversationID, userID), "
 					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
+					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
 	private static String createMessagesQuery
