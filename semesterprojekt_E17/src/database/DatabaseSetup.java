@@ -92,6 +92,15 @@ public class DatabaseSetup {
 					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID)"
 					+ ");";
 
+	private static String createCategoriesInTripsQuery
+					= "CREATE TABLE IF NOT EXISTS CategoriesInTrips ("
+					+ "tripID int, "
+					+ "categoryID int, "
+					+ "PRIMARY KEY (categoryID, tripID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
+					+ ");";
+
 	private static String createUsersInTripsQuery
 					= "CREATE TABLE IF NOT EXISTS UsersInTrips ("
 					+ "tripID int, "
@@ -122,19 +131,10 @@ public class DatabaseSetup {
 					+ "FOREIGN KEY (tripID) REFERENCES trips(tripID)"
 					+ ");";
 
-	private static String createCategoriesInTripsQuery
-					= "CREATE TABLE IF NOT EXISTS CategoriesInTrips ("
-					+ "tripID int, "
-					+ "categoryID int, "
-					+ "PRIMARY KEY (categoryID, tripID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
-					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
-					+ ");";
-
 	private static String createTagsInTripsQuery
 					= "CREATE TABLE IF NOT EXISTS TagsInTrips ("
 					+ "tripID int, "
-					+ "tag varchar(255) NOT NULL, "
+					+ "tag varchar(255), "
 					+ "PRIMARY KEY (tripID, tag), "
 					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
 					+ ");";
@@ -158,10 +158,10 @@ public class DatabaseSetup {
 		createUsersInConversationsQuery,
 		createMessagesQuery,
 		createTripsQuery,
+		createCategoriesInTripsQuery,
 		createUsersInTripsQuery,
 		createInstructorsInTripsQuery,
 		createOptionalPricesQuery,
-		createCategoriesInTripsQuery,
 		createTagsInTripsQuery,
 		createImagesIntripsQuery
 	};
@@ -169,10 +169,10 @@ public class DatabaseSetup {
 	public static String[] dropTableQueries = {
 		"DROP TABLE IF EXISTS ImagesIntrips;",
 		"DROP TABLE IF EXISTS TagsInTrips;",
-		"DROP TABLE IF EXISTS CategoriesInTrips;",
 		"DROP TABLE IF EXISTS OptionalPrices;",
 		"DROP TABLE IF EXISTS InstructorsInTrips;",
 		"DROP TABLE IF EXISTS UsersInTrips;",
+		"DROP TABLE IF EXISTS CategoriesInTrips;",
 		"DROP TABLE IF EXISTS Trips;",
 		"DROP TABLE IF EXISTS Messages;",
 		"DROP TABLE IF EXISTS UsersInConversations;",

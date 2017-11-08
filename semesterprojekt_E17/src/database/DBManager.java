@@ -1,12 +1,12 @@
 package database;
 
+import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,6 +57,19 @@ public class DBManager {
 			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+	
+	public ResultSet executeQuery(String query) {
+		try {
+			return connection.createStatement().executeQuery(query);
+		} catch (SQLException ex) {
+			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
+
+	public Connection getConnection() {
+		return connection;
+	}
 
 	public int executeInsertAndGetId(String query) {
 		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
@@ -73,16 +86,36 @@ public class DBManager {
 		}
 	}
 
-	public ResultSet executeQuery(String query) {
-		try {
-			return connection.createStatement().executeQuery(query);
+	/**
+	 * A very specific method for executing a statement, where the first argument
+	 * an image.
+	 *
+	 * @param query
+	 * @param image
+	 * @return
+	 */
+	public int executeImageInsertAndGetId(String query, byte[] image) {
+		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+			statement.setBinaryStream(1, new ByteArrayInputStream(image));
+			statement.executeUpdate();
+			ResultSet generatedKeys = statement.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				return generatedKeys.getInt(1);
+			} else {
+				return -1;
+			}
 		} catch (SQLException ex) {
 			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+			return -1;
 		}
-		return null;
 	}
 
-	public Connection getConnection() {
-		return connection;
+	public PreparedStatement getPreparedStatement(String query) {
+		try {
+			return connection.prepareStatement(query);
+		} catch (SQLException ex) {
+			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 }

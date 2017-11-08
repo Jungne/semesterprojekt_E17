@@ -1,10 +1,10 @@
 package interfaces;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class Trip implements Serializable {
 
@@ -22,7 +22,7 @@ public class Trip implements Serializable {
 	private List<InstructorListItem> instructors;
 	private List<OptionalPrice> optionalPrices;
 	private Conversation conversation;
-	private List<String> tags;
+	private Set<String> tags;
 	private List<byte[]> images;
 
 	/**
@@ -44,7 +44,7 @@ public class Trip implements Serializable {
 	 * @param categories
 	 * @param tags
 	 */
-	public Trip(int id, String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<User> participants, List<InstructorListItem> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, List<String> tags) {
+	public Trip(int id, String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<User> participants, List<InstructorListItem> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, Set<String> tags) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -104,7 +104,7 @@ public class Trip implements Serializable {
 	 * @param tags
 	 * @throws java.lang.Exception
 	 */
-	public Trip(String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<String> tags) throws Exception {
+	public Trip(String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags) throws Exception {
 		if (title == null) {
 			throw new Exception("invalid title");
 		}
@@ -264,7 +264,7 @@ public class Trip implements Serializable {
 	/**
 	 * @return the tags
 	 */
-	public List<String> getTags() {
+	public Set<String> getTags() {
 		return tags;
 	}
 

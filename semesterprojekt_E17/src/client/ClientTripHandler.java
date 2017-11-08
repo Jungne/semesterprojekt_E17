@@ -10,12 +10,13 @@ import interfaces.User;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClientTripHandler {
 
-	public static void createTrip(IServerController serverController, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, List<String> tags) throws Exception {
+	public static void createTrip(IServerController serverController, String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, Set<String> tags) throws Exception {
 		try {
 			serverController.createTrip(new Trip(title, description, categories, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags));
 		} catch (RemoteException ex) {

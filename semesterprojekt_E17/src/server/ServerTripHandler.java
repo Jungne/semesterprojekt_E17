@@ -3,15 +3,18 @@ package server;
 import database.DBManager;
 import interfaces.Category;
 import interfaces.InstructorListItem;
+import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.image.Image;
@@ -57,11 +60,46 @@ public class ServerTripHandler {
 		}
 
 		//Creates the group conversation and returnes the conversation id
-		int groupConversationId = createConversation(newTrip.getParticipants());
+		int groupConversationId = addConversation(newTrip.getParticipants());
 
-		//TODO - create rest of trip
-		//temp return
-		return -1;
+		//Adds a trip to the database and returnes its id
+		int tripId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO "
+						+ "Trip (tripID, tripTitle, tripDescription, tripPrice, timeStart, "
+						+ "locationID, tripAddress, participantLimit, userID, conversationID) "
+						+ "VALUES ("
+						+ "DEFAULT, "
+						+ "'" + newTrip.getTitle() + "', "
+						+ "'" + newTrip.getDescription() + "', "
+						+ newTrip.getPrice() + ", "
+						+ "'" + newTrip.getTimeStart() + "', " //TODO insert the date properly
+						+ newTrip.getLocation().getId() + ", "
+						+ "'" + newTrip.getMeetingAddress() + "', "
+						+ newTrip.getParticipantLimit() + ", "
+						+ newTrip.getOrganizer().getId() + ", "
+						+ groupConversationId + ");");
+
+		//Adds categories to the trip in the database
+		addCategories(tripId, newTrip.getCategoryIds());
+
+		//Adds organizer as participant in the trip in the database
+		addParticipant(tripId, newTrip.getParticipants().get(0).getId()); //Assumes that organizer is the only participant in the list
+
+		//Adds a instructor in the trip for each instructorListItem
+		for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
+			addInstructorInTrip(tripId, instructorListItem.getUser().getId(), instructorListItem.getCategory().getId());
+		}
+
+		//Adds the optional prices to the trip in the database
+		addOptionalPrices(tripId, newTrip.getOptionalPrices());
+
+		//Adds the tags to the trip in the database
+		addTags(tripId, newTrip.getTags());
+
+		//Adds the images to the trip in the databaseF
+		for (byte[] image : newTrip.getImages()) {
+			addImagetoTrip(tripId, image);
+		}
+		return tripId;
 	}
 
 	/**
@@ -134,19 +172,67 @@ public class ServerTripHandler {
 		return false;
 	}
 
-	private static int createConversation(List<User> users) {
+	private static int addConversation(List<User> users) {
 		//Inserts a new conversation id into Conversations
 		int conversationId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO Conversations (conversationID) VALUES (DEFAULT);");
 
 		//Inserts all the users from the trip into UsersInConversations
-		String query = "INSERT INTO UsersInConversations (userID, conversationID) VALUES ";
+		String query = "INSERT INTO UsersInConversations (conversationID, userID) VALUES ";
 		String queryValues = "";
 		for (User user : users) {
-			queryValues += ("(" + user.getId() + ", " + conversationId + "), ");
+			queryValues += ("(" + conversationId + ", " + user.getId() + "), ");
 		}
 		query += queryValues.substring(0, queryValues.length() - 2) + ";";
 		DBManager.getInstance().executeUpdate(query);
 		return conversationId;
+	}
+
+	private static void addCategories(int tripId, List<Integer> categoryIds) {
+		String query = "INSERT INTO CategoriesInTrips (tripID, categoryID) VALUES ";
+		String queryValues = "";
+		for (int categoryId : categoryIds) {
+			queryValues += ("(" + tripId + ", " + categoryIds + "), ");
+		}
+		query += queryValues.substring(0, queryValues.length() - 2) + ";";
+		DBManager.getInstance().executeUpdate(query);
+	}
+
+	private static void addParticipant(int tripId, int userId) {
+		DBManager.getInstance().executeUpdate("INSERT INTO UsersInTrips (tripID, userID) "
+						+ "VALUES (" + tripId + ", " + userId + ");");
+	}
+
+	private static void addInstructorInTrip(int tripId, int userId, int categoryId) {
+		DBManager.getInstance().executeUpdate("INSERT INTO InstructorsInTrips (tripID, userID, categoryID) "
+						+ "VALUES (" + tripId + ", " + userId + ", " + categoryId + ");");
+	}
+
+	private static void addOptionalPrices(int tripId, List<OptionalPrice> optionalPrices) {
+		String query = "INSERT INTO OptionalPrices (priceID, tripID, optionalPrice, priceDescription) VALUES ";
+		String queryValues = "";
+		for (OptionalPrice optionalPrice : optionalPrices) {
+			queryValues += ("(DEFAULT, "
+							+ tripId + ", "
+							+ optionalPrice.getPrice() + ", "
+							+ "'" + optionalPrice.getDescription() + "'), ");
+		}
+		query += queryValues.substring(0, queryValues.length() - 2) + ";";
+		DBManager.getInstance().executeUpdate(query);
+	}
+
+	private static void addTags(int tripId, Set<String> tags) {
+		String query = "INSERT INTO TagsInTrips (tripID, tags) VALUES ";
+		String queryValues = "";
+		for (String tag : tags) {
+			queryValues += ("(" + tripId + ", '" + tag + "'), ");
+		}
+		query += queryValues.substring(0, queryValues.length() - 2) + ";";
+		DBManager.getInstance().executeUpdate(query);
+	}
+
+	private static void addImagetoTrip(int tripId, byte[] image) {
+		int imageId = DBManager.getInstance().executeImageInsertAndGetId("INSERT INTO Images (imageID, imageFile) VALUES (DEFAULT, ?);", image);
+		DBManager.getInstance().executeUpdate("INSERT INTO ImagesInTrips (imageID, tripID) VALUES (" + imageId + ", " + tripId + ");");
 	}
 
 	static void modifyTrip(Trip trip) {
