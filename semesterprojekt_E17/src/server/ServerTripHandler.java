@@ -240,7 +240,7 @@ public class ServerTripHandler {
 	}
 
 	private static void addOptionalPrices(int tripId, List<OptionalPrice> optionalPrices) {
-		if (optionalPrices == null) {
+		if (optionalPrices == null || optionalPrices.isEmpty()) {
 			return;
 		}
 		String query = "INSERT INTO OptionalPrices (priceID, tripID, optionalPrice, priceDescription) VALUES ";

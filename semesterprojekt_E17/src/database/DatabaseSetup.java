@@ -1,12 +1,10 @@
 package database;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 public class DatabaseSetup {
 
-	private static DBManager dbm;
+	private static DBManager dbm = DBManager.getInstance();
 
 	private static String createCategoriesQuery
 					= "CREATE TABLE IF NOT EXISTS Categories ("
@@ -193,24 +191,22 @@ public class DatabaseSetup {
 	}
 
 	private static void createTables() {
-		dbm = DBManager.getInstance();
 		for (String query : createTableQueries) {
 			dbm.executeUpdate(query);
 		}
 	}
 
 	private static void dropTables() {
-		dbm = DBManager.getInstance();
 		for (String query : dropTableQueries) {
 			dbm.executeUpdate(query);
 		}
 	}
 
 	private static void addTempData() {
-		dbm = DBManager.getInstance();
 		//Inserts categories
 		dbm.executeUpdate("INSERT INTO Categories VALUES (1, 'Bowling');");
 		dbm.executeUpdate("INSERT INTO Categories VALUES (2, 'Running');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (3, 'Climbing');");
 		//Inserts locations
 		dbm.executeUpdate("INSERT INTO Locations VALUES (1, 'Jylland');");
 		dbm.executeUpdate("INSERT INTO Locations VALUES (2, 'Fyn');");

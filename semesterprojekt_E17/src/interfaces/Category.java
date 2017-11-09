@@ -26,6 +26,10 @@ public class Category implements Serializable {
 		return name;
 	}
 
+	public Category clone() {
+		return new Category(id, name);
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		if (other == null || !(other instanceof Category)) {
