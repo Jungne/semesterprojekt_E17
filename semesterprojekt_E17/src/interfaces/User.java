@@ -1,8 +1,8 @@
 package interfaces;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
-import javafx.scene.image.Image;
 
 public class User implements Serializable {
 
@@ -11,6 +11,7 @@ public class User implements Serializable {
 	private String name;
 	private List<Category> certificates;
 	private byte[] image;
+	private InputStream imageStream;
 
 	public User(int id, String email, String name, List<Category> certificates) {
 		this.id = id;
@@ -24,8 +25,8 @@ public class User implements Serializable {
 		this.email = email;
 		this.name = name;
 		this.image = image;
-	}
-
+	}	
+	
 	public void addCertificate(Category certificate) {
 		getCertificates().add(certificate);
 	}

@@ -76,4 +76,26 @@ public class ServerUserHandler {
 		}
 		return null;
 	}
+
+	public User signIn(String username, String password) {
+		String query = "SELECT Users.userID, email, userName, imageFile "
+						+ "FROM Users, Images "
+						+ "WHERE email = '" + username + "' AND password = '" + password + "' AND Users.imageID = Images.imageId";
+		User user = null;
+		
+		try {
+			ResultSet userRs = DBManager.getInstance().executeQuery(query);
+
+			int userId = userRs.getInt(1);
+			String userEmail = userRs.getString(2);
+			String userName = userRs.getString(3);
+			byte[] userImage = userRs.getBytes(4);
+			
+			user = new User(userId, userEmail, userName, userImage);
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		
+		return user;
+	}
 }
