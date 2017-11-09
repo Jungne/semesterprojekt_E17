@@ -16,7 +16,7 @@ public class HBoxCell extends HBox {
 	Label description = new Label();
 	Label price = new Label();
 	Label category = new Label();
-	
+
 	private int id;
 
 	//Creates an HBoxCell for a trip.
@@ -38,20 +38,22 @@ public class HBoxCell extends HBox {
 		title.setText(trip.getTitle());
 		title.setPrefWidth(150);
 		title.setStyle("-fx-font-weight: bold");
-		
+
 		description.setText(trip.getDescription());
 		description.setPrefWidth(150);
-		
+
 		VBox vbox1 = new VBox();
 		vbox1.getChildren().addAll(title, description);
-		
+
 		price.setText(Double.toString(trip.getPrice()) + "kr");
-		
-		category.setText(trip.getCategories().get(0).getName());
+
+//		if (!trip.getCategories().isEmpty()) {
+//			category.setText(trip.getCategories().get(0).getName());
+//		}
 
 		VBox vbox2 = new VBox();
 		vbox2.getChildren().addAll(price, category);
-		
+
 		imageView.setFitWidth(100);
 		imageView.setPreserveRatio(true);
 

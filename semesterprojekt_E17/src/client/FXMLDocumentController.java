@@ -63,7 +63,6 @@ public class FXMLDocumentController implements Initializable {
 //		categories.add(new Category(0, "testcategory"));
 //		trips.add(new Trip(0, "Test trip", "This a test of the HBoxCell", categories, 420.69, image));
 //		showTrips(trips, browseTripsListView);
-
 	}
 
 	private void showTrips(List<Trip> trips, ListView listview) {
@@ -78,26 +77,29 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleBrowseTripsButton(ActionEvent event) throws RemoteException {
 		browseTripsPane.setVisible(true);
-		
+
 		List<Trip> trips = clientController.getAllTrips();
-		
+
 		showTrips(trips, browseTripsListView);
 	}
-	
+
 	@FXML
 	private void handleSearchTripsButton(ActionEvent event) {
 		//Only date and price works at the moment.
-		
+
 		String searchTitle; //TODO add textfield in GUI.
 		int categoryID = -1; //TODO implement categoryID
 		int locationID = -1; //TODO implement locationID
-		double priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
-		
+		double priceMax = -1;
+		if (!searchTripsPriceTextField.getText().equals("")) {
+			priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
+		}
+
 		//Date stuff
 		LocalDate localDate = searchTripsDatePicker.getValue();
 		Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
 		Date date = Date.from(instant);
-		
+
 		List<Trip> trips = clientController.searchTrips("", -1, date, -1, priceMax);
 
 		showTrips(trips, browseTripsListView);
