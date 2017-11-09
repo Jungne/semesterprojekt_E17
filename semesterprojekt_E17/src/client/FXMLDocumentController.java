@@ -120,6 +120,7 @@ public class FXMLDocumentController implements Initializable {
 //		categories.add(new Category(0, "testcategory"));
 //		trips.add(new Trip(0, "Test trip", "This a test of the HBoxCell", categories, 420.69, image));
 //		showTrips(trips, browseTripsListView);
+
 	}
 
 	private void showPane(AnchorPane pane) {
@@ -166,7 +167,10 @@ public class FXMLDocumentController implements Initializable {
 		String searchTitle; //TODO add textfield in GUI.
 		int categoryID = -1; //TODO implement categoryID
 		int locationID = -1; //TODO implement locationID
-		double priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
+		double priceMax = -1;
+		if (!searchTripsPriceTextField.getText().equals("")) {
+			priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
+		}
 
 		//Date stuff
 		LocalDate localDate = searchTripsDatePicker.getValue();
