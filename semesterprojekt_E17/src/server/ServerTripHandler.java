@@ -2,11 +2,13 @@ package server;
 
 import database.DBManager;
 import interfaces.InstructorListItem;
+import interfaces.Location;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +33,6 @@ public class ServerTripHandler {
 	 * be created.
 	 */
 	public static int createTrip(Trip newTrip) {
-
 		//Checks if category ids exists
 		if (!getCategoryIds().containsAll(newTrip.getCategoryIds())) {
 			return -1;
@@ -57,16 +58,20 @@ public class ServerTripHandler {
 		//Creates the group conversation and returnes the conversation id
 		int groupConversationId = addConversation(newTrip.getParticipants());
 
+		//Chooses the right format to save to the date of meeting
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String timeStart = newTrip.getTimeStart().format(formatter);
+
 		//Adds a trip to the database and returnes its id
 		int tripId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO "
-						+ "Trip (tripID, tripTitle, tripDescription, tripPrice, timeStart, "
+						+ "Trips (tripID, tripTitle, tripDescription, tripPrice, timeStart, "
 						+ "locationID, tripAddress, participantLimit, userID, conversationID) "
 						+ "VALUES ("
 						+ "DEFAULT, "
 						+ "'" + newTrip.getTitle() + "', "
 						+ "'" + newTrip.getDescription() + "', "
 						+ newTrip.getPrice() + ", "
-						+ "'" + newTrip.getTimeStart() + "', " //TODO insert the date properly
+						+ "'" + timeStart + "', "
 						+ newTrip.getLocation().getId() + ", "
 						+ "'" + newTrip.getMeetingAddress() + "', "
 						+ newTrip.getParticipantLimit() + ", "
@@ -90,11 +95,28 @@ public class ServerTripHandler {
 		//Adds the tags to the trip in the database
 		addTags(tripId, newTrip.getTags());
 
-		//Adds the images to the trip in the databaseF
-		for (byte[] image : newTrip.getImages()) {
-			addImagetoTrip(tripId, image);
+		//Adds the images to the trip in the database
+		if (newTrip.getImages() != null) {
+			for (byte[] image : newTrip.getImages()) {
+				addImagetoTrip(tripId, image);
+			}
 		}
+
 		return tripId;
+	}
+
+	public static List<Category> getCategories() {
+		ArrayList<Category> categories = new ArrayList<>();
+		ResultSet rs = DBManager.getInstance().executeQuery("SELECT categoryID, categoryName FROM Categories;");
+		try {
+			while (rs.next()) {
+				categories.add(new Category(rs.getInt(1), rs.getString(2)));
+			}
+			return categories;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 
 	/**
@@ -110,6 +132,20 @@ public class ServerTripHandler {
 				categoryIds.add(rs.getInt(1));
 			}
 			return categoryIds;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
+	}
+
+	public static List<Location> getLocations() {
+		ArrayList<Location> locations = new ArrayList<>();
+		ResultSet rs = DBManager.getInstance().executeQuery("SELECT locationID, locationName FROM Locations;");
+		try {
+			while (rs.next()) {
+				locations.add(new Location(rs.getInt(1), rs.getString(2)));
+			}
+			return locations;
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 			return null;
@@ -186,7 +222,7 @@ public class ServerTripHandler {
 		String query = "INSERT INTO CategoriesInTrips (tripID, categoryID) VALUES ";
 		String queryValues = "";
 		for (int categoryId : categoryIds) {
-			queryValues += ("(" + tripId + ", " + categoryIds + "), ");
+			queryValues += ("(" + tripId + ", " + categoryId + "), ");
 		}
 		query += queryValues.substring(0, queryValues.length() - 2) + ";";
 		DBManager.getInstance().executeUpdate(query);
@@ -203,6 +239,9 @@ public class ServerTripHandler {
 	}
 
 	private static void addOptionalPrices(int tripId, List<OptionalPrice> optionalPrices) {
+		if (optionalPrices == null || optionalPrices.isEmpty()) {
+			return;
+		}
 		String query = "INSERT INTO OptionalPrices (priceID, tripID, optionalPrice, priceDescription) VALUES ";
 		String queryValues = "";
 		for (OptionalPrice optionalPrice : optionalPrices) {
@@ -216,7 +255,7 @@ public class ServerTripHandler {
 	}
 
 	private static void addTags(int tripId, Set<String> tags) {
-		String query = "INSERT INTO TagsInTrips (tripID, tags) VALUES ";
+		String query = "INSERT INTO TagsInTrips (tripID, tag) VALUES ";
 		String queryValues = "";
 		for (String tag : tags) {
 			queryValues += ("(" + tripId + ", '" + tag + "'), ");

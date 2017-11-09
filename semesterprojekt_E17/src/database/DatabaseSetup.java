@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 public class DatabaseSetup {
 
-	private static DBManager dbm;
+	private static DBManager dbm = DBManager.getInstance();
 
 	private static String createCategoriesQuery
 					= "CREATE TABLE IF NOT EXISTS Categories ("
@@ -60,6 +60,7 @@ public class DatabaseSetup {
 					+ "userID int, "
 					+ "PRIMARY KEY (conversationID, userID), "
 					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
+					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
 	private static String createMessagesQuery
@@ -186,20 +187,39 @@ public class DatabaseSetup {
 	public static void main(String[] args) throws SQLException {
 		//createTables();
 		//dropTables();
+		//addTempData();
 	}
 
 	private static void createTables() {
-		dbm = DBManager.getInstance();
 		for (String query : createTableQueries) {
 			dbm.executeUpdate(query);
 		}
 	}
 
 	private static void dropTables() {
-		dbm = DBManager.getInstance();
 		for (String query : dropTableQueries) {
 			dbm.executeUpdate(query);
 		}
+	}
+
+	private static void addTempData() {
+		//Inserts categories
+		dbm.executeUpdate("INSERT INTO Categories VALUES (1, 'Bowling');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (2, 'Running');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (3, 'Climbing');");
+		//Inserts locations
+		dbm.executeUpdate("INSERT INTO Locations VALUES (1, 'Jylland');");
+		dbm.executeUpdate("INSERT INTO Locations VALUES (2, 'Fyn');");
+		dbm.executeUpdate("INSERT INTO Locations VALUES (3, 'Sjælland');");
+		//Inserts users
+		dbm.executeUpdate("INSERT INTO Users VALUES (1, 'dalun12@student.sdu.dk', '123456', 'Daniel');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (2, 'eitho16@student.sdu.dk', '123456', 'Eirikur');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (3, 'hjrin15@student.sdu.dk', '123456', 'Hjalte');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (4, 'julos14@student.sdu.dk', '123456', 'Jungne');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (5, 'lalun13@student.sdu.dk', '123456', 'Lasse');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (6, 'lawar15@student.sdu.dk', '123456', 'Laura');");
+		//Inserts certificates
+		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2);");
 	}
 
 }

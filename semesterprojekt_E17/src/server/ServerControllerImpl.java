@@ -1,7 +1,9 @@
 package server;
 
+import interfaces.Category;
 import interfaces.Conversation;
 import interfaces.IServerController;
+import interfaces.Location;
 import interfaces.Message;
 import interfaces.Trip;
 import interfaces.User;
@@ -41,8 +43,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public void createTrip(Trip newTrip) throws RemoteException {
-		ServerTripHandler.createTrip(newTrip);
+	public int createTrip(Trip newTrip) throws RemoteException {
+		return ServerTripHandler.createTrip(newTrip);
 	}
 
 	@Override
@@ -50,10 +52,10 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 		return ServerTripHandler.searchTrip(searchTitle, category, timedateStart, location, priceMAX);
 	}
 
-  @Override
-  public void modifyTrip(Trip trip) throws RemoteException {
-    ServerTripHandler.modifyTrip(trip);
-  }
+	@Override
+	public void modifyTrip(Trip trip) throws RemoteException {
+		ServerTripHandler.modifyTrip(trip);
+	}
 
 	@Override
 	public void deleteTrip(Trip trip) throws RemoteException {
@@ -77,6 +79,16 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
+	public List<Category> getCategories() throws RemoteException {
+		return ServerTripHandler.getCategories();
+	}
+
+	@Override
+	public List<Location> getLocations() throws RemoteException {
+		return ServerTripHandler.getLocations();
+	}
+
+	@Override
 	public List<Conversation> getUserConversations(User user) throws RemoteException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
@@ -95,10 +107,11 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public void updateConversation(Conversation conversation) throws RemoteException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
-        @Override
-        public Trip showTrip(int tripsID) throws RemoteException {
-           return ServerTripHandler.showTrip(tripsID);
-            
-        }
+
+	@Override
+	public Trip showTrip(int tripsID) throws RemoteException {
+		return ServerTripHandler.showTrip(tripsID);
+
+	}
 
 }

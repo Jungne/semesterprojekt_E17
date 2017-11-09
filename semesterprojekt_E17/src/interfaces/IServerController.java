@@ -19,7 +19,7 @@ public interface IServerController extends Remote {
     
     public List<Trip> searchTrips(String searchTitle, int category, Date timedateStart, int location, double priceMAX) throws RemoteException;
     
-    public void createTrip(Trip newTrip) throws RemoteException;
+    public int createTrip(Trip newTrip) throws RemoteException;
     
     public void modifyTrip(Trip trip) throws RemoteException;
     
@@ -30,6 +30,10 @@ public interface IServerController extends Remote {
     public boolean instructInTrip(Trip trip, User user) throws RemoteException;
     
     public void kickParticipant(Trip trip, User user) throws RemoteException;
+  
+	  public List<Category> getCategories() throws RemoteException;
+
+	  public List<Location> getLocations() throws RemoteException;
     
     //Messaging functions
     public List<Conversation> getUserConversations(User user) throws RemoteException;
@@ -39,6 +43,7 @@ public interface IServerController extends Remote {
     public void sendMessage(Message message) throws RemoteException;
     
     public void updateConversation(Conversation conversation) throws RemoteException;
+  
     public Trip showTrip(int tripsID) throws RemoteException;
-    
+
 }
