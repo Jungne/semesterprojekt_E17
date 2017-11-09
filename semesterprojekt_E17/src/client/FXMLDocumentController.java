@@ -1,16 +1,11 @@
 package client;
 
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import interfaces.Trip;
 import interfaces.User;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
@@ -201,7 +196,7 @@ public class FXMLDocumentController implements Initializable {
 		if (password.equals(repeatPassword)) {
 			User user = new User(-1, email, name, profilePicture);
 			try {
-				clientController.signUp(user, password);
+				clientController.signUp(user, hashPassword(password));
 			} catch (RemoteException ex) {
 				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -230,26 +225,5 @@ public class FXMLDocumentController implements Initializable {
 		}
 
 		return String.format("%064x", new java.math.BigInteger(1, hashBytes)).toLowerCase();
-	}
-
-	private byte[] convertImageToByteArray() {
-		byte[] returnArray = null;
-		try {
-			ByteArrayOutputStream byteArrayOutput = new ByteArrayOutputStream();
-			BufferedImage image = ImageIO.read(newAccountProfilePictureFile);
-			ImageIO.write(image, "png", byteArrayOutput);
-			byteArrayOutput.flush();
-			
-			String base64String = Base64.encode(byteArrayOutput.toByteArray());
-			byteArrayOutput.close();
-			
-			returnArray = Base64.decode(base64String);
-		} catch (IOException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (Base64DecodingException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		
-		return returnArray;				
 	}
 }
