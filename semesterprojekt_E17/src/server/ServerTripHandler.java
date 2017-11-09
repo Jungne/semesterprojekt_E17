@@ -1,14 +1,15 @@
 package server;
 
 import database.DBManager;
+import interfaces.Category;
 import interfaces.InstructorListItem;
+import interfaces.Location;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,8 +60,8 @@ public class ServerTripHandler {
 		int groupConversationId = addConversation(newTrip.getParticipants());
 
 		//Chooses the right format to save to the date of meeting
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String timeStart = dateFormat.format(newTrip.getTimeStart());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String timeStart = newTrip.getTimeStart().format(formatter);
 
 		//Adds a trip to the database and returnes its id
 		int tripId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO "
@@ -79,7 +80,6 @@ public class ServerTripHandler {
 						+ groupConversationId + ");");
 
 		//Adds categories to the trip in the database
-		System.out.println(newTrip.getCategoryIds());
 		addCategories(tripId, newTrip.getCategoryIds());
 
 		//Adds organizer as participant in the trip in the database
@@ -106,6 +106,20 @@ public class ServerTripHandler {
 		return tripId;
 	}
 
+	public static List<Category> getCategories() {
+		ArrayList<Category> categories = new ArrayList<>();
+		ResultSet rs = DBManager.getInstance().executeQuery("SELECT categoryID, categoryName FROM Categories;");
+		try {
+			while (rs.next()) {
+				categories.add(new Category(rs.getInt(1), rs.getString(2)));
+			}
+			return categories;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
+	}
+
 	/**
 	 * Gets all category ids from the database.
 	 *
@@ -119,6 +133,20 @@ public class ServerTripHandler {
 				categoryIds.add(rs.getInt(1));
 			}
 			return categoryIds;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
+	}
+
+	public static List<Location> getLocations() {
+		ArrayList<Location> locations = new ArrayList<>();
+		ResultSet rs = DBManager.getInstance().executeQuery("SELECT locationID, locationName FROM Locations;");
+		try {
+			while (rs.next()) {
+				locations.add(new Location(rs.getInt(1), rs.getString(2)));
+			}
+			return locations;
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 			return null;

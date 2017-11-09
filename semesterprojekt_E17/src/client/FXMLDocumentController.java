@@ -8,13 +8,14 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -24,8 +25,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
@@ -63,6 +66,14 @@ public class FXMLDocumentController implements Initializable {
 	private Button createTripBackButton;
 	@FXML
 	private Button createTripCreateTripButton;
+	@FXML
+	private ComboBox<Category> createTripCategoryComboBox;
+	@FXML
+	private ComboBox<Location> createTripLocationComboBox;
+	@FXML
+	private TextField createTripTitleTextField;
+	@FXML
+	private TextArea createTripDescriptionTextArea;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -131,6 +142,16 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleMyTripsButton(ActionEvent event) {
 		showPane(createTripPane1);
+
+		//Gets all categories from the server and displays them in the comboBox
+		ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
+		createTripCategoryComboBox.setItems(categories);
+		createTripCategoryComboBox.setPromptText("Choose");
+
+		//Gets all locations from the server and displays them in the comboBox
+		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
+		createTripLocationComboBox.setItems(locations);
+		createTripLocationComboBox.setPromptText("Choose");
 	}
 
 	@FXML
@@ -147,11 +168,6 @@ public class FXMLDocumentController implements Initializable {
 	private void handleCreateTripButtons(ActionEvent event) throws Exception {
 		if (event.getSource() == createTripCreateTripButton) {
 
-			//Uses random category
-			ArrayList<Category> categories = new ArrayList<>();
-			categories.add(new Category(2, "Running"));
-			//Uses random location
-			Location location = new Location(2, "Fyn");
 			//Uses random organizer
 			User organizer = new User(5, "lalun13@student.sdu.dk", "Lasse", null);
 			//Organizer instructs in running
@@ -162,8 +178,17 @@ public class FXMLDocumentController implements Initializable {
 			tags.add("running");
 			tags.add("easy");
 			tags.add("10km");
-			//Creates the trip
-			clientController.createTrip("test Title", "This is a test trip", categories, 100, new Date(2017, 12, 24), location, "Kertemindevej 47, 5540 Ullerslev", 12, organizer, organizerInstructorIn, null, tags, null);
+
+			//Gets all the values and creates the trip
+			String title = createTripTitleTextField.getText();
+			String description = createTripDescriptionTextArea.getText();	
+			ArrayList<Category> categories = new ArrayList<>();
+			categories.add(createTripCategoryComboBox.getValue());
+			double price = 100; //TODO
+			LocalDateTime date = LocalDateTime.of(2017, Month.DECEMBER, 24, 10, 0); //TODO
+			Location location = createTripLocationComboBox.getValue();
+
+			clientController.createTrip(title, description, categories, price, date, location, "Kertemindevej 47, 5540 Ullerslev", 12, organizer, organizerInstructorIn, null, tags, null);
 		}
 	}
 }
