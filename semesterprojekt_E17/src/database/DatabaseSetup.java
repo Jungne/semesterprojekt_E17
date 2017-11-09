@@ -187,6 +187,7 @@ public class DatabaseSetup {
 	public static void main(String[] args) throws SQLException {
 		//createTables();
 		//dropTables();
+		//addTempData();
 	}
 
 	private static void createTables() {
@@ -201,6 +202,26 @@ public class DatabaseSetup {
 		for (String query : dropTableQueries) {
 			dbm.executeUpdate(query);
 		}
+	}
+
+	private static void addTempData() {
+		dbm = DBManager.getInstance();
+		//Inserts categories
+		dbm.executeUpdate("INSERT INTO Categories VALUES (1, 'Bowling');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (2, 'Running');");
+		//Inserts locations
+		dbm.executeUpdate("INSERT INTO Locations VALUES (1, 'Jylland');");
+		dbm.executeUpdate("INSERT INTO Locations VALUES (2, 'Fyn');");
+		dbm.executeUpdate("INSERT INTO Locations VALUES (3, 'Sjælland');");
+		//Inserts users
+		dbm.executeUpdate("INSERT INTO Users VALUES (1, 'dalun12@student.sdu.dk', '123456', 'Daniel');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (2, 'eitho16@student.sdu.dk', '123456', 'Eirikur');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (3, 'hjrin15@student.sdu.dk', '123456', 'Hjalte');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (4, 'julos14@student.sdu.dk', '123456', 'Jungne');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (5, 'lalun13@student.sdu.dk', '123456', 'Lasse');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (6, 'lawar15@student.sdu.dk', '123456', 'Laura');");
+		//Inserts certificates
+		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2);");
 	}
 
 }

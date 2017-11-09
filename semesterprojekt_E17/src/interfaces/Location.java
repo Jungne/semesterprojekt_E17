@@ -1,6 +1,8 @@
 package interfaces;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
 
 	private int id;
 	private String name;

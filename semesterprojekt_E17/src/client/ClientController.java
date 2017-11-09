@@ -11,7 +11,9 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -56,8 +58,8 @@ public class ClientController {
 		ClientTripHandler.participateInTrip(user, serverController, trip);
 	}
 
-	public void createTrip(String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, Set<String> tags) throws Exception {
-		ClientTripHandler.createTrip(serverController, title, description, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, categories, tags);
+	public void createTrip(String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
+		ClientTripHandler.createTrip(serverController, title, description, categories, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
 	}
 
 	public void modifyTrip(Trip trip) {
@@ -75,4 +77,5 @@ public class ClientController {
 	public void kickParticipant(Trip trip, User user) {
 		ClientTripHandler.kickParticipant(serverController, trip, user);
 	}
+
 }

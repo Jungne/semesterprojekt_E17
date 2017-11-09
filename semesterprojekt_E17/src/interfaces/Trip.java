@@ -104,7 +104,7 @@ public class Trip implements Serializable {
 	 * @param tags
 	 * @throws java.lang.Exception
 	 */
-	public Trip(String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags) throws Exception {
+	public Trip(String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
 		if (title == null) {
 			throw new Exception("invalid title");
 		}
@@ -149,6 +149,7 @@ public class Trip implements Serializable {
 
 		this.optionalPrices = optionalPrices;
 		this.tags = tags;
+		this.images = images;
 	}
 
 	public void participate(User user) {

@@ -1,23 +1,20 @@
 package server;
 
 import database.DBManager;
-import interfaces.Category;
 import interfaces.InstructorListItem;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.image.Image;
 
 /**
  * This class handles creation of trip objects to be sent to the client. This
@@ -36,7 +33,6 @@ public class ServerTripHandler {
 	 * be created.
 	 */
 	public static int createTrip(Trip newTrip) {
-
 		//Checks if category ids exists
 		if (!getCategoryIds().containsAll(newTrip.getCategoryIds())) {
 			return -1;
@@ -62,16 +58,20 @@ public class ServerTripHandler {
 		//Creates the group conversation and returnes the conversation id
 		int groupConversationId = addConversation(newTrip.getParticipants());
 
+		//Chooses the right format to save to the date of meeting
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String timeStart = dateFormat.format(newTrip.getTimeStart());
+
 		//Adds a trip to the database and returnes its id
 		int tripId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO "
-						+ "Trip (tripID, tripTitle, tripDescription, tripPrice, timeStart, "
+						+ "Trips (tripID, tripTitle, tripDescription, tripPrice, timeStart, "
 						+ "locationID, tripAddress, participantLimit, userID, conversationID) "
 						+ "VALUES ("
 						+ "DEFAULT, "
 						+ "'" + newTrip.getTitle() + "', "
 						+ "'" + newTrip.getDescription() + "', "
 						+ newTrip.getPrice() + ", "
-						+ "'" + newTrip.getTimeStart() + "', " //TODO insert the date properly
+						+ "'" + timeStart + "', "
 						+ newTrip.getLocation().getId() + ", "
 						+ "'" + newTrip.getMeetingAddress() + "', "
 						+ newTrip.getParticipantLimit() + ", "
@@ -79,6 +79,7 @@ public class ServerTripHandler {
 						+ groupConversationId + ");");
 
 		//Adds categories to the trip in the database
+		System.out.println(newTrip.getCategoryIds());
 		addCategories(tripId, newTrip.getCategoryIds());
 
 		//Adds organizer as participant in the trip in the database
@@ -95,10 +96,13 @@ public class ServerTripHandler {
 		//Adds the tags to the trip in the database
 		addTags(tripId, newTrip.getTags());
 
-		//Adds the images to the trip in the databaseF
-		for (byte[] image : newTrip.getImages()) {
-			addImagetoTrip(tripId, image);
+		//Adds the images to the trip in the database
+		if (newTrip.getImages() != null) {
+			for (byte[] image : newTrip.getImages()) {
+				addImagetoTrip(tripId, image);
+			}
 		}
+
 		return tripId;
 	}
 
@@ -191,7 +195,7 @@ public class ServerTripHandler {
 		String query = "INSERT INTO CategoriesInTrips (tripID, categoryID) VALUES ";
 		String queryValues = "";
 		for (int categoryId : categoryIds) {
-			queryValues += ("(" + tripId + ", " + categoryIds + "), ");
+			queryValues += ("(" + tripId + ", " + categoryId + "), ");
 		}
 		query += queryValues.substring(0, queryValues.length() - 2) + ";";
 		DBManager.getInstance().executeUpdate(query);
@@ -208,6 +212,9 @@ public class ServerTripHandler {
 	}
 
 	private static void addOptionalPrices(int tripId, List<OptionalPrice> optionalPrices) {
+		if (optionalPrices == null) {
+			return;
+		}
 		String query = "INSERT INTO OptionalPrices (priceID, tripID, optionalPrice, priceDescription) VALUES ";
 		String queryValues = "";
 		for (OptionalPrice optionalPrice : optionalPrices) {
@@ -221,7 +228,7 @@ public class ServerTripHandler {
 	}
 
 	private static void addTags(int tripId, Set<String> tags) {
-		String query = "INSERT INTO TagsInTrips (tripID, tags) VALUES ";
+		String query = "INSERT INTO TagsInTrips (tripID, tag) VALUES ";
 		String queryValues = "";
 		for (String tag : tags) {
 			queryValues += ("(" + tripId + ", '" + tag + "'), ");
