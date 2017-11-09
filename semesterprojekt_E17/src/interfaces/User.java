@@ -2,7 +2,6 @@ package interfaces;
 
 import java.io.Serializable;
 import java.util.List;
-import javafx.scene.image.Image;
 
 public class User implements Serializable {
 
@@ -11,13 +10,6 @@ public class User implements Serializable {
 	private String name;
 	private List<Category> certificates;
 	private byte[] image;
-
-	public User(int id, String email, String name, List<Category> certificates) {
-		this.id = id;
-		this.email = email;
-		this.name = name;
-		this.certificates = certificates;
-	}
 
 	public User(int id, String email, String name, byte[] image) {
 		this.id = id;

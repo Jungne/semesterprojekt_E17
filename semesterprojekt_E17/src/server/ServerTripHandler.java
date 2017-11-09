@@ -1,6 +1,7 @@
 package server;
 
 import database.DBManager;
+import interfaces.Category;
 import interfaces.InstructorListItem;
 import interfaces.Location;
 import interfaces.OptionalPrice;
