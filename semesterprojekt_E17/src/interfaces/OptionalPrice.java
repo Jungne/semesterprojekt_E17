@@ -1,6 +1,8 @@
 package interfaces;
 
-public class OptionalPrice {
+import java.io.Serializable;
+
+public class OptionalPrice implements Serializable {
 
 	private int id;
 	private double price;

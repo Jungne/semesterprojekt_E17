@@ -1,7 +1,6 @@
 package client;
 
 import interfaces.Category;
-import interfaces.Conversation;
 import interfaces.IServerController;
 import interfaces.Location;
 import interfaces.OptionalPrice;
@@ -11,6 +10,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -62,13 +62,17 @@ public class ClientController {
 	public Trip showTrip(int tripsID) {
 		return ClientTripHandler.showTrip(tripsID, serverController);
 	}
+  
+	public Trip viewTrip(int tripsID) {
+		return ClientTripHandler.viewTrip(tripsID, serverController);
+	}
 
 	public void participateInTrip(User user, Trip trip) {
 		ClientTripHandler.participateInTrip(user, serverController, trip);
 	}
 
-	public void createTrip(String title, String description, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, List<Category> categories, Set<String> tags) throws Exception {
-		ClientTripHandler.createTrip(serverController, title, description, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, categories, tags);
+	public int createTrip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
+		return ClientTripHandler.createTrip(serverController, title, description, categories, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
 	}
 
 	public void modifyTrip(Trip trip) {
@@ -86,4 +90,13 @@ public class ClientController {
 	public void kickParticipant(Trip trip, User user) {
 		ClientTripHandler.kickParticipant(serverController, trip, user);
 	}
+
+	public List<Category> getCategories() {
+		return ClientTripHandler.getCategories(serverController);
+	}
+
+	public List<Location> getLocations() {
+		return ClientTripHandler.getLocations(serverController);
+	}
+
 }

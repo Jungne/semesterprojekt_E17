@@ -19,6 +19,11 @@ public class DBManager {
 		String url = "jdbc:postgresql://tek-mmmi-db0a.tek.c.sdu.dk/si3_2017_group_12_db";
 		String user = "si3_2017_group_12";
 		String password = "TGIF27-Ricky";
+		/*
+		String url = "jdbc:postgresql://localhost:5432/Test";
+		String user = "postgres";
+		String password = "1234";
+		 */
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {
@@ -57,7 +62,7 @@ public class DBManager {
 			Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
+
 	public ResultSet executeQuery(String query) {
 		try {
 			return connection.createStatement().executeQuery(query);

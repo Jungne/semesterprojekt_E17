@@ -13,13 +13,6 @@ public class User implements Serializable {
 	private byte[] image;
 	private InputStream imageStream;
 
-	public User(int id, String email, String name, List<Category> certificates) {
-		this.id = id;
-		this.email = email;
-		this.name = name;
-		this.certificates = certificates;
-	}
-
 	public User(int id, String email, String name, byte[] image) {
 		this.id = id;
 		this.email = email;
