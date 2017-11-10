@@ -115,6 +115,10 @@ public class FXMLDocumentController implements Initializable {
   private Text viewTripTitleLabel;
   @FXML
   private Text viewTripDescriptionLabel;
+  @FXML
+  private Text viewTripPriceLabel;
+  @FXML
+  private Button viewTripButton;
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -264,12 +268,22 @@ public class FXMLDocumentController implements Initializable {
       //TODO - Go to ModifyTripPane
     }
     if (event.getSource() == myTripsViewTripButton) {
-      Trip trip = clientController.viewTrip(0); //Should be id obtained from selected element in list view on my trips
-      if (trip != null) {
-        viewTripDescriptionLabel.setText("Trip #" + trip.getId());
-        viewTripDescriptionLabel.setText(trip.getTitle());
-        showPane(viewTripPane);
-      }
+      viewTrip(0);
+    }
+  }
+
+  @FXML
+  private void handleViewTripButton(ActionEvent event) {
+    viewTrip(0);
+  }
+
+  private void viewTrip(int id) {
+    Trip trip = clientController.viewTrip(1); //Should be id obtained from selected element in list view on my trips
+    if (trip != null) {
+      viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
+      viewTripDescriptionLabel.setText(trip.getDescription());
+      viewTripPriceLabel.setText("Price: " + trip.getPrice());
+      showPane(viewTripPane);
     }
   }
 }
