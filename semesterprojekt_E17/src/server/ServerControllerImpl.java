@@ -114,4 +114,9 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
 	}
 
+  @Override
+  public Trip viewTrip(int tripID) throws RemoteException {
+		return ServerTripHandler.viewTrip(tripID);
+  }
+
 }

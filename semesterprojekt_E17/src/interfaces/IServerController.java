@@ -34,6 +34,8 @@ public interface IServerController extends Remote {
 	  public List<Category> getCategories() throws RemoteException;
 
 	  public List<Location> getLocations() throws RemoteException;
+
+	  public Trip viewTrip(int tripID) throws RemoteException;
     
     //Messaging functions
     public List<Conversation> getUserConversations(User user) throws RemoteException;
