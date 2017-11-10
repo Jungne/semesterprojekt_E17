@@ -375,8 +375,9 @@ public class ServerTripHandler {
       while (rs.next()) {
         int id = rs.getInt("tripID");
         String title = rs.getString("tripTitle");
-        //String description = rs.getString("tripDescription");
-        return new Trip(id, title);
+        String description = rs.getString("tripDescription");
+        double price = Double.parseDouble(rs.getString("tripPrice"));
+        return new Trip(id, title, description, price, null);
       }
     } catch (SQLException ex) {
       Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);

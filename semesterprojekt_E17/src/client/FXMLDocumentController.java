@@ -113,13 +113,17 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private TextField createTripTagsTextField;
 
-	//View Trip
-	@FXML
-	private AnchorPane viewTripPane;
-	@FXML
-	private Text viewTripTitleLabel;
-	@FXML
-	private Text viewTripDescriptionLabel;
+  //View Trip
+  @FXML
+  private AnchorPane viewTripPane;
+  @FXML
+  private Text viewTripTitleLabel;
+  @FXML
+  private Text viewTripDescriptionLabel;
+  @FXML
+  private Text viewTripPriceLabel;
+  @FXML
+  private Button viewTripButton;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -265,22 +269,31 @@ public class FXMLDocumentController implements Initializable {
 			ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 			createTripCategoryComboBox.setItems(categories);
 			createTripCategoryComboBox.setPromptText("Choose");
+      //Gets all locations from the server and displays them in the comboBox
+      ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
+      createTripLocationComboBox.setItems(locations);
+      createTripLocationComboBox.setPromptText("Choose");
+    }
+    if (event.getSource() == myTripsModifyTripButton) {
+      //TODO - Go to ModifyTripPane
+    }
+    if (event.getSource() == myTripsViewTripButton) {
+      viewTrip(0);
+    }
+  }
 
-			//Gets all locations from the server and displays them in the comboBox
-			ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
-			createTripLocationComboBox.setItems(locations);
-			createTripLocationComboBox.setPromptText("Choose");
-		}
-		if (event.getSource() == myTripsModifyTripButton) {
-			//TODO - Go to ModifyTripPane
-		}
-		if (event.getSource() == myTripsViewTripButton) {
-			Trip trip = clientController.viewTrip(0); //Should be id obtained from selected element in list view on my trips
-			if (trip != null) {
-				viewTripDescriptionLabel.setText("Trip #" + trip.getId());
-				viewTripDescriptionLabel.setText(trip.getTitle());
-				showPane(viewTripPane);
-			}
-		}
-	}
+  @FXML
+  private void handleViewTripButton(ActionEvent event) {
+    viewTrip(0);
+  }
+
+  private void viewTrip(int id) {
+    Trip trip = clientController.viewTrip(1); //Should be id obtained from selected element in list view on my trips
+    if (trip != null) {
+      viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
+      viewTripDescriptionLabel.setText(trip.getDescription());
+      viewTripPriceLabel.setText("Price: " + trip.getPrice());
+      showPane(viewTripPane);
+    }
+  }
 }

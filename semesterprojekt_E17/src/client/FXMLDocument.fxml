@@ -31,7 +31,7 @@
             <Button mnemonicParsing="false" text="Log in/out" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" visible="false">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -71,6 +71,7 @@
             </Text>
             <Button fx:id="searchTripsButton" layoutX="81.0" layoutY="341.0" mnemonicParsing="false" onAction="#handleSearchTripsButton" text="Search" />
             <ListView fx:id="browseTripsListView" layoutX="239.0" layoutY="60.0" prefHeight="548.0" prefWidth="392.0" />
+            <Button fx:id="viewTripButton" layoutX="74.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleViewTripButton" text="View Trip" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="createTripPane1" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
@@ -186,13 +187,18 @@
          </children></AnchorPane>
       <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
-            <Text fx:id="viewTripTitleLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trip #0">
+            <Text fx:id="viewTripTitleLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trip #0 - Title">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Text>
             <Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
-            <Text fx:id="viewTripDescriptionLabel" layoutX="42.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+            <Text fx:id="viewTripDescriptionLabel" layoutX="42.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
+            <Text fx:id="viewTripPriceLabel" layoutX="42.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price">
                <font>
                   <Font name="System Italic" size="13.0" />
                </font>
