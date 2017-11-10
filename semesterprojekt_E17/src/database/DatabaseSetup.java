@@ -129,7 +129,7 @@ public class DatabaseSetup {
 					+ "optionalPrice decimal(10,2) NOT NULL, "
 					+ "priceDescription varchar(255) NOT NULL, "
 					+ "PRIMARY KEY (priceID), "
-					+ "FOREIGN KEY (tripID) REFERENCES trips(tripID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
 					+ ");";
 
 	private static String createTagsInTripsQuery
@@ -204,20 +204,20 @@ public class DatabaseSetup {
 
 	private static void addTempData() {
 		//Inserts categories
-		dbm.executeUpdate("INSERT INTO Categories VALUES (1, 'Bowling');");
-		dbm.executeUpdate("INSERT INTO Categories VALUES (2, 'Running');");
-		dbm.executeUpdate("INSERT INTO Categories VALUES (3, 'Climbing');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Bowling');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Running');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Climbing');");
 		//Inserts locations
-		dbm.executeUpdate("INSERT INTO Locations VALUES (1, 'Jylland');");
-		dbm.executeUpdate("INSERT INTO Locations VALUES (2, 'Fyn');");
-		dbm.executeUpdate("INSERT INTO Locations VALUES (3, 'Sjælland');");
+		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Jylland');");
+		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Fyn');");
+		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Sjælland');");
 		//Inserts users
-		dbm.executeUpdate("INSERT INTO Users VALUES (1, 'dalun12@student.sdu.dk', '123456', 'Daniel');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (2, 'eitho16@student.sdu.dk', '123456', 'Eirikur');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (3, 'hjrin15@student.sdu.dk', '123456', 'Hjalte');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (4, 'julos14@student.sdu.dk', '123456', 'Jungne');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (5, 'lalun13@student.sdu.dk', '123456', 'Lasse');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (6, 'lawar15@student.sdu.dk', '123456', 'Laura');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'dalun12@student.sdu.dk', '123456', 'Daniel');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'eitho16@student.sdu.dk', '123456', 'Eirikur');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'hjrin15@student.sdu.dk', '123456', 'Hjalte');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'julos14@student.sdu.dk', '123456', 'Jungne');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lalun13@student.sdu.dk', '123456', 'Lasse');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '123456', 'Laura');");
 		//Inserts certificates
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2);");
 	}
