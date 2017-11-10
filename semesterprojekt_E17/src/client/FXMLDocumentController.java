@@ -171,23 +171,6 @@ public class FXMLDocumentController implements Initializable {
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
-		//Testing HBoxCell
-//		ArrayList<Trip> trips = new ArrayList<>();
-//		byte[] image = "".getBytes();
-//		ArrayList<Category> categories = new ArrayList<>();
-//		categories.add(new Category(0, "testcategory"));
-//		trips.add(new Trip(0, "Test trip", "This a test of the HBoxCell", categories, 420.69, image));
-//		showTrips(trips, browseTripsListView);
-	}
-
-
-	private void handleBrowseTripsButton(ActionEvent event) throws RemoteException {
-		browseTripsPane.setVisible(true);
-
-		List<Trip> trips = clientController.getAllTrips();
-
-		showTrips(trips, browseTripsListView);
 	}
 
 	@FXML
