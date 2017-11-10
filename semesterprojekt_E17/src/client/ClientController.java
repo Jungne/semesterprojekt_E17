@@ -62,6 +62,10 @@ public class ClientController {
 	public Trip showTrip(int tripsID) {
 		return ClientTripHandler.showTrip(tripsID, serverController);
 	}
+  
+	public Trip viewTrip(int tripsID) {
+		return ClientTripHandler.viewTrip(tripsID, serverController);
+	}
 
 	public void participateInTrip(User user, Trip trip) {
 		ClientTripHandler.participateInTrip(user, serverController, trip);
