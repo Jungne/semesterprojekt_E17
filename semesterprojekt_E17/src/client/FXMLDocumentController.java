@@ -345,10 +345,6 @@ public class FXMLDocumentController implements Initializable {
 		return String.format("%064x", new java.math.BigInteger(1, hashBytes)).toLowerCase();
 	}
 
-	private void handleMyTripsButton(ActionEvent event) {
-		showPane(createTripPane1);
-	}
-
 	@FXML
 	private void handleCreateTripNextBackButton(ActionEvent event) {
 		if (event.getSource() == createTripNextButton) {
