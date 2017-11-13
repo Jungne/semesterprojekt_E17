@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -40,10 +39,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -56,92 +57,92 @@ import javax.imageio.ImageIO;
 
 public class FXMLDocumentController implements Initializable {
 
-  private ClientController clientController;
-	
+	private ClientController clientController;
+
 	private File newAccountProfilePictureFile;
 
-  @FXML
-  private AnchorPane mainPane;
+	@FXML
+	private AnchorPane mainPane;
 
-  //toolbar
-  @FXML
-  private Button toolBarMessagingButton;
-  @FXML
-  private Button toolBarBrowseTripsButton;
-  @FXML
-  private Button toolBarMyTripsButton;
-  @FXML
-  private Button toolBarProfileButton;
+	//toolbar
+	@FXML
+	private Button toolBarMessagingButton;
+	@FXML
+	private Button toolBarBrowseTripsButton;
+	@FXML
+	private Button toolBarMyTripsButton;
+	@FXML
+	private Button toolBarProfileButton;
 
-  //Browse
-  @FXML
-  private AnchorPane browseTripsPane;
-  @FXML
-  private Button searchTripsButton;
-  @FXML
-  private ListView<HBoxCell> browseTripsListView;
-  @FXML
-  private TextField searchTripsLocationTextField;
-  @FXML
-  private CheckBox searchTripsNormalCheckBox;
-  @FXML
-  private CheckBox searchTripsInstructorCheckBox;
-  @FXML
-  private TextField searchTripsPriceTextField;
-  @FXML
-  private DatePicker searchTripsDatePicker;
+	//Browse
+	@FXML
+	private AnchorPane browseTripsPane;
+	@FXML
+	private Button searchTripsButton;
+	@FXML
+	private ListView<HBoxCell> browseTripsListView;
+	@FXML
+	private TextField searchTripsLocationTextField;
+	@FXML
+	private CheckBox searchTripsNormalCheckBox;
+	@FXML
+	private CheckBox searchTripsInstructorCheckBox;
+	@FXML
+	private TextField searchTripsPriceTextField;
+	@FXML
+	private DatePicker searchTripsDatePicker;
 
-  //My Trips
-  @FXML
-  private AnchorPane myTripsPane;
-  @FXML
-  private Button myTripsCreateTripButton;
-  @FXML
-  private Button myTripsModifyTripButton;
-  @FXML
-  private Button myTripsViewTripButton;
+	//My Trips
+	@FXML
+	private AnchorPane myTripsPane;
+	@FXML
+	private Button myTripsCreateTripButton;
+	@FXML
+	private Button myTripsModifyTripButton;
+	@FXML
+	private Button myTripsViewTripButton;
 
-  //Create Trip
-  @FXML
-  private AnchorPane createTripPane1;
-  @FXML
-  private AnchorPane createTripPane2;
-  @FXML
-  private Button createTripNextButton;
-  @FXML
-  private Button createTripBackButton;
-  @FXML
-  private ComboBox<Category> createTripCategoryComboBox;
-  @FXML
-  private ComboBox<Location> createTripLocationComboBox;
-  @FXML
-  private TextField createTripTitleTextField;
-  @FXML
-  private TextArea createTripDescriptionTextArea;
-  @FXML
-  private CheckBox createTripInstructorCheckBox;
-  @FXML
-  private TextField createTripAddressTextField;
-  @FXML
-  private TextField createTripPriceTextField;
-  @FXML
-  private DatePicker createTripTimeStartDatePicker;
-  @FXML
-  private TextField createTripParticipantLimitTextField;
-  @FXML
-  private TextField createTripTagsTextField;
+	//Create Trip
+	@FXML
+	private AnchorPane createTripPane1;
+	@FXML
+	private AnchorPane createTripPane2;
+	@FXML
+	private Button createTripNextButton;
+	@FXML
+	private Button createTripBackButton;
+	@FXML
+	private ComboBox<Category> createTripCategoryComboBox;
+	@FXML
+	private ComboBox<Location> createTripLocationComboBox;
+	@FXML
+	private TextField createTripTitleTextField;
+	@FXML
+	private TextArea createTripDescriptionTextArea;
+	@FXML
+	private CheckBox createTripInstructorCheckBox;
+	@FXML
+	private TextField createTripAddressTextField;
+	@FXML
+	private TextField createTripPriceTextField;
+	@FXML
+	private DatePicker createTripTimeStartDatePicker;
+	@FXML
+	private TextField createTripParticipantLimitTextField;
+	@FXML
+	private TextField createTripTagsTextField;
 
-  //View Trip
-  @FXML
-  private AnchorPane viewTripPane;
-  @FXML
-  private Text viewTripTitleLabel;
-  @FXML
-  private Text viewTripDescriptionLabel;
-  @FXML
-  private Text viewTripPriceLabel;
-  @FXML
-  private Button viewTripButton;
+	//View Trip
+	@FXML
+	private AnchorPane viewTripPane;
+	@FXML
+	private Text viewTripTitleLabel;
+	@FXML
+	private Text viewTripDescriptionLabel;
+	@FXML
+	private Text viewTripPriceLabel;
+	@FXML
+	private Button viewTripButton;
 	@FXML
 	private AnchorPane logInOutPane;
 	@FXML
@@ -168,6 +169,20 @@ public class FXMLDocumentController implements Initializable {
 	private Button newAccountProfilePictureButton;
 	@FXML
 	private Button newAccountCreateButton;
+	@FXML
+	private Button toolbarLogInLogOutButton;
+	@FXML
+	private Button newAccountBackButton;
+	@FXML
+	private ToolBar toolBar;
+	@FXML
+	private AnchorPane profilePane;
+	@FXML
+	private ImageView profilePictureImageView;
+	@FXML
+	private Label profileNameLabel;
+	@FXML
+	private Label profileEmailLabel;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -181,12 +196,13 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private void showPane(AnchorPane pane) {
-		//All panes set to invisible
-		browseTripsPane.setVisible(false);
-		myTripsPane.setVisible(false);
-		createTripPane1.setVisible(false);
-		createTripPane2.setVisible(false);
-		viewTripPane.setVisible(false);
+//		//All panes set to invisible
+		for (Node node : mainPane.getChildren()) {
+			node.setVisible(false);
+		}
+
+		//Sets the toolbar to visible again.
+		toolBar.setVisible(true);
 
 		//The given pane is set to visible
 		pane.setVisible(true);
@@ -205,7 +221,10 @@ public class FXMLDocumentController implements Initializable {
 			showPane(myTripsPane);
 			//TODO - here should my trips be loaded
 		} else if (event.getSource() == toolBarProfileButton) {
-			//TODO - Go to profile pane
+			showPane(profilePane);			
+			loadProfileInfo();
+		} else if (event.getSource() == toolbarLogInLogOutButton) {
+			showPane(logInOutPane);
 		}
 	}
 
@@ -240,15 +259,28 @@ public class FXMLDocumentController implements Initializable {
 		showTrips(trips, browseTripsListView);
 	}
 
+	@FXML
 	private void handleLogInButton(ActionEvent event) {
 		String username = logInEmailTextField.getText();
 		String password = hashPassword(logInPasswordTextField.getText());
 
 		try {
 			clientController.signIn(username, password);
+			showPane(profilePane);
+			loadProfileInfo();
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
+	}
+
+	@FXML
+	private void handleNewAccountButton(ActionEvent event) {
+		showPane(newAccountPane);
+	}
+
+	@FXML
+	private void handleNewAccountBackButton(ActionEvent event) {
+		showPane(logInOutPane);
 	}
 
 	@FXML
@@ -270,7 +302,7 @@ public class FXMLDocumentController implements Initializable {
 		String password = newAccountPasswordTextField.getText();
 		String repeatPassword = newAccountRepeatPasswordTextField.getText();
 		byte[] profilePicture = null;
-		
+
 		BufferedImage bImage = SwingFXUtils.fromFXImage(newAccountImageView.getImage(), null);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
@@ -280,11 +312,13 @@ public class FXMLDocumentController implements Initializable {
 		} catch (IOException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		
+
 		if (password.equals(repeatPassword)) {
 			User user = new User(-1, email, name, profilePicture);
 			try {
 				clientController.signUp(user, hashPassword(password));
+				showPane(profilePane);
+				loadProfileInfo();
 			} catch (RemoteException ex) {
 				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -315,19 +349,19 @@ public class FXMLDocumentController implements Initializable {
 		return String.format("%064x", new java.math.BigInteger(1, hashBytes)).toLowerCase();
 	}
 
-  private void handleMyTripsButton(ActionEvent event) {
-    showPane(createTripPane1);
-  }
+	private void handleMyTripsButton(ActionEvent event) {
+		showPane(createTripPane1);
+	}
 
-  @FXML
-  private void handleCreateTripNextBackButton(ActionEvent event) {
-    if (event.getSource() == createTripNextButton) {
-      showPane(createTripPane2);
-    }
-    if (event.getSource() == createTripBackButton) {
-      showPane(createTripPane1);
-    }
-  }
+	@FXML
+	private void handleCreateTripNextBackButton(ActionEvent event) {
+		if (event.getSource() == createTripNextButton) {
+			showPane(createTripPane2);
+		}
+		if (event.getSource() == createTripBackButton) {
+			showPane(createTripPane1);
+		}
+	}
 
 	@FXML
 	private void handleCreateTripButton(ActionEvent event) throws Exception {
@@ -382,31 +416,36 @@ public class FXMLDocumentController implements Initializable {
 			ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 			createTripCategoryComboBox.setItems(categories);
 			createTripCategoryComboBox.setPromptText("Choose");
-      //Gets all locations from the server and displays them in the comboBox
-      ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
-      createTripLocationComboBox.setItems(locations);
-      createTripLocationComboBox.setPromptText("Choose");
-    }
-    if (event.getSource() == myTripsModifyTripButton) {
-      //TODO - Go to ModifyTripPane
-    }
-    if (event.getSource() == myTripsViewTripButton) {
-      viewTrip(0);
-    }
-  }
+			//Gets all locations from the server and displays them in the comboBox
+			ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
+			createTripLocationComboBox.setItems(locations);
+			createTripLocationComboBox.setPromptText("Choose");
+		}
+		if (event.getSource() == myTripsModifyTripButton) {
+			//TODO - Go to ModifyTripPane
+		}
+		if (event.getSource() == myTripsViewTripButton) {
+			viewTrip(0);
+		}
+	}
 
-  @FXML
-  private void handleViewTripButton(ActionEvent event) {
-    viewTrip(0);
-  }
+	@FXML
+	private void handleViewTripButton(ActionEvent event) {
+		viewTrip(0);
+	}
 
-  private void viewTrip(int id) {
-    Trip trip = clientController.viewTrip(1); //Should be id obtained from selected element in list view on my trips
-    if (trip != null) {
-      viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
-      viewTripDescriptionLabel.setText(trip.getDescription());
-      viewTripPriceLabel.setText("Price: " + trip.getPrice());
-      showPane(viewTripPane);
-    }
-  }
+	private void viewTrip(int id) {
+		Trip trip = clientController.viewTrip(1); //Should be id obtained from selected element in list view on my trips
+		if (trip != null) {
+			viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
+			viewTripDescriptionLabel.setText(trip.getDescription());
+			viewTripPriceLabel.setText("Price: " + trip.getPrice());
+			showPane(viewTripPane);
+		}
+	}
+
+	private void loadProfileInfo() {
+		profileNameLabel.setText(clientController.getCurrentUser().getName());
+		profileEmailLabel.setText(clientController.getCurrentUser().getName());
+	}
 }

@@ -41,12 +41,12 @@ public class ServerUserHandler {
 							+ "VALUES(?, ?, ?, ?)";
 			PreparedStatement userStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-			userStatement.setString(0, newUserEmail);
-			userStatement.setString(1, password);
-			userStatement.setString(2, newUserName);
-			userStatement.setInt(3, imageId);
+			userStatement.setString(1, newUserEmail);
+			userStatement.setString(2, password);
+			userStatement.setString(3, newUserName);
+			userStatement.setInt(4, imageId);
 
-			userStatement.executeQuery();
+			userStatement.executeUpdate();
 
 			int newUserId;
 			ResultSet userIdRs = userStatement.getGeneratedKeys();

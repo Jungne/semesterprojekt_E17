@@ -99,4 +99,7 @@ public class ClientController {
 		return ClientTripHandler.getLocations(serverController);
 	}
 
+	public User getCurrentUser() {
+		return currentUser;
+	}
 }
