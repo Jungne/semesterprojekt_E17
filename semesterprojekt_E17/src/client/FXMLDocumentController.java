@@ -1,16 +1,19 @@
 package client;
 
+import java.io.IOException;
 import interfaces.Category;
 import interfaces.Location;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
 import java.rmi.RemoteException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,16 +27,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
@@ -41,6 +54,8 @@ import javax.imageio.ImageIO;
 public class FXMLDocumentController implements Initializable {
 
 	private ClientController clientController;
+
+	private File newAccountProfilePictureFile;
 
 	@FXML
 	private AnchorPane mainPane;
@@ -113,42 +128,77 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private TextField createTripTagsTextField;
 
-  //View Trip
-  @FXML
-  private AnchorPane viewTripPane;
-  @FXML
-  private Text viewTripTitleLabel;
-  @FXML
-  private Text viewTripDescriptionLabel;
-  @FXML
-  private Text viewTripPriceLabel;
-  @FXML
-  private Button viewTripButton;
+	//View Trip
+	@FXML
+	private AnchorPane viewTripPane;
+	@FXML
+	private Text viewTripTitleLabel;
+	@FXML
+	private Text viewTripDescriptionLabel;
+	@FXML
+	private Text viewTripPriceLabel;
+	@FXML
+	private Button viewTripButton;
+	@FXML
+	private AnchorPane logInOutPane;
+	@FXML
+	private TextField logInEmailTextField;
+	@FXML
+	private TextField logInPasswordTextField;
+	@FXML
+	private Hyperlink newAccountButton;
+	@FXML
+	private Button logInButton;
+	@FXML
+	private AnchorPane newAccountPane;
+	@FXML
+	private TextField newAccountNameTextField;
+	@FXML
+	private TextField newAccountEmailTextField;
+	@FXML
+	private PasswordField newAccountPasswordTextField;
+	@FXML
+	private PasswordField newAccountRepeatPasswordTextField;
+	@FXML
+	private ImageView newAccountImageView;
+	@FXML
+	private Button newAccountProfilePictureButton;
+	@FXML
+	private Button newAccountCreateButton;
+	@FXML
+	private Button toolbarLogInLogOutButton;
+	@FXML
+	private Button newAccountBackButton;
+	@FXML
+	private ToolBar toolBar;
+	@FXML
+	private AnchorPane profilePane;
+	@FXML
+	private ImageView profilePictureImageView;
+	@FXML
+	private Label profileNameLabel;
+	@FXML
+	private Label profileEmailLabel;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		try {
 			clientController = new ClientController();
+
+			newAccountImageView.setImage(new Image("default_profile_picture.png"));
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
-		//Testing HBoxCell
-//		ArrayList<Trip> trips = new ArrayList<>();
-//		byte[] image = "".getBytes();
-//		ArrayList<Category> categories = new ArrayList<>();
-//		categories.add(new Category(0, "testcategory"));
-//		trips.add(new Trip(0, "Test trip", "This a test of the HBoxCell", categories, 420.69, image));
-//		showTrips(trips, browseTripsListView);
 	}
 
 	private void showPane(AnchorPane pane) {
-		//All panes set to invisible
-		browseTripsPane.setVisible(false);
-		myTripsPane.setVisible(false);
-		createTripPane1.setVisible(false);
-		createTripPane2.setVisible(false);
-		viewTripPane.setVisible(false);
+//		//All panes set to invisible
+		for (Node node : mainPane.getChildren()) {
+			node.setVisible(false);
+		}
+
+		//Sets the toolbar to visible again.
+		toolBar.setVisible(true);
 
 		//The given pane is set to visible
 		pane.setVisible(true);
@@ -167,7 +217,10 @@ public class FXMLDocumentController implements Initializable {
 			showPane(myTripsPane);
 			//TODO - here should my trips be loaded
 		} else if (event.getSource() == toolBarProfileButton) {
-			//TODO - Go to profile pane
+			showPane(profilePane);			
+			loadProfileInfo();
+		} else if (event.getSource() == toolbarLogInLogOutButton) {
+			showPane(logInOutPane);
 		}
 	}
 
@@ -202,8 +255,94 @@ public class FXMLDocumentController implements Initializable {
 		showTrips(trips, browseTripsListView);
 	}
 
-	private void handleMyTripsButton(ActionEvent event) {
-		showPane(createTripPane1);
+	@FXML
+	private void handleLogInButton(ActionEvent event) {
+		String username = logInEmailTextField.getText();
+		String password = hashPassword(logInPasswordTextField.getText());
+
+		try {
+			clientController.signIn(username, password);
+			showPane(profilePane);
+			loadProfileInfo();
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	@FXML
+	private void handleNewAccountButton(ActionEvent event) {
+		showPane(newAccountPane);
+	}
+
+	@FXML
+	private void handleNewAccountBackButton(ActionEvent event) {
+		showPane(logInOutPane);
+	}
+
+	@FXML
+	private void handleChooseProfilePictureButton(ActionEvent event) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select profile picture");
+		Node source = (Node) event.getSource();
+		Window stage = source.getScene().getWindow();
+		newAccountProfilePictureFile = fileChooser.showOpenDialog(stage);
+		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
+
+		newAccountImageView.setImage(profilePicture);
+	}
+
+	@FXML
+	private void handleCreateAccountButton(ActionEvent event) {
+		String name = newAccountNameTextField.getText();
+		String email = newAccountEmailTextField.getText();
+		String password = newAccountPasswordTextField.getText();
+		String repeatPassword = newAccountRepeatPasswordTextField.getText();
+		byte[] profilePicture = null;
+
+		BufferedImage bImage = SwingFXUtils.fromFXImage(newAccountImageView.getImage(), null);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(bImage, "png", baos);
+			profilePicture = baos.toByteArray();
+			baos.close();
+		} catch (IOException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		if (password.equals(repeatPassword)) {
+			User user = new User(-1, email, name, profilePicture);
+			try {
+				clientController.signUp(user, hashPassword(password));
+				showPane(profilePane);
+				loadProfileInfo();
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		} else {
+			newAccountRepeatPasswordTextField.setStyle("-fx-text-box-border: red");
+		}
+	}
+
+	/**
+	 * hashes the password using the SHA-256 algorithm
+	 *
+	 * @param password the password to be hashed
+	 * @return the hash of the password
+	 */
+	private String hashPassword(String password) {
+		byte[] hashBytes = null;
+		// shitty attempt at salting the password :)
+		password += password.substring(0, 4);
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+			md.update(password.getBytes());
+			hashBytes = md.digest();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+
+		return String.format("%064x", new java.math.BigInteger(1, hashBytes)).toLowerCase();
 	}
 
 	@FXML
@@ -269,31 +408,38 @@ public class FXMLDocumentController implements Initializable {
 			ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 			createTripCategoryComboBox.setItems(categories);
 			createTripCategoryComboBox.setPromptText("Choose");
-      //Gets all locations from the server and displays them in the comboBox
-      ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
-      createTripLocationComboBox.setItems(locations);
-      createTripLocationComboBox.setPromptText("Choose");
-    }
-    if (event.getSource() == myTripsModifyTripButton) {
-      //TODO - Go to ModifyTripPane
-    }
-    if (event.getSource() == myTripsViewTripButton) {
-      viewTrip(0);
-    }
-  }
+			//Gets all locations from the server and displays them in the comboBox
+			ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
+			createTripLocationComboBox.setItems(locations);
+			createTripLocationComboBox.setPromptText("Choose");
+		}
+		if (event.getSource() == myTripsModifyTripButton) {
+			//TODO - Go to ModifyTripPane
+		}
+		if (event.getSource() == myTripsViewTripButton) {
+			viewTrip(0);
+		}
+	}
 
-  @FXML
-  private void handleViewTripButton(ActionEvent event) {
-    viewTrip(0);
-  }
+	@FXML
+	private void handleViewTripButton(ActionEvent event) {
+		viewTrip(0);
+	}
 
-  private void viewTrip(int id) {
-    Trip trip = clientController.viewTrip(1); //Should be id obtained from selected element in list view on my trips
-    if (trip != null) {
-      viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
-      viewTripDescriptionLabel.setText(trip.getDescription());
-      viewTripPriceLabel.setText("Price: " + trip.getPrice());
-      showPane(viewTripPane);
-    }
-  }
+	private void viewTrip(int id) {
+		Trip trip = clientController.viewTrip(1); //Should be id obtained from selected element in list view on my trips
+		if (trip != null) {
+			viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
+			viewTripDescriptionLabel.setText(trip.getDescription());
+			viewTripPriceLabel.setText("Price: " + trip.getPrice());
+			showPane(viewTripPane);
+		}
+	}
+
+	private void loadProfileInfo() {
+		profileNameLabel.setText(clientController.getCurrentUser().getName());
+		profileEmailLabel.setText(clientController.getCurrentUser().getEmail());
+		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
+		profilePictureImageView.setImage(image);
+	}
 }

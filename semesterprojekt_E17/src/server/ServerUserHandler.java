@@ -41,12 +41,12 @@ public class ServerUserHandler {
 							+ "VALUES(?, ?, ?, ?)";
 			PreparedStatement userStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-			userStatement.setString(0, newUserEmail);
-			userStatement.setString(1, password);
-			userStatement.setString(2, newUserName);
-			userStatement.setInt(3, imageId);
+			userStatement.setString(1, newUserEmail);
+			userStatement.setString(2, password);
+			userStatement.setString(3, newUserName);
+			userStatement.setInt(4, imageId);
 
-			userStatement.executeQuery();
+			userStatement.executeUpdate();
 
 			int newUserId;
 			ResultSet userIdRs = userStatement.getGeneratedKeys();
@@ -75,5 +75,29 @@ public class ServerUserHandler {
 			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return null;
+	}
+
+	public static User signIn(String username, String password) {
+		String query = "SELECT Users.userID, email, userName, imageFile "
+						+ "FROM Users, Images "
+						+ "WHERE email = '" + username + "' AND password = '" + password + "' AND Users.imageID = Images.imageId";
+		User user = null;
+		
+		try {
+			ResultSet userRs = DBManager.getInstance().executeQuery(query);
+
+			userRs.next();
+			
+			int userId = userRs.getInt(1);
+			String userEmail = userRs.getString(2);
+			String userName = userRs.getString(3);
+			byte[] userImage = userRs.getBytes(4);
+			
+			user = new User(userId, userEmail, userName, userImage);
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		
+		return user;
 	}
 }

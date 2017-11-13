@@ -1,5 +1,6 @@
 package interfaces;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,14 +11,15 @@ public class User implements Serializable {
 	private String name;
 	private List<Category> certificates;
 	private byte[] image;
+	private InputStream imageStream;
 
 	public User(int id, String email, String name, byte[] image) {
 		this.id = id;
 		this.email = email;
 		this.name = name;
 		this.image = image;
-	}
-
+	}	
+	
 	public void addCertificate(Category certificate) {
 		getCertificates().add(certificate);
 	}

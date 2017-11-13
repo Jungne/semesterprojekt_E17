@@ -32,12 +32,12 @@ public class ClientController {
 		}
 	}
         
-	public User signUp(User user, String password) throws RemoteException {
-		return serverController.signUp(user, password);
+	public void signUp(User user, String password) throws RemoteException {
+		currentUser = serverController.signUp(user, password);
 	}
 
-	public User signIn(String username, String password) throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public void signIn(String username, String password) throws RemoteException {
+		currentUser = serverController.signIn(username, password);
 	}
 
 	public void signOut() throws RemoteException {
@@ -99,4 +99,7 @@ public class ClientController {
 		return ClientTripHandler.getLocations(serverController);
 	}
 
+	public User getCurrentUser() {
+		return currentUser;
+	}
 }
