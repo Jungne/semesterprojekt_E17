@@ -77,7 +77,7 @@ public class ServerUserHandler {
 		return null;
 	}
 
-	public User signIn(String username, String password) {
+	public static User signIn(String username, String password) {
 		String query = "SELECT Users.userID, email, userName, imageFile "
 						+ "FROM Users, Images "
 						+ "WHERE email = '" + username + "' AND password = '" + password + "' AND Users.imageID = Images.imageId";
@@ -86,6 +86,8 @@ public class ServerUserHandler {
 		try {
 			ResultSet userRs = DBManager.getInstance().executeQuery(query);
 
+			userRs.next();
+			
 			int userId = userRs.getInt(1);
 			String userEmail = userRs.getString(2);
 			String userName = userRs.getString(3);

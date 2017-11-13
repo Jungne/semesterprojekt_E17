@@ -1,8 +1,5 @@
 package client;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import interfaces.Category;
 import interfaces.Location;
@@ -10,6 +7,7 @@ import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
@@ -47,8 +45,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.scene.layout.AnchorPane;
@@ -446,6 +442,8 @@ public class FXMLDocumentController implements Initializable {
 
 	private void loadProfileInfo() {
 		profileNameLabel.setText(clientController.getCurrentUser().getName());
-		profileEmailLabel.setText(clientController.getCurrentUser().getName());
+		profileEmailLabel.setText(clientController.getCurrentUser().getEmail());
+		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
+		profilePictureImageView.setImage(image);
 	}
 }
