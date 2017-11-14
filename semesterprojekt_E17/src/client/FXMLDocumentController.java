@@ -139,6 +139,24 @@ public class FXMLDocumentController implements Initializable {
 	private Text viewTripPriceLabel;
 	@FXML
 	private Button viewTripButton;
+
+	//Modify Trip
+	@FXML
+	private AnchorPane modifyTripPane;
+	@FXML
+	private Text modifyTripIDLabel;
+	@FXML
+	private TextField modifyTripTitleTextField;
+	@FXML
+	private TextField modifyTripDescriptionTextField;
+	@FXML
+	private TextField modifyTripPriceTextField;
+	@FXML
+	private Button modifyTripSaveChangesButton;
+	@FXML
+	private Button modifyTripCancelButton;
+
+	//Unsorted
 	@FXML
 	private AnchorPane logInOutPane;
 	@FXML
@@ -217,7 +235,7 @@ public class FXMLDocumentController implements Initializable {
 			showPane(myTripsPane);
 			//TODO - here should my trips be loaded
 		} else if (event.getSource() == toolBarProfileButton) {
-			showPane(profilePane);			
+			showPane(profilePane);
 			loadProfileInfo();
 		} else if (event.getSource() == toolbarLogInLogOutButton) {
 			showPane(logInOutPane);
@@ -414,25 +432,33 @@ public class FXMLDocumentController implements Initializable {
 			createTripLocationComboBox.setPromptText("Choose");
 		}
 		if (event.getSource() == myTripsModifyTripButton) {
-			//TODO - Go to ModifyTripPane
+			viewTrip(1, true);
 		}
 		if (event.getSource() == myTripsViewTripButton) {
-			viewTrip(0);
+			viewTrip(1, false);
 		}
 	}
 
 	@FXML
 	private void handleViewTripButton(ActionEvent event) {
-		viewTrip(0);
+		viewTrip(1, false);
 	}
 
-	private void viewTrip(int id) {
-		Trip trip = clientController.viewTrip(1); //Should be id obtained from selected element in list view on my trips
+	private void viewTrip(int id, boolean modifyMode) {
+		Trip trip = clientController.viewTrip(id); //Should be id obtained from selected element in list view on my trips
 		if (trip != null) {
-			viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
-			viewTripDescriptionLabel.setText(trip.getDescription());
-			viewTripPriceLabel.setText("Price: " + trip.getPrice());
-			showPane(viewTripPane);
+			if (modifyMode) {
+				modifyTripIDLabel.setText("Trip #" + trip.getId());
+				modifyTripTitleTextField.setText(trip.getTitle());
+				modifyTripDescriptionTextField.setText(trip.getDescription());
+				modifyTripPriceTextField.setText("Price: " + trip.getPrice());
+				showPane(modifyTripPane);
+			} else {
+				viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
+				viewTripDescriptionLabel.setText(trip.getDescription());
+				viewTripPriceLabel.setText("Price: " + trip.getPrice());
+				showPane(viewTripPane);
+			}
 		}
 	}
 
@@ -441,5 +467,27 @@ public class FXMLDocumentController implements Initializable {
 		profileEmailLabel.setText(clientController.getCurrentUser().getEmail());
 		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
 		profilePictureImageView.setImage(image);
+	}
+
+	@FXML
+	private void handleModifyTripButtons(ActionEvent event) {
+		if (event.getSource().equals(modifyTripSaveChangesButton)) {
+			clientController.modifyTrip(new Trip(
+							Integer.parseInt(modifyTripIDLabel.getText().substring(6)),
+							modifyTripTitleTextField.getText(),
+							modifyTripDescriptionTextField.getText(),
+							Double.parseDouble(modifyTripPriceTextField.getText()),
+							null
+			));
+		} else if (event.getSource().equals(modifyTripCancelButton)) {
+			resetModifyTripPane();
+			showPane(myTripsPane);
+		}
+	}
+
+	private void resetModifyTripPane() {
+		modifyTripTitleTextField.setText("");
+		modifyTripDescriptionTextField.setText("");
+		modifyTripPriceTextField.setText("");
 	}
 }
