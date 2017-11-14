@@ -59,12 +59,12 @@ public class ClientController {
 		return null;
 	}
 
-	public Trip showTrip(int tripsID) {
-		return ClientTripHandler.showTrip(tripsID, serverController);
+	public Trip showTrip(int tripID) {
+		return ClientTripHandler.showTrip(tripID, serverController);
 	}
   
-	public Trip viewTrip(int tripsID) {
-		return ClientTripHandler.viewTrip(tripsID, serverController);
+	public Trip viewTrip(int tripID) {
+		return ClientTripHandler.viewTrip(tripID, serverController);
 	}
 
 	public void participateInTrip(User user, Trip trip) {
@@ -76,7 +76,7 @@ public class ClientController {
 	}
 
 	public void modifyTrip(Trip trip) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		ClientTripHandler.modifyTrip(trip, serverController);
 	}
 
 	public void deleteTrip(Trip trip) {
