@@ -54,8 +54,8 @@ import javax.imageio.ImageIO;
 public class FXMLDocumentController implements Initializable {
 
 	private ClientController clientController;
-
-	private File newAccountProfilePictureFile;
+	private Window stage;
+	private File tripImageFile;
 
 	@FXML
 	private AnchorPane mainPane;
@@ -100,6 +100,8 @@ public class FXMLDocumentController implements Initializable {
 
 	//Create Trip
 	@FXML
+	private Text createTripInvalidPictureText;
+	@FXML
 	private AnchorPane createTripPane1;
 	@FXML
 	private AnchorPane createTripPane2;
@@ -107,6 +109,8 @@ public class FXMLDocumentController implements Initializable {
 	private Button createTripNextButton;
 	@FXML
 	private Button createTripBackButton;
+	@FXML
+	private Button createTripCreateTripButton;
 	@FXML
 	private ComboBox<Category> createTripCategoryComboBox;
 	@FXML
@@ -135,6 +139,16 @@ public class FXMLDocumentController implements Initializable {
 	private TextField createTripParticipantLimitTextField;
 	@FXML
 	private TextField createTripTagsTextField;
+	@FXML
+	private Text createTripInvalidParticipantLimitText;
+	@FXML
+	private Button createTripCancelButton1;
+	@FXML
+	private Button createTripCancelButton2;
+	@FXML
+	private Text createTripInvalidLocationText;
+	@FXML
+	private Button createTripAddPictureButton;
 
 	//View Trip
 	@FXML
@@ -197,6 +211,8 @@ public class FXMLDocumentController implements Initializable {
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
+		stage = null;
+		tripImageFile = null;
 	}
 
 	private void showPane(AnchorPane pane) {
@@ -289,14 +305,21 @@ public class FXMLDocumentController implements Initializable {
 
 	@FXML
 	private void handleChooseProfilePictureButton(ActionEvent event) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Select profile picture");
-		Node source = (Node) event.getSource();
-		Window stage = source.getScene().getWindow();
-		newAccountProfilePictureFile = fileChooser.showOpenDialog(stage);
+		File newAccountProfilePictureFile = chooseImage("Select profile picture");
 		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
 
 		newAccountImageView.setImage(profilePicture);
+	}
+
+	private File chooseImage(String title) {
+		stage = mainPane.getScene().getWindow();
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle(title);
+		return fileChooser.showOpenDialog(stage);
+	}
+
+	private String getFileType(File file) {
+		return file.getPath().substring(file.getPath().lastIndexOf('.') + 1);
 	}
 
 	@FXML
@@ -354,18 +377,26 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	@FXML
-	private void handleCreateTripNextBackButton(ActionEvent event) {
-		if (event.getSource() == createTripNextButton) {
+	private void handleCreateTripButtons(ActionEvent event) {
+		if (event.getSource() == createTripAddPictureButton) {
+			tripImageFile = chooseImage("Select trip picture");
+		} else if (event.getSource() == createTripNextButton) {
 			showPane(createTripPane2);
-		}
-		if (event.getSource() == createTripBackButton) {
+		} else if (event.getSource() == createTripBackButton) {
 			showPane(createTripPane1);
+		} else if (event.getSource() == createTripCancelButton1 || event.getSource() == createTripCancelButton2) {
+			showPane(myTripsPane);
+			resetCreateTripPane();
+		} else if (event.getSource() == createTripCreateTripButton) {
+			try {
+				createTrip();
+			} catch (Exception ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
 	}
 
-	@FXML
-	private void handleCreateTripButton(ActionEvent event) throws Exception {
-		boolean tripIsInvalid = false;
+	private void createTrip() throws Exception {
 		//Gets all the values
 		String title = createTripTitleTextField.getText();
 		String description = createTripDescriptionTextArea.getText();
@@ -373,12 +404,18 @@ public class FXMLDocumentController implements Initializable {
 		ArrayList<Category> categories = new ArrayList<>();
 		categories.add(category);
 		String priceString = createTripPriceTextField.getText();
+		if (priceString == null || priceString.isEmpty()) {
+			priceString = "0";
+		}
 		LocalDate date = createTripTimeStartDatePicker.getValue();
 		Location location = createTripLocationComboBox.getValue();
 		String meetingAddress = createTripAddressTextField.getText();
-		int participantLimit = Integer.parseInt(createTripParticipantLimitTextField.getText());
+		String participantLimitString = createTripParticipantLimitTextField.getText();
+		if (participantLimitString == null || participantLimitString.isEmpty()) {
+			participantLimitString = "0";
+		}
 		//TODO - Should use the logged in user
-		User organizer = new User(5, "lalun13@student.sdu.dk", "Lasse", null);
+		User organizer = clientController.getCurrentUser();
 		ArrayList<Category> organizerInstructorIn = new ArrayList<>();
 		if (createTripInstructorCheckBox.isSelected()) {
 			//Makes the organizer instructor in all trip categories
@@ -394,34 +431,32 @@ public class FXMLDocumentController implements Initializable {
 		for (String s : createTripTagsTextField.getText().split(" ")) {
 			tags.add(s);
 		}
-		//TODO - Should be able to add images via GUI
-		ArrayList<byte[]> images = new ArrayList<>();
-		//Inserts default image
-		File imageFile = new File("src/default.jpg");
-		BufferedImage image = ImageIO.read(imageFile);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(image, "jpg", baos);
-		images.add(baos.toByteArray());
 
 		//Checks if parameters are valid
-		if (!isTripParametersValid(title, category, priceString, date)) {
+		if (!isTripParametersValid(title, category, priceString, date, participantLimitString, location, tripImageFile)) {
 			return;
 		}
 
-		//Converts price and date when validation is checked
-		if (priceString == null || priceString.isEmpty()) {
-			priceString = "0";
-		}
+		//Converts price, date, participant limit and image now that validation is checked
 		double price = Double.parseDouble(priceString);
 		LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 12, 0);
-
+		int participantLimit = Integer.parseInt(createTripParticipantLimitTextField.getText());
+		//TODO - Should be able to add several images
+		//TODO - There should be a default trip picture if no pictures a seleceted
+		ArrayList<byte[]> images = new ArrayList<>();
+		if (tripImageFile != null) {
+			BufferedImage image = ImageIO.read(tripImageFile);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(image, getFileType(tripImageFile), baos); //TODO - should split path to get type
+			images.add(baos.toByteArray());
+		}
 		//Creates trip
 		clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
 		resetCreateTripPane();
 		showPane(myTripsPane);
 	}
 
-	private boolean isTripParametersValid(String title, Category category, String priceString, LocalDate date) {
+	private boolean isTripParametersValid(String title, Category category, String priceString, LocalDate date, String participantLimitString, Location location, File imageFile) {
 		boolean isTripParametersValid = true;
 		//Title check
 		if (title == null || title.isEmpty()) {
@@ -457,7 +492,39 @@ public class FXMLDocumentController implements Initializable {
 		} else {
 			createTripInvalidDateText.setVisible(false);
 		}
-		//TODO More checks (participantlimit, location)
+		//ParticipantLimit check
+		int participantLimit;
+		try {
+			participantLimit = Integer.parseInt(participantLimitString);
+		} catch (NumberFormatException e) {
+			participantLimit = -1;
+		}
+		if (participantLimit < 0) {
+			createTripInvalidParticipantLimitText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidParticipantLimitText.setVisible(false);
+		}
+		//Location check
+		if (location == null) {
+			createTripInvalidLocationText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidLocationText.setVisible(false);
+		}
+		//Picture check
+		if (tripImageFile != null) {
+			createTripInvalidPictureText.setVisible(false);
+			try {
+				BufferedImage image = ImageIO.read(tripImageFile);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, getFileType(tripImageFile), baos);
+			} catch (Exception ex) {
+				createTripInvalidPictureText.setVisible(true);
+				isTripParametersValid = false;
+			}
+		}
+
 		return isTripParametersValid;
 	}
 
