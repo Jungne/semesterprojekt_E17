@@ -110,9 +110,13 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private ComboBox<Category> createTripCategoryComboBox;
 	@FXML
+	private Text createTripInvalidCategoryText;
+	@FXML
 	private ComboBox<Location> createTripLocationComboBox;
 	@FXML
 	private TextField createTripTitleTextField;
+	@FXML
+	private Text createTripInvalidTitleText;
 	@FXML
 	private TextArea createTripDescriptionTextArea;
 	@FXML
@@ -122,7 +126,11 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private TextField createTripPriceTextField;
 	@FXML
+	private Text createTripInvalidPriceText;
+	@FXML
 	private DatePicker createTripTimeStartDatePicker;
+	@FXML
+	private Text createTripInvalidDateText;
 	@FXML
 	private TextField createTripParticipantLimitTextField;
 	@FXML
@@ -192,7 +200,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private void showPane(AnchorPane pane) {
-//		//All panes set to invisible
+		//All panes set to invisible
 		for (Node node : mainPane.getChildren()) {
 			node.setVisible(false);
 		}
@@ -217,7 +225,7 @@ public class FXMLDocumentController implements Initializable {
 			showPane(myTripsPane);
 			//TODO - here should my trips be loaded
 		} else if (event.getSource() == toolBarProfileButton) {
-			showPane(profilePane);			
+			showPane(profilePane);
 			loadProfileInfo();
 		} else if (event.getSource() == toolbarLogInLogOutButton) {
 			showPane(logInOutPane);
@@ -357,16 +365,15 @@ public class FXMLDocumentController implements Initializable {
 
 	@FXML
 	private void handleCreateTripButton(ActionEvent event) throws Exception {
-		//Gets all the values and creates the trip
+		boolean tripIsInvalid = false;
+		//Gets all the values
 		String title = createTripTitleTextField.getText();
 		String description = createTripDescriptionTextArea.getText();
-
+		Category category = createTripCategoryComboBox.getValue();
 		ArrayList<Category> categories = new ArrayList<>();
-		categories.add(createTripCategoryComboBox.getValue());
-
-		double price = Double.parseDouble(createTripPriceTextField.getText());
+		categories.add(category);
+		String priceString = createTripPriceTextField.getText();
 		LocalDate date = createTripTimeStartDatePicker.getValue();
-		LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 12, 0);
 		Location location = createTripLocationComboBox.getValue();
 		String meetingAddress = createTripAddressTextField.getText();
 		int participantLimit = Integer.parseInt(createTripParticipantLimitTextField.getText());
@@ -375,8 +382,10 @@ public class FXMLDocumentController implements Initializable {
 		ArrayList<Category> organizerInstructorIn = new ArrayList<>();
 		if (createTripInstructorCheckBox.isSelected()) {
 			//Makes the organizer instructor in all trip categories
-			for (Category category : categories) {
-				organizerInstructorIn.add(category.clone());
+			for (Category c : categories) {
+				if (c != null) {
+					organizerInstructorIn.add(c.clone());
+				}
 			}
 		}
 		//TODO - Should add optional prices to GUI
@@ -394,9 +403,66 @@ public class FXMLDocumentController implements Initializable {
 		ImageIO.write(image, "jpg", baos);
 		images.add(baos.toByteArray());
 
-		clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
+		//Checks if parameters are valid
+		if (!isTripParametersValid(title, category, priceString, date)) {
+			return;
+		}
 
+		//Converts price and date when validation is checked
+		if (priceString == null || priceString.isEmpty()) {
+			priceString = "0";
+		}
+		double price = Double.parseDouble(priceString);
+		LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 12, 0);
+
+		//Creates trip
+		clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
+		resetCreateTripPane();
 		showPane(myTripsPane);
+	}
+
+	private boolean isTripParametersValid(String title, Category category, String priceString, LocalDate date) {
+		boolean isTripParametersValid = true;
+		//Title check
+		if (title == null || title.isEmpty()) {
+			createTripInvalidTitleText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidTitleText.setVisible(false);
+		}
+		//Category check
+		if (category == null) {
+			createTripInvalidCategoryText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidCategoryText.setVisible(false);
+		}
+		//Price check
+		double price;
+		try {
+			price = Double.parseDouble(priceString);
+		} catch (NumberFormatException e) {
+			price = -1;
+		}
+		if (price < 0) {
+			createTripInvalidPriceText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidPriceText.setVisible(false);
+		}
+		//timeStart check
+		if (date == null || date.isBefore(LocalDate.now())) {
+			createTripInvalidDateText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidDateText.setVisible(false);
+		}
+		//TODO More checks (participantlimit, location)
+		return isTripParametersValid;
+	}
+
+	private void resetCreateTripPane() {
+		//TODO
 	}
 
 	@FXML
@@ -407,11 +473,9 @@ public class FXMLDocumentController implements Initializable {
 			//Gets all categories from the server and displays them in the comboBox
 			ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 			createTripCategoryComboBox.setItems(categories);
-			createTripCategoryComboBox.setPromptText("Choose");
 			//Gets all locations from the server and displays them in the comboBox
 			ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
 			createTripLocationComboBox.setItems(locations);
-			createTripLocationComboBox.setPromptText("Choose");
 		}
 		if (event.getSource() == myTripsModifyTripButton) {
 			//TODO - Go to ModifyTripPane

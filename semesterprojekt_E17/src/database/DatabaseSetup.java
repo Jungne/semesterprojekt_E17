@@ -221,6 +221,7 @@ public class DatabaseSetup {
 		//Inserts certificates
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2);");
 		//Inserts trips
+		/*
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Doc Hollywood', 'Pallor', 70.14, '2016-11-23', 1, '8 Dawn Park', 11, 2, 1);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Septien', 'Pathological fracture in oth disease, unsp ankle, init', 79.21, '2018-06-19', 1, '5 Bonner Hill', 12, 2, 1);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Hours', 'Dislocation of unsp interphaln joint of l rng fngr, init', 276.2, '2017-06-07', 3, '829 Sullivan Circle', 14, 6, 1);");
@@ -231,6 +232,7 @@ public class DatabaseSetup {
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Glory to the Filmmaker! (Kantoku · Banzai!)', 'Poisoning by other systemic antibiotics, assault, sequela', 3.55, '2018-12-30', 1, '3 South Crossing', 10, 4, 1);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Time of Eve (Eve no jikan)', 'Puncture wound with foreign body of lip', 392.25, '2018-05-14', 2, '7725 Buena Vista Trail', 8, 6, 1);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Burning Hot Summer, A (Un été brûlant)', 'Wedge comprsn fx T11-T12 vertebra, subs for fx w nonunion', 437.9, '2017-06-22', 2, '056 Stuart Trail', 12, 6, 1);");
+		 */
 	}
 
 }

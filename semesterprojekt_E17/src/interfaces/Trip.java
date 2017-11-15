@@ -108,7 +108,7 @@ public class Trip implements Serializable {
 	 * @throws java.lang.Exception
 	 */
 	public Trip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
-		if (title == null) {
+		if (title == null || title.isEmpty()) {
 			throw new Exception("invalid title");
 		}
 		this.title = title;

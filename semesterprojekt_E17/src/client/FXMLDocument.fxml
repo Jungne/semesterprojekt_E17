@@ -113,8 +113,18 @@
                </font>
             </Text>
             <Button fx:id="createTripNextButton" layoutX="70.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleCreateTripNextBackButton" text="Next" />
-            <ComboBox fx:id="createTripCategoryComboBox" layoutX="60.0" layoutY="420.0" prefWidth="150.0" />
+            <ComboBox fx:id="createTripCategoryComboBox" layoutX="60.0" layoutY="420.0" prefWidth="150.0" promptText="Choose" />
             <CheckBox fx:id="createTripInstructorCheckBox" layoutX="232.0" layoutY="424.0" mnemonicParsing="false" text="Instructor" />
+            <Text fx:id="createTripInvalidTitleText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter your name!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidCategoryText" fill="#da0303" layoutX="60.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a category!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
@@ -155,7 +165,7 @@
             </Text>
             <Button layoutX="70.0" layoutY="420.0" mnemonicParsing="false" onAction="#handleCreateTripButton" text="Create trip" />
             <Button fx:id="createTripBackButton" layoutX="500.0" layoutY="420.0" mnemonicParsing="false" onAction="#handleCreateTripNextBackButton" text="Back" />
-            <ComboBox fx:id="createTripLocationComboBox" layoutX="60.0" layoutY="182.0" prefWidth="150.0" />
+            <ComboBox fx:id="createTripLocationComboBox" layoutX="60.0" layoutY="182.0" prefWidth="150.0" promptText="Choose" />
             <Text layoutX="60.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant limit">
                <font>
                   <Font size="10.0" />
@@ -168,6 +178,16 @@
                </font>
             </Text>
             <TextField fx:id="createTripTagsTextField" layoutX="60.0" layoutY="344.0" prefHeight="25.0" prefWidth="300.0" promptText="tag1 tag2 tag3" />
+            <Text fx:id="createTripInvalidPriceText" fill="#da0303" layoutX="339.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid price!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidDateText" fill="#da0303" layoutX="339.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid date!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
@@ -203,7 +223,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />
