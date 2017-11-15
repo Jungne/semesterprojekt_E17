@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
@@ -8,7 +9,7 @@ public class User implements Serializable {
 	private int id;
 	private String email;
 	private String name;
-	private List<Category> certificates;
+	private List<Category> certificates = new ArrayList<>();
 	private byte[] image;
 
 	public User(int id, String email, String name, byte[] image) {
@@ -51,6 +52,10 @@ public class User implements Serializable {
 	 */
 	public byte[] getImage() {
 		return image;
+	}
+	
+	public void promoteToInstructor(Category category) {
+		this.certificates.add(category);
 	}
 
 }
