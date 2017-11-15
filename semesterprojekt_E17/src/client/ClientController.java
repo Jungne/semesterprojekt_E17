@@ -25,6 +25,7 @@ public class ClientController {
 	public ClientController() throws RemoteException {
 		String hostname = "localhost";
 		
+		//RMI Security Manager
 		if (System.getSecurityManager() == null) {
         System.setSecurityManager(new SecurityManager());
     }
