@@ -56,7 +56,6 @@ public class FXMLDocumentController implements Initializable {
 
 	private ClientController clientController;
 	private Window stage;
-	private File tripImageFile;
 
 	@FXML
 	private AnchorPane mainPane;
@@ -217,7 +216,6 @@ public class FXMLDocumentController implements Initializable {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		stage = null;
-		tripImageFile = null;
 	}
 
 	private void showPane(AnchorPane pane) {
@@ -317,16 +315,10 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private File chooseImage(String title) {
-		createTripPictureListHBox.getChildren().add(new ImageItem(createTripPictureListHBox, "some_picture.jpg", null));
-		
 		stage = mainPane.getScene().getWindow();
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle(title);
 		return fileChooser.showOpenDialog(stage);
-	}
-
-	private String getFileType(File file) {
-		return file.getPath().substring(file.getPath().lastIndexOf('.') + 1);
 	}
 
 	@FXML
@@ -386,7 +378,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleCreateTripButtons(ActionEvent event) {
 		if (event.getSource() == createTripAddPictureButton) {
-			tripImageFile = chooseImage("Select trip picture");
+			addImageListItem();
 		} else if (event.getSource() == createTripNextButton) {
 			showPane(createTripPane2);
 		} else if (event.getSource() == createTripBackButton) {
@@ -448,7 +440,7 @@ public class FXMLDocumentController implements Initializable {
 		}
 
 		//Checks if parameters are valid
-		if (!isTripParametersValid(title, category, priceString, date, location, participantLimitString, organizer.getCertificates(), tripImageFile)) {
+		if (!isTripParametersValid(title, category, priceString, date, location, participantLimitString, organizer.getCertificates())) {
 			return -1;
 		}
 
@@ -458,18 +450,17 @@ public class FXMLDocumentController implements Initializable {
 		int participantLimit = Integer.parseInt(participantLimitString);
 		//TODO - Should be able to add several images
 		//TODO - tripAddress should not be null or empty
-		ArrayList<byte[]> images = new ArrayList<>();
-		if (tripImageFile != null) {
-			BufferedImage image = ImageIO.read(tripImageFile);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(image, getFileType(tripImageFile), baos);
-			images.add(baos.toByteArray());
+		List<byte[]> images = new ArrayList<>();
+		createTripInvalidPictureText.setVisible(false);
+		createTripPictureListHBox.getChildren();
+		for (Node node : createTripPictureListHBox.getChildren()) {
+			images.add(((ImageListItem) node).getImageByteArray());
 		}
 		//Creates trip
 		return clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
 	}
 
-	private boolean isTripParametersValid(String title, Category category, String priceString, LocalDate date, Location location, String participantLimitString, List<Category> organizerCertificates, File imageFile) {
+	private boolean isTripParametersValid(String title, Category category, String priceString, LocalDate date, Location location, String participantLimitString, List<Category> organizerCertificates) {
 		boolean isTripParametersValid = true;
 		//Title check
 		if (title == null || title.isEmpty()) {
@@ -525,19 +516,6 @@ public class FXMLDocumentController implements Initializable {
 		} else {
 			createTripInvalidParticipantLimitText.setVisible(false);
 		}
-		//Picture check
-		if (tripImageFile != null) {
-			createTripInvalidPictureText.setVisible(false);
-			try {
-				BufferedImage image = ImageIO.read(tripImageFile);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ImageIO.write(image, getFileType(tripImageFile), baos);
-			} catch (Exception ex) {
-				createTripInvalidPictureText.setVisible(true);
-				isTripParametersValid = false;
-				tripImageFile = null;
-			}
-		}
 		//Organizer certificates check
 		createTripInvalidCertificateText.setVisible(false);
 		System.out.println(category);
@@ -548,6 +526,31 @@ public class FXMLDocumentController implements Initializable {
 		}
 
 		return isTripParametersValid;
+	}
+
+	private void addImageListItem() {
+		createTripInvalidPictureText.setVisible(false);
+		try {
+			ImageListItem imageItem;
+			//Chooses file with FileChooser
+			File imageFile = chooseImage("Select trip picture");
+			String imageFileName = imageFile.getName();
+			String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
+			//Converts file to byte array
+			BufferedImage image = ImageIO.read(imageFile);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(image, imageFileType, baos);
+			//Inserts values in imageItem
+			imageItem = new ImageListItem(createTripPictureListHBox, imageFileName, baos.toByteArray());
+			createTripPictureListHBox.getChildren().add(imageItem);
+		} catch (Exception ex) {
+			createTripInvalidPictureText.setVisible(true);
+			return;
+		}
+	}
+
+	private String getFileType(File file) {
+		return file.getPath().substring(file.getPath().lastIndexOf('.') + 1);
 	}
 
 	private void setUpCreateTripPane() {
@@ -561,7 +564,6 @@ public class FXMLDocumentController implements Initializable {
 
 		//Reset parameters
 		createTripTitleTextField.setText(null);
-		tripImageFile = null;
 		createTripDescriptionTextArea.setText(null);
 		createTripCategoryComboBox.setValue(null);
 		createTripInstructorCheckBox.setSelected(false);
@@ -618,4 +620,5 @@ public class FXMLDocumentController implements Initializable {
 		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
 		profilePictureImageView.setImage(image);
 	}
+
 }

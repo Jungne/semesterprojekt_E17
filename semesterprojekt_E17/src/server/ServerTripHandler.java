@@ -142,7 +142,9 @@ public class ServerTripHandler {
 		//Adds the images to the trip in the database
 		if (newTrip.getImages() != null) {
 			for (byte[] image : newTrip.getImages()) {
-				addImagetoTrip(tripId, image);
+				if (image != null) {
+					addImagetoTrip(tripId, image);
+				}
 			}
 		}
 
@@ -377,6 +379,7 @@ public class ServerTripHandler {
 		String query = "SELECT Trips.tripID, tripTitle, tripdescription, tripPrice, imageFile FROM Trips, ImagesInTrips, Images "
 						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
 
+		
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
 		if (!searchTitle.equals("")) {
 			query += " AND tripTitle LIKE '%" + searchTitle + "%'";

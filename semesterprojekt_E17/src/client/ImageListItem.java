@@ -7,21 +7,28 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-public class ImageItem extends Pane {
+public class ImageListItem extends Pane {
 
 	private HBox parent;
 	private String imageName;
-	private byte[] imageFile;
+	private byte[] imageByteArray;
 	private Button button;
 	private Button cancelButton;
 
-	public ImageItem(HBox parent, String imageName, byte[] imageFile) {
+	public ImageListItem(HBox parent, String imageName, byte[] imageByteArray) {
 		this.parent = parent;
 		this.imageName = imageName;
-		this.imageFile = imageFile;
+		this.imageByteArray = imageByteArray;
 
 		setUpButtons(imageName);
 		this.getChildren().addAll(button, cancelButton);
+	}
+
+	/**
+	 * @return the imageByteArray
+	 */
+	public byte[] getImageByteArray() {
+		return imageByteArray;
 	}
 
 	private void setUpButtons(String imageName) {
