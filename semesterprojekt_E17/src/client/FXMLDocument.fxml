@@ -13,6 +13,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -136,6 +137,7 @@
                   <Font size="10.0" />
                </font>
             </Text>
+            <HBox fx:id="createTripPictureListHBox" layoutX="150.0" layoutY="164.0" prefHeight="22.0" prefWidth="450.0" spacing="4.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
