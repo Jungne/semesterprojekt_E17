@@ -51,9 +51,11 @@ public class ServerTripHandler {
 		}
 
 		//Checks if organizer have the required certificates
-		for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
-			if (!certificateExists(instructorListItem)) {
-				return -1;
+		if (newTrip.getInstructors() != null) {
+			for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
+				if (!certificateExists(instructorListItem)) {
+					return -1;
+				}
 			}
 		}
 
@@ -75,7 +77,6 @@ public class ServerTripHandler {
 		}
 		String sqlTripPrice = newTrip.getPrice() + "";
 
-		//Chooses the right format to save to the date of meeting
 		if (newTrip.getTimeStart() == null || newTrip.getTimeStart().isBefore(LocalDateTime.now())) {
 			return -1;
 		}
@@ -84,7 +85,7 @@ public class ServerTripHandler {
 
 		String sqlTripAddress;
 		if (newTrip.getMeetingAddress() == null || newTrip.getMeetingAddress().isEmpty()) {
-			sqlTripAddress = "null";
+			return -1;
 		} else {
 			sqlTripAddress = "'" + newTrip.getMeetingAddress() + "'";
 		}
@@ -129,8 +130,10 @@ public class ServerTripHandler {
 		addParticipant(tripId, newTrip.getOrganizer().getId());
 
 		//Adds a instructor in the trip for each instructorListItem
-		for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
-			addInstructorInTrip(tripId, instructorListItem.getUser().getId(), instructorListItem.getCategory().getId());
+		if (newTrip.getInstructors() != null) {
+			for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
+				addInstructorInTrip(tripId, instructorListItem.getUser().getId(), instructorListItem.getCategory().getId());
+			}
 		}
 
 		//Adds the optional prices to the trip in the database
@@ -379,7 +382,6 @@ public class ServerTripHandler {
 		String query = "SELECT Trips.tripID, tripTitle, tripdescription, tripPrice, imageFile FROM Trips, ImagesInTrips, Images "
 						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
 
-		
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
 		if (!searchTitle.equals("")) {
 			query += " AND tripTitle LIKE '%" + searchTitle + "%'";

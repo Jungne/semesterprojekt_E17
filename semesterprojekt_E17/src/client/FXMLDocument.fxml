@@ -116,7 +116,7 @@
             <Button fx:id="createTripNextButton" layoutX="70.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Next" />
             <ComboBox fx:id="createTripCategoryComboBox" layoutX="60.0" layoutY="420.0" prefWidth="150.0" promptText="Choose" />
             <CheckBox fx:id="createTripInstructorCheckBox" layoutX="232.0" layoutY="424.0" mnemonicParsing="false" text="Instructor" />
-            <Text fx:id="createTripInvalidTitleText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter your name!" visible="false">
+            <Text fx:id="createTripInvalidTitleText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter trip title!" visible="false">
                <font>
                   <Font size="10.0" />
                </font>
@@ -127,7 +127,7 @@
                </font>
             </Text>
             <Button fx:id="createTripCancelButton1" layoutX="465.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
-            <Text fx:id="createTripInvalidPictureText" fill="#da0303" layoutX="60.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Picture is corrupt!" visible="false">
+            <Text fx:id="createTripInvalidPictureText" fill="#da0303" layoutX="60.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid picture!" visible="false">
                <font>
                   <Font size="10.0" />
                </font>
@@ -208,6 +208,11 @@
                </font>
             </Text>
             <Text fx:id="createTripInvalidLocationText" fill="#da0303" layoutX="60.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a location!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidMeetingAddressText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter a meeting address!" visible="false">
                <font>
                   <Font size="10.0" />
                </font>
