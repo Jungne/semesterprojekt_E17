@@ -48,6 +48,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
 
@@ -151,6 +152,8 @@ public class FXMLDocumentController implements Initializable {
 	private Text createTripInvalidLocationText;
 	@FXML
 	private Button createTripAddPictureButton;
+	@FXML
+	private HBox createTripPictureListHBox;
 
 	//View Trip
 	@FXML
@@ -314,6 +317,8 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private File chooseImage(String title) {
+		createTripPictureListHBox.getChildren().add(new ImageItem(createTripPictureListHBox, "some_picture.jpg", null));
+		
 		stage = mainPane.getScene().getWindow();
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle(title);
@@ -452,7 +457,7 @@ public class FXMLDocumentController implements Initializable {
 		LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 12, 0);
 		int participantLimit = Integer.parseInt(participantLimitString);
 		//TODO - Should be able to add several images
-		//TODO - There should be a default trip picture if no pictures a seleceted
+		//TODO - tripAddress should not be null or empty
 		ArrayList<byte[]> images = new ArrayList<>();
 		if (tripImageFile != null) {
 			BufferedImage image = ImageIO.read(tripImageFile);
