@@ -367,7 +367,7 @@ public class ServerTripHandler {
     return trip;
   }
 
-  static Trip viewTrip(int tripID) {
+  public static Trip viewTrip(int tripID) {
     String query = "SELECT * FROM Trips WHERE tripID = " + tripID + ";";
     ResultSet rs = DBManager.getInstance().executeQuery(query);
 

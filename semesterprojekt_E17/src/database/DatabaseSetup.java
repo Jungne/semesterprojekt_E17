@@ -220,12 +220,12 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Fyn');");
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Sjælland');");
 		//Inserts users
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'dalun12@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Daniel');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'eitho16@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Eirikur');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'hjrin15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Hjalte');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'julos14@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Jungne');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lalun13@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Lasse');");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Laura');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'dalun12@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Daniel', 1);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'eitho16@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Eirikur', 1);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'hjrin15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Hjalte', 1);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'julos14@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Jungne', 1);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lalun13@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Lasse', 1);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Laura', 1);");
 		//Inserts certificates
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2);");
 		//Inserts conversations

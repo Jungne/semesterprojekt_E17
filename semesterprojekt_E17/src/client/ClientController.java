@@ -73,8 +73,8 @@ public class ClientController {
 		return ClientTripHandler.viewTrip(tripID, serverController);
 	}
 
-	public void participateInTrip(User user, Trip trip) {
-		ClientTripHandler.participateInTrip(user, serverController, trip);
+	public void participateInTrip(Trip trip) {
+		ClientTripHandler.participateInTrip(currentUser, serverController, trip);
 	}
 
 	public int createTrip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {

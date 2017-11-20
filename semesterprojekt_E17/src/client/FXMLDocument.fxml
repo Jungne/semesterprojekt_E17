@@ -29,7 +29,7 @@
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in/out" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" visible="false">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -201,6 +201,7 @@
                   <Font name="System Italic" size="13.0" />
                </font>
             </Text>
+            <Button fx:id="joinTripButton" layoutX="110.0" layoutY="172.0" mnemonicParsing="false" onAction="#handleJoinTripButton" text="Join trip" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
@@ -240,7 +241,7 @@
             <Label fx:id="profileEmailLabel" layoutX="52.0" layoutY="105.0" text="Label" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="modifyTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
+      <AnchorPane fx:id="modifyTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <Text fx:id="modifyTripIDLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trip #0">
                <font>
