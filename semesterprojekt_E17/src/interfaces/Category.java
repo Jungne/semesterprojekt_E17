@@ -1,6 +1,8 @@
 package interfaces;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable {
 
 	private int id;
 	private String name;
@@ -23,4 +25,26 @@ public class Category {
 	public String getName() {
 		return name;
 	}
+
+	public Category clone() {
+		return new Category(id, name);
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof Category)) {
+			return false;
+		}
+		Category otherCategory = (Category) other;
+		if (this.id == otherCategory.id) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+
 }

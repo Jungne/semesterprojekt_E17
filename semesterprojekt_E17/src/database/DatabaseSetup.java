@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 public class DatabaseSetup {
 
-	private static DBManager dbm;
+	private static DBManager dbm = DBManager.getInstance();
 
 	private static String createCategoriesQuery
 					= "CREATE TABLE IF NOT EXISTS Categories ("
@@ -60,6 +60,7 @@ public class DatabaseSetup {
 					+ "userID int, "
 					+ "PRIMARY KEY (conversationID, userID), "
 					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
+					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
 	private static String createMessagesQuery
@@ -128,7 +129,7 @@ public class DatabaseSetup {
 					+ "optionalPrice decimal(10,2) NOT NULL, "
 					+ "priceDescription varchar(255) NOT NULL, "
 					+ "PRIMARY KEY (priceID), "
-					+ "FOREIGN KEY (tripID) REFERENCES trips(tripID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
 					+ ");";
 
 	private static String createTagsInTripsQuery
@@ -186,20 +187,50 @@ public class DatabaseSetup {
 	public static void main(String[] args) throws SQLException {
 		//createTables();
 		//dropTables();
+		//addTempData();
 	}
 
 	private static void createTables() {
-		dbm = DBManager.getInstance();
 		for (String query : createTableQueries) {
 			dbm.executeUpdate(query);
 		}
 	}
 
 	private static void dropTables() {
-		dbm = DBManager.getInstance();
 		for (String query : dropTableQueries) {
 			dbm.executeUpdate(query);
 		}
+	}
+
+	private static void addTempData() {
+		//Inserts categories
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Bowling');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Running');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Climbing');");
+		//Inserts locations
+		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Jylland');");
+		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Fyn');");
+		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Sjælland');");
+		//Inserts users
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'dalun12@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Daniel');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'eitho16@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Eirikur');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'hjrin15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Hjalte');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'julos14@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Jungne');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lalun13@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Lasse');");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Laura');");
+		//Inserts certificates
+		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2);");
+		//Inserts trips
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Doc Hollywood', 'Pallor', 70.14, '2016-11-23', 1, '8 Dawn Park', 11, 2, 1);");
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Septien', 'Pathological fracture in oth disease, unsp ankle, init', 79.21, '2018-06-19', 1, '5 Bonner Hill', 12, 2, 1);");
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Hours', 'Dislocation of unsp interphaln joint of l rng fngr, init', 276.2, '2017-06-07', 3, '829 Sullivan Circle', 14, 6, 1);");
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Citizen Gangster ', 'Nail disorders in diseases classified elsewhere', 236.97, '2018-04-15', 1, '17 Dahle Alley', 11, 2, 1);");
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Maid in Sweden', 'Unsp inj unsp musc/fasc/tend at thi lev, unsp thigh, sequela', 417.63, '2016-11-17', 2, '73400 Sauthoff Pass', 12, 5, 1);");
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Whatever Happened to Harold Smith?', 'Other prurigo', 5.15, '2017-08-29', 1, '93070 Brown Terrace', 17, 3, 1);");
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Anything But Love (a.k.a. Standard Time)', 'Oth physl fx upr end rad, unsp arm, subs for fx w delay heal', 233.64, '2017-01-04', 2, '4 Crowley Road', 2, 3, 1);");
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Glory to the Filmmaker! (Kantoku · Banzai!)', 'Poisoning by other systemic antibiotics, assault, sequela', 3.55, '2018-12-30', 1, '3 South Crossing', 10, 4, 1);");
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Time of Eve (Eve no jikan)', 'Puncture wound with foreign body of lip', 392.25, '2018-05-14', 2, '7725 Buena Vista Trail', 8, 6, 1);");
+		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Burning Hot Summer, A (Un été brûlant)', 'Wedge comprsn fx T11-T12 vertebra, subs for fx w nonunion', 437.9, '2017-06-22', 2, '056 Stuart Trail', 12, 6, 1);");
 	}
 
 }

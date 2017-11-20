@@ -1,8 +1,8 @@
 package interfaces;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +13,7 @@ public class Trip implements Serializable {
 	private String description;
 	private List<Category> categories;
 	private double price;
-	private Date timeStart;
+	private LocalDateTime timeStart;
 	private Location location;
 	private String meetingAddress;
 	private int participantLimit;
@@ -43,8 +43,9 @@ public class Trip implements Serializable {
 	 * @param conversation
 	 * @param categories
 	 * @param tags
+	 * @param images
 	 */
-	public Trip(int id, String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<User> participants, List<InstructorListItem> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, Set<String> tags) {
+	public Trip(int id, String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<User> participants, List<InstructorListItem> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, Set<String> tags, List<byte[]> images) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -60,6 +61,7 @@ public class Trip implements Serializable {
 		this.optionalPrices = optionalPrices;
 		this.conversation = conversation;
 		this.tags = tags;
+		this.images = images;
 	}
 
 	public Trip(int id, String title) {
@@ -102,9 +104,10 @@ public class Trip implements Serializable {
 	 * @param organizerInstructorIn
 	 * @param optionalPrices
 	 * @param tags
+	 * @param images
 	 * @throws java.lang.Exception
 	 */
-	public Trip(String title, String description, List<Category> categories, double price, Date timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags) throws Exception {
+	public Trip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
 		if (title == null) {
 			throw new Exception("invalid title");
 		}
@@ -117,7 +120,7 @@ public class Trip implements Serializable {
 		}
 		this.price = price;
 
-		if (timeStart.before(new Date())) {
+		if (timeStart.isBefore(LocalDateTime.now())) {
 			throw new Exception("invalid date");
 		}
 		this.timeStart = timeStart;
@@ -149,6 +152,7 @@ public class Trip implements Serializable {
 
 		this.optionalPrices = optionalPrices;
 		this.tags = tags;
+		this.images = images;
 	}
 
 	public void participate(User user) {
@@ -201,7 +205,7 @@ public class Trip implements Serializable {
 	/**
 	 * @return the timeStart
 	 */
-	public Date getTimeStart() {
+	public LocalDateTime getTimeStart() {
 		return timeStart;
 	}
 
