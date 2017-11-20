@@ -1,6 +1,13 @@
 package database;
 
+import com.sun.javafx.iio.ImageStorage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DatabaseSetup {
 
@@ -83,7 +90,7 @@ public class DatabaseSetup {
 					+ "tripPrice decimal(10,2), "
 					+ "timeStart timestamp, "
 					+ "locationID int, "
-					+ "tripAddress varchar(255), "
+					+ "tripAddress varchar(255) NOT NULL, "
 					+ "participantLimit int, "
 					+ "userID int NOT NULL, "
 					+ "conversationID int NOT NULL, "
@@ -144,7 +151,7 @@ public class DatabaseSetup {
 					= "CREATE TABLE IF NOT EXISTS ImagesIntrips ("
 					+ "imageID int, "
 					+ "tripID int, "
-					+ "PRIMARY KEY (imageID), "
+//					+ "PRIMARY KEY (imageID, tripID), "
 					+ "FOREIGN KEY (imageID) REFERENCES Images(imageID), "
 					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
 					+ ");";
@@ -184,10 +191,11 @@ public class DatabaseSetup {
 		"DROP TABLE IF EXISTS Locations;",
 		"DROP TABLE IF EXISTS Categories;",};
 
-	public static void main(String[] args) throws SQLException {
-		//createTables();
-		//dropTables();
-		//addTempData();
+	public static void main(String[] args) throws SQLException, IOException {
+		dropTables();
+		createTables();
+		addDefaultImages();
+		addTempData();
 	}
 
 	private static void createTables() {
@@ -220,6 +228,8 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Laura');");
 		//Inserts certificates
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2);");
+		//Inserts conversations
+		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT)");
 		//Inserts trips
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Doc Hollywood', 'Pallor', 70.14, '2016-11-23', 1, '8 Dawn Park', 11, 2, 1);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Septien', 'Pathological fracture in oth disease, unsp ankle, init', 79.21, '2018-06-19', 1, '5 Bonner Hill', 12, 2, 1);");
@@ -231,6 +241,33 @@ public class DatabaseSetup {
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Glory to the Filmmaker! (Kantoku · Banzai!)', 'Poisoning by other systemic antibiotics, assault, sequela', 3.55, '2018-12-30', 1, '3 South Crossing', 10, 4, 1);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Time of Eve (Eve no jikan)', 'Puncture wound with foreign body of lip', 392.25, '2018-05-14', 2, '7725 Buena Vista Trail', 8, 6, 1);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Burning Hot Summer, A (Un été brûlant)', 'Wedge comprsn fx T11-T12 vertebra, subs for fx w nonunion', 437.9, '2017-06-22', 2, '056 Stuart Trail', 12, 6, 1);");
+		//Inserts ImagesInTrips
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 1)");
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 2)");
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 3)");
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 4)");
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 5)");
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 6)");
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 7)");
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 8)");
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 9)");
+		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 10)");
+	}
+	
+	private static void addDefaultImages() throws IOException, SQLException {
+		byte[] defaultProfilePicture = Files.readAllBytes(new File("src/default_profile_picture.png").toPath());
+		byte[] defaultTripImage = Files.readAllBytes(new File("src/default.jpg").toPath());		
+		
+		//Inserts the imageFile
+			String imageQuery1 = "INSERT INTO Images (imageTitle, imageFile) VALUES ('DefaultProfilePicture', ?)";
+			PreparedStatement imageStatement1 = dbm.getConnection().prepareStatement(imageQuery1);
+			imageStatement1.setBytes(1, defaultProfilePicture);
+			imageStatement1.executeUpdate();
+			String imageQuery2 = "INSERT INTO Images (imageTitle, imageFile) VALUES ('DefaultTripImage', ?)";
+			PreparedStatement imageStatement2 = dbm.getConnection().prepareStatement(imageQuery2);
+			imageStatement2.setBytes(1, defaultTripImage);
+			imageStatement2.executeUpdate();
+			
 	}
 
 }

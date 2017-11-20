@@ -441,7 +441,8 @@ public class FXMLDocumentController implements Initializable {
 
 	@FXML
 	private void handleViewTripButton(ActionEvent event) {
-		viewTrip(1, false);
+		int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
+		viewTrip(tripId, false);
 	}
 
 	private void viewTrip(int id, boolean modifyMode) {

@@ -60,11 +60,7 @@ public class HBoxCell extends HBox {
 		this.getChildren().addAll(imageView, vbox1, vbox2);
 	}
 
-	public int getProductId() {
-		return id;
-	}
-
-	public int getImageId() {
+	public int getTripId() {
 		return id;
 	}
 
