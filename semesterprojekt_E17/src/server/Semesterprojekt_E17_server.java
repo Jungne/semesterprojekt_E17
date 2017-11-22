@@ -26,11 +26,6 @@ public class Semesterprojekt_E17_server {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-	
-			//RMI Security Manager
-			if (System.getSecurityManager() == null) {
-        System.setSecurityManager(new SecurityManager());
-			}
 		
 	try {
 	    ServerControllerImpl serverController = new ServerControllerImpl();

@@ -25,11 +25,6 @@ public class ClientController {
 	public ClientController() throws RemoteException {
 		String hostname = "localhost";
 		
-		//RMI Security Manager
-		if (System.getSecurityManager() == null) {
-        System.setSecurityManager(new SecurityManager());
-    }
-		
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12345);
 			serverController = (IServerController) registry.lookup("serverController");
