@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -49,6 +50,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
 
@@ -56,6 +58,7 @@ public class FXMLDocumentController implements Initializable {
 
 	private ClientController clientController;
 	private Window stage;
+	private User testUser;
 
 	@FXML
 	private AnchorPane mainPane;
@@ -100,8 +103,6 @@ public class FXMLDocumentController implements Initializable {
 
 	//Create Trip
 	@FXML
-	private Text createTripInvalidCertificateText;
-	@FXML
 	private Text createTripInvalidPictureText;
 	@FXML
 	private AnchorPane createTripPane1;
@@ -125,8 +126,6 @@ public class FXMLDocumentController implements Initializable {
 	private Text createTripInvalidTitleText;
 	@FXML
 	private TextArea createTripDescriptionTextArea;
-	@FXML
-	private CheckBox createTripInstructorCheckBox;
 	@FXML
 	private TextField createTripAddressTextField;
 	@FXML
@@ -155,6 +154,12 @@ public class FXMLDocumentController implements Initializable {
 	private HBox createTripPictureListHBox;
 	@FXML
 	private Text createTripInvalidMeetingAddressText;
+	@FXML
+	private HBox createTripCategoryListHBox;
+	@FXML
+	private Text createTripIntructorText;
+	private boolean categoryComboboxIsDisabled = false;
+	private int currentIntructorTextOccupiers = 0;
 
 	//View Trip
 	@FXML
@@ -218,6 +223,10 @@ public class FXMLDocumentController implements Initializable {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		stage = null;
+
+		//temp user
+		testUser = new User(5, null, null, null);
+		testUser.promoteToInstructor(new Category(2, "Running"));
 	}
 
 	private void showPane(AnchorPane pane) {
@@ -387,6 +396,8 @@ public class FXMLDocumentController implements Initializable {
 			showPane(createTripPane1);
 		} else if (event.getSource() == createTripCancelButton1 || event.getSource() == createTripCancelButton2) {
 			showPane(myTripsPane);
+		} else if (event.getSource() == createTripCategoryComboBox) {
+			addCategoryListItem();
 		} else if (event.getSource() == createTripCreateTripButton) {
 			try {
 				int tripId = createTrip();
@@ -403,36 +414,38 @@ public class FXMLDocumentController implements Initializable {
 		//Gets all the values
 		String title = createTripTitleTextField.getText();
 		String description = createTripDescriptionTextArea.getText();
-		Category category = createTripCategoryComboBox.getValue();
+
+		//Gets categories and categories that the organizer will instruct in
 		ArrayList<Category> categories = new ArrayList<>();
-		categories.add(category);
+		ArrayList<Category> organizerInstructorIn = new ArrayList<>();
+		for (Node node : createTripCategoryListHBox.getChildren()) {
+			CategoryListItem categoryListItem = (CategoryListItem) node;
+			categories.add(categoryListItem.getCategory());
+			if (categoryListItem.isInstructor()) {
+				organizerInstructorIn.add(categoryListItem.getCategory());
+			}
+		}
+		//Gets trip price
 		String priceString = createTripPriceTextField.getText();
 		if (priceString == null || priceString.isEmpty()) {
 			priceString = "0";
 		}
+		//Gets date and time
+		//TODO - Should get time also
 		LocalDate date = createTripTimeStartDatePicker.getValue();
+		//Gets location, meeting address and participant limit
 		Location location = createTripLocationComboBox.getValue();
 		String meetingAddress = createTripAddressTextField.getText();
 		String participantLimitString = createTripParticipantLimitTextField.getText();
 		if (participantLimitString == null || participantLimitString.isEmpty()) {
 			participantLimitString = "0";
 		}
+		//Get the organizer
 		//User organizer = clientController.getCurrentUser();
-		//Temp: creates user and promotes as running instructor
-		User organizer = new User(5, null, null, null);
-		organizer.promoteToInstructor(new Category(2, "Running"));
-
-		ArrayList<Category> organizerInstructorIn = new ArrayList<>();
-		if (createTripInstructorCheckBox.isSelected()) {
-			//Temp: Makes the organizer instructor in all trip categories
-			for (Category c : categories) {
-				if (c != null) {
-					organizerInstructorIn.add(c.clone());
-				}
-			}
-		}
+		//Gets optional prices
 		//TODO - Should add optional prices to GUI
 		ArrayList<OptionalPrice> optionalPrices = new ArrayList<>();
+		//Gets tags
 		HashSet<String> tags = new HashSet<>();
 		String tagsString = createTripTagsTextField.getText();
 		if (tagsString != null && !tagsString.isEmpty()) {
@@ -440,15 +453,14 @@ public class FXMLDocumentController implements Initializable {
 				tags.add(tag);
 			}
 		}
-
+		//Gets trip images
 		List<byte[]> images = new ArrayList<>();
-		createTripPictureListHBox.getChildren();
 		for (Node node : createTripPictureListHBox.getChildren()) {
 			images.add(((ImageListItem) node).getImageByteArray());
 		}
 
 		//Checks if parameters are valid
-		if (!isTripParametersValid(title, category, priceString, date, location, meetingAddress, participantLimitString, organizer.getCertificates())) {
+		if (!isTripParametersValid(title, categories, priceString, date, location, meetingAddress, participantLimitString)) {
 			return -1;
 		}
 
@@ -458,10 +470,10 @@ public class FXMLDocumentController implements Initializable {
 		int participantLimit = Integer.parseInt(participantLimitString);
 
 		//Creates trip
-		return clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
+		return clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, testUser, organizerInstructorIn, optionalPrices, tags, images);
 	}
 
-	private boolean isTripParametersValid(String title, Category category, String priceString, LocalDate date, Location location, String meetingAddress, String participantLimitString, List<Category> organizerCertificates) {
+	private boolean isTripParametersValid(String title, List<Category> categories, String priceString, LocalDate date, Location location, String meetingAddress, String participantLimitString) {
 		boolean isTripParametersValid = true;
 		//Title check
 		if (title == null || title.isEmpty()) {
@@ -471,7 +483,7 @@ public class FXMLDocumentController implements Initializable {
 			createTripInvalidTitleText.setVisible(false);
 		}
 		//category check
-		if (category == null) {
+		if (categories.isEmpty()) {
 			createTripInvalidCategoryText.setVisible(true);
 			isTripParametersValid = false;
 		} else {
@@ -524,12 +536,6 @@ public class FXMLDocumentController implements Initializable {
 		} else {
 			createTripInvalidParticipantLimitText.setVisible(false);
 		}
-		//Organizer certificates check
-		createTripInvalidCertificateText.setVisible(false);
-		if (createTripInstructorCheckBox.isSelected() && !organizerCertificates.contains(category)) {
-			createTripInvalidCertificateText.setVisible(true);
-			isTripParametersValid = false;
-		}
 		//Reset picture warning
 		createTripInvalidPictureText.setVisible(false);
 
@@ -549,19 +555,82 @@ public class FXMLDocumentController implements Initializable {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(image, imageFileType, baos);
 			//Inserts values in imageItem
-			imageListItem = new ImageListItem(createTripPictureListHBox, imageFileName, baos.toByteArray());
+			imageListItem = new ImageListItem(this, imageFileName, baos.toByteArray());
 			createTripPictureListHBox.getChildren().add(imageListItem);
 		} catch (Exception ex) {
 			createTripInvalidPictureText.setVisible(true);
-			return;
 		}
 	}
 
-	private String getFileType(File file) {
-		return file.getPath().substring(file.getPath().lastIndexOf('.') + 1);
+	protected void removeImageListItem(ImageListItem imageListItem) {
+		createTripPictureListHBox.getChildren().remove(imageListItem);
+	}
+
+	private void addCategoryListItem() {
+		if (categoryComboboxIsDisabled) {
+			return;
+		}
+		Category category = createTripCategoryComboBox.getValue();
+		//Checks if category already exists in list
+		for (Node node : createTripCategoryListHBox.getChildren()) {
+			if (((CategoryListItem) node).getCategory().equals(category)) {
+				return;
+			}
+		}
+
+		//Adds the category to HBox and reveal the instructor text
+		createTripIntructorText.setVisible(true);
+		createTripCategoryListHBox.getChildren().add(new CategoryListItem(this, category));
+
+		//Resets current combobox value
+		categoryComboboxIsDisabled = true;
+		//createTripCategoryComboBox.setValue(null);
+		categoryComboboxIsDisabled = false;
+	}
+
+	protected void removeCategoryListItem(CategoryListItem categoryListItem) {
+		createTripCategoryListHBox.getChildren().remove(categoryListItem);
+		if (createTripCategoryListHBox.getChildren().isEmpty()) {
+			createTripIntructorText.setVisible(false);
+		}
+	}
+
+	protected boolean hasCertificate(Category category) {
+		if (testUser.getCertificates().contains(category)) {
+			return true;
+		}
+		showMessageFiveSeconds(category);
+		return false;
+	}
+
+	private void showMessageFiveSeconds(Category category) {
+		currentIntructorTextOccupiers++;
+		//Show warning message
+		createTripIntructorText.setText("You do not have cerficate for '" + category.getName() + "'-instructor!");
+		createTripIntructorText.setFill(Paint.valueOf("#da0303"));
+		createTripIntructorText.setOpacity(1);
+
+		TimerTask timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				//Checks if instructor text is used elsewhere
+				currentIntructorTextOccupiers--;
+				if (currentIntructorTextOccupiers != 0) {
+					return;
+				}
+				//Show default message
+				createTripIntructorText.setText("Click on categories to participate as instructor");
+				createTripIntructorText.setFill(Paint.valueOf("black"));
+				createTripIntructorText.setOpacity(0.5);
+			}
+		};
+		new java.util.Timer().schedule(timerTask, 5000);
 	}
 
 	private void setUpCreateTripPane() {
+		//Disable category combobox before adjusting values
+		categoryComboboxIsDisabled = true;
+
 		//Gets all categories from the server and displays them in the comboBox
 		ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 		createTripCategoryComboBox.setItems(categories);
@@ -573,8 +642,7 @@ public class FXMLDocumentController implements Initializable {
 		//Reset parameters
 		createTripTitleTextField.setText(null);
 		createTripDescriptionTextArea.setText(null);
-		createTripCategoryComboBox.setValue(null);
-		createTripInstructorCheckBox.setSelected(false);
+		//createTripCategoryComboBox.setValue(null);
 		createTripAddressTextField.setText(null);
 		createTripPriceTextField.setText(null);
 		createTripLocationComboBox.setValue(null);
@@ -586,14 +654,18 @@ public class FXMLDocumentController implements Initializable {
 		createTripInvalidTitleText.setVisible(false);
 		createTripInvalidPictureText.setVisible(false);
 		createTripInvalidCategoryText.setVisible(false);
-		createTripInvalidCertificateText.setVisible(false);
+		createTripIntructorText.setVisible(false);
 		createTripInvalidPriceText.setVisible(false);
 		createTripInvalidLocationText.setVisible(false);
 		createTripInvalidDateText.setVisible(false);
 		createTripInvalidParticipantLimitText.setVisible(false);
 
-		//Reset PictureListHBox
+		//Reset HBox lists
 		createTripPictureListHBox.getChildren().clear();
+		createTripCategoryListHBox.getChildren().clear();
+
+		//Activate category combobox after adjusting values
+		categoryComboboxIsDisabled = false;
 	}
 
 	@FXML

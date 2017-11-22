@@ -108,14 +108,8 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <Text layoutX="232.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Text>
-            <Button fx:id="createTripNextButton" layoutX="70.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Next" />
-            <ComboBox fx:id="createTripCategoryComboBox" layoutX="60.0" layoutY="420.0" prefWidth="150.0" promptText="Choose" />
-            <CheckBox fx:id="createTripInstructorCheckBox" layoutX="232.0" layoutY="424.0" mnemonicParsing="false" text="Instructor" />
+            <Button fx:id="createTripNextButton" layoutX="70.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Next" />
+            <ComboBox fx:id="createTripCategoryComboBox" layoutX="60.0" layoutY="420.0" onAction="#handleCreateTripButtons" prefHeight="25.0" prefWidth="120.0" promptText="Choose" />
             <Text fx:id="createTripInvalidTitleText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter trip title!" visible="false">
                <font>
                   <Font size="10.0" />
@@ -126,18 +120,19 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <Button fx:id="createTripCancelButton1" layoutX="465.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
+            <Button fx:id="createTripCancelButton1" layoutX="465.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
             <Text fx:id="createTripInvalidPictureText" fill="#da0303" layoutX="60.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid picture!" visible="false">
                <font>
                   <Font size="10.0" />
                </font>
             </Text>
-            <Text fx:id="createTripInvalidCertificateText" fill="#da0303" layoutX="232.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You do not have cerficate for this!" visible="false">
+            <Text fx:id="createTripIntructorText" layoutX="197.0" layoutY="455.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Click on categories to partocipate as instructor" visible="false">
                <font>
                   <Font size="10.0" />
                </font>
             </Text>
             <HBox fx:id="createTripPictureListHBox" layoutX="150.0" layoutY="164.0" prefHeight="22.0" prefWidth="450.0" spacing="4.0" />
+            <HBox fx:id="createTripCategoryListHBox" layoutX="197.0" layoutY="421.0" prefHeight="22.0" prefWidth="392.0" spacing="4.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
@@ -176,8 +171,8 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <Button fx:id="createTripCreateTripButton" layoutX="70.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Create trip" />
-            <Button fx:id="createTripBackButton" layoutX="500.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Back" />
+            <Button fx:id="createTripCreateTripButton" layoutX="70.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Create trip" />
+            <Button fx:id="createTripBackButton" layoutX="500.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Back" />
             <ComboBox fx:id="createTripLocationComboBox" layoutX="60.0" layoutY="182.0" prefWidth="150.0" promptText="Choose" />
             <Text layoutX="60.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant limit">
                <font>
@@ -201,7 +196,7 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <Button fx:id="createTripCancelButton2" layoutX="465.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
+            <Button fx:id="createTripCancelButton2" layoutX="465.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
             <Text fx:id="createTripInvalidParticipantLimitText" fill="#da0303" layoutX="60.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid participant limit!" visible="false">
                <font>
                   <Font size="10.0" />
