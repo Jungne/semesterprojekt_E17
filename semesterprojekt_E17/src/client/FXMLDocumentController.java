@@ -101,7 +101,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button myTripsViewTripButton;
 
-	//Create Trip
+	// <editor-fold defaultstate="collapsed" desc="Create Trip - Elements">
 	@FXML
 	private Text createTripInvalidPictureText;
 	@FXML
@@ -160,6 +160,7 @@ public class FXMLDocumentController implements Initializable {
 	private Text createTripIntructorText;
 	private boolean categoryComboboxIsDisabled = false;
 	private int currentIntructorTextOccupiers = 0;
+	// </editor-fold>
 
 	//View Trip
 	@FXML
