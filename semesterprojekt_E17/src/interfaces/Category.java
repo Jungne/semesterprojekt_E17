@@ -1,6 +1,8 @@
 package interfaces;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Category implements Serializable {
 
@@ -36,15 +38,30 @@ public class Category implements Serializable {
 			return false;
 		}
 		Category otherCategory = (Category) other;
-		if (this.id == otherCategory.id) {
-			return true;
-		}
-		return false;
+		return this.id == otherCategory.id;
 	}
 
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	/**
+	 * Takes a list of categories and return a list of cetegories ids. Returns
+	 * null just one category is null.
+	 *
+	 * @param categories
+	 * @return
+	 */
+	public static List<Integer> getCategoryIds(List<Category> categories) {
+		ArrayList<Integer> categoryIds = new ArrayList<>();
+		for (Category category : categories) {
+			if (category == null) {
+				return null;
+			}
+			categoryIds.add(category.getId());
+		}
+		return categoryIds;
 	}
 
 }

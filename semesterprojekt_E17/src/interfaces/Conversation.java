@@ -1,13 +1,14 @@
 package interfaces;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Conversation implements Serializable {
 
 	private int id;
-	private List<User> participants;
-	private List<Message> messages;
+	private List<User> participants = new ArrayList<>();
+	private List<Message> messages = new ArrayList<>();
 
 	public Conversation(int id, List<User> participants, List<Message> messages) {
 		this.id = id;
