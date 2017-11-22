@@ -1,6 +1,7 @@
 package client;
 
 import interfaces.Category;
+import interfaces.FullTripException;
 import interfaces.IServerController;
 import interfaces.Location;
 import interfaces.OptionalPrice;
@@ -73,7 +74,7 @@ public class ClientController {
 		return ClientTripHandler.viewTrip(tripID, serverController);
 	}
 
-	public void participateInTrip(Trip trip) {
+	public void participateInTrip(Trip trip) throws FullTripException {
 		ClientTripHandler.participateInTrip(currentUser, serverController, trip);
 	}
 

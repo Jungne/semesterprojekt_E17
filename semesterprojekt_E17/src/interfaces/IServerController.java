@@ -25,7 +25,7 @@ public interface IServerController extends Remote {
     
     public void deleteTrip(Trip trip) throws RemoteException;
     
-    public void participateInTrip(Trip trip, User user) throws RemoteException;
+    public void participateInTrip(Trip trip, User user) throws FullTripException, RemoteException;
     
     public boolean instructInTrip(Trip trip, User user) throws RemoteException;
     

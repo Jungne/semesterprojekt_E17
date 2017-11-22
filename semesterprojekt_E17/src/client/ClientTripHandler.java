@@ -1,6 +1,7 @@
 package client;
 
 import interfaces.Category;
+import interfaces.FullTripException;
 import interfaces.IServerController;
 import interfaces.Location;
 import interfaces.OptionalPrice;
@@ -32,11 +33,11 @@ public class ClientTripHandler {
 		}
 	}
 
-	public static void participateInTrip(User user, IServerController serverController, Trip trip) {
+	public static void participateInTrip(User user, IServerController serverController, Trip trip) throws FullTripException {
 		try {
 			serverController.participateInTrip(trip, user);
 		} catch (RemoteException ex) {
-			Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

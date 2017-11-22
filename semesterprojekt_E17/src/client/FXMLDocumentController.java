@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 import interfaces.Category;
+import interfaces.FullTripException;
 import interfaces.Location;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
@@ -499,6 +500,12 @@ public class FXMLDocumentController implements Initializable {
 	
 	@FXML
 	private void handleJoinTripButton(ActionEvent event) {
-		clientController.participateInTrip(viewedTrip);
+		try {
+			clientController.participateInTrip(viewedTrip);
+		} catch (FullTripException ex) {
+			//TODO popup explanation, that trip is full.
+			System.out.println("test");
+			System.out.println(ex);
+		}
 	}
 }
