@@ -28,6 +28,7 @@ import java.util.logging.Logger;
  */
 public class ServerTripHandler {
 
+	private static DBManager dbm = DBManager.getInstance();
 	/**
 	 * Creates a trip in the database by using the information in newTrip.
 	 *
@@ -109,7 +110,7 @@ public class ServerTripHandler {
 			return -1;
 		}
 		//Adds a trip to the database and returnes its id
-		int tripId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO "
+		int tripId = dbm.executeInsertAndGetId("INSERT INTO "
 						+ "Trips (tripID, tripTitle, tripDescription, tripPrice, timeStart, "
 						+ "locationID, tripAddress, participantLimit, userID, conversationID) "
 						+ "VALUES ("
@@ -157,7 +158,7 @@ public class ServerTripHandler {
 
 	public static List<Category> getCategories() {
 		ArrayList<Category> categories = new ArrayList<>();
-		ResultSet rs = DBManager.getInstance().executeQuery("SELECT categoryID, categoryName FROM Categories;");
+		ResultSet rs = dbm.executeQuery("SELECT categoryID, categoryName FROM Categories;");
 		try {
 			while (rs.next()) {
 				categories.add(new Category(rs.getInt(1), rs.getString(2)));
@@ -176,7 +177,7 @@ public class ServerTripHandler {
 	 */
 	private static List<Integer> getCategoryIds() {
 		ArrayList<Integer> categoryIds = new ArrayList<>();
-		ResultSet rs = DBManager.getInstance().executeQuery("SELECT categoryID FROM Categories;");
+		ResultSet rs = dbm.executeQuery("SELECT categoryID FROM Categories;");
 		try {
 			while (rs.next()) {
 				categoryIds.add(rs.getInt(1));
@@ -198,7 +199,7 @@ public class ServerTripHandler {
 
 	public static List<Location> getLocations() {
 		ArrayList<Location> locations = new ArrayList<>();
-		ResultSet rs = DBManager.getInstance().executeQuery("SELECT locationID, locationName FROM Locations;");
+		ResultSet rs = dbm.executeQuery("SELECT locationID, locationName FROM Locations;");
 		try {
 			while (rs.next()) {
 				locations.add(new Location(rs.getInt(1), rs.getString(2)));
@@ -217,7 +218,7 @@ public class ServerTripHandler {
 	 */
 	private static List<Integer> getLocationIds() {
 		ArrayList<Integer> locationIds = new ArrayList<>();
-		ResultSet rs = DBManager.getInstance().executeQuery("SELECT locationID FROM Locations;");
+		ResultSet rs = dbm.executeQuery("SELECT locationID FROM Locations;");
 		try {
 			while (rs.next()) {
 				locationIds.add(rs.getInt(1));
@@ -255,7 +256,7 @@ public class ServerTripHandler {
 		if (user == null) {
 			return false;
 		}
-		ResultSet rs = DBManager.getInstance().executeQuery("SELECT userID FROM Users WHERE userID = " + user.getId() + ";");
+		ResultSet rs = dbm.executeQuery("SELECT userID FROM Users WHERE userID = " + user.getId() + ";");
 		try {
 			if (rs.next()) {
 				return true;
@@ -270,7 +271,7 @@ public class ServerTripHandler {
 		if (instructorListItem == null || instructorListItem.getUser() == null || instructorListItem.getCategory() == null) {
 			return false;
 		}
-		ResultSet rs = DBManager.getInstance().executeQuery("SELECT categoryID FROM Certificates "
+		ResultSet rs = dbm.executeQuery("SELECT categoryID FROM Certificates "
 						+ "WHERE userID = " + instructorListItem.getUser().getId() + " "
 						+ "AND categoryID = " + instructorListItem.getCategory().getId() + ";");
 		try {
@@ -289,7 +290,7 @@ public class ServerTripHandler {
 		}
 
 		//Inserts a new conversation id into Conversations
-		int conversationId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO Conversations (conversationID) VALUES (DEFAULT);");
+		int conversationId = dbm.executeInsertAndGetId("INSERT INTO Conversations (conversationID) VALUES (DEFAULT);");
 
 		//Inserts all the users from the trip into UsersInConversations
 		String query = "INSERT INTO UsersInConversations (conversationID, userID) VALUES ";
@@ -298,7 +299,7 @@ public class ServerTripHandler {
 			queryValues += ("(" + conversationId + ", " + user.getId() + "), ");
 		}
 		query += queryValues.substring(0, queryValues.length() - 2) + ";";
-		DBManager.getInstance().executeUpdate(query);
+		dbm.executeUpdate(query);
 		return conversationId;
 	}
 
@@ -309,16 +310,16 @@ public class ServerTripHandler {
 			queryValues += ("(" + tripId + ", " + categoryId + "), ");
 		}
 		query += queryValues.substring(0, queryValues.length() - 2) + ";";
-		DBManager.getInstance().executeUpdate(query);
+		dbm.executeUpdate(query);
 	}
 
 	private static void addParticipant(int tripId, int userId) {
-		DBManager.getInstance().executeUpdate("INSERT INTO UsersInTrips (tripID, userID) "
+		dbm.executeUpdate("INSERT INTO UsersInTrips (tripID, userID) "
 						+ "VALUES (" + tripId + ", " + userId + ");");
 	}
 
 	private static void addInstructorInTrip(int tripId, int userId, int categoryId) {
-		DBManager.getInstance().executeUpdate("INSERT INTO InstructorsInTrips (tripID, userID, categoryID) "
+		dbm.executeUpdate("INSERT INTO InstructorsInTrips (tripID, userID, categoryID) "
 						+ "VALUES (" + tripId + ", " + userId + ", " + categoryId + ");");
 	}
 
@@ -335,7 +336,7 @@ public class ServerTripHandler {
 							+ "'" + optionalPrice.getDescription() + "'), ");
 		}
 		query += queryValues.substring(0, queryValues.length() - 2) + ";";
-		DBManager.getInstance().executeUpdate(query);
+		dbm.executeUpdate(query);
 	}
 
 	private static void addTags(int tripId, Set<String> tags) {
@@ -348,12 +349,12 @@ public class ServerTripHandler {
 			queryValues += ("(" + tripId + ", '" + tag + "'), ");
 		}
 		query += queryValues.substring(0, queryValues.length() - 2) + ";";
-		DBManager.getInstance().executeUpdate(query);
+		dbm.executeUpdate(query);
 	}
 
 	private static void addImagetoTrip(int tripId, byte[] image) {
-		int imageId = DBManager.getInstance().executeImageInsertAndGetId("INSERT INTO Images (imageID, imageFile) VALUES (DEFAULT, ?);", image);
-		DBManager.getInstance().executeUpdate("INSERT INTO ImagesInTrips (imageID, tripID) VALUES (" + imageId + ", " + tripId + ");");
+		int imageId = dbm.executeImageInsertAndGetId("INSERT INTO Images (imageID, imageFile) VALUES (DEFAULT, ?);", image);
+		dbm.executeUpdate("INSERT INTO ImagesInTrips (imageID, tripID) VALUES (" + imageId + ", " + tripId + ");");
 	}
 
 	static void modifyTrip(Trip trip) {
@@ -364,7 +365,7 @@ public class ServerTripHandler {
 						+ "tripPrice = " + trip.getPrice() + " "
 						+ "WHERE tripID = " + trip.getId() + ";";
 
-		DBManager.getInstance().executeUpdate(query);
+		dbm.executeUpdate(query);
 
 		//Need to also update trip categories and users in trip
 	}
@@ -408,7 +409,7 @@ public class ServerTripHandler {
 		}
 
 		//Initializes a resultset and an ArrayList for handling the creation of trips to be returned.
-		ResultSet searchResult = DBManager.getInstance().executeQuery(query);
+		ResultSet searchResult = dbm.executeQuery(query);
 		ArrayList<Trip> searchResultTrips = new ArrayList<>();
 
 		try {
@@ -429,7 +430,7 @@ public class ServerTripHandler {
 	public static void deleteTrip(Trip trip) {
 		String query = "DELETE FROM Trips WHERE tripID = " + trip.getId() + ";";
 
-		DBManager.getInstance().executeUpdate(query);
+		dbm.executeUpdate(query);
 	}
 
 	public static void participateInTrip(Trip trip, User user) throws FullTripException {
@@ -437,8 +438,7 @@ public class ServerTripHandler {
 		int userID = user.getId();
 
 		if (!isTripFull(trip)) {
-			String query = "INSERT INTO UsersInTrips VALUES ('" + tripID + "', '" + userID + "');";
-			DBManager.getInstance().executeUpdate(query);
+			addParticipant(tripID, userID);
 			System.out.println("Joined trip");
 		} else {
 			throw new FullTripException("Trip is full.");
@@ -449,18 +449,18 @@ public class ServerTripHandler {
 		int tripID = trip.getId();
 		int userID = user.getId();
 		String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() + "AND userID = " + userID + ";";
-		DBManager.getInstance().executeUpdate(query);
+		dbm.executeUpdate(query);
 	}
 
 	public static Trip showTrip(int tripsID) {
 		String query = "SELECT * FROM Trips WHERE tripID = " + tripsID + ";";
-		Trip trip = (Trip) DBManager.getInstance().executeQuery(query);
+		Trip trip = (Trip) dbm.executeQuery(query);
 		return trip;
 	}
 
 	public static Trip viewTrip(int tripID) {
 		String query = "SELECT * FROM Trips WHERE tripID = " + tripID + ";";
-		ResultSet rs = DBManager.getInstance().executeQuery(query);
+		ResultSet rs = dbm.executeQuery(query);
 
 		try {
 			while (rs.next()) {
@@ -478,7 +478,7 @@ public class ServerTripHandler {
 
 	public static boolean isTripFull(Trip trip) {
 		try {
-			ResultSet fullTripCheck = DBManager.getInstance().executeQuery("SELECT UsersInTrips.tripId, COUNT(UsersInTrips.tripId), MAX(participantLimit)\n"
+			ResultSet fullTripCheck = dbm.executeQuery("SELECT UsersInTrips.tripId, COUNT(UsersInTrips.tripId), MAX(participantLimit)\n"
 							+ "FROM UsersInTrips\n"
 							+ "INNER JOIN Trips On UsersInTrips.tripId = Trips.tripID\n"
 							+ "WHERE UsersInTrips.tripId = " + trip.getId() + "\n"
