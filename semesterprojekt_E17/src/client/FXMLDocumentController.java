@@ -246,6 +246,14 @@ public class FXMLDocumentController implements Initializable {
 		//temp user
 		testUser = new User(5, null, null, null);
 		testUser.promoteToInstructor(new Category(2, "Running"));
+		
+		try {
+			clientController.signUp(testUser, "123");
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (IllegalArgumentException ex) {
+			System.out.println(ex.getMessage());
+		}
 	}
 
 	private void showPane(AnchorPane pane) {
@@ -292,24 +300,26 @@ public class FXMLDocumentController implements Initializable {
 
 	@FXML
 	private void handleSearchTripsButton(ActionEvent event) {
-		//Only date and price works at the moment.
-
-		String searchTitle; //TODO add textfield in GUI.
-		int categoryID = -1; //TODO implement categoryID
-		int locationID = -1; //TODO implement locationID
-		double priceMax = -1;
-		if (!searchTripsPriceTextField.getText().equals("")) {
-			priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
+		try {
+			//Only date and price works at the moment.
+			
+			String searchTitle; //TODO add textfield in GUI.
+			int categoryID = -1; //TODO implement categoryID
+			int locationID = -1; //TODO implement locationID
+			double priceMax = -1;
+			if (!searchTripsPriceTextField.getText().equals("")) {
+				priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
+			}
+			
+			//Date stuff
+			LocalDate date = searchTripsDatePicker.getValue();
+			
+			List<Trip> trips = clientController.searchTrips("", -1, date, -1, priceMax);
+			
+			showTrips(trips, browseTripsListView);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
-		//Date stuff
-		LocalDate localDate = searchTripsDatePicker.getValue();
-		Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-		Date date = Date.from(instant);
-
-		List<Trip> trips = clientController.searchTrips("", -1, date, -1, priceMax);
-
-		showTrips(trips, browseTripsListView);
 	}
 
 	@FXML

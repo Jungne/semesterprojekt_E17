@@ -9,10 +9,10 @@ import interfaces.Trip;
 import interfaces.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -376,14 +376,14 @@ public class ServerTripHandler {
 	 * @param priceMAX
 	 * @return list of trips matching search parameters.
 	 */
-	public static List<Trip> searchTrip(String searchTitle, int category, Date timedateStart, int location, double priceMAX) {
+	public static List<Trip> searchTrip(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) {
 
 		//Initializes the query string.
 		String query = "SELECT Trips.tripID, tripTitle, tripdescription, tripPrice, imageFile FROM Trips, ImagesInTrips, Images "
 						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
 
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
-		if (!searchTitle.equals("")) {
+		if (!(searchTitle == null || searchTitle.isEmpty())) {
 			query += " AND tripTitle LIKE '%" + searchTitle + "%'";
 		}
 

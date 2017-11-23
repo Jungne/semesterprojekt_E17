@@ -98,7 +98,7 @@ public class DatabaseSetup {
 					+ "tripID int, "
 					+ "categoryID int, "
 					+ "PRIMARY KEY (categoryID, tripID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE, "
 					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
 					+ ");";
 
@@ -107,7 +107,7 @@ public class DatabaseSetup {
 					+ "tripID int, "
 					+ "userID int, "
 					+ "PRIMARY KEY (tripID, userID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE, "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
@@ -117,7 +117,7 @@ public class DatabaseSetup {
 					+ "userID int, "
 					+ "categoryID int, "
 					+ "PRIMARY KEY (tripID, userID, categoryID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE, "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
 					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
 					+ ");";
@@ -129,7 +129,7 @@ public class DatabaseSetup {
 					+ "optionalPrice decimal(10,2) NOT NULL, "
 					+ "priceDescription varchar(255) NOT NULL, "
 					+ "PRIMARY KEY (priceID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE"
 					+ ");";
 
 	private static String createTagsInTripsQuery
@@ -137,7 +137,7 @@ public class DatabaseSetup {
 					+ "tripID int, "
 					+ "tag varchar(255), "
 					+ "PRIMARY KEY (tripID, tag), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE"
 					+ ");";
 
 	private static String createImagesIntripsQuery
@@ -146,7 +146,7 @@ public class DatabaseSetup {
 					+ "tripID int, "
 					+ "PRIMARY KEY (imageID), "
 					+ "FOREIGN KEY (imageID) REFERENCES Images(imageID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE"
 					+ ");";
 
 	protected static String[] createTableQueries = {
@@ -185,9 +185,9 @@ public class DatabaseSetup {
 		"DROP TABLE IF EXISTS Categories;",};
 
 	public static void main(String[] args) throws SQLException {
-		//createTables();
-		//dropTables();
-		//addTempData();
+		dropTables();
+		createTables();
+		addTempData();
 	}
 
 	private static void createTables() {
@@ -221,18 +221,16 @@ public class DatabaseSetup {
 		//Inserts certificates
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2);");
 		//Inserts trips
-		/*
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Doc Hollywood', 'Pallor', 70.14, '2016-11-23', 1, '8 Dawn Park', 11, 2, 1);");
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Septien', 'Pathological fracture in oth disease, unsp ankle, init', 79.21, '2018-06-19', 1, '5 Bonner Hill', 12, 2, 1);");
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Hours', 'Dislocation of unsp interphaln joint of l rng fngr, init', 276.2, '2017-06-07', 3, '829 Sullivan Circle', 14, 6, 1);");
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Citizen Gangster ', 'Nail disorders in diseases classified elsewhere', 236.97, '2018-04-15', 1, '17 Dahle Alley', 11, 2, 1);");
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Maid in Sweden', 'Unsp inj unsp musc/fasc/tend at thi lev, unsp thigh, sequela', 417.63, '2016-11-17', 2, '73400 Sauthoff Pass', 12, 5, 1);");
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Whatever Happened to Harold Smith?', 'Other prurigo', 5.15, '2017-08-29', 1, '93070 Brown Terrace', 17, 3, 1);");
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Anything But Love (a.k.a. Standard Time)', 'Oth physl fx upr end rad, unsp arm, subs for fx w delay heal', 233.64, '2017-01-04', 2, '4 Crowley Road', 2, 3, 1);");
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Glory to the Filmmaker! (Kantoku · Banzai!)', 'Poisoning by other systemic antibiotics, assault, sequela', 3.55, '2018-12-30', 1, '3 South Crossing', 10, 4, 1);");
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Time of Eve (Eve no jikan)', 'Puncture wound with foreign body of lip', 392.25, '2018-05-14', 2, '7725 Buena Vista Trail', 8, 6, 1);");
-		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Burning Hot Summer, A (Un été brûlant)', 'Wedge comprsn fx T11-T12 vertebra, subs for fx w nonunion', 437.9, '2017-06-22', 2, '056 Stuart Trail', 12, 6, 1);");
-		 */
-	}
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Doc Hollywood', 'Pallor', 70.14, '2016-11-23', 1, '8 Dawn Park', 11, 2, 1);");
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Septien', 'Pathological fracture in oth disease, unsp ankle, init', 79.21, '2018-06-19', 1, '5 Bonner Hill', 12, 2, 1);");
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Hours', 'Dislocation of unsp interphaln joint of l rng fngr, init', 276.2, '2017-06-07', 3, '829 Sullivan Circle', 14, 6, 1);");
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Citizen Gangster ', 'Nail disorders in diseases classified elsewhere', 236.97, '2018-04-15', 1, '17 Dahle Alley', 11, 2, 1);");
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Maid in Sweden', 'Unsp inj unsp musc/fasc/tend at thi lev, unsp thigh, sequela', 417.63, '2016-11-17', 2, '73400 Sauthoff Pass', 12, 5, 1);");
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Whatever Happened to Harold Smith?', 'Other prurigo', 5.15, '2017-08-29', 1, '93070 Brown Terrace', 17, 3, 1);");
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Anything But Love (a.k.a. Standard Time)', 'Oth physl fx upr end rad, unsp arm, subs for fx w delay heal', 233.64, '2017-01-04', 2, '4 Crowley Road', 2, 3, 1);");
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Glory to the Filmmaker! (Kantoku · Banzai!)', 'Poisoning by other systemic antibiotics, assault, sequela', 3.55, '2018-12-30', 1, '3 South Crossing', 10, 4, 1);");
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Time of Eve (Eve no jikan)', 'Puncture wound with foreign body of lip', 392.25, '2018-05-14', 2, '7725 Buena Vista Trail', 8, 6, 1);");
+//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Burning Hot Summer, A (Un été brûlant)', 'Wedge comprsn fx T11-T12 vertebra, subs for fx w nonunion', 437.9, '2017-06-22', 2, '056 Stuart Trail', 12, 6, 1);");
+		}
 
 }
