@@ -105,7 +105,7 @@ public class DatabaseSetup {
 					+ "tripID int, "
 					+ "categoryID int, "
 					+ "PRIMARY KEY (categoryID, tripID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE, "
 					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
 					+ ");";
 
@@ -114,7 +114,7 @@ public class DatabaseSetup {
 					+ "tripID int, "
 					+ "userID int, "
 					+ "PRIMARY KEY (tripID, userID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE, "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
@@ -124,7 +124,7 @@ public class DatabaseSetup {
 					+ "userID int, "
 					+ "categoryID int, "
 					+ "PRIMARY KEY (tripID, userID, categoryID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID), "
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE, "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID), "
 					+ "FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)"
 					+ ");";
@@ -136,7 +136,7 @@ public class DatabaseSetup {
 					+ "optionalPrice decimal(10,2) NOT NULL, "
 					+ "priceDescription varchar(255) NOT NULL, "
 					+ "PRIMARY KEY (priceID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE"
 					+ ");";
 
 	private static String createTagsInTripsQuery
@@ -144,7 +144,7 @@ public class DatabaseSetup {
 					+ "tripID int, "
 					+ "tag varchar(255), "
 					+ "PRIMARY KEY (tripID, tag), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE"
 					+ ");";
 
 	private static String createImagesIntripsQuery
@@ -153,7 +153,7 @@ public class DatabaseSetup {
 					+ "tripID int, "
 //					+ "PRIMARY KEY (imageID, tripID), "
 					+ "FOREIGN KEY (imageID) REFERENCES Images(imageID), "
-					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID)"
+					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE"
 					+ ");";
 
 	protected static String[] createTableQueries = {

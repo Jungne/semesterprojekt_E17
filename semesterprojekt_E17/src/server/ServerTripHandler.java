@@ -10,9 +10,10 @@ import interfaces.Trip;
 import interfaces.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -36,12 +37,12 @@ public class ServerTripHandler {
 	 */
 	public static int createTrip(Trip newTrip) {
 		//Checks if category ids exists
-		if (!getCategoryIds().containsAll(newTrip.getCategoryIds())) {
+		if (!categoriesExists(newTrip.getCategories())) {
 			return -1;
 		}
 
 		//Checks if location id exists
-		if (!getLocationIds().contains(newTrip.getLocation().getId())) {
+		if (!locationExists(newTrip.getLocation())) {
 			return -1;
 		}
 
@@ -50,45 +51,90 @@ public class ServerTripHandler {
 			return -1;
 		}
 
-		//Checks if participants have the required certificates
-		for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
-			if (!certificateExists(instructorListItem)) {
-				return -1;
+		//Checks if organizer have the required certificates
+		if (newTrip.getInstructors() != null) {
+			for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
+				if (!certificateExists(instructorListItem)) {
+					return -1;
+				}
 			}
 		}
 
-		//Creates the group conversation and returnes the conversation id
-		int groupConversationId = addConversation(newTrip.getParticipants());
+		//Checks if values are valid and then converts values to SQL values
+		if (newTrip.getTitle() == null || newTrip.getTitle().isEmpty()) {
+			return -1;
+		}
+		String sqlTripTitle = "'" + newTrip.getTitle() + "'";
 
-		//Chooses the right format to save to the date of meeting
+		String sqlTripDescription;
+		if (newTrip.getDescription() == null || newTrip.getDescription().isEmpty()) {
+			sqlTripDescription = "null";
+		} else {
+			sqlTripDescription = "'" + newTrip.getDescription() + "'";
+		}
+
+		if (newTrip.getPrice() < 0) {
+			return -1;
+		}
+		String sqlTripPrice = newTrip.getPrice() + "";
+
+		if (newTrip.getTimeStart() == null || newTrip.getTimeStart().isBefore(LocalDateTime.now())) {
+			return -1;
+		}
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		String timeStart = newTrip.getTimeStart().format(formatter);
+		String sqlTimeStart = "'" + newTrip.getTimeStart().format(formatter) + "'";
 
+		String sqlTripAddress;
+		if (newTrip.getMeetingAddress() == null || newTrip.getMeetingAddress().isEmpty()) {
+			return -1;
+		} else {
+			sqlTripAddress = "'" + newTrip.getMeetingAddress() + "'";
+		}
+
+		String sqlParticipantLimit;
+		if (newTrip.getParticipantLimit() < 0) {
+			return -1;
+		}
+		if (newTrip.getParticipantLimit() == 0) {
+			sqlParticipantLimit = "null";
+		} else {
+			sqlParticipantLimit = newTrip.getParticipantLimit() + "";
+		}
+
+		//Creates the group conversation and returnes the conversation id. -1 is returned if it failed
+		ArrayList<User> participants = new ArrayList<>();
+		participants.add(newTrip.getOrganizer());
+		int sqlConversationId = addConversation(participants);
+		if (sqlConversationId == -1) {
+			return -1;
+		}
 		//Adds a trip to the database and returnes its id
 		int tripId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO "
 						+ "Trips (tripID, tripTitle, tripDescription, tripPrice, timeStart, "
 						+ "locationID, tripAddress, participantLimit, userID, conversationID) "
 						+ "VALUES ("
 						+ "DEFAULT, "
-						+ "'" + newTrip.getTitle() + "', "
-						+ "'" + newTrip.getDescription() + "', "
-						+ newTrip.getPrice() + ", "
-						+ "'" + timeStart + "', "
+						+ sqlTripTitle + ", "
+						+ sqlTripDescription + ", "
+						+ sqlTripPrice + ", "
+						+ sqlTimeStart + ", "
 						+ newTrip.getLocation().getId() + ", "
-						+ "'" + newTrip.getMeetingAddress() + "', "
-						+ newTrip.getParticipantLimit() + ", "
+						+ sqlTripAddress + ", "
+						+ sqlParticipantLimit + ", "
 						+ newTrip.getOrganizer().getId() + ", "
-						+ groupConversationId + ");");
+						+ sqlConversationId + ");");
 
 		//Adds categories to the trip in the database
-		addCategories(tripId, newTrip.getCategoryIds());
+		addCategories(tripId, Category.getCategoryIds(newTrip.getCategories()));
 
 		//Adds organizer as participant in the trip in the database
-		addParticipant(tripId, newTrip.getParticipants().get(0).getId()); //Assumes that organizer is the only participant in the list
+		addParticipant(tripId, newTrip.getOrganizer().getId());
 
 		//Adds a instructor in the trip for each instructorListItem
-		for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
-			addInstructorInTrip(tripId, instructorListItem.getUser().getId(), instructorListItem.getCategory().getId());
+		if (newTrip.getInstructors() != null) {
+			for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
+				addInstructorInTrip(tripId, instructorListItem.getUser().getId(), instructorListItem.getCategory().getId());
+			}
 		}
 
 		//Adds the optional prices to the trip in the database
@@ -100,7 +146,9 @@ public class ServerTripHandler {
 		//Adds the images to the trip in the database
 		if (newTrip.getImages() != null) {
 			for (byte[] image : newTrip.getImages()) {
-				addImagetoTrip(tripId, image);
+				if (image != null) {
+					addImagetoTrip(tripId, image);
+				}
 			}
 		}
 
@@ -140,6 +188,14 @@ public class ServerTripHandler {
 		}
 	}
 
+	private static boolean categoriesExists(List<Category> categories) {
+		if (categories == null) {
+			return false;
+		}
+		return getCategoryIds().containsAll(Category.getCategoryIds(categories));
+
+	}
+
 	public static List<Location> getLocations() {
 		ArrayList<Location> locations = new ArrayList<>();
 		ResultSet rs = DBManager.getInstance().executeQuery("SELECT locationID, locationName FROM Locations;");
@@ -174,12 +230,31 @@ public class ServerTripHandler {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Checks if the given location exists in the database
+	 *
+	 * @param location
+	 * @return
+	 */
+	private static boolean locationExists(Location location) {
+		if (location == null) {
+			return false;
+		}
+		return getLocationIds().contains(location.getId());
+	}
+
+	/**
+>>>>>>> refs/remotes/origin/master
 	 * Checks if the given user exists in the database.
 	 *
 	 * @param user
 	 * @return true if user exist or false if user does not exist.
 	 */
 	private static boolean userExists(User user) {
+		if (user == null) {
+			return false;
+		}
 		ResultSet rs = DBManager.getInstance().executeQuery("SELECT userID FROM Users WHERE userID = " + user.getId() + ";");
 		try {
 			if (rs.next()) {
@@ -192,6 +267,9 @@ public class ServerTripHandler {
 	}
 
 	private static boolean certificateExists(InstructorListItem instructorListItem) {
+		if (instructorListItem == null || instructorListItem.getUser() == null || instructorListItem.getCategory() == null) {
+			return false;
+		}
 		ResultSet rs = DBManager.getInstance().executeQuery("SELECT categoryID FROM Certificates "
 						+ "WHERE userID = " + instructorListItem.getUser().getId() + " "
 						+ "AND categoryID = " + instructorListItem.getCategory().getId() + ";");
@@ -206,6 +284,10 @@ public class ServerTripHandler {
 	}
 
 	private static int addConversation(List<User> users) {
+		if (users == null || users.isEmpty()) {
+			return -1;
+		}
+
 		//Inserts a new conversation id into Conversations
 		int conversationId = DBManager.getInstance().executeInsertAndGetId("INSERT INTO Conversations (conversationID) VALUES (DEFAULT);");
 
@@ -257,6 +339,9 @@ public class ServerTripHandler {
 	}
 
 	private static void addTags(int tripId, Set<String> tags) {
+		if (tags == null || tags.isEmpty()) {
+			return;
+		}
 		String query = "INSERT INTO TagsInTrips (tripID, tag) VALUES ";
 		String queryValues = "";
 		for (String tag : tags) {
@@ -295,14 +380,14 @@ public class ServerTripHandler {
 	 * @param priceMAX
 	 * @return list of trips matching search parameters.
 	 */
-	public static List<Trip> searchTrip(String searchTitle, int category, Date timedateStart, int location, double priceMAX) {
+	public static List<Trip> searchTrip(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) {
 
 		//Initializes the query string.
 		String query = "SELECT Trips.tripID, tripTitle, tripdescription, tripPrice, imageFile FROM Trips, ImagesInTrips, Images "
 						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
 
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
-		if (!searchTitle.equals("")) {
+	if (!(searchTitle == null || searchTitle.isEmpty())) {
 			query += " AND tripTitle LIKE '%" + searchTitle + "%'";
 		}
 
@@ -411,5 +496,4 @@ public class ServerTripHandler {
 		}
 		return false;
 	}
-
 }

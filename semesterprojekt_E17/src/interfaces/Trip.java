@@ -3,6 +3,7 @@ package interfaces;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,19 +12,19 @@ public class Trip implements Serializable {
 	private int id;
 	private String title;
 	private String description;
-	private List<Category> categories;
+	private List<Category> categories = new ArrayList<>();
 	private double price;
 	private LocalDateTime timeStart;
 	private Location location;
 	private String meetingAddress;
 	private int participantLimit;
 	private User organizer;
-	private List<User> participants;
-	private List<InstructorListItem> instructors;
-	private List<OptionalPrice> optionalPrices;
+	private List<User> participants = new ArrayList<>();
+	private List<InstructorListItem> instructors = new ArrayList<>();
+	private List<OptionalPrice> optionalPrices = new ArrayList<>();
 	private Conversation conversation;
-	private Set<String> tags;
-	private List<byte[]> images;
+	private Set<String> tags = new HashSet<>();
+	private List<byte[]> images = new ArrayList<>();
 
 	/**
 	 * Constructor to add all information
@@ -74,7 +75,6 @@ public class Trip implements Serializable {
 		this.title = title;
 		this.description = description;
 		this.price = price;
-		this.images = new ArrayList<>();
 		images.add(image);
 	}
 
@@ -84,7 +84,6 @@ public class Trip implements Serializable {
 		this.description = description;
 		this.categories = categories;
 		this.price = price;
-		this.images = new ArrayList<>();
 		images.add(image);
 	}
 
@@ -108,48 +107,19 @@ public class Trip implements Serializable {
 	 * @throws java.lang.Exception
 	 */
 	public Trip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
-		if (title == null) {
-			throw new Exception("invalid title");
-		}
 		this.title = title;
 		this.description = description;
 		this.categories = categories;
-
-		if (price < 0) {
-			throw new Exception("invalid price");
-		}
 		this.price = price;
-
-		if (timeStart.isBefore(LocalDateTime.now())) {
-			throw new Exception("invalid date");
-		}
 		this.timeStart = timeStart;
 		this.location = location;
 		this.meetingAddress = meetingAddress;
-
-		if (participantLimit <= 0) {
-			throw new Exception("invalid participant limit");
-		}
 		this.participantLimit = participantLimit;
-
-		if (organizer == null) {
-			throw new Exception("invalid organizer");
-		}
 		this.organizer = organizer;
-
-		//Adds the organizer to the trip automatically
-		this.participants = new ArrayList<>();
-		participants.add(organizer);
-
 		//Promotes the organizer as instructor the desired categories
-		this.instructors = new ArrayList<>();
 		for (Category category : organizerInstructorIn) {
-			if (!this.categories.contains(category)) {
-				throw new Exception("invalid instructor");
-			}
 			this.instructors.add(new InstructorListItem(organizer, category));
 		}
-
 		this.optionalPrices = optionalPrices;
 		this.tags = tags;
 		this.images = images;
@@ -185,14 +155,6 @@ public class Trip implements Serializable {
 	 */
 	public List<Category> getCategories() {
 		return categories;
-	}
-
-	public List<Integer> getCategoryIds() {
-		ArrayList<Integer> categoryIds = new ArrayList<>();
-		for (Category category : categories) {
-			categoryIds.add(category.getId());
-		}
-		return categoryIds;
 	}
 
 	/**
