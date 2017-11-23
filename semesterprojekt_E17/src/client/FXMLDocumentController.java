@@ -29,12 +29,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
 
@@ -63,8 +65,6 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private ListView<HBoxCell> browseTripsListView;
 	@FXML
-	private TextField searchTripsLocationTextField;
-	@FXML
 	private CheckBox searchTripsNormalCheckBox;
 	@FXML
 	private CheckBox searchTripsInstructorCheckBox;
@@ -72,6 +72,14 @@ public class FXMLDocumentController implements Initializable {
 	private TextField searchTripsPriceTextField;
 	@FXML
 	private DatePicker searchTripsDatePicker;
+	@FXML
+	private TextField searchTripsTitleTextField;
+	@FXML
+	private ComboBox<Location> searchTripsLocationComboBox;
+	@FXML
+	private ComboBox<Category> searchTripsCategoryComboBox;
+	@FXML
+	private HBox searchTripCategoryListHBox;
 
 	//My Trips
 	@FXML
@@ -113,17 +121,17 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private TextField createTripTagsTextField;
 
-  //View Trip
-  @FXML
-  private AnchorPane viewTripPane;
-  @FXML
-  private Text viewTripTitleLabel;
-  @FXML
-  private Text viewTripDescriptionLabel;
-  @FXML
-  private Text viewTripPriceLabel;
-  @FXML
-  private Button viewTripButton;
+	//View Trip
+	@FXML
+	private AnchorPane viewTripPane;
+	@FXML
+	private Text viewTripTitleLabel;
+	@FXML
+	private Text viewTripDescriptionLabel;
+	@FXML
+	private Text viewTripPriceLabel;
+	@FXML
+	private Button viewTripButton;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -160,9 +168,7 @@ public class FXMLDocumentController implements Initializable {
 			//TODO - Go to messaging pane
 		} else if (event.getSource() == toolBarBrowseTripsButton) {
 			showPane(browseTripsPane);
-
-			//List<Trip> trips = clientController.getAllTrips();
-			//showTrips(trips, browseTripsListView);
+			resetBrowseTripPane();
 		} else if (event.getSource() == toolBarMyTripsButton) {
 			showPane(myTripsPane);
 			//TODO - here should my trips be loaded
@@ -269,31 +275,42 @@ public class FXMLDocumentController implements Initializable {
 			ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 			createTripCategoryComboBox.setItems(categories);
 			createTripCategoryComboBox.setPromptText("Choose");
-      //Gets all locations from the server and displays them in the comboBox
-      ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
-      createTripLocationComboBox.setItems(locations);
-      createTripLocationComboBox.setPromptText("Choose");
-    }
-    if (event.getSource() == myTripsModifyTripButton) {
-      //TODO - Go to ModifyTripPane
-    }
-    if (event.getSource() == myTripsViewTripButton) {
-      viewTrip(0);
-    }
-  }
+			//Gets all locations from the server and displays them in the comboBox
+			ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
+			createTripLocationComboBox.setItems(locations);
+			createTripLocationComboBox.setPromptText("Choose");
+		}
+		if (event.getSource() == myTripsModifyTripButton) {
+			//TODO - Go to ModifyTripPane
+		}
+		if (event.getSource() == myTripsViewTripButton) {
+			viewTrip(0);
+		}
+	}
 
-  @FXML
-  private void handleViewTripButton(ActionEvent event) {
-    viewTrip(0);
-  }
+	@FXML
+	private void handleViewTripButton(ActionEvent event) {
+		viewTrip(0);
+	}
 
-  private void viewTrip(int id) {
-    Trip trip = clientController.viewTrip(1); //Should be id obtained from selected element in list view on my trips
-    if (trip != null) {
-      viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
-      viewTripDescriptionLabel.setText(trip.getDescription());
-      viewTripPriceLabel.setText("Price: " + trip.getPrice());
-      showPane(viewTripPane);
-    }
-  }
+	private void viewTrip(int id) {
+		Trip trip = clientController.viewTrip(1); //Should be id obtained from selected element in list view on my trips
+		if (trip != null) {
+			viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
+			viewTripDescriptionLabel.setText(trip.getDescription());
+			viewTripPriceLabel.setText("Price: " + trip.getPrice());
+			showPane(viewTripPane);
+		}
+	}
+
+	private void resetBrowseTripPane() {
+		
+		//Gets all locations from the server and displays them in the comboBox
+		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
+		searchTripsLocationComboBox.setItems(locations);
+
+		//Gets all categories from the server and displays them in the comboBox
+		ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
+		searchTripsCategoryComboBox.setItems(categories);
+	}
 }
