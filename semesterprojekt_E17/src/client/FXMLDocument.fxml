@@ -67,7 +67,7 @@
                   <Font size="7.0" />
                </font>
             </Text>
-            <Button fx:id="searchTripsButton" layoutX="26.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleSearchTripsButton" prefHeight="25.0" prefWidth="109.0" text="Search" />
+            <Button fx:id="searchTripsButton" layoutX="26.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleSearchTripsButtons" prefHeight="25.0" prefWidth="109.0" text="Search" />
             <ListView fx:id="browseTripsListView" layoutX="239.0" layoutY="60.0" prefHeight="548.0" prefWidth="392.0" />
             <Button fx:id="viewTripButton" layoutX="26.0" layoutY="544.0" mnemonicParsing="false" onAction="#handleViewTripButton" prefHeight="25.0" prefWidth="109.0" text="View Trip" />
             <Label layoutX="22.0" layoutY="60.0" text="Title">
@@ -82,8 +82,8 @@
                </font>
             </Label>
             <HBox fx:id="searchTripCategoryListHBox" layoutX="21.0" layoutY="235.0" prefHeight="22.0" prefWidth="200.0" />
-            <ComboBox fx:id="searchTripsLocationComboBox" layoutX="23.0" layoutY="146.0" prefWidth="150.0" />
-            <ComboBox fx:id="searchTripsCategoryComboBox" layoutX="23.0" layoutY="199.0" prefWidth="150.0" />
+            <ComboBox fx:id="searchTripsLocationComboBox" layoutX="23.0" layoutY="146.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
+            <ComboBox fx:id="searchTripsCategoryComboBox" layoutX="23.0" layoutY="199.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="createTripPane1" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
@@ -261,7 +261,7 @@
             <Button fx:id="joinTripButton" layoutX="110.0" layoutY="172.0" mnemonicParsing="false" onAction="#handleJoinTripButton" text="Join trip" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />

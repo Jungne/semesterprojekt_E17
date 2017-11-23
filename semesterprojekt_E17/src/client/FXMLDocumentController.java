@@ -33,7 +33,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
@@ -56,9 +55,9 @@ import javax.imageio.ImageIO;
 public class FXMLDocumentController implements Initializable {
 
 	private ClientController clientController;
-	
+
 	private File newAccountProfilePictureFile;
-	
+
 	private Trip viewedTrip;
 	private Window stage;
 	private User testUser;
@@ -76,7 +75,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button toolBarProfileButton;
 
-	//Browse
+	// <editor-fold defaultstate="collapsed" desc="Browse Trips - Elements">
 	@FXML
 	private AnchorPane browseTripsPane;
 	@FXML
@@ -99,6 +98,7 @@ public class FXMLDocumentController implements Initializable {
 	private ComboBox<Category> searchTripsCategoryComboBox;
 	@FXML
 	private HBox searchTripCategoryListHBox;
+	// </editor-fold>
 
 	//My Trips
 	@FXML
@@ -257,7 +257,7 @@ public class FXMLDocumentController implements Initializable {
 		//temp user
 		testUser = new User(5, null, null, null);
 		testUser.promoteToInstructor(new Category(2, "Running"));
-		
+
 		try {
 			clientController.signUp(testUser, "123");
 		} catch (RemoteException ex) {
@@ -308,10 +308,43 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	@FXML
-	private void handleSearchTripsButton(ActionEvent event) {
+	private void handleSearchTripsButtons(ActionEvent event) {
+		if (event.getSource() == searchTripsButton) {
+			searchTrips();
+		} else if (event.getSource() == searchTripsLocationComboBox) {
+
+		} else if (event.getSource() == searchTripsCategoryComboBox) {
+			addCategoryListItem2();
+		}
+	}
+
+	private boolean categoryComboboxIsDisabled2 = false;
+
+	private void addCategoryListItem2() {
+		if (categoryComboboxIsDisabled2) {
+			return;
+		}
+		Category category = searchTripsCategoryComboBox.getValue();
+		//Checks if category already exists in list
+		for (Node node : searchTripCategoryListHBox.getChildren()) {
+			if (((CategoryListItem) node).getCategory().equals(category)) {
+				return;
+			}
+		}
+
+		//Adds the category to HBox and reveal the instructor text
+		searchTripCategoryListHBox.getChildren().add(new CategoryListItem(this, category));
+
+		//Resets current combobox value
+		categoryComboboxIsDisabled2 = true;
+		//createTripCategoryComboBox.setValue(null);
+		categoryComboboxIsDisabled2 = false;
+	}
+
+	private void searchTrips() {
 		try {
 			//Only date and price works at the moment.
-			
+
 			String searchTitle; //TODO add textfield in GUI.
 			int categoryID = -1; //TODO implement categoryID
 			int locationID = -1; //TODO implement locationID
@@ -319,12 +352,12 @@ public class FXMLDocumentController implements Initializable {
 			if (!searchTripsPriceTextField.getText().equals("")) {
 				priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
 			}
-			
+
 			//Date stuff
 			LocalDate date = searchTripsDatePicker.getValue();
-			
+
 			List<Trip> trips = clientController.searchTrips("", -1, date, -1, priceMax);
-			
+
 			showTrips(trips, browseTripsListView);
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
@@ -627,6 +660,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	protected void removeCategoryListItem(CategoryListItem categoryListItem) {
+		searchTripCategoryListHBox.getChildren().remove(categoryListItem);
 		createTripCategoryListHBox.getChildren().remove(categoryListItem);
 		if (createTripCategoryListHBox.getChildren().isEmpty()) {
 			createTripIntructorText.setVisible(false);
@@ -665,7 +699,7 @@ public class FXMLDocumentController implements Initializable {
 		new java.util.Timer().schedule(timerTask, 5000);
 	}
 
-	private void setUpCreateTripPane() {
+	private void resetCreateTripPane() {
 		//Disable category combobox before adjusting values
 		categoryComboboxIsDisabled = true;
 
@@ -680,7 +714,7 @@ public class FXMLDocumentController implements Initializable {
 		//Reset parameters
 		createTripTitleTextField.setText(null);
 		createTripDescriptionTextArea.setText(null);
-		//createTripCategoryComboBox.setValue(null);
+		createTripCategoryComboBox.setValue(null);
 		createTripAddressTextField.setText(null);
 		createTripPriceTextField.setText(null);
 		createTripLocationComboBox.setValue(null);
@@ -709,7 +743,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleMyTripsButtons(ActionEvent event) {
 		if (event.getSource() == myTripsCreateTripButton) {
-			setUpCreateTripPane();
+			resetCreateTripPane();
 			showPane(createTripPane1);
 		}
 		if (event.getSource() == myTripsModifyTripButton) {
@@ -753,14 +787,19 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private void resetBrowseTripPane() {
-		
 		//Gets all locations from the server and displays them in the comboBox
 		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
 		searchTripsLocationComboBox.setItems(locations);
 
+		categoryComboboxIsDisabled2 = true;
 		//Gets all categories from the server and displays them in the comboBox
 		ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 		searchTripsCategoryComboBox.setItems(categories);
+		searchTripsCategoryComboBox.setValue(null);
+		categoryComboboxIsDisabled2 = false;
+		
+		//Resets category HBox
+		searchTripCategoryListHBox.getChildren().clear();
 	}
 
 	@FXML
@@ -784,7 +823,7 @@ public class FXMLDocumentController implements Initializable {
 		modifyTripDescriptionTextField.setText("");
 		modifyTripPriceTextField.setText("");
 	}
-	
+
 	@FXML
 	private void handleJoinTripButton(ActionEvent event) {
 		try {
@@ -795,4 +834,5 @@ public class FXMLDocumentController implements Initializable {
 			System.out.println(ex);
 		}
 	}
+
 }
