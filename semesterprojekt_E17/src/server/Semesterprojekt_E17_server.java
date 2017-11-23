@@ -19,23 +19,24 @@ import java.util.logging.Logger;
  */
 public class Semesterprojekt_E17_server {
 
-    private static final int REGISTRY_PORT = 12345;
-    private static final String REMOTE_OBJECT_NAME = "serverController";
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-	try {
-	    ServerControllerImpl serverController = new ServerControllerImpl();
-	    Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
-	    registry.bind(REMOTE_OBJECT_NAME, serverController);
-	    System.out.println("Server is running");
-	} catch (RemoteException ex) {
-	    Logger.getLogger(Semesterprojekt_E17_server.class.getName()).log(Level.SEVERE, null, ex);
-	} catch (AlreadyBoundException ex) {
-	    Logger.getLogger(Semesterprojekt_E17_server.class.getName()).log(Level.SEVERE, null, ex);
+	private static final int REGISTRY_PORT = 12345;
+	private static final String REMOTE_OBJECT_NAME = "serverController";
+
+	/**
+	 * @param args the command line arguments
+	 */
+	public static void main(String[] args) {
+
+		try {
+			ServerControllerImpl serverController = new ServerControllerImpl();
+			Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
+			registry.bind(REMOTE_OBJECT_NAME, serverController);
+			System.out.println("Server is running");
+		} catch (RemoteException ex) {
+			Logger.getLogger(Semesterprojekt_E17_server.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (AlreadyBoundException ex) {
+			Logger.getLogger(Semesterprojekt_E17_server.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
-    }
-    
+
 }

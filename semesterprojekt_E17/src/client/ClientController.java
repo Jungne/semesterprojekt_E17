@@ -1,6 +1,7 @@
 package client;
 
 import interfaces.Category;
+import interfaces.FullTripException;
 import interfaces.IServerController;
 import interfaces.Location;
 import interfaces.OptionalPrice;
@@ -10,12 +11,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ClientController {
 
@@ -24,6 +23,7 @@ public class ClientController {
 
 	public ClientController() throws RemoteException {
 		String hostname = "localhost";
+
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12345);
 			serverController = (IServerController) registry.lookup("serverController");
@@ -31,44 +31,37 @@ public class ClientController {
 			ex.printStackTrace();
 		}
 	}
-        
-	public User signUp(User user, String password) throws RemoteException {
-		return serverController.signUp(user, password);
+
+	public void signUp(User user, String password) throws RemoteException {
+		currentUser = serverController.signUp(user, password);
 	}
 
-	public User signIn(String username, String password) throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public void signIn(String username, String password) throws RemoteException {
+		currentUser = serverController.signIn(username, password);
 	}
 
 	public void signOut() throws RemoteException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+
 	public List<Trip> getAllTrips() throws RemoteException {
-
-		return serverController.getAllTrips();
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-	public List<Trip> searchTrips(String searchTitle, int category, Date timedateStart, int location, double priceMAX) {
-
-		try {
-			return serverController.searchTrips(searchTitle, category, timedateStart, location, priceMAX);
-		} catch (RemoteException ex) {
-			Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
-		}
-
-		return null;
+	public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX)  throws RemoteException {
+		return serverController.searchTrips(searchTitle, category, timedateStart, location, priceMAX);
 	}
 
-	public Trip showTrip(int tripsID) {
-		return ClientTripHandler.showTrip(tripsID, serverController);
-	}
-  
-	public Trip viewTrip(int tripsID) {
-		return ClientTripHandler.viewTrip(tripsID, serverController);
+	public Trip showTrip(int tripID) {
+		return ClientTripHandler.showTrip(tripID, serverController);
 	}
 
-	public void participateInTrip(User user, Trip trip) {
-		ClientTripHandler.participateInTrip(user, serverController, trip);
+	public Trip viewTrip(int tripID) {
+		return ClientTripHandler.viewTrip(tripID, serverController);
+	}
+
+	public void participateInTrip(Trip trip) throws FullTripException {
+		ClientTripHandler.participateInTrip(currentUser, serverController, trip);
 	}
 
 	public int createTrip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
@@ -76,7 +69,7 @@ public class ClientController {
 	}
 
 	public void modifyTrip(Trip trip) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		ClientTripHandler.modifyTrip(trip, serverController);
 	}
 
 	public void deleteTrip(Trip trip) {
@@ -99,4 +92,7 @@ public class ClientController {
 		return ClientTripHandler.getLocations(serverController);
 	}
 
+	public User getCurrentUser() {
+		return currentUser;
+	}
 }

@@ -14,17 +14,6 @@ public class OptionalPrice implements Serializable {
 		this.description = description;
 	}
 
-	public OptionalPrice(double price, String description) throws Exception {
-		if (price <= 0) {
-			throw new Exception("invalid price");
-		}
-		this.price = price;
-		if (description == null) {
-			throw new Exception("invalid description");
-		}
-		this.description = description;
-	}
-
 	/**
 	 * @return the id
 	 */

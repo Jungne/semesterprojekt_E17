@@ -30,7 +30,6 @@ public class HBoxCell extends HBox {
 		if (trip.getImages().get(0).length > 0) {
 			InputStream inputStream = new ByteArrayInputStream(trip.getImages().get(0));
 			imageView.setImage(new Image(inputStream));
-			System.out.println(trip.getImages().get(0));
 		} else {
 			imageView.setImage(new Image("default.jpg")); //Add default image or not.
 		}
@@ -47,10 +46,10 @@ public class HBoxCell extends HBox {
 
 		price.setText(Double.toString(trip.getPrice()) + "kr");
 
-//		if (!trip.getCategories().isEmpty()) {
-//			category.setText(trip.getCategories().get(0).getName());
-//		}
-
+		/*
+		if (!trip.getCategories().isEmpty()) {
+			category.setText(trip.getCategories().get(0).getName());
+		}*/
 		VBox vbox2 = new VBox();
 		vbox2.getChildren().addAll(price, category);
 
@@ -60,11 +59,7 @@ public class HBoxCell extends HBox {
 		this.getChildren().addAll(imageView, vbox1, vbox2);
 	}
 
-	public int getProductId() {
-		return id;
-	}
-
-	public int getImageId() {
+	public int getTripId() {
 		return id;
 	}
 
@@ -72,4 +67,5 @@ public class HBoxCell extends HBox {
 	public String toString() {
 		return id + title.getText();
 	}
+
 }

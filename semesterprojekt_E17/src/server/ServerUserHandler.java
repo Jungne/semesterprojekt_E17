@@ -3,77 +3,69 @@ package server;
 import database.DBManager;
 import interfaces.Category;
 import interfaces.User;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServerUserHandler {
 
+	private static DBManager dbm = DBManager.getInstance();
+
 	public static User createUser(User newUser, String password) {
-		try {
-			String newUserEmail = newUser.getEmail();
-			String newUserName = newUser.getName();
-			List<Category> newUserCertificates = newUser.getCertificates();
-			byte[] newUserImage = newUser.getImage();
+		String newUserEmail = newUser.getEmail();
+		String newUserName = newUser.getName();
+		List<Category> newUserCertificates = newUser.getCertificates();
+		byte[] newUserImage = newUser.getImage();
 
-			Connection connection = DBManager.getInstance().getConnection();
-
+		if (newUserEmail == null || newUserEmail.isEmpty()) {
+			throw new IllegalArgumentException("Invalid user email.");
+		}
+		if (newUserName == null || newUserName.isEmpty()) {
+			return null;
+		}
+		if (password == null || password.isEmpty()) {
+			return null;
+		}
+		
+		String sqlImageId = "null";
+		if (newUserImage != null) {
 			//Inserts the imageFile
 			String imageQuery = "INSERT INTO Images (imageTitle, imageFile) VALUES ('" + newUserName + "Image', ?)";
-			PreparedStatement imageStatement = connection.prepareStatement(imageQuery, Statement.RETURN_GENERATED_KEYS);
-			imageStatement.setBytes(1, newUserImage);
-			imageStatement.executeUpdate();
-			int imageId;
-			ResultSet imageRs = imageStatement.getGeneratedKeys();
-			if (imageRs.next()) {
-				imageId = imageRs.getInt(1);
-			} else {
-				imageId = -1;
-			}
+			int imageId = dbm.executeImageInsertAndGetId(imageQuery, newUserImage);
+			sqlImageId = imageId + "";
+		}
 
-			String query = "INSERT INTO Users(email, password, userName, imageId) "
-							+ "VALUES(?, ?, ?, ?)";
-			PreparedStatement userStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+		//Inserts the new user.
+		String query = "INSERT INTO Users(email, password, userName, imageId) "
+						+ "VALUES('" + newUserEmail + "', '" + password + "', '" + newUserName + "', " + sqlImageId + ")";
+		int newUserId = dbm.executeInsertAndGetId(query);
 
-			userStatement.setString(0, newUserEmail);
-			userStatement.setString(1, password);
-			userStatement.setString(2, newUserName);
-			userStatement.setInt(3, imageId);
+		return signIn(newUserEmail, password);
+	}
 
-			userStatement.executeQuery();
+	public static User signIn(String signInEmail, String password) {
+		String query = "SELECT Users.userID, email, userName, imageFile "
+						+ "FROM Users, Images "
+						+ "WHERE email = '" + signInEmail + "' AND password = '" + password + "' AND Users.imageID = Images.imageId";
+		User user = null;
 
-			int newUserId;
-			ResultSet userIdRs = userStatement.getGeneratedKeys();
+		try {
+			ResultSet userRs = dbm.executeQuery(query);
 
-			if (userIdRs.next()) {
-				newUserId = imageRs.getInt(1);
-			} else {
-				newUserId = -1;
-			}
-
-			String getUserQuery = "SELECT userId, email, userName, imageFile "
-							+ "FROM Users, Images "
-							+ "WHERE userId = " + newUserId + " AND Users.imageId = Images.imageId";
-
-			ResultSet userRs = DBManager.getInstance().executeQuery(getUserQuery);
+			userRs.next();
 
 			int userId = userRs.getInt(1);
 			String userEmail = userRs.getString(2);
 			String userName = userRs.getString(3);
 			byte[] userImage = userRs.getBytes(4);
 
-			User user = new User(userId, userEmail, userName, userImage);
-
-			return user;
+			user = new User(userId, userEmail, userName, userImage);
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		return null;
+
+		return user;
 	}
 }

@@ -1,40 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package interfaces;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-/**
- *
- * @author jungn
- */
-public class Message implements Serializable{
-    
-    private int id;
-    private User sender;
-    private String message;
-    private Date timestamp;
+public class Message implements Serializable {
 
-    public Message(int id, User sender, String message, Date timestamp) {
-	this.id = id;
-	this.sender = sender;
-	this.message = message;
-	this.timestamp = timestamp;
-    }
-    
-    public int getSenderId() {
-	return sender.getId();
-    }
+	private int id;
+	private User sender;
+	private String message;
+	private LocalDateTime timestamp;
 
-    public String getMessage() {
-	return message;
-    }
+	public Message(int id, User sender, String message, LocalDateTime timestamp) {
+		this.id = id;
+		this.sender = sender;
+		this.message = message;
+		this.timestamp = timestamp;
+	}
 
-    public Date getTimestamp() {
-	return timestamp;
-    }
+	public int getSenderId() {
+		return sender.getId();
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
 }

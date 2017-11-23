@@ -2,7 +2,7 @@ package interfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IServerController extends Remote {
@@ -17,7 +17,7 @@ public interface IServerController extends Remote {
     //Trip functions    
     public List<Trip> getAllTrips() throws RemoteException;
     
-    public List<Trip> searchTrips(String searchTitle, int category, Date timedateStart, int location, double priceMAX) throws RemoteException;
+    public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) throws RemoteException;
     
     public int createTrip(Trip newTrip) throws RemoteException;
     
@@ -25,7 +25,7 @@ public interface IServerController extends Remote {
     
     public void deleteTrip(Trip trip) throws RemoteException;
     
-    public void participateInTrip(Trip trip, User user) throws RemoteException;
+    public void participateInTrip(Trip trip, User user) throws FullTripException, RemoteException;
     
     public boolean instructInTrip(Trip trip, User user) throws RemoteException;
     

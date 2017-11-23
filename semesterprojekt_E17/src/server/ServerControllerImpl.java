@@ -2,6 +2,7 @@ package server;
 
 import interfaces.Category;
 import interfaces.Conversation;
+import interfaces.FullTripException;
 import interfaces.IServerController;
 import interfaces.Location;
 import interfaces.Message;
@@ -9,9 +10,10 @@ import interfaces.Trip;
 import interfaces.User;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerControllerImpl extends UnicastRemoteObject implements IServerController {
 
@@ -26,7 +28,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
 	@Override
 	public User signIn(String username, String password) throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return ServerUserHandler.signIn(username, password);
 	}
 
 	@Override
@@ -36,10 +38,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
 	@Override
 	public List<Trip> getAllTrips() throws RemoteException {
-		ArrayList<Trip> tripList = new ArrayList<>();
-		tripList.add(new Trip(0, "First trip"));
-
-		return tripList;
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
@@ -48,7 +47,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public List<Trip> searchTrips(String searchTitle, int category, Date timedateStart, int location, double priceMAX) throws RemoteException {
+	public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) throws RemoteException {
 		return ServerTripHandler.searchTrip(searchTitle, category, timedateStart, location, priceMAX);
 	}
 
@@ -63,8 +62,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public void participateInTrip(Trip trip, User user) throws RemoteException {
-		ServerTripHandler.participateInTrip(trip, user);
+	public void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException {
+			ServerTripHandler.participateInTrip(trip, user);
 
 	}
 
@@ -114,9 +113,9 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
 	}
 
-  @Override
-  public Trip viewTrip(int tripID) throws RemoteException {
+	@Override
+	public Trip viewTrip(int tripID) throws RemoteException {
 		return ServerTripHandler.viewTrip(tripID);
-  }
+	}
 
 }

@@ -4,11 +4,14 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.Line?>
@@ -17,14 +20,14 @@
 
 <AnchorPane id="AnchorPane" fx:id="mainPane" prefHeight="662.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.FXMLDocumentController">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="644.0">
+      <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="644.0">
         <items>
             <Label text="Outdoor activity portal" />
           <Button fx:id="toolBarMessagingButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Messaging" />
             <Button fx:id="toolBarBrowseTripsButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse trips" />
             <Button fx:id="toolBarMyTripsButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="My trips" />
             <Button fx:id="toolBarProfileButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Profile" />
-            <Button mnemonicParsing="false" text="Log in/out" />
+            <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in/out" />
         </items>
       </ToolBar>
       <AnchorPane fx:id="browseTripsPane" layoutY="40.0" visible="false">
@@ -101,7 +104,7 @@
                <font>
                   <Font size="10.0" />
                </font></Text>
-            <Button layoutX="60.0" layoutY="163.0" mnemonicParsing="false" text="Add picture" />
+            <Button fx:id="createTripAddPictureButton" layoutX="60.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Add picture" />
             <Text layoutX="60.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pictures">
                <font>
                   <Font size="10.0" />
@@ -118,14 +121,31 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <Text layoutX="232.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type">
+            <Button fx:id="createTripNextButton" layoutX="70.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Next" />
+            <ComboBox fx:id="createTripCategoryComboBox" layoutX="60.0" layoutY="420.0" onAction="#handleCreateTripButtons" prefHeight="25.0" prefWidth="120.0" promptText="Choose" />
+            <Text fx:id="createTripInvalidTitleText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter trip title!" visible="false">
                <font>
                   <Font size="10.0" />
                </font>
             </Text>
-            <Button fx:id="createTripNextButton" layoutX="70.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleCreateTripNextBackButton" text="Next" />
-            <ComboBox fx:id="createTripCategoryComboBox" layoutX="60.0" layoutY="420.0" prefWidth="150.0" />
-            <CheckBox fx:id="createTripInstructorCheckBox" layoutX="232.0" layoutY="424.0" mnemonicParsing="false" text="Instructor" />
+            <Text fx:id="createTripInvalidCategoryText" fill="#da0303" layoutX="60.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a category!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Button fx:id="createTripCancelButton1" layoutX="465.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
+            <Text fx:id="createTripInvalidPictureText" fill="#da0303" layoutX="60.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid picture!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripIntructorText" layoutX="197.0" layoutY="455.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Click on categories to partocipate as instructor" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <HBox fx:id="createTripPictureListHBox" layoutX="150.0" layoutY="164.0" prefHeight="22.0" prefWidth="450.0" spacing="4.0" />
+            <HBox fx:id="createTripCategoryListHBox" layoutX="197.0" layoutY="421.0" prefHeight="22.0" prefWidth="392.0" spacing="4.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
@@ -164,9 +184,9 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <Button layoutX="70.0" layoutY="420.0" mnemonicParsing="false" onAction="#handleCreateTripButton" text="Create trip" />
-            <Button fx:id="createTripBackButton" layoutX="500.0" layoutY="420.0" mnemonicParsing="false" onAction="#handleCreateTripNextBackButton" text="Back" />
-            <ComboBox fx:id="createTripLocationComboBox" layoutX="60.0" layoutY="182.0" prefWidth="150.0" />
+            <Button fx:id="createTripCreateTripButton" layoutX="70.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Create trip" />
+            <Button fx:id="createTripBackButton" layoutX="500.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Back" />
+            <ComboBox fx:id="createTripLocationComboBox" layoutX="60.0" layoutY="182.0" prefWidth="150.0" promptText="Choose" />
             <Text layoutX="60.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant limit">
                <font>
                   <Font size="10.0" />
@@ -179,6 +199,32 @@
                </font>
             </Text>
             <TextField fx:id="createTripTagsTextField" layoutX="60.0" layoutY="344.0" prefHeight="25.0" prefWidth="300.0" promptText="tag1 tag2 tag3" />
+            <Text fx:id="createTripInvalidPriceText" fill="#da0303" layoutX="339.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid price!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidDateText" fill="#da0303" layoutX="339.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid date!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Button fx:id="createTripCancelButton2" layoutX="465.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
+            <Text fx:id="createTripInvalidParticipantLimitText" fill="#da0303" layoutX="60.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid participant limit!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidLocationText" fill="#da0303" layoutX="60.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a location!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidMeetingAddressText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter a meeting address!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
@@ -212,6 +258,74 @@
                   <Font name="System Italic" size="13.0" />
                </font>
             </Text>
+            <Button fx:id="joinTripButton" layoutX="110.0" layoutY="172.0" mnemonicParsing="false" onAction="#handleJoinTripButton" text="Join trip" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <Label layoutX="71.0" layoutY="117.0" text="Email" />
+            <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />
+            <Label layoutX="71.0" layoutY="167.0" text="Password" />
+            <Hyperlink fx:id="newAccountButton" layoutX="72.0" layoutY="258.0" onAction="#handleNewAccountButton" text="Create new account" />
+            <Button fx:id="logInButton" layoutX="74.0" layoutY="218.0" mnemonicParsing="false" onAction="#handleLogInButton" text="Log In" />
+            <PasswordField fx:id="logInPasswordTextField" layoutX="71.0" layoutY="184.0" prefHeight="25.0" prefWidth="240.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="newAccountPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <Label layoutX="115.0" layoutY="128.0" text="Name" />
+            <Label layoutX="115.0" layoutY="237.0" text="Password" />
+            <Label layoutX="115.0" layoutY="182.0" text="Email" />
+            <TextField fx:id="newAccountNameTextField" layoutX="115.0" layoutY="145.0" />
+            <TextField fx:id="newAccountEmailTextField" layoutX="115.0" layoutY="199.0" />
+            <Label layoutX="115.0" layoutY="295.0" text="Repeat password" />
+            <PasswordField fx:id="newAccountPasswordTextField" layoutX="115.0" layoutY="254.0" />
+            <PasswordField fx:id="newAccountRepeatPasswordTextField" layoutX="115.0" layoutY="312.0" prefHeight="25.0" prefWidth="150.0" />
+            <ImageView fx:id="newAccountImageView" fitHeight="150.0" fitWidth="200.0" layoutX="330.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="newAccountProfilePictureButton" layoutX="330.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleChooseProfilePictureButton" text="Choose image" />
+            <Label layoutX="330.0" layoutY="154.0" text="Profile picture" />
+            <Button fx:id="newAccountCreateButton" layoutX="117.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleCreateAccountButton" text="Create account" />
+            <Button fx:id="newAccountBackButton" cancelButton="true" layoutX="223.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountBackButton" text="Back" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false">
+         <children>
+            <Label layoutX="52.0" layoutY="88.0" style="-fx-font-weight: bold;" text="Email" />
+            <Label layoutX="51.0" layoutY="43.0" style="-fx-font-weight: bold;" text="Name" />
+            <ImageView fx:id="profilePictureImageView" fitHeight="150.0" fitWidth="200.0" layoutX="322.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" />
+            <Label layoutX="322.0" layoutY="42.0" style="-fx-font-weight: bold;" text="Profile picture" />
+            <Label fx:id="profileNameLabel" layoutX="51.0" layoutY="60.0" text="Label" />
+            <Label fx:id="profileEmailLabel" layoutX="52.0" layoutY="105.0" text="Label" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="modifyTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+         <children>
+            <Text fx:id="modifyTripIDLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trip #0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Text>
+            <Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
+            <Text layoutX="42.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title:">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
+            <Text layoutX="42.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
+            <Text layoutX="42.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price:">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
+            <TextField fx:id="modifyTripTitleTextField" layoutX="43.0" layoutY="78.0" prefWidth="200.0" />
+            <TextField fx:id="modifyTripDescriptionTextField" layoutX="43.0" layoutY="128.0" prefHeight="100.0" prefWidth="400.0" />
+            <TextField fx:id="modifyTripPriceTextField" layoutX="43.0" layoutY="253.0" prefWidth="100.0" />
+            <Button fx:id="modifyTripSaveChangesButton" layoutX="43.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleModifyTripButtons" prefWidth="95.0" text="Save Changes" />
+            <Button fx:id="modifyTripCancelButton" layoutX="148.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleModifyTripButtons" prefWidth="95.0" text="Cancel" />
          </children>
       </AnchorPane>
    </children>
