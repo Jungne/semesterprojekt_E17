@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 import interfaces.Category;
+import interfaces.FullTripException;
 import interfaces.Location;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
@@ -14,12 +15,9 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -57,6 +55,10 @@ import javax.imageio.ImageIO;
 public class FXMLDocumentController implements Initializable {
 
 	private ClientController clientController;
+	
+	private File newAccountProfilePictureFile;
+	
+	private Trip viewedTrip;
 	private Window stage;
 	private User testUser;
 
@@ -231,6 +233,8 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileNameLabel;
 	@FXML
 	private Label profileEmailLabel;
+	@FXML
+	private Button joinTripButton;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -713,22 +717,24 @@ public class FXMLDocumentController implements Initializable {
 
 	@FXML
 	private void handleViewTripButton(ActionEvent event) {
-		viewTrip(1, false);
+		int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
+		System.out.println(tripId);
+		viewTrip(tripId, false);
 	}
 
 	private void viewTrip(int id, boolean modifyMode) {
-		Trip trip = clientController.viewTrip(id); //Should be id obtained from selected element in list view on my trips
-		if (trip != null) {
+		viewedTrip = clientController.viewTrip(id); //Should be id obtained from selected element in list view on my trips
+		if (viewedTrip != null) {
 			if (modifyMode) {
-				modifyTripIDLabel.setText("Trip #" + trip.getId());
-				modifyTripTitleTextField.setText(trip.getTitle());
-				modifyTripDescriptionTextField.setText(trip.getDescription());
-				modifyTripPriceTextField.setText("Price: " + trip.getPrice());
+				modifyTripIDLabel.setText("Trip #" + viewedTrip.getId());
+				modifyTripTitleTextField.setText(viewedTrip.getTitle());
+				modifyTripDescriptionTextField.setText(viewedTrip.getDescription());
+				modifyTripPriceTextField.setText("Price: " + viewedTrip.getPrice());
 				showPane(modifyTripPane);
 			} else {
-				viewTripTitleLabel.setText("Trip #" + trip.getId() + " - " + trip.getTitle());
-				viewTripDescriptionLabel.setText(trip.getDescription());
-				viewTripPriceLabel.setText("Price: " + trip.getPrice());
+				viewTripTitleLabel.setText("Trip #" + viewedTrip.getId() + " - " + viewedTrip.getTitle());
+				viewTripDescriptionLabel.setText(viewedTrip.getDescription());
+				viewTripPriceLabel.setText("Price: " + viewedTrip.getPrice());
 				showPane(viewTripPane);
 			}
 		}
@@ -761,5 +767,16 @@ public class FXMLDocumentController implements Initializable {
 		modifyTripTitleTextField.setText("");
 		modifyTripDescriptionTextField.setText("");
 		modifyTripPriceTextField.setText("");
+	}
+	
+	@FXML
+	private void handleJoinTripButton(ActionEvent event) {
+		try {
+			clientController.participateInTrip(viewedTrip);
+		} catch (FullTripException ex) {
+			//TODO popup explanation, that trip is full.
+			System.out.println("test");
+			System.out.println(ex);
+		}
 	}
 }

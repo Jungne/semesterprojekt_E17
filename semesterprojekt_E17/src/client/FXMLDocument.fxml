@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
@@ -24,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" fx:id="mainPane" prefHeight="662.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="mainPane" prefHeight="662.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.FXMLDocumentController">
    <children>
       <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="644.0">
         <items>
@@ -36,7 +30,7 @@
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in/out" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" visible="false">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -251,9 +245,10 @@
                   <Font name="System Italic" size="13.0" />
                </font>
             </Text>
+            <Button fx:id="joinTripButton" layoutX="110.0" layoutY="172.0" mnemonicParsing="false" onAction="#handleJoinTripButton" text="Join trip" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />

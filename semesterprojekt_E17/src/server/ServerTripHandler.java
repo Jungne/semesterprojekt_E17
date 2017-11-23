@@ -2,6 +2,7 @@ package server;
 
 import database.DBManager;
 import interfaces.Category;
+import interfaces.FullTripException;
 import interfaces.InstructorListItem;
 import interfaces.Location;
 import interfaces.OptionalPrice;
@@ -229,6 +230,8 @@ public class ServerTripHandler {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
 	 * Checks if the given location exists in the database
 	 *
 	 * @param location
@@ -242,6 +245,7 @@ public class ServerTripHandler {
 	}
 
 	/**
+>>>>>>> refs/remotes/origin/master
 	 * Checks if the given user exists in the database.
 	 *
 	 * @param user
@@ -383,7 +387,7 @@ public class ServerTripHandler {
 						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
 
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
-		if (!(searchTitle == null || searchTitle.isEmpty())) {
+	if (!(searchTitle == null || searchTitle.isEmpty())) {
 			query += " AND tripTitle LIKE '%" + searchTitle + "%'";
 		}
 
@@ -428,12 +432,17 @@ public class ServerTripHandler {
 		DBManager.getInstance().executeUpdate(query);
 	}
 
-	public static void participateInTrip(Trip trip, User user) {
+	public static void participateInTrip(Trip trip, User user) throws FullTripException {
 		int tripID = trip.getId();
 		int userID = user.getId();
 
-		String query = "INSERT INTO UsersInTrips VALUES ('" + tripID + "', '" + userID + "');";
-		DBManager.getInstance().executeUpdate(query);
+		if (!isTripFull(trip)) {
+			String query = "INSERT INTO UsersInTrips VALUES ('" + tripID + "', '" + userID + "');";
+			DBManager.getInstance().executeUpdate(query);
+			System.out.println("Joined trip");
+		} else {
+			throw new FullTripException("Trip is full.");
+		}
 	}
 
 	public static void kickParticipant(Trip trip, User user) {
@@ -449,7 +458,7 @@ public class ServerTripHandler {
 		return trip;
 	}
 
-	static Trip viewTrip(int tripID) {
+	public static Trip viewTrip(int tripID) {
 		String query = "SELECT * FROM Trips WHERE tripID = " + tripID + ";";
 		ResultSet rs = DBManager.getInstance().executeQuery(query);
 
@@ -467,4 +476,24 @@ public class ServerTripHandler {
 		return null;
 	}
 
+	public static boolean isTripFull(Trip trip) {
+		try {
+			ResultSet fullTripCheck = DBManager.getInstance().executeQuery("SELECT UsersInTrips.tripId, COUNT(UsersInTrips.tripId), MAX(participantLimit)\n"
+							+ "FROM UsersInTrips\n"
+							+ "INNER JOIN Trips On UsersInTrips.tripId = Trips.tripID\n"
+							+ "WHERE UsersInTrips.tripId = " + trip.getId() + "\n"
+											+ "GROUP BY UsersInTrips.tripId");
+			if (fullTripCheck.next()) {
+				int usersInTrip = (int) fullTripCheck.getLong("count");
+				int participantLimit = fullTripCheck.getInt("max");
+				System.out.println(usersInTrip >= participantLimit);
+				return usersInTrip >= participantLimit;
+			} else {
+				return false;
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return false;
+	}
 }

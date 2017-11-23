@@ -2,6 +2,7 @@ package server;
 
 import interfaces.Category;
 import interfaces.Conversation;
+import interfaces.FullTripException;
 import interfaces.IServerController;
 import interfaces.Location;
 import interfaces.Message;
@@ -11,6 +12,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerControllerImpl extends UnicastRemoteObject implements IServerController {
 
@@ -59,8 +62,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public void participateInTrip(Trip trip, User user) throws RemoteException {
-		ServerTripHandler.participateInTrip(trip, user);
+	public void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException {
+			ServerTripHandler.participateInTrip(trip, user);
 
 	}
 
