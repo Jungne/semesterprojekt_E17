@@ -27,6 +27,7 @@ public class ClientController {
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12345);
 			serverController = (IServerController) registry.lookup("serverController");
+			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance());
 		} catch (RemoteException | NotBoundException ex) {
 			ex.printStackTrace();
 		}
