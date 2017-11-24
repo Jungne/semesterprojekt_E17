@@ -64,7 +64,6 @@ public class CategoryListItem extends PaneListItem {
 				isInstructor = true;
 			}
 		});
-
 	}
 
 }
