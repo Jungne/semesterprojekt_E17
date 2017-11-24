@@ -95,4 +95,8 @@ public class ClientController {
 	public User getCurrentUser() {
 		return currentUser;
 	}
+	
+	public List<User> searchUsers(String query) throws RemoteException {
+		return serverController.searchUsers(query);
+	}
 }

@@ -48,4 +48,5 @@ public interface IServerController extends Remote {
   
     public Trip showTrip(int tripsID) throws RemoteException;
 
+		public List<User> searchUsers(String query)  throws RemoteException;
 }
