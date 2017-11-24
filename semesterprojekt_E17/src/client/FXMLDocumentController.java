@@ -242,6 +242,16 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileEmailLabel;
 	@FXML
 	private Button joinTripButton;
+	@FXML
+	private AnchorPane browseUsersPane;
+	@FXML
+	private Button browseUsersSearchButton;
+	@FXML
+	private Button toolBarBrowseUsersButton;
+	@FXML
+	private TextField browseUsersTextField;
+	@FXML
+	private ListView<?> browseUsersListView;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -295,6 +305,8 @@ public class FXMLDocumentController implements Initializable {
 			loadProfileInfo();
 		} else if (event.getSource() == toolbarLogInLogOutButton) {
 			showPane(logInOutPane);
+		} else if (event.getSource() == toolBarBrowseUsersButton) {
+			showPane(browseUsersPane);
 		}
 	}
 
@@ -797,7 +809,7 @@ public class FXMLDocumentController implements Initializable {
 		searchTripsCategoryComboBox.setItems(categories);
 		searchTripsCategoryComboBox.setValue(null);
 		categoryComboboxIsDisabled2 = false;
-		
+
 		//Resets category HBox
 		searchTripCategoryListHBox.getChildren().clear();
 	}
@@ -835,4 +847,22 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
+	@FXML
+	private void handleBrowseUsersSearchButton(ActionEvent event) {
+		try {
+			String searchText = browseUsersTextField.getText();
+			List<User> users = clientController.searchUsers(searchText);
+			List<HBoxCell> list = new ArrayList<>();
+			
+			for (User user : users) {
+				list.add(new HBoxCell(user));
+			}
+			
+			ObservableList observableList = FXCollections.observableArrayList(list);
+			browseUsersListView.setItems(observableList);
+
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 }
