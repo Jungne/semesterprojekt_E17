@@ -47,5 +47,8 @@ public interface IServerController extends Remote {
     public void updateConversation(Conversation conversation) throws RemoteException;
   
     public Trip showTrip(int tripsID) throws RemoteException;
+		
+		public void registerClient(IChatClient client);
 
+		public List<User> searchUsers(String query)  throws RemoteException;
 }

@@ -231,8 +231,6 @@ public class ServerTripHandler {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
 	 * Checks if the given location exists in the database
 	 *
 	 * @param location

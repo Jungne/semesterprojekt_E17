@@ -5,6 +5,7 @@ import interfaces.Category;
 import interfaces.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +29,7 @@ public class ServerUserHandler {
 		if (password == null || password.isEmpty()) {
 			return null;
 		}
-		
+
 		String sqlImageId = "null";
 		if (newUserImage != null) {
 			//Inserts the imageFile
@@ -67,5 +68,33 @@ public class ServerUserHandler {
 		}
 
 		return user;
+	}
+
+	public static List<User> searchUsers(String query) {
+		try {
+			String sqlQuery = ""
+							+ "SELECT Users.userID, email, userName, imageFile\n"
+							+ "FROM Users\n"
+							+ "INNER JOIN Images ON Users.imageID = images.imageID\n"
+							+ "WHERE LOWER(userName) LIKE LOWER('%" + query + "%')";
+			
+			ResultSet usersRs = dbm.executeQuery(sqlQuery);
+
+			ArrayList<User> users = new ArrayList<>();
+
+			while (usersRs.next()) {
+				int id = usersRs.getInt("userID");
+				String email = usersRs.getString("email");
+				String userName = usersRs.getString("userName");
+				byte[] image = usersRs.getBytes("imageFile");
+				
+				users.add(new User(id, email, userName, image));
+			}
+
+			return users;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
 	}
 }

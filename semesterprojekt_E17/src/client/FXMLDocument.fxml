@@ -28,6 +28,7 @@
             <Button fx:id="toolBarMyTripsButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="My trips" />
             <Button fx:id="toolBarProfileButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Profile" />
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in/out" />
+            <Button fx:id="toolBarBrowseUsersButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse users" />
         </items>
       </ToolBar>
       <AnchorPane fx:id="browseTripsPane" layoutY="40.0" visible="false">
@@ -261,7 +262,7 @@
             <Button fx:id="joinTripButton" layoutX="110.0" layoutY="172.0" mnemonicParsing="false" onAction="#handleJoinTripButton" text="Join trip" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />
@@ -298,7 +299,7 @@
             <Label fx:id="profileEmailLabel" layoutX="52.0" layoutY="105.0" text="Label" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="modifyTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="modifyTripPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Text fx:id="modifyTripIDLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trip #0">
                <font>
@@ -326,6 +327,14 @@
             <TextField fx:id="modifyTripPriceTextField" layoutX="43.0" layoutY="253.0" prefWidth="100.0" />
             <Button fx:id="modifyTripSaveChangesButton" layoutX="43.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleModifyTripButtons" prefWidth="95.0" text="Save Changes" />
             <Button fx:id="modifyTripCancelButton" layoutX="148.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleModifyTripButtons" prefWidth="95.0" text="Cancel" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="browseUsersPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <TextField fx:id="browseUsersTextField" layoutX="32.0" layoutY="54.0" promptText="Name" />
+            <ListView fx:id="browseUsersListView" layoutX="250.0" layoutY="54.0" prefHeight="477.0" prefWidth="371.0" />
+            <Label layoutX="32.0" layoutY="37.0" text="Name" />
+            <Button fx:id="browseUsersSearchButton" layoutX="32.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButton" text="Search" />
          </children>
       </AnchorPane>
    </children>

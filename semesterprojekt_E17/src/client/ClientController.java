@@ -27,6 +27,7 @@ public class ClientController {
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12345);
 			serverController = (IServerController) registry.lookup("serverController");
+			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance());
 		} catch (RemoteException | NotBoundException ex) {
 			ex.printStackTrace();
 		}
@@ -94,5 +95,9 @@ public class ClientController {
 
 	public User getCurrentUser() {
 		return currentUser;
+	}
+	
+	public List<User> searchUsers(String query) throws RemoteException {
+		return serverController.searchUsers(query);
 	}
 }

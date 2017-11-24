@@ -3,6 +3,7 @@ package server;
 import interfaces.Category;
 import interfaces.Conversation;
 import interfaces.FullTripException;
+import interfaces.IChatClient;
 import interfaces.IServerController;
 import interfaces.Location;
 import interfaces.Message;
@@ -16,9 +17,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServerControllerImpl extends UnicastRemoteObject implements IServerController {
+	
+	private ServerMessagingHandler messagingHandler;
 
 	public ServerControllerImpl() throws RemoteException {
-
+		messagingHandler = new ServerMessagingHandler();
 	}
 
 	@Override
@@ -117,5 +120,14 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public Trip viewTrip(int tripID) throws RemoteException {
 		return ServerTripHandler.viewTrip(tripID);
 	}
+	
+	@Override
+	public void registerClient(IChatClient client) {
+		messagingHandler.registerClient(client);
+	}
 
+	@Override
+	public List<User> searchUsers(String query) {
+		return ServerUserHandler.searchUsers(query);
+	}
 }
