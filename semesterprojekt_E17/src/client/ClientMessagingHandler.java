@@ -21,7 +21,7 @@ public class ClientMessagingHandler {
 	 */
 	@SuppressWarnings("serial")
 	private static class MessageReceiver extends UnicastRemoteObject implements IChatClient {
-
+		private String test = "test";
 		protected MessageReceiver() throws RemoteException {
 			super();
 		}
@@ -29,6 +29,11 @@ public class ClientMessagingHandler {
 		@Override
 		public void receiveMessage(String message) throws RemoteException {
 			// Unsupported operation
+		}
+		
+		@Override
+		public String getTest() {
+			return test;
 		}
 		
 	}

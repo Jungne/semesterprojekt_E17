@@ -17,11 +17,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServerControllerImpl extends UnicastRemoteObject implements IServerController {
-	
+
 	private ServerMessagingHandler messagingHandler;
 
 	public ServerControllerImpl() throws RemoteException {
-		messagingHandler = new ServerMessagingHandler();
+			messagingHandler = new ServerMessagingHandler();
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
 	@Override
 	public void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException {
-			ServerTripHandler.participateInTrip(trip, user);
+		ServerTripHandler.participateInTrip(trip, user);
 
 	}
 
@@ -120,10 +120,14 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public Trip viewTrip(int tripID) throws RemoteException {
 		return ServerTripHandler.viewTrip(tripID);
 	}
-	
+
 	@Override
 	public void registerClient(IChatClient client) {
-		messagingHandler.registerClient(client);
+		try {
+			messagingHandler.registerClient(client);
+		} catch (RemoteException ex) {
+			Logger.getLogger(ServerControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 
 	@Override
