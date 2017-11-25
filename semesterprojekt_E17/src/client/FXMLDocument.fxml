@@ -31,7 +31,7 @@
             <Button fx:id="toolBarBrowseUsersButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse users" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" visible="false">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -39,52 +39,52 @@
                </font>
             </Label>
             <Line endX="100.0" layoutX="109.0" layoutY="41.0" startX="-100.0" />
-            <Label layoutX="23.0" layoutY="119.0" text="Location">
+            <Label layoutX="20.0" layoutY="119.0" text="Location">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="283.0" text="Type">
+            <Label layoutX="20.0" layoutY="283.0" text="Type">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font></Label>
-            <CheckBox fx:id="searchTripsNormalCheckBox" layoutX="25.0" layoutY="308.0" mnemonicParsing="false" text="Normal" />
-            <CheckBox fx:id="searchTripsInstructorCheckBox" layoutX="27.0" layoutY="332.0" mnemonicParsing="false" text="Instructor" />
-            <Label layoutX="21.0" layoutY="369.0" text="Price">
+            <CheckBox fx:id="searchTripsNormalCheckBox" layoutX="20.0" layoutY="308.0" mnemonicParsing="false" text="Normal" />
+            <CheckBox fx:id="searchTripsInstructorCheckBox" layoutX="20.0" layoutY="332.0" mnemonicParsing="false" text="Instructor" />
+            <Label layoutX="20.0" layoutY="369.0" text="Price">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <TextField fx:id="searchTripsPriceTextField" layoutX="22.0" layoutY="386.0" prefHeight="27.0" prefWidth="201.0" promptText="Amount Kr." />
-            <Label layoutX="24.0" layoutY="429.0" text="Time period" />
-            <DatePicker fx:id="searchTripsDatePicker" layoutX="22.0" layoutY="446.0" prefHeight="27.0" prefWidth="201.0" />
+            <TextField fx:id="searchTripsPriceTextField" layoutX="20.0" layoutY="386.0" prefHeight="27.0" prefWidth="200.0" promptText="Amount Kr." />
+            <Label layoutX="20.0" layoutY="429.0" text="Time period" />
+            <DatePicker fx:id="searchTripsDatePicker" layoutX="20.0" layoutY="446.0" prefHeight="27.0" prefWidth="200.0" />
             <Text layoutX="53.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MAX.">
                <font>
                   <Font size="7.0" />
                </font>
             </Text>
-            <Text layoutX="98.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="START.">
+            <Text layoutX="90.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="START.">
                <font>
                   <Font size="7.0" />
                </font>
             </Text>
-            <Button fx:id="searchTripsButton" layoutX="26.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleSearchTripsButtons" prefHeight="25.0" prefWidth="109.0" text="Search" />
+            <Button fx:id="searchTripsButton" layoutX="20.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleSearchTripsButtons" prefHeight="25.0" prefWidth="109.0" text="Search" />
             <ListView fx:id="browseTripsListView" layoutX="239.0" layoutY="60.0" prefHeight="548.0" prefWidth="392.0" />
-            <Button fx:id="viewTripButton" layoutX="26.0" layoutY="544.0" mnemonicParsing="false" onAction="#handleViewTripButton" prefHeight="25.0" prefWidth="109.0" text="View Trip" />
-            <Label layoutX="22.0" layoutY="60.0" text="Title">
+            <Button fx:id="viewTripButton" layoutX="20.0" layoutY="544.0" mnemonicParsing="false" onAction="#handleViewTripButton" prefHeight="25.0" prefWidth="109.0" text="View Trip" />
+            <Label layoutX="20.0" layoutY="60.0" text="Title">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <TextField fx:id="searchTripsTitleTextField" layoutX="19.0" layoutY="79.0" prefHeight="27.0" prefWidth="201.0" promptText="Tiitle?" />
-            <Label layoutX="22.0" layoutY="180.0" text="Category">
+            <TextField fx:id="searchTripsTitleTextField" layoutX="20.0" layoutY="79.0" prefHeight="27.0" prefWidth="200.0" promptText="Tiitle?" />
+            <Label layoutX="20.0" layoutY="180.0" text="Category">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
             <HBox fx:id="searchTripCategoryListHBox" layoutX="21.0" layoutY="235.0" prefHeight="22.0" prefWidth="200.0" />
-            <ComboBox fx:id="searchTripsLocationComboBox" layoutX="23.0" layoutY="146.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
-            <ComboBox fx:id="searchTripsCategoryComboBox" layoutX="23.0" layoutY="199.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
+            <ComboBox fx:id="searchTripsLocationComboBox" layoutX="20.0" layoutY="146.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
+            <ComboBox fx:id="searchTripsCategoryComboBox" layoutX="20.0" layoutY="199.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="createTripPane1" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
@@ -262,7 +262,7 @@
             <Button fx:id="joinTripButton" layoutX="110.0" layoutY="172.0" mnemonicParsing="false" onAction="#handleJoinTripButton" text="Join trip" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />
@@ -329,7 +329,7 @@
             <Button fx:id="modifyTripCancelButton" layoutX="148.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleModifyTripButtons" prefWidth="95.0" text="Cancel" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="browseUsersPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="browseUsersPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <TextField fx:id="browseUsersTextField" layoutX="32.0" layoutY="54.0" promptText="Name" />
             <ListView fx:id="browseUsersListView" layoutX="250.0" layoutY="54.0" prefHeight="477.0" prefWidth="371.0" />
