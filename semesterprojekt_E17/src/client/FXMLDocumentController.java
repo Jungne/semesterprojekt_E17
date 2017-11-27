@@ -185,6 +185,8 @@ public class FXMLDocumentController implements Initializable {
 	private Text viewTripPriceLabel;
 	@FXML
 	private Button viewTripButton;
+        @FXML
+        private ListView viewListOfParticipants;
 
 	//Modify Trip
 	@FXML
@@ -437,6 +439,7 @@ public class FXMLDocumentController implements Initializable {
 				viewTripTitleLabel.setText("Trip #" + viewedTrip.getId() + " - " + viewedTrip.getTitle());
 				viewTripDescriptionLabel.setText(viewedTrip.getDescription());
 				viewTripPriceLabel.setText("Price: " + viewedTrip.getPrice());
+                                viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
 				showPane(viewTripPane);
 			}
 		}
