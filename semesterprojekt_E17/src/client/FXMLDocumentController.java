@@ -254,7 +254,9 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private TextField browseUsersTextField;
 	@FXML
-	private ListView<?> browseUsersListView;
+	private ListView<HBoxCell> browseUsersListView;
+	@FXML
+	private Button browseUsersMessageButton;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -844,21 +846,26 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	@FXML
-	private void handleBrowseUsersSearchButton(ActionEvent event) {
-		try {
-			String searchText = browseUsersTextField.getText();
-			List<User> users = clientController.searchUsers(searchText);
-			List<HBoxCell> list = new ArrayList<>();
+	private void handleBrowseUsersSearchButtons(ActionEvent event) {
+		if (event.getSource().equals(browseUsersSearchButton)) {
+			try {
+				String searchText = browseUsersTextField.getText();
+				List<User> users = clientController.searchUsers(searchText);
+				List<HBoxCell> list = new ArrayList<>();
 
-			for (User user : users) {
-				list.add(new HBoxCell(user));
+				for (User user : users) {
+					list.add(new HBoxCell(user));
+				}
+
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				browseUsersListView.setItems(observableList);
+
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
-
-			ObservableList observableList = FXCollections.observableArrayList(list);
-			browseUsersListView.setItems(observableList);
-
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		} else if (event.getSource().equals(browseUsersMessageButton)) {
+			int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
+			//Use userId to open a conversation.
 		}
 	}
 
