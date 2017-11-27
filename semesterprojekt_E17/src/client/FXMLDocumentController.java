@@ -258,7 +258,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button browseUsersMessageButton;
 	@FXML
-	private ListView<?> myTripsListView;
+	private ListView<HBoxCell> myTripsListView;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -433,7 +433,7 @@ public class FXMLDocumentController implements Initializable {
 				modifyTripIDLabel.setText("Trip #" + viewedTrip.getId());
 				modifyTripTitleTextField.setText(viewedTrip.getTitle());
 				modifyTripDescriptionTextField.setText(viewedTrip.getDescription());
-				modifyTripPriceTextField.setText("Price: " + viewedTrip.getPrice());
+				modifyTripPriceTextField.setText("" + viewedTrip.getPrice());
 				showPane(modifyTripPane);
 			} else {
 				viewTripTitleLabel.setText("Trip #" + viewedTrip.getId() + " - " + viewedTrip.getTitle());
@@ -839,10 +839,12 @@ public class FXMLDocumentController implements Initializable {
 			showPane(createTripPane1);
 		}
 		if (event.getSource() == myTripsModifyTripButton) {
-			viewTrip(1, true);
+			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+			viewTrip(id, true);
 		}
 		if (event.getSource() == myTripsViewTripButton) {
-			viewTrip(1, false);
+			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+			viewTrip(id, false);
 		}
 	}
 	// </editor-fold>
