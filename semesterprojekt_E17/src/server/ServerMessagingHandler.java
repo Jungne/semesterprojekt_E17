@@ -1,6 +1,7 @@
 package server;
 
 import interfaces.IChatClient;
+import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,8 @@ public class ServerMessagingHandler {
 	/**
 	 * Register clients in the form of remote objects
 	 */
-	public void registerClient(IChatClient client) {
+	public void registerClient(IChatClient client) throws RemoteException {
 		clients.add(client);
+		System.out.println(client.getTest());
 	}
 }
