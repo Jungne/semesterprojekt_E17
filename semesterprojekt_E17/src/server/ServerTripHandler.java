@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 public class ServerTripHandler {
 
 	private static DBManager dbm = DBManager.getInstance();
+
 	/**
 	 * Creates a trip in the database by using the information in newTrip.
 	 *
@@ -244,8 +245,8 @@ public class ServerTripHandler {
 	}
 
 	/**
->>>>>>> refs/remotes/origin/master
-	 * Checks if the given user exists in the database.
+	 * >>>>>>> refs/remotes/origin/master Checks if the given user exists in the
+	 * database.
 	 *
 	 * @param user
 	 * @return true if user exist or false if user does not exist.
@@ -386,7 +387,7 @@ public class ServerTripHandler {
 						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
 
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
-	if (!(searchTitle == null || searchTitle.isEmpty())) {
+		if (!(searchTitle == null || searchTitle.isEmpty())) {
 			query += " AND tripTitle LIKE '%" + searchTitle + "%'";
 		}
 
@@ -480,7 +481,7 @@ public class ServerTripHandler {
 							+ "FROM UsersInTrips\n"
 							+ "INNER JOIN Trips On UsersInTrips.tripId = Trips.tripID\n"
 							+ "WHERE UsersInTrips.tripId = " + trip.getId() + "\n"
-											+ "GROUP BY UsersInTrips.tripId");
+							+ "GROUP BY UsersInTrips.tripId");
 			if (fullTripCheck.next()) {
 				int usersInTrip = (int) fullTripCheck.getLong("count");
 				int participantLimit = fullTripCheck.getInt("max");
@@ -493,5 +494,34 @@ public class ServerTripHandler {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return false;
+	}
+
+	public static List<Trip> getMyTrips(User user) {
+		try {
+			String query = ""
+							+ "SELECT trips.tripid, triptitle, tripdescription, tripprice, imagefile\n"
+							+ "FROM trips\n"
+							+ "INNER JOIN usersInTrips ON trips.tripid = usersInTrips.tripid\n"
+							+ "INNER JOIN imagesInTrips ON imagesInTrips.tripid = trips.tripid\n"
+							+ "INNER JOIN images ON images.imageid = imagesInTrips.imageid\n"
+							+ "WHERE usersInTrips.userid = " + user.getId()+ " AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
+			List<Trip> myTrips = new ArrayList<>();
+
+			ResultSet tripsRs = dbm.executeQuery(query);
+
+			while (tripsRs.next()) {
+				int id = tripsRs.getInt(1);
+				String title = tripsRs.getString(2);
+				String description = tripsRs.getString(3);
+				double price = tripsRs.getDouble(4);
+				byte[] image = tripsRs.getBytes(5);
+				myTrips.add(new Trip(id, title, description, price, image));
+			}
+
+			return myTrips;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
 	}
 }

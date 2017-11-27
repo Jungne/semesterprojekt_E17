@@ -134,4 +134,9 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public List<User> searchUsers(String query) {
 		return ServerUserHandler.searchUsers(query);
 	}
+	
+	@Override
+	public List<Trip> getMyTrips(User user) {
+		return ServerTripHandler.getMyTrips(user);
+	}
 }

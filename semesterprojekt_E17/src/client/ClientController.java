@@ -49,7 +49,7 @@ public class ClientController {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-	public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX)  throws RemoteException {
+	public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) throws RemoteException {
 		return serverController.searchTrips(searchTitle, category, timedateStart, location, priceMAX);
 	}
 
@@ -96,8 +96,15 @@ public class ClientController {
 	public User getCurrentUser() {
 		return currentUser;
 	}
-	
+
 	public List<User> searchUsers(String query) throws RemoteException {
 		return serverController.searchUsers(query);
+	}
+
+	public List<Trip> getMyTrips() {
+		if (currentUser != null) {
+			return ClientTripHandler.getMyTrips(currentUser, serverController);
+		}
+		return null;
 	}
 }

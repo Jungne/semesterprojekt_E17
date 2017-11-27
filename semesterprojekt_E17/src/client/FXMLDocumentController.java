@@ -257,6 +257,8 @@ public class FXMLDocumentController implements Initializable {
 	private ListView<HBoxCell> browseUsersListView;
 	@FXML
 	private Button browseUsersMessageButton;
+	@FXML
+	private ListView<?> myTripsListView;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -533,7 +535,7 @@ public class FXMLDocumentController implements Initializable {
 			resetBrowseTripPane();
 		} else if (event.getSource() == toolBarMyTripsButton) {
 			showPane(myTripsPane);
-			//TODO - here should my trips be loaded
+			loadMyTrips();
 		} else if (event.getSource() == toolBarProfileButton) {
 			showPane(profilePane);
 			loadProfileInfo();
@@ -869,4 +871,18 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
+	private void loadMyTrips() {
+		List<Trip> myTrips = clientController.getMyTrips();
+
+		if (myTrips != null) {
+			List<HBoxCell> list = new ArrayList<>();
+
+			for (Trip trip : myTrips) {
+				list.add(new HBoxCell(trip));
+			}
+
+			ObservableList observableList = FXCollections.observableArrayList(list);
+			myTripsListView.setItems(observableList);
+		}
+	}
 }

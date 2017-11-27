@@ -228,7 +228,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Trips">
                <font>
@@ -239,7 +239,7 @@
             <Button fx:id="myTripsCreateTripButton" layoutX="60.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Create Trip" />
             <Button fx:id="myTripsModifyTripButton" layoutX="60.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Modify Trip" />
             <Button fx:id="myTripsViewTripButton" layoutX="60.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="View Trip" />
-            <ListView layoutX="160.0" layoutY="100.0" prefHeight="420.0" prefWidth="420.0" />
+            <ListView fx:id="myTripsListView" layoutX="160.0" layoutY="100.0" prefHeight="420.0" prefWidth="420.0" />
          </children></AnchorPane>
       <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
@@ -329,7 +329,7 @@
             <Button fx:id="modifyTripCancelButton" layoutX="148.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleModifyTripButtons" prefWidth="95.0" text="Cancel" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="browseUsersPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="browseUsersPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <TextField fx:id="browseUsersTextField" layoutX="32.0" layoutY="54.0" promptText="Name" />
             <ListView fx:id="browseUsersListView" layoutX="250.0" layoutY="54.0" prefHeight="477.0" prefWidth="371.0" />

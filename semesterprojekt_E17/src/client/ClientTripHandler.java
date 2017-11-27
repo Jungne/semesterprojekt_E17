@@ -95,4 +95,12 @@ public class ClientTripHandler {
 		}
 	}
 
+	public static List<Trip> getMyTrips(User user, IServerController serverController) {
+		try {
+			return serverController.getMyTrips(user);
+		} catch (RemoteException ex) {
+			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
 }
