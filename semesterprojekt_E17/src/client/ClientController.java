@@ -107,4 +107,8 @@ public class ClientController {
 		}
 		return null;
 	}
+
+	public void setCurrentConversation(int tripID) throws RemoteException {
+		ClientMessagingHandler.setCurrentConversation(serverController, tripID);
+	}
 }

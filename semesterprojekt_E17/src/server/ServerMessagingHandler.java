@@ -12,15 +12,22 @@ import java.util.Set;
 public class ServerMessagingHandler {
 
 	/**
-	 * All clients of the server, in the form of remote objects
+	 * All clients of the server, in the form of remote objects.
 	 */
 	Set<IChatClient> clients = new HashSet<IChatClient>();
 
 	/**
-	 * Register clients in the form of remote objects
+	 * Register clients in the form of remote objects.
 	 */
 	public void registerClient(IChatClient client) throws RemoteException {
 		clients.add(client);
 		System.out.println(client.getTest());
+	}
+
+	/**
+	 * Register the active conversations.
+	 */
+	public void addActiveConversation(int tripID) {
+		System.out.print(tripID);
 	}
 }

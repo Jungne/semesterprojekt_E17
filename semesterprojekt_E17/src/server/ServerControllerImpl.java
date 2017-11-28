@@ -139,4 +139,9 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public List<Trip> getMyTrips(User user) {
 		return ServerTripHandler.getMyTrips(user);
 	}
+	
+	@Override
+	public void addActiveConversation(int tripID) {
+		messagingHandler.addActiveConversation(tripID);
+	}
 }

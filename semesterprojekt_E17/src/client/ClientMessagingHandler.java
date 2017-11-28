@@ -2,6 +2,7 @@
 package client;
 
 import interfaces.IChatClient;
+import interfaces.IServerController;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -43,5 +44,9 @@ public class ClientMessagingHandler {
 			receiver = new MessageReceiver();
 		} 
 		return receiver;
+	}
+	
+	public static void setCurrentConversation(IServerController serverController, int tripID) throws RemoteException {
+		serverController.addActiveConversation(tripID);
 	}
 }
