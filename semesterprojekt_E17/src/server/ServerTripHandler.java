@@ -388,7 +388,7 @@ public class ServerTripHandler {
 
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
 		if (!(searchTitle == null || searchTitle.isEmpty())) {
-			query += " AND tripTitle LIKE '%" + searchTitle + "%'";
+			query += " AND LOWER(tripTitle) LIKE '%" + searchTitle.toLowerCase() + "%'";
 		}
 
 		if(categories != null){
