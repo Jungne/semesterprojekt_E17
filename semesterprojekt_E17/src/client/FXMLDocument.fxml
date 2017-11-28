@@ -25,9 +25,9 @@
             <Label text="Outdoor activity portal" />
           <Button fx:id="toolBarMessagingButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Messaging" />
             <Button fx:id="toolBarBrowseTripsButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse trips" />
-            <Button fx:id="toolBarMyTripsButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="My trips" />
-            <Button fx:id="toolBarProfileButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Profile" />
-            <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in/out" />
+            <Button fx:id="toolBarMyTripsButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="My trips" />
+            <Button fx:id="toolBarProfileButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Profile" />
+            <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
             <Button fx:id="toolBarBrowseUsersButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse users" />
         </items>
       </ToolBar>

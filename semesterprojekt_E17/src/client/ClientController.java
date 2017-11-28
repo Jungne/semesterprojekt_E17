@@ -19,7 +19,7 @@ import java.util.Set;
 public class ClientController {
 
 	private IServerController serverController;
-	private User currentUser;
+	private User currentUser = null;
 
 	public ClientController() throws RemoteException {
 		String hostname = "localhost";
@@ -42,7 +42,7 @@ public class ClientController {
 	}
 
 	public void signOut() throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		currentUser = null;
 	}
 
 	public List<Trip> getAllTrips() throws RemoteException {
