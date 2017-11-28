@@ -50,8 +50,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) throws RemoteException {
-		return ServerTripHandler.searchTrip(searchTitle, category, timedateStart, location, priceMAX);
+	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
+		return ServerTripHandler.searchTrip(searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}
 
 	@Override

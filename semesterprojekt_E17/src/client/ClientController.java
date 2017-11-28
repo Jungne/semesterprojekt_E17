@@ -19,7 +19,7 @@ import java.util.Set;
 public class ClientController {
 
 	private IServerController serverController;
-	private User currentUser;
+	private User currentUser = null;
 
 	public ClientController() throws RemoteException {
 		String hostname = "localhost";
@@ -42,15 +42,16 @@ public class ClientController {
 	}
 
 	public void signOut() throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		currentUser = null;
 	}
 
 	public List<Trip> getAllTrips() throws RemoteException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-	public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) throws RemoteException {
-		return serverController.searchTrips(searchTitle, category, timedateStart, location, priceMAX);
+
+	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType)  throws RemoteException {
+		return serverController.searchTrips(searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}
 
 	public Trip showTrip(int tripID) {
