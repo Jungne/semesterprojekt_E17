@@ -897,7 +897,7 @@ public class FXMLDocumentController implements Initializable {
 
 				@Override
 				public void changed(ObservableValue<? extends HBoxCell> observable, HBoxCell newValue, HBoxCell oldValue) {
-					int id = newValue.getTripId();
+					int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 					try {
 						clientController.setCurrentConversation(id);
 					} catch (RemoteException ex) {
