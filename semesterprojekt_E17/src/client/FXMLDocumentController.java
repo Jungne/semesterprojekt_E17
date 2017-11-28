@@ -57,14 +57,14 @@ import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 
 public class FXMLDocumentController implements Initializable {
-	
+
 	private ClientController clientController;
-	
+
 	private File newAccountProfilePictureFile;
-	
+
 	private Trip viewedTrip;
 	private Window stage;
-	
+
 	@FXML
 	private AnchorPane mainPane;
 
@@ -81,7 +81,7 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="Browse Trips - Elements">
 	private boolean categoryComboboxIsDisabled2 = false;
-	
+
 	@FXML
 	private AnchorPane browseTripsPane;
 	@FXML
@@ -265,19 +265,19 @@ public class FXMLDocumentController implements Initializable {
 	private Button browseUsersMessageButton;
 	@FXML
 	private ListView<HBoxCell> myTripsListView;
-	
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		try {
 			clientController = new ClientController();
-			
+
 			newAccountImageView.setImage(new Image("default_profile_picture.png"));
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		stage = null;
 	}
-	
+
 	private void showPane(AnchorPane pane) {
 		//All panes set to invisible
 		for (Node node : mainPane.getChildren()) {
@@ -290,7 +290,7 @@ public class FXMLDocumentController implements Initializable {
 		//The given pane is set to visible
 		pane.setVisible(true);
 	}
-	
+
 	private void showTrips(List<Trip> trips, ListView listview) {
 		List<HBoxCell> list = new ArrayList<>();
 		for (Trip trip : trips) {
@@ -299,7 +299,7 @@ public class FXMLDocumentController implements Initializable {
 		ObservableList observableList = FXCollections.observableArrayList(list);
 		listview.setItems(observableList);
 	}
-	
+
 	@FXML
 	private void handleSearchTripsButtons(ActionEvent event) {
 		if (event.getSource() == searchTripsButton) {
@@ -308,7 +308,7 @@ public class FXMLDocumentController implements Initializable {
 			addCategoryListItem2();
 		}
 	}
-	
+
 	private void searchTrips() {
 		try {
 			//Only date and price works at the moment.
@@ -323,20 +323,20 @@ public class FXMLDocumentController implements Initializable {
 
 			//Date stuff
 			LocalDate date = searchTripsDatePicker.getValue();
-			
+
 			List<Trip> trips = clientController.searchTrips("", -1, date, -1, priceMax);
-			
+
 			showTrips(trips, browseTripsListView);
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
+
 	@FXML
 	private void handleLogInButton(ActionEvent event) {
 		String username = logInEmailTextField.getText();
 		String password = hashPassword(logInPasswordTextField.getText());
-		
+
 		try {
 			clientController.signIn(username, password);
 			showPane(profilePane);
@@ -345,32 +345,32 @@ public class FXMLDocumentController implements Initializable {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
+
 	@FXML
 	private void handleNewAccountButton(ActionEvent event) {
 		showPane(newAccountPane);
 	}
-	
+
 	@FXML
 	private void handleNewAccountBackButton(ActionEvent event) {
 		showPane(logInOutPane);
 	}
-	
+
 	@FXML
 	private void handleChooseProfilePictureButton(ActionEvent event) {
 		File newAccountProfilePictureFile = chooseImage("Select profile picture");
 		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
-		
+
 		newAccountImageView.setImage(profilePicture);
 	}
-	
+
 	private File chooseImage(String title) {
 		stage = mainPane.getScene().getWindow();
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle(title);
 		return fileChooser.showOpenDialog(stage);
 	}
-	
+
 	@FXML
 	private void handleCreateAccountButton(ActionEvent event) {
 		String name = newAccountNameTextField.getText();
@@ -378,7 +378,7 @@ public class FXMLDocumentController implements Initializable {
 		String password = newAccountPasswordTextField.getText();
 		String repeatPassword = newAccountRepeatPasswordTextField.getText();
 		byte[] profilePicture = null;
-		
+
 		BufferedImage bImage = SwingFXUtils.fromFXImage(newAccountImageView.getImage(), null);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
@@ -388,7 +388,7 @@ public class FXMLDocumentController implements Initializable {
 		} catch (IOException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		
+
 		if (password.equals(repeatPassword)) {
 			User user = new User(-1, email, name, profilePicture);
 			try {
@@ -421,17 +421,17 @@ public class FXMLDocumentController implements Initializable {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		
+
 		return String.format("%064x", new java.math.BigInteger(1, hashBytes)).toLowerCase();
 	}
-	
+
 	@FXML
 	private void handleViewTripButton(ActionEvent event) {
 		int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
 		System.out.println(tripId);
 		viewTrip(tripId, false);
 	}
-	
+
 	private void viewTrip(int id, boolean modifyMode) {
 		viewedTrip = clientController.viewTrip(id); //Should be id obtained from selected element in list view on my trips
 		if (viewedTrip != null) {
@@ -450,19 +450,19 @@ public class FXMLDocumentController implements Initializable {
 			}
 		}
 	}
-	
+
 	private void loadProfileInfo() {
 		profileNameLabel.setText(clientController.getCurrentUser().getName());
 		profileEmailLabel.setText(clientController.getCurrentUser().getEmail());
 		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
 		profilePictureImageView.setImage(image);
 	}
-	
+
 	private void resetBrowseTripPane() {
 		//Gets all locations from the server and displays them in the comboBox
 		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
 		searchTripsLocationComboBox.setItems(locations);
-		
+
 		categoryComboboxIsDisabled2 = true;
 		//Gets all categories from the server and displays them in the comboBox
 		ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
@@ -473,7 +473,7 @@ public class FXMLDocumentController implements Initializable {
 		//Resets category HBox
 		searchTripCategoryListHBox.getChildren().clear();
 	}
-	
+
 	@FXML
 	private void handleModifyTripButtons(ActionEvent event) {
 		if (event.getSource().equals(modifyTripSaveChangesButton)) {
@@ -489,13 +489,13 @@ public class FXMLDocumentController implements Initializable {
 			showPane(myTripsPane);
 		}
 	}
-	
+
 	private void resetModifyTripPane() {
 		modifyTripTitleTextField.setText("");
 		modifyTripDescriptionTextField.setText("");
 		modifyTripPriceTextField.setText("");
 	}
-	
+
 	@FXML
 	private void handleJoinTripButton(ActionEvent event) {
 		try {
@@ -506,7 +506,7 @@ public class FXMLDocumentController implements Initializable {
 			System.out.println(ex);
 		}
 	}
-	
+
 	private void addCategoryListItem2() {
 		if (categoryComboboxIsDisabled2) {
 			return;
@@ -527,7 +527,7 @@ public class FXMLDocumentController implements Initializable {
 		//createTripCategoryComboBox.setValue(null);
 		categoryComboboxIsDisabled2 = false;
 	}
-	
+
 	protected void removeCategoryListItem2(CategoryListItem2 categoryListItem) {
 		searchTripCategoryListHBox.getChildren().remove(categoryListItem);
 	}
@@ -595,7 +595,7 @@ public class FXMLDocumentController implements Initializable {
 		//Activate category combobox after adjusting values
 		categoryComboboxIsDisabled = false;
 	}
-	
+
 	@FXML
 	private void handleCreateTripButtons(ActionEvent event) {
 		if (event.getSource() == createTripAddPictureButton) {
@@ -619,7 +619,7 @@ public class FXMLDocumentController implements Initializable {
 			}
 		}
 	}
-	
+
 	private void addImageListItem() {
 		createTripInvalidPictureText.setVisible(false);
 		try {
@@ -639,11 +639,11 @@ public class FXMLDocumentController implements Initializable {
 			createTripInvalidPictureText.setVisible(true);
 		}
 	}
-	
+
 	protected void removeImageListItem(ImageListItem imageListItem) {
 		createTripPictureListHBox.getChildren().remove(imageListItem);
 	}
-	
+
 	private void addCategoryListItem() {
 		if (categoryComboboxIsDisabled) {
 			return;
@@ -665,7 +665,7 @@ public class FXMLDocumentController implements Initializable {
 		//createTripCategoryComboBox.setValue(null);
 		categoryComboboxIsDisabled = false;
 	}
-	
+
 	protected boolean hasCertificate(Category category) {
 		if (clientController.getCurrentUser().getCertificates().contains(category)) {
 			return true;
@@ -673,14 +673,14 @@ public class FXMLDocumentController implements Initializable {
 		showMessageFiveSeconds(category);
 		return false;
 	}
-	
+
 	private void showMessageFiveSeconds(Category category) {
 		currentIntructorTextOccupiers++;
 		//Show warning message
 		createTripIntructorText.setText("You do not have cerficate for '" + category.getName() + "'-instructor!");
 		createTripIntructorText.setFill(Paint.valueOf("#da0303"));
 		createTripIntructorText.setOpacity(1);
-		
+
 		TimerTask timerTask = new TimerTask() {
 			@Override
 			public void run() {
@@ -697,14 +697,14 @@ public class FXMLDocumentController implements Initializable {
 		};
 		new java.util.Timer().schedule(timerTask, 5000);
 	}
-	
+
 	protected void removeCategoryListItem(CategoryListItem categoryListItem) {
 		createTripCategoryListHBox.getChildren().remove(categoryListItem);
 		if (createTripCategoryListHBox.getChildren().isEmpty()) {
 			createTripIntructorText.setVisible(false);
 		}
 	}
-	
+
 	private int createTrip() throws Exception {
 		//Gets all the values
 		String title = createTripTitleTextField.getText();
@@ -767,7 +767,7 @@ public class FXMLDocumentController implements Initializable {
 		//Creates trip
 		return clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
 	}
-	
+
 	private boolean isTripParametersValid(String title, List<Category> categories, String priceString, LocalDate date, Location location, String meetingAddress, String participantLimitString) {
 		boolean isTripParametersValid = true;
 		//Title check
@@ -833,7 +833,7 @@ public class FXMLDocumentController implements Initializable {
 		}
 		//Reset picture warning
 		createTripInvalidPictureText.setVisible(false);
-		
+
 		return isTripParametersValid;
 	}
 	// </editor-fold>
@@ -863,14 +863,14 @@ public class FXMLDocumentController implements Initializable {
 				String searchText = browseUsersTextField.getText();
 				List<User> users = clientController.searchUsers(searchText);
 				List<HBoxCell> list = new ArrayList<>();
-				
+
 				for (User user : users) {
 					list.add(new HBoxCell(user));
 				}
-				
+
 				ObservableList observableList = FXCollections.observableArrayList(list);
 				browseUsersListView.setItems(observableList);
-				
+
 			} catch (RemoteException ex) {
 				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -879,30 +879,34 @@ public class FXMLDocumentController implements Initializable {
 			//Use userId to open a conversation.
 		}
 	}
-	
+
 	private void loadMyTrips() {
 		List<Trip> myTrips = clientController.getMyTrips();
-		
+
 		if (myTrips != null) {
 			List<HBoxCell> list = new ArrayList<>();
-			
+
 			for (Trip trip : myTrips) {
 				list.add(new HBoxCell(trip));
 			}
-			
+
 			ObservableList observableList = FXCollections.observableArrayList(list);
 			myTripsListView.setItems(observableList);
-			
+
 			myTripsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
-				
+
 				@Override
 				public void changed(ObservableValue<? extends HBoxCell> observable, HBoxCell newValue, HBoxCell oldValue) {
 					int id = newValue.getTripId();
-					clientController.setCurrentConversation(id);
+					try {
+						clientController.setCurrentConversation(id);
+					} catch (RemoteException ex) {
+						Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+					}
 				}
 			});
-			
+
 		}
-		
+
 	}
 }
