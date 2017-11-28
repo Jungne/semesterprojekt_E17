@@ -236,7 +236,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Trips">
                <font>
@@ -247,7 +247,7 @@
             <Button fx:id="myTripsCreateTripButton" layoutX="60.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Create Trip" />
             <Button fx:id="myTripsModifyTripButton" layoutX="60.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Modify Trip" />
             <Button fx:id="myTripsViewTripButton" layoutX="60.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="View Trip" />
-            <ListView layoutX="160.0" layoutY="100.0" prefHeight="420.0" prefWidth="420.0" />
+            <ListView fx:id="myTripsListView" layoutX="160.0" layoutY="100.0" prefHeight="420.0" prefWidth="420.0" />
          </children></AnchorPane>
       <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
@@ -268,9 +268,15 @@
                </font>
             </Text>
             <Button fx:id="joinTripButton" layoutX="110.0" layoutY="172.0" mnemonicParsing="false" onAction="#handleJoinTripButton" text="Join trip" />
+            <ListView fx:id="viewListOfParticipants" layoutX="40.0" layoutY="217.0" prefHeight="224.0" prefWidth="200.0" />
+            <Text fx:id="viewTripDescriptionLabel1" layoutX="42.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants:" wrappingWidth="91.99999879766256">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />
@@ -342,7 +348,8 @@
             <TextField fx:id="browseUsersTextField" layoutX="32.0" layoutY="54.0" promptText="Name" />
             <ListView fx:id="browseUsersListView" layoutX="250.0" layoutY="54.0" prefHeight="477.0" prefWidth="371.0" />
             <Label layoutX="32.0" layoutY="37.0" text="Name" />
-            <Button fx:id="browseUsersSearchButton" layoutX="32.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButton" text="Search" />
+            <Button fx:id="browseUsersSearchButton" layoutX="32.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Search" />
+            <Button fx:id="browseUsersMessageButton" layoutX="32.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Message" />
          </children>
       </AnchorPane>
    </children>

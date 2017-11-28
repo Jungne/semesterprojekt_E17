@@ -100,6 +100,9 @@ public class FXMLDocumentController implements Initializable {
 	private ComboBox<Category> searchTripsCategoryComboBox;
 	@FXML
 	private HBox searchTripCategoryListHBox;
+	@FXML	
+	private Text searchTripInvalidPriceText;
+	
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="My Trips - Elements">
@@ -185,6 +188,8 @@ public class FXMLDocumentController implements Initializable {
 	private Text viewTripPriceLabel;
 	@FXML
 	private Button viewTripButton;
+        @FXML
+        private ListView viewListOfParticipants;
 
 	//Modify Trip
 	@FXML
@@ -254,9 +259,12 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private TextField browseUsersTextField;
 	@FXML
-	private ListView<?> browseUsersListView;
+	private ListView<HBoxCell> browseUsersListView;
 	@FXML
-	private Text searchTripInvalidPriceText;
+	private Button browseUsersMessageButton;
+	@FXML
+	private ListView<HBoxCell> myTripsListView;
+
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -516,12 +524,13 @@ public class FXMLDocumentController implements Initializable {
 				modifyTripIDLabel.setText("Trip #" + viewedTrip.getId());
 				modifyTripTitleTextField.setText(viewedTrip.getTitle());
 				modifyTripDescriptionTextField.setText(viewedTrip.getDescription());
-				modifyTripPriceTextField.setText("Price: " + viewedTrip.getPrice());
+				modifyTripPriceTextField.setText("" + viewedTrip.getPrice());
 				showPane(modifyTripPane);
 			} else {
 				viewTripTitleLabel.setText("Trip #" + viewedTrip.getId() + " - " + viewedTrip.getTitle());
 				viewTripDescriptionLabel.setText(viewedTrip.getDescription());
 				viewTripPriceLabel.setText("Price: " + viewedTrip.getPrice());
+                                viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
 				showPane(viewTripPane);
 			}
 		}
@@ -632,7 +641,7 @@ public class FXMLDocumentController implements Initializable {
 			resetBrowseTripPane();
 		} else if (event.getSource() == toolBarMyTripsButton) {
 			showPane(myTripsPane);
-			//TODO - here should my trips be loaded
+			loadMyTrips();
 		} else if (event.getSource() == toolBarProfileButton) {
 			showPane(profilePane);
 			loadProfileInfo();
@@ -936,31 +945,52 @@ public class FXMLDocumentController implements Initializable {
 			showPane(createTripPane1);
 		}
 		if (event.getSource() == myTripsModifyTripButton) {
-			viewTrip(1, true);
+			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+			viewTrip(id, true);
 		}
 		if (event.getSource() == myTripsViewTripButton) {
-			viewTrip(1, false);
+			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+			viewTrip(id, false);
 		}
 	}
 	// </editor-fold>
 
 	@FXML
-	private void handleBrowseUsersSearchButton(ActionEvent event) {
-		try {
-			String searchText = browseUsersTextField.getText();
-			List<User> users = clientController.searchUsers(searchText);
-			List<HBoxCell> list = new ArrayList<>();
+	private void handleBrowseUsersSearchButtons(ActionEvent event) {
+		if (event.getSource().equals(browseUsersSearchButton)) {
+			try {
+				String searchText = browseUsersTextField.getText();
+				List<User> users = clientController.searchUsers(searchText);
+				List<HBoxCell> list = new ArrayList<>();
 
-			for (User user : users) {
-				list.add(new HBoxCell(user));
+				for (User user : users) {
+					list.add(new HBoxCell(user));
+				}
+
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				browseUsersListView.setItems(observableList);
+
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
-
-			ObservableList observableList = FXCollections.observableArrayList(list);
-			browseUsersListView.setItems(observableList);
-
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		} else if (event.getSource().equals(browseUsersMessageButton)) {
+			int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
+			//Use userId to open a conversation.
 		}
 	}
 
+	private void loadMyTrips() {
+		List<Trip> myTrips = clientController.getMyTrips();
+
+		if (myTrips != null) {
+			List<HBoxCell> list = new ArrayList<>();
+
+			for (Trip trip : myTrips) {
+				list.add(new HBoxCell(trip));
+			}
+
+			ObservableList observableList = FXCollections.observableArrayList(list);
+			myTripsListView.setItems(observableList);
+		}
+	}
 }
