@@ -49,8 +49,8 @@ public class ClientController {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-	public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX)  throws RemoteException {
-		return serverController.searchTrips(searchTitle, category, timedateStart, location, priceMAX);
+	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType)  throws RemoteException {
+		return serverController.searchTrips(searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}
 
 	public Trip showTrip(int tripID) {

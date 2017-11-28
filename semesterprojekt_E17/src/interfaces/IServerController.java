@@ -17,7 +17,7 @@ public interface IServerController extends Remote {
     //Trip functions    
     public List<Trip> getAllTrips() throws RemoteException;
     
-    public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) throws RemoteException;
+    public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException;
     
     public int createTrip(Trip newTrip) throws RemoteException;
     

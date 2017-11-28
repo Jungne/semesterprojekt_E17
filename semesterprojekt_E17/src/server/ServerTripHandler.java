@@ -373,27 +373,38 @@ public class ServerTripHandler {
 	 * given parameters.
 	 *
 	 * @param searchTitle used for a regex.
-	 * @param category
+	 * @param categories
 	 * @param timedateStart
 	 * @param location
 	 * @param priceMAX
 	 * @return list of trips matching search parameters.
 	 */
-	public static List<Trip> searchTrip(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) {
+	public static List<Trip> searchTrip(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) {
 
 		//Initializes the query string.
-		String query = "SELECT Trips.tripID, tripTitle, tripdescription, tripPrice, imageFile FROM Trips, ImagesInTrips, Images "
+		String query = "SELECT DISTINCT Trips.tripID, tripTitle, tripdescription, tripPrice, imageFile FROM Trips, ImagesInTrips, Images, CategoriesInTrips, Instructorsintrips "
 						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
 
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
-	if (!(searchTitle == null || searchTitle.isEmpty())) {
+		if (!(searchTitle == null || searchTitle.isEmpty())) {
 			query += " AND tripTitle LIKE '%" + searchTitle + "%'";
 		}
 
-		if (category >= 0) {
-			query += " AND categoryID = '" + category + "'";
-		}
+		if(categories != null){
+			
+			query += " AND Trips.tripid = CategoriesInTrips.tripid AND categoriesInTrips.categoryid IN (";
+			
+			for(Category category : categories){
+				
+				query += category.getId() + ",";	
+			}		
+			
+			query = query.substring(0, query.length()-1);
 
+			query += query + ")";
+			
+		}
+				
 		if (timedateStart != null) {
 			query += " AND timeStart >= '" + timedateStart + "'";
 		}
@@ -403,20 +414,31 @@ public class ServerTripHandler {
 		}
 
 		if (priceMAX >= 0) {
-			query += " AND tripPrice <= " + priceMAX + "'";
+			query += " AND tripPrice <= '" + priceMAX + "'";
+		}
+				
+		if(tripType.equals("NORMAL")){
+					
+			query += " AND NOT InstructorsInTrips.tripID = trips.tripID";
+		}	
+		
+		else if(tripType.equals("INSTRUCTOR")){
+			query += " AND InstructorsInTrips.tripID = trips.tripID";
 		}
 
 		//Initializes a resultset and an ArrayList for handling the creation of trips to be returned.
 		ResultSet searchResult = dbm.executeQuery(query);
 		ArrayList<Trip> searchResultTrips = new ArrayList<>();
 
-		try {
+		try{
+			
 			while (searchResult.next()) {
 				int id = searchResult.getInt(1);
 				String title = searchResult.getString(2);
 				String description = searchResult.getString(3);
 				double price = searchResult.getDouble(4);
 				byte[] image = searchResult.getBytes(5);
+				
 				searchResultTrips.add(new Trip(id, title, description, price, image));
 			}
 		} catch (SQLException ex) {
