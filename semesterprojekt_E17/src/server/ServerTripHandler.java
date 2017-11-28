@@ -399,11 +399,9 @@ public class ServerTripHandler {
 				
 				query += category.getId() + ",";	
 			}		
-			
 			query = query.substring(0, query.length()-1);
 
-			query += query + ")";
-			
+			query += ")";
 		}
 				
 		if (timedateStart != null) {
@@ -432,7 +430,7 @@ public class ServerTripHandler {
 		ArrayList<Trip> searchResultTrips = new ArrayList<>();
 
 		try{
-			
+			if (searchResult == null) throw new SQLException();
 			while (searchResult.next()) {
 				int id = searchResult.getInt(1);
 				String title = searchResult.getString(2);
