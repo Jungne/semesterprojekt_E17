@@ -259,6 +259,8 @@ public class FXMLDocumentController implements Initializable {
 	private ListView<HBoxCell> browseUsersListView;
 	@FXML
 	private Button browseUsersMessageButton;
+	@FXML
+	private ListView<HBoxCell> myTripsListView;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -433,7 +435,7 @@ public class FXMLDocumentController implements Initializable {
 				modifyTripIDLabel.setText("Trip #" + viewedTrip.getId());
 				modifyTripTitleTextField.setText(viewedTrip.getTitle());
 				modifyTripDescriptionTextField.setText(viewedTrip.getDescription());
-				modifyTripPriceTextField.setText("Price: " + viewedTrip.getPrice());
+				modifyTripPriceTextField.setText("" + viewedTrip.getPrice());
 				showPane(modifyTripPane);
 			} else {
 				viewTripTitleLabel.setText("Trip #" + viewedTrip.getId() + " - " + viewedTrip.getTitle());
@@ -536,7 +538,7 @@ public class FXMLDocumentController implements Initializable {
 			resetBrowseTripPane();
 		} else if (event.getSource() == toolBarMyTripsButton) {
 			showPane(myTripsPane);
-			//TODO - here should my trips be loaded
+			loadMyTrips();
 		} else if (event.getSource() == toolBarProfileButton) {
 			showPane(profilePane);
 			loadProfileInfo();
@@ -840,10 +842,12 @@ public class FXMLDocumentController implements Initializable {
 			showPane(createTripPane1);
 		}
 		if (event.getSource() == myTripsModifyTripButton) {
-			viewTrip(1, true);
+			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+			viewTrip(id, true);
 		}
 		if (event.getSource() == myTripsViewTripButton) {
-			viewTrip(1, false);
+			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+			viewTrip(id, false);
 		}
 	}
 	// </editor-fold>
@@ -872,4 +876,18 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
+	private void loadMyTrips() {
+		List<Trip> myTrips = clientController.getMyTrips();
+
+		if (myTrips != null) {
+			List<HBoxCell> list = new ArrayList<>();
+
+			for (Trip trip : myTrips) {
+				list.add(new HBoxCell(trip));
+			}
+
+			ObservableList observableList = FXCollections.observableArrayList(list);
+			myTripsListView.setItems(observableList);
+		}
+	}
 }

@@ -51,4 +51,6 @@ public interface IServerController extends Remote {
 		public void registerClient(IChatClient client) throws RemoteException;
 
 		public List<User> searchUsers(String query)  throws RemoteException;
+		
+		public List<Trip> getMyTrips(User user) throws RemoteException;
 }
