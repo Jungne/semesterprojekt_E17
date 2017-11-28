@@ -100,11 +100,10 @@ public class FXMLDocumentController implements Initializable {
 	private ComboBox<Category> searchTripsCategoryComboBox;
 	@FXML
 	private HBox searchTripCategoryListHBox;
-	@FXML	
+	@FXML
 	private Text searchTripInvalidPriceText;
-	
-	// </editor-fold>
 
+	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="My Trips - Elements">
 	@FXML
 	private AnchorPane myTripsPane;
@@ -188,8 +187,8 @@ public class FXMLDocumentController implements Initializable {
 	private Text viewTripPriceLabel;
 	@FXML
 	private Button viewTripButton;
-        @FXML
-        private ListView viewListOfParticipants;
+	@FXML
+	private ListView viewListOfParticipants;
 
 	//Modify Trip
 	@FXML
@@ -265,7 +264,6 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private ListView<HBoxCell> myTripsListView;
 
-
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		try {
@@ -303,7 +301,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleSearchTripsButtons(ActionEvent event) {
 		if (event.getSource() == searchTripsButton) {
-			if(isSearchTripPriceParameterValid()== false){
+			if (isSearchTripPriceParameterValid() == false) {
 				return;
 			}
 			searchTrips();
@@ -312,94 +310,86 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
-			
 	/**
-  * This method checks if the price for a trip is valid 
-  * The method is in use when a user is browsing trips 
-  *
-  * @Return boolean isTripPriceParameterValid - True if the price is valid otherwise false 
-  */
-	private boolean isSearchTripPriceParameterValid(){
+	 *   * This method checks if the price for a trip is valid    * The method is
+	 * in use when a user is browsing trips    *   * @Return boolean
+	 * isTripPriceParameterValid - True if the price is valid otherwise false    
+	 */
+	private boolean isSearchTripPriceParameterValid() {
 
-	//The return value. Boolean value is true if the trip pirce is valid    
-	boolean isTripPriceParameterValid = true;
+		//The return value. Boolean value is true if the trip pirce is valid    
+		boolean isTripPriceParameterValid = true;
 
-	//Get price
-	String priceString = searchTripsPriceTextField.getText();
-	double price;
+		//Get price
+		String priceString = searchTripsPriceTextField.getText();
+		double price;
 
-	//If the user price field is empty, then the "searchTripInvalidPriceText" label is not visable 
-	if(priceString == null || priceString.equals("") ){
-		price = 0;
-	}else{
-		try {
-			price = Double.parseDouble(priceString);
-		}catch (NumberFormatException e) {
-		price = -1;
+		//If the user price field is empty, then the "searchTripInvalidPriceText" label is not visable 
+		if (priceString == null || priceString.equals("")) {
+			price = 0;
+		} else {
+			try {
+				price = Double.parseDouble(priceString);
+			} catch (NumberFormatException e) {
+				price = -1;
+			}
 		}
-	}
 
-	if (price < 0) {
-	searchTripInvalidPriceText.setVisible(true);
-	isTripPriceParameterValid = false;
-	}
-	
-	else {
-	searchTripInvalidPriceText.setVisible(false);
-	}
+		if (price < 0) {
+			searchTripInvalidPriceText.setVisible(true);
+			isTripPriceParameterValid = false;
+		} else {
+			searchTripInvalidPriceText.setVisible(false);
+		}
 
 		return isTripPriceParameterValid;
 	}
-	
+
 	/**
 	 * This method handles searching for trips
-	 *  
+	 *
 	 */
 	private void searchTrips() {
 		try {
-			String searchTitle; 
-			ArrayList<Category> categories = null; 
+			String searchTitle;
+			ArrayList<Category> categories = null;
 			int locationID;
 			double priceMax = -1;
 			String tripType = "";
-			
+
 			//Get search trip by title
 			searchTitle = searchTripsTitleTextField.getText();
-			
+
 			//Get location
 			try {
 				//Get the location ID for the selected location in the combobox
 				locationID = searchTripsLocationComboBox.getValue().getId();
-			}catch (Exception e) {
+			} catch (Exception e) {
 				locationID = -1;
 			}
-			
+
 			//Get categories
-			if(!searchTripCategoryListHBox.getChildren().isEmpty()){
-					
-				 categories = new ArrayList<>();
-				
-					for (Node node : searchTripCategoryListHBox.getChildren()) {
-						CategoryListItem2 categoryListItem = (CategoryListItem2) node;
-						categories.add(categoryListItem.getCategory());
-					}			
+			if (!searchTripCategoryListHBox.getChildren().isEmpty()) {
+
+				categories = new ArrayList<>();
+
+				for (Node node : searchTripCategoryListHBox.getChildren()) {
+					CategoryListItem2 categoryListItem = (CategoryListItem2) node;
+					categories.add(categoryListItem.getCategory());
+				}
 			}
-			
+
 			//Check if the user is browsing for normal trips
-			if (searchTripsNormalCheckBox.isSelected() && searchTripsInstructorCheckBox.isSelected()==false) {
-			tripType = "NORMAL";
-			}
-
-			//Check if the user is searching for trips with an instructor
-			else if (searchTripsInstructorCheckBox.isSelected() && searchTripsNormalCheckBox.isSelected()==false) {
+			if (searchTripsNormalCheckBox.isSelected() && searchTripsInstructorCheckBox.isSelected() == false) {
+				tripType = "NORMAL";
+			} //Check if the user is searching for trips with an instructor
+			else if (searchTripsInstructorCheckBox.isSelected() && searchTripsNormalCheckBox.isSelected() == false) {
 				tripType = "INSTRUCTOR";
+			} //If normal and trips with an instructor are selected or if no checkbox for trip type is selected
+			else if (searchTripsInstructorCheckBox.isSelected() && searchTripsNormalCheckBox.isSelected() || searchTripsInstructorCheckBox.isSelected() == false && searchTripsNormalCheckBox.isSelected() == false) {
+				tripType = "";
 			}
 
-			//If normal and trips with an instructor are selected or if no checkbox for trip type is selected
-			else if (searchTripsInstructorCheckBox.isSelected() && searchTripsNormalCheckBox.isSelected() || searchTripsInstructorCheckBox.isSelected() == false && searchTripsNormalCheckBox.isSelected() == false ) {
-				tripType ="";
-			}
-			
 			//Get price
 			if (!searchTripsPriceTextField.getText().equals("")) {
 				priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
@@ -409,11 +399,11 @@ public class FXMLDocumentController implements Initializable {
 			LocalDate date = searchTripsDatePicker.getValue();
 
 			//Get date
-			List<Trip> trips = clientController.searchTrips(searchTitle,categories, date, locationID, priceMax, tripType);
+			List<Trip> trips = clientController.searchTrips(searchTitle, categories, date, locationID, priceMax, tripType);
 
 			showTrips(trips, browseTripsListView);
 		} catch (RemoteException ex) {
-				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -426,6 +416,9 @@ public class FXMLDocumentController implements Initializable {
 			clientController.signIn(username, password);
 			showPane(profilePane);
 			loadProfileInfo();
+			toolBarMyTripsButton.setDisable(false);
+			toolBarProfileButton.setDisable(false);
+			toolbarLogInLogOutButton.setText("Log out");
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -530,7 +523,7 @@ public class FXMLDocumentController implements Initializable {
 				viewTripTitleLabel.setText("Trip #" + viewedTrip.getId() + " - " + viewedTrip.getTitle());
 				viewTripDescriptionLabel.setText(viewedTrip.getDescription());
 				viewTripPriceLabel.setText("Price: " + viewedTrip.getPrice());
-                                viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
+				viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
 				showPane(viewTripPane);
 			}
 		}
@@ -544,7 +537,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private void resetBrowseTripPane() {
-	
+
 		//Reset parameters for browse trips
 		searchTripsNormalCheckBox.setSelected(false);
 		searchTripsInstructorCheckBox.setSelected(false);
@@ -568,7 +561,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Resets category HBox
 		searchTripCategoryListHBox.getChildren().clear();
-		
+
 		//Reload all trips
 		searchTrips();
 	}
@@ -647,6 +640,12 @@ public class FXMLDocumentController implements Initializable {
 			loadProfileInfo();
 		} else if (event.getSource() == toolbarLogInLogOutButton) {
 			showPane(logInOutPane);
+			if (clientController.getCurrentUser() != null) {
+				clientController.signOut();
+				toolBarMyTripsButton.setDisable(true);
+				toolBarProfileButton.setDisable(true);
+				toolbarLogInLogOutButton.setText("Log in");
+			}
 		} else if (event.getSource() == toolBarBrowseUsersButton) {
 			showPane(browseUsersPane);
 		}
