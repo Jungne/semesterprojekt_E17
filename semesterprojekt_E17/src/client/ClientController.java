@@ -27,7 +27,6 @@ public class ClientController {
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12345);
 			serverController = (IServerController) registry.lookup("serverController");
-			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance());
 		} catch (RemoteException | NotBoundException ex) {
 			ex.printStackTrace();
 		}
@@ -39,6 +38,9 @@ public class ClientController {
 
 	public void signIn(String username, String password) throws RemoteException {
 		currentUser = serverController.signIn(username, password);
+		if (currentUser != null) {
+			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser.getId()));
+		}
 	}
 
 	public void signOut() throws RemoteException {
@@ -49,8 +51,7 @@ public class ClientController {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-
-	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType)  throws RemoteException {
+	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
 		return serverController.searchTrips(searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}
 

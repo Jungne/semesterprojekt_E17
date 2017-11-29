@@ -18,6 +18,6 @@ public interface IChatClient extends Remote {
 	 */
 	public void receiveMessage(String message) throws RemoteException;
 	
-	public String getTest() throws RemoteException;
+	public int getUserId() throws RemoteException;
 	
 }

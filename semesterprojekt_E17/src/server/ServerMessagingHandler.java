@@ -2,8 +2,8 @@ package server;
 
 import interfaces.IChatClient;
 import java.rmi.RemoteException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -14,20 +14,21 @@ public class ServerMessagingHandler {
 	/**
 	 * All clients of the server, in the form of remote objects.
 	 */
-	Set<IChatClient> clients = new HashSet<IChatClient>();
+	Map<Integer, IChatClient> clientsMap = new HashMap<>();
 
 	/**
 	 * Register clients in the form of remote objects.
 	 */
 	public void registerClient(IChatClient client) throws RemoteException {
-		clients.add(client);
-		System.out.println(client.getTest());
+		clientsMap.put(client.getUserId(), client);
+		System.out.println(client.getUserId());
 	}
 
 	/**
 	 * Register the active conversations.
 	 */
-	public void addActiveConversation(int tripID) {
-		System.out.print(tripID);
+	public void addActiveConversation(int conversationID) {
+		System.out.print(conversationID);
+		
 	}
 }

@@ -274,6 +274,20 @@ public class FXMLDocumentController implements Initializable {
 			clientController = new ClientController();
 
 			newAccountImageView.setImage(new Image("default_profile_picture.png"));
+			
+			myTripsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
+
+				@Override
+				public void changed(ObservableValue<? extends HBoxCell> observable, HBoxCell newValue, HBoxCell oldValue) {
+					int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+					try {
+						clientController.setCurrentConversation(id);
+					} catch (RemoteException ex) {
+						Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+					}
+				}
+			});
+			
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -995,18 +1009,7 @@ public class FXMLDocumentController implements Initializable {
 			ObservableList observableList = FXCollections.observableArrayList(list);
 			myTripsListView.setItems(observableList);
 
-			myTripsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
-
-				@Override
-				public void changed(ObservableValue<? extends HBoxCell> observable, HBoxCell newValue, HBoxCell oldValue) {
-					int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-					try {
-						clientController.setCurrentConversation(id);
-					} catch (RemoteException ex) {
-						Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-					}
-				}
-			});
+			
 
 		}
 
