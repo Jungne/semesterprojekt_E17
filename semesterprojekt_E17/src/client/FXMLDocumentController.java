@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -274,7 +275,7 @@ public class FXMLDocumentController implements Initializable {
 			clientController = new ClientController();
 
 			newAccountImageView.setImage(new Image("default_profile_picture.png"));
-			
+
 			myTripsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
 
 				@Override
@@ -287,7 +288,7 @@ public class FXMLDocumentController implements Initializable {
 					}
 				}
 			});
-			
+
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -368,61 +369,63 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void searchTrips() {
-		try {
-			String searchTitle;
-			ArrayList<Category> categories = null;
-			int locationID;
-			double priceMax = -1;
-			String tripType = "";
-
-			//Get search trip by title
-			searchTitle = searchTripsTitleTextField.getText();
-
-			//Get location
+		Platform.runLater(() -> {
 			try {
-				//Get the location ID for the selected location in the combobox
-				locationID = searchTripsLocationComboBox.getValue().getId();
-			} catch (Exception e) {
-				locationID = -1;
-			}
+				String searchTitle;
+				ArrayList<Category> categories = null;
+				int locationID;
+				double priceMax = -1;
+				String tripType = "";
 
-			//Get categories
-			if (!searchTripCategoryListHBox.getChildren().isEmpty()) {
+				//Get search trip by title
+				searchTitle = searchTripsTitleTextField.getText();
 
-				categories = new ArrayList<>();
-
-				for (Node node : searchTripCategoryListHBox.getChildren()) {
-					CategoryListItem2 categoryListItem = (CategoryListItem2) node;
-					categories.add(categoryListItem.getCategory());
+				//Get location
+				try {
+					//Get the location ID for the selected location in the combobox
+					locationID = searchTripsLocationComboBox.getValue().getId();
+				} catch (Exception e) {
+					locationID = -1;
 				}
+
+				//Get categories
+				if (!searchTripCategoryListHBox.getChildren().isEmpty()) {
+
+					categories = new ArrayList<>();
+
+					for (Node node : searchTripCategoryListHBox.getChildren()) {
+						CategoryListItem2 categoryListItem = (CategoryListItem2) node;
+						categories.add(categoryListItem.getCategory());
+					}
+				}
+
+				//Check if the user is browsing for normal trips
+				if (searchTripsNormalCheckBox.isSelected() && searchTripsInstructorCheckBox.isSelected() == false) {
+					tripType = "NORMAL";
+				} //Check if the user is searching for trips with an instructor
+				else if (searchTripsInstructorCheckBox.isSelected() && searchTripsNormalCheckBox.isSelected() == false) {
+					tripType = "INSTRUCTOR";
+				} //If normal and trips with an instructor are selected or if no checkbox for trip type is selected
+				else if (searchTripsInstructorCheckBox.isSelected() && searchTripsNormalCheckBox.isSelected() || searchTripsInstructorCheckBox.isSelected() == false && searchTripsNormalCheckBox.isSelected() == false) {
+					tripType = "";
+				}
+
+				//Get price
+				if (!searchTripsPriceTextField.getText().equals("")) {
+					priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
+				}
+
+				//Get date
+				LocalDate date = searchTripsDatePicker.getValue();
+
+				//Get date
+				List<Trip> trips = clientController.searchTrips(searchTitle, categories, date, locationID, priceMax, tripType);
+
+				showTrips(trips, browseTripsListView);
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
-
-			//Check if the user is browsing for normal trips
-			if (searchTripsNormalCheckBox.isSelected() && searchTripsInstructorCheckBox.isSelected() == false) {
-				tripType = "NORMAL";
-			} //Check if the user is searching for trips with an instructor
-			else if (searchTripsInstructorCheckBox.isSelected() && searchTripsNormalCheckBox.isSelected() == false) {
-				tripType = "INSTRUCTOR";
-			} //If normal and trips with an instructor are selected or if no checkbox for trip type is selected
-			else if (searchTripsInstructorCheckBox.isSelected() && searchTripsNormalCheckBox.isSelected() || searchTripsInstructorCheckBox.isSelected() == false && searchTripsNormalCheckBox.isSelected() == false) {
-				tripType = "";
-			}
-
-			//Get price
-			if (!searchTripsPriceTextField.getText().equals("")) {
-				priceMax = Double.parseDouble(searchTripsPriceTextField.getText());
-			}
-
-			//Get date
-			LocalDate date = searchTripsDatePicker.getValue();
-
-			//Get date
-			List<Trip> trips = clientController.searchTrips(searchTitle, categories, date, locationID, priceMax, tripType);
-
-			showTrips(trips, browseTripsListView);
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		});
 	}
 
 	@FXML
@@ -997,21 +1000,19 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private void loadMyTrips() {
-		List<Trip> myTrips = clientController.getMyTrips();
+		Platform.runLater(() -> {
+			List<Trip> myTrips = clientController.getMyTrips();
 
-		if (myTrips != null) {
-			List<HBoxCell> list = new ArrayList<>();
+			if (myTrips != null) {
+				List<HBoxCell> list = new ArrayList<>();
 
-			for (Trip trip : myTrips) {
-				list.add(new HBoxCell(trip));
+				for (Trip trip : myTrips) {
+					list.add(new HBoxCell(trip));
+				}
+
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				myTripsListView.setItems(observableList);
 			}
-
-			ObservableList observableList = FXCollections.observableArrayList(list);
-			myTripsListView.setItems(observableList);
-
-			
-
-		}
-
+		});
 	}
 }
