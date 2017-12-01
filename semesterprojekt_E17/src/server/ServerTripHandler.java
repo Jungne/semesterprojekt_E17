@@ -408,7 +408,7 @@ public class ServerTripHandler {
 			query += " AND timeStart >= '" + timedateStart + "'";
 		}
 
-		if (location >= 0) {
+		if (location > 0) {
 			query += " AND locationID = '" + location + "'";
 		}
 

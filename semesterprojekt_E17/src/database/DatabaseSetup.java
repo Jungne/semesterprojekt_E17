@@ -151,7 +151,7 @@ public class DatabaseSetup {
 					= "CREATE TABLE IF NOT EXISTS ImagesIntrips ("
 					+ "imageID int, "
 					+ "tripID int, "
-//					+ "PRIMARY KEY (imageID, tripID), "
+					//					+ "PRIMARY KEY (imageID, tripID), "
 					+ "FOREIGN KEY (imageID) REFERENCES Images(imageID), "
 					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE"
 					+ ");";
@@ -227,7 +227,12 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lalun13@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Lasse', 1);");
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Laura', 1);");
 		//Inserts certificates
-		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2);");
+		dbm.executeUpdate("INSERT INTO Certificates VALUES (1, 1)");
+		dbm.executeUpdate("INSERT INTO Certificates VALUES (2, 2)");
+		dbm.executeUpdate("INSERT INTO Certificates VALUES (3, 3)");
+		dbm.executeUpdate("INSERT INTO Certificates VALUES (4, 3)");
+		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2)");
+		dbm.executeUpdate("INSERT INTO Certificates VALUES (6, 1)");
 		//Inserts conversations
 		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT)");
 		//Inserts trips
@@ -252,22 +257,27 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 8)");
 		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 9)");
 		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 10)");
+		//Inserts CategoriesInTrips
+		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (1, 1)");
+		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (3, 3)");
+		//Inserts InstructosInTrips
+		dbm.executeUpdate("INSERT INTO InstructorsInTrips VALUES (3, 4, 3)");
 	}
-	
+
 	private static void addDefaultImages() throws IOException, SQLException {
 		byte[] defaultProfilePicture = Files.readAllBytes(new File("src/default_profile_picture.png").toPath());
-		byte[] defaultTripImage = Files.readAllBytes(new File("src/default.jpg").toPath());		
-		
+		byte[] defaultTripImage = Files.readAllBytes(new File("src/default.jpg").toPath());
+
 		//Inserts the imageFile
-			String imageQuery1 = "INSERT INTO Images (imageTitle, imageFile) VALUES ('DefaultProfilePicture', ?)";
-			PreparedStatement imageStatement1 = dbm.getConnection().prepareStatement(imageQuery1);
-			imageStatement1.setBytes(1, defaultProfilePicture);
-			imageStatement1.executeUpdate();
-			String imageQuery2 = "INSERT INTO Images (imageTitle, imageFile) VALUES ('DefaultTripImage', ?)";
-			PreparedStatement imageStatement2 = dbm.getConnection().prepareStatement(imageQuery2);
-			imageStatement2.setBytes(1, defaultTripImage);
-			imageStatement2.executeUpdate();
-			
+		String imageQuery1 = "INSERT INTO Images (imageTitle, imageFile) VALUES ('DefaultProfilePicture', ?)";
+		PreparedStatement imageStatement1 = dbm.getConnection().prepareStatement(imageQuery1);
+		imageStatement1.setBytes(1, defaultProfilePicture);
+		imageStatement1.executeUpdate();
+		String imageQuery2 = "INSERT INTO Images (imageTitle, imageFile) VALUES ('DefaultTripImage', ?)";
+		PreparedStatement imageStatement2 = dbm.getConnection().prepareStatement(imageQuery2);
+		imageStatement2.setBytes(1, defaultTripImage);
+		imageStatement2.executeUpdate();
+
 	}
 
 }

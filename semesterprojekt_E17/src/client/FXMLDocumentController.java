@@ -571,6 +571,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Gets all locations from the server and displays them in the comboBox
 		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
+		locations.add(0, new Location(-1, ""));
 		searchTripsLocationComboBox.setItems(locations);
 
 		categoryComboboxIsDisabled2 = true;
