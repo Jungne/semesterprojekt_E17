@@ -55,4 +55,5 @@ public interface IServerController extends Remote {
 
 	public void addActiveConversation(int tripID) throws RemoteException;
 
+	public List<Conversation> loadMyConversations(User user) throws RemoteException;
 }

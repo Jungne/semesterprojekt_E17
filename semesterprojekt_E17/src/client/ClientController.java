@@ -1,6 +1,7 @@
 package client;
 
 import interfaces.Category;
+import interfaces.Conversation;
 import interfaces.FullTripException;
 import interfaces.IServerController;
 import interfaces.Location;
@@ -20,6 +21,7 @@ public class ClientController {
 
 	private IServerController serverController;
 	private User currentUser = null;
+	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
 		String hostname = "localhost";
@@ -112,5 +114,9 @@ public class ClientController {
 
 	public void setCurrentConversation(int tripID) throws RemoteException {
 		ClientMessagingHandler.setCurrentConversation(serverController, tripID);
+	}
+	
+	public List<Conversation> loadMyConversations() {
+		return ClientMessagingHandler.loadMyConversations(serverController, currentUser);
 	}
 }
