@@ -545,6 +545,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Gets all locations from the server and displays them in the comboBox
 		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
+		locations.add(0, new Location(-1,""));
 		searchTripsLocationComboBox.setItems(locations);
 
 		categoryComboboxIsDisabled2 = true;
@@ -581,14 +582,12 @@ public class FXMLDocumentController implements Initializable {
 		//Adds the category to HBox
 		searchTripCategoryListHBox.getChildren().add(new CategoryListItem2(this, category));
 		
+		//searchTripsCategoryComboBox.getSelectionModel().clearSelection();
+	
 		//Resets current combobox value
 		categoryComboboxIsDisabled2 = true;
-		//searchTripsCategoryComboBox.setItems(null);
-		
-		//createTripCategoryComboBox.setValue(null);
-		//searchTripsCategoryComboBox.setItems(categories);
 		categoryComboboxIsDisabled2 = false;
-		
+
 	}
 
 	/**
