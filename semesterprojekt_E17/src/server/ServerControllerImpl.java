@@ -92,12 +92,12 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
 	@Override
 	public Conversation getConversation(Conversation conversation) throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return ServerMessagingHandler.getConversation(conversation);
 	}
 
 	@Override
 	public void sendMessage(Message message) throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		ServerMessagingHandler.sendMessage(message);
 	}
 
 	@Override

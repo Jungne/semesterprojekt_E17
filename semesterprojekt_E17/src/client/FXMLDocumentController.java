@@ -281,7 +281,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private AnchorPane messagingPane;
 	@FXML
-	private ListView<Label> messagingConversationsListView;
+	private ListView<HBoxCell> messagingConversationsListView;
 	@FXML
 	private ListView<?> messagingActiveConversationListView;
 	@FXML
@@ -297,11 +297,11 @@ public class FXMLDocumentController implements Initializable {
 
 			newAccountImageView.setImage(new Image("default_profile_picture.png"));
 
-			myTripsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
+			messagingConversationsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
 
 				@Override
 				public void changed(ObservableValue<? extends HBoxCell> observable, HBoxCell newValue, HBoxCell oldValue) {
-					int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+					int id = messagingConversationsListView.getSelectionModel().getSelectedItem().getConversationId();
 					try {
 						clientController.setCurrentConversation(id);
 					} catch (RemoteException ex) {
@@ -1197,6 +1197,15 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
+	private Conversation getConversation(Conversation conversation) {
+		try {
+			return clientController.getConversation(conversation);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
+
 	private void searchUsers() {
 		try {
 			String searchText = browseUsersTextField.getText();
@@ -1218,10 +1227,10 @@ public class FXMLDocumentController implements Initializable {
 
 		//Reset parameters for browse users
 		browseUsersTextField.clear();
-		
+
 		//Reload all users
 		searchUsers();
-		
+
 	}
 
 	// </editor-fold>
@@ -1233,13 +1242,13 @@ public class FXMLDocumentController implements Initializable {
 		List<Conversation> conversations = clientController.getUserConversations();
 
 		if (conversations != null) {
-			List<Label> list = new ArrayList<>();
+			List<HBoxCell> list = new ArrayList<>();
 
 			try {
 
 				for (Conversation conversation : conversations) {
 					String name = clientController.getConversationName(conversation);
-					list.add(new Label(name));
+					list.add(new HBoxCell(conversation, name));
 				}
 			} catch (RemoteException ex) {
 				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
@@ -1247,5 +1256,22 @@ public class FXMLDocumentController implements Initializable {
 			ObservableList observableList = FXCollections.observableArrayList(list);
 			messagingConversationsListView.setItems(observableList);
 		}
+	}
+
+	private void showConversation(Conversation conversation) {
+
+	}
+
+	private void sendMessage(String message) {
+		try {
+			clientController.sendMessage(message);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	@FXML
+	private void handleSendMessageButton(ActionEvent event) {
+		sendMessage(messagingTextField.getText());
 	}
 }
