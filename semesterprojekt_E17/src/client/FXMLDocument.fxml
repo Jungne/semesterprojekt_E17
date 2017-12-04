@@ -23,12 +23,12 @@
       <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="644.0">
         <items>
             <Label text="Outdoor activity portal" />
-          <Button fx:id="toolBarMessagingButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Messaging" />
             <Button fx:id="toolBarBrowseTripsButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse trips" />
+            <Button fx:id="toolBarBrowseUsersButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse users" />
+          <Button fx:id="toolBarMessagingButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Messaging" />
             <Button fx:id="toolBarMyTripsButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="My trips" />
             <Button fx:id="toolBarProfileButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Profile" />
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
-            <Button fx:id="toolBarBrowseUsersButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse users" />
         </items>
       </ToolBar>
       <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
@@ -350,6 +350,14 @@
             <Label layoutX="32.0" layoutY="37.0" text="Name" />
             <Button fx:id="browseUsersSearchButton" layoutX="32.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" prefHeight="25.0" prefWidth="63.0" text="Search" />
             <Button fx:id="browseUsersMessageButton" layoutX="33.0" layoutY="139.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Message" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="messagingPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <ListView fx:id="messagingConversationsListView" layoutX="14.0" layoutY="14.0" prefHeight="420.0" prefWidth="225.0" />
+            <ListView fx:id="messagingActiveConversationListView" layoutX="250.0" layoutY="14.0" prefHeight="420.0" prefWidth="382.0" />
+            <TextField fx:id="messagingTextField" layoutX="250.0" layoutY="446.0" prefHeight="25.0" prefWidth="326.0" />
+            <Button fx:id="messagingSendButton" layoutX="589.0" layoutY="446.0" mnemonicParsing="false" text="Send" />
          </children>
       </AnchorPane>
    </children>

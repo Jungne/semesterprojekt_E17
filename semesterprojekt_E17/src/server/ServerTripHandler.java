@@ -104,9 +104,7 @@ public class ServerTripHandler {
 		}
 
 		//Creates the group conversation and returnes the conversation id. -1 is returned if it failed
-		ArrayList<User> participants = new ArrayList<>();
-		participants.add(newTrip.getOrganizer());
-		int sqlConversationId = addConversation(participants);
+		int sqlConversationId = ServerMessagingHandler.addConversation("trip");
 		if (sqlConversationId == -1) {
 			return -1;
 		}
@@ -129,7 +127,7 @@ public class ServerTripHandler {
 		//Adds categories to the trip in the database
 		addCategories(tripId, Category.getCategoryIds(newTrip.getCategories()));
 
-		//Adds organizer as participant in the trip in the database
+		//Adds organizer as participant in the trip in the database and adds to trip conversation.
 		addParticipant(tripId, newTrip.getOrganizer().getId());
 
 		//Adds a instructor in the trip for each instructorListItem
@@ -281,26 +279,7 @@ public class ServerTripHandler {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return false;
-	}
-
-	private static int addConversation(List<User> users) {
-		if (users == null || users.isEmpty()) {
-			return -1;
-		}
-
-		//Inserts a new conversation id into Conversations
-		int conversationId = dbm.executeInsertAndGetId("INSERT INTO Conversations (conversationID) VALUES (DEFAULT);");
-
-		//Inserts all the users from the trip into UsersInConversations
-		String query = "INSERT INTO UsersInConversations (conversationID, userID) VALUES ";
-		String queryValues = "";
-		for (User user : users) {
-			queryValues += ("(" + conversationId + ", " + user.getId() + "), ");
-		}
-		query += queryValues.substring(0, queryValues.length() - 2) + ";";
-		dbm.executeUpdate(query);
-		return conversationId;
-	}
+	}	
 
 	private static void addCategories(int tripId, List<Integer> categoryIds) {
 		String query = "INSERT INTO CategoriesInTrips (tripID, categoryID) VALUES ";
@@ -315,6 +294,7 @@ public class ServerTripHandler {
 	private static void addParticipant(int tripId, int userId) {
 		dbm.executeUpdate("INSERT INTO UsersInTrips (tripID, userID) "
 						+ "VALUES (" + tripId + ", " + userId + ");");
+		ServerMessagingHandler.addUserToConversation(userId, getConversationId(tripId));
 	}
 
 	private static void addInstructorInTrip(int tripId, int userId, int categoryId) {
@@ -543,5 +523,23 @@ public class ServerTripHandler {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return null;
+	}
+	
+	public static int getConversationId(int tripId) {
+		String query = ""
+						+ "SELECT conversationId "
+						+ "FROM Trips "
+						+ "WHERE tripId = " + tripId;
+		
+		ResultSet conversationIdRs = dbm.executeQuery(query);
+		
+		try {
+			if (conversationIdRs.next()) {
+				return conversationIdRs.getInt("conversationId");
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return -1;
 	}
 }

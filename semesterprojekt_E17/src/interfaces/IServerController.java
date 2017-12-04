@@ -37,7 +37,6 @@ public interface IServerController extends Remote {
 	public Trip viewTrip(int tripID) throws RemoteException;
 
 	//Messaging functions
-	public List<Conversation> getUserConversations(User user) throws RemoteException;
 
 	public Conversation getConversation(Conversation conversation) throws RemoteException;
 
@@ -55,4 +54,7 @@ public interface IServerController extends Remote {
 
 	public void addActiveConversation(int tripID) throws RemoteException;
 
+	public List<Conversation> getUserConversations(User user) throws RemoteException;
+	
+	public String getConversationName(Conversation conversation, User user) throws RemoteException;
 }
