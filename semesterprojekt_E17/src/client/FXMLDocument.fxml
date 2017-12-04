@@ -158,7 +158,7 @@
             <HBox fx:id="createTripCategoryListHBox" layoutX="197.0" layoutY="421.0" prefHeight="22.0" prefWidth="392.0" spacing="4.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
+      <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create trip">
                <font>
@@ -289,7 +289,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />

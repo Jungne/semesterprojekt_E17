@@ -30,7 +30,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -819,8 +818,10 @@ public class FXMLDocumentController implements Initializable {
 		//Gets all locations from the server and displays them in the comboBox
 		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
 		createTripLocationComboBox.setItems(locations);
-		
-		createTripHourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23));
+
+		//Sets the ValueFactory for hour and minute Spinner
+		createTripHourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
+		createTripMinuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59));
 
 		//Reset parameters
 		createTripTitleTextField.setText(null);
