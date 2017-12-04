@@ -479,16 +479,7 @@ public class ServerTripHandler {
 	}
 
 	public static Trip viewTrip(int tripID) {
-		String query = "SELECT ("
-            + "tripID"
-            + "tripTitle"
-            + "tripDescription"
-            + "tripPrice"
-            + "timeStart"
-            + "locationID"
-            + "participantLimit"
-            + "userID"
-            + ") FROM Trips WHERE tripID = " + tripID + ";";
+		String query = "SELECT * FROM Trips WHERE tripID = " + tripID + ";";
 		ResultSet rs = dbm.executeQuery(query);
 
 		try {
@@ -505,9 +496,9 @@ public class ServerTripHandler {
         int participantLimit = rs.getInt("participantLimit");
         User organizer = getUserView(rs.getInt("userID"));
         
-        byte[] image = getImagesInTrip(id).get(0);
+        byte[] image = getImagesInTrip(id).isEmpty() ? null : getImagesInTrip(id).get(0);
+        ArrayList<Category> categories = getCategoriesInTrip(id).isEmpty() ? null : getCategoriesInTrip(id);
         
-        ArrayList<Category> categories = getCategoriesInTrip(id);
 				return new Trip(id, title, description, price, null);
 			}
 		} catch (SQLException ex) {
@@ -530,7 +521,7 @@ public class ServerTripHandler {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
     
-		return categories.isEmpty() ? null : categories;
+		return categories;
 	}
   
   private static ArrayList<byte[]> getImagesInTrip(int id) {
@@ -538,6 +529,10 @@ public class ServerTripHandler {
     ResultSet rs = dbm.executeQuery(query);
     
     ArrayList<byte[]> images = new ArrayList<byte[]>();
+    
+    if(rs == null) {
+      return images;
+    }
     
     try {
       while(rs.next()){
@@ -547,7 +542,7 @@ public class ServerTripHandler {
       Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
     }
     
-    return images.isEmpty() ? null : images;
+    return images;
   }
   
   private static Location getLocation(int id) {
