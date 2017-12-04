@@ -276,7 +276,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />
@@ -343,13 +343,13 @@
             <Button fx:id="modifyTripCancelButton" layoutX="148.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleModifyTripButtons" prefWidth="95.0" text="Cancel" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="browseUsersPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="browseUsersPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <TextField fx:id="browseUsersTextField" layoutX="32.0" layoutY="54.0" promptText="Name" />
             <ListView fx:id="browseUsersListView" layoutX="250.0" layoutY="54.0" prefHeight="477.0" prefWidth="371.0" />
             <Label layoutX="32.0" layoutY="37.0" text="Name" />
-            <Button fx:id="browseUsersSearchButton" layoutX="32.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Search" />
-            <Button fx:id="browseUsersMessageButton" layoutX="32.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Message" />
+            <Button fx:id="browseUsersSearchButton" layoutX="32.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" prefHeight="25.0" prefWidth="63.0" text="Search" />
+            <Button fx:id="browseUsersMessageButton" layoutX="33.0" layoutY="139.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Message" />
          </children>
       </AnchorPane>
    </children>
