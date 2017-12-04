@@ -6,19 +6,27 @@ import java.time.LocalDateTime;
 public class Message implements Serializable {
 
 	private int id;
-	private User sender;
+	private int senderId;
 	private String message;
 	private LocalDateTime timestamp;
+	private int conversationId;
 
-	public Message(int id, User sender, String message, LocalDateTime timestamp) {
+	public Message(int id, int senderId, String message, LocalDateTime timestamp, int conversationId) {
 		this.id = id;
-		this.sender = sender;
+		this.senderId = senderId;
 		this.message = message;
 		this.timestamp = timestamp;
+		this.conversationId = conversationId;
+	}
+
+	public Message(int senderId, String message, int conversationId) {
+		this.senderId = senderId;
+		this.message = message;
+		this.conversationId = conversationId;
 	}
 
 	public int getSenderId() {
-		return sender.getId();
+		return senderId;
 	}
 
 	public String getMessage() {
@@ -28,4 +36,13 @@ public class Message implements Serializable {
 	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
+
+	public int getConversationId() {
+		return conversationId;
+	}
+
+	public int getId() {
+		return id;
+	}
+	
 }

@@ -5,6 +5,7 @@ import interfaces.Conversation;
 import interfaces.FullTripException;
 import interfaces.IServerController;
 import interfaces.Location;
+import interfaces.Message;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
@@ -115,12 +116,24 @@ public class ClientController {
 	public void setCurrentConversation(int tripID) throws RemoteException {
 		ClientMessagingHandler.setCurrentConversation(serverController, tripID);
 	}
-	
+
 	public List<Conversation> getUserConversations() {
 		return ClientMessagingHandler.getUserConversations(serverController, currentUser);
 	}
-	
+
 	public String getConversationName(Conversation conversation) throws RemoteException {
 		return serverController.getConversationName(conversation, currentUser);
+	}
+
+	public Conversation getConversation(Conversation conversation) throws RemoteException {
+		return ClientMessagingHandler.getConversation(serverController, conversation);
+	}
+
+	public void sendMessage(String message) throws RemoteException {
+		ClientMessagingHandler.sendMessage(serverController, message, currentUser);
+	}
+	
+	public void setActiveConversation(Conversation conversation) throws RemoteException {
+		ClientMessagingHandler.setActiveConversation(serverController, conversation);
 	}
 }

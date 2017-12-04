@@ -1,17 +1,19 @@
 package interfaces;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Conversation implements Serializable {
 
 	private int id;
 	private String type;
-	private List<User> participants = new ArrayList<>();
-	private List<Message> messages = new ArrayList<>();
+	private Set<User> participants = new HashSet<>();
+	private Set<Message> messages = new TreeSet<>();
 
-	public Conversation(int id, String type, List<User> participants, List<Message> messages) {
+	public Conversation(int id, String type, Set<User> participants, Set<Message> messages) {
 		this.id = id;
 		this.type = type;
 		this.participants = participants;
@@ -33,19 +35,12 @@ public class Conversation implements Serializable {
 	public String getType() {
 		return type;
 	}
-	
-	/**
-	 * @return the participants
-	 */
-	public List<User> getParticipants() {
+
+	public Set<User> getParticipants() {
 		return participants;
 	}
 
-	/**
-	 * @return the messages
-	 */
-	public List<Message> getMessages() {
+	public Set<Message> getMessages() {
 		return messages;
 	}
-
 }

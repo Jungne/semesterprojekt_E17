@@ -3,6 +3,7 @@ package client;
 import interfaces.Conversation;
 import interfaces.IChatClient;
 import interfaces.IServerController;
+import interfaces.Message;
 import interfaces.User;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -17,6 +18,8 @@ import java.util.logging.Logger;
 public class ClientMessagingHandler {
 
 	private static MessageReceiver receiver = null;
+	private static Conversation activeConversation = null;
+	private static int activeConversationId;
 
 	/**
 	 * Remote object that is passed to the server and used to perform callbacks
@@ -37,8 +40,8 @@ public class ClientMessagingHandler {
 		}
 
 		@Override
-		public void receiveMessage(String message) throws RemoteException {
-			// Unsupported operation
+		public void receiveMessage(Message message) throws RemoteException {
+			System.out.println(message.getMessage());
 		}
 
 		@Override
@@ -54,8 +57,15 @@ public class ClientMessagingHandler {
 		return receiver;
 	}
 
-	public static void setCurrentConversation(IServerController serverController, int tripID) throws RemoteException {
-		serverController.addActiveConversation(tripID);
+	public static void setCurrentConversation(IServerController serverController, int conversationID) throws RemoteException {
+		serverController.addActiveConversation(conversationID);
+//		activeConversation = serverController.getConversation(new Conversation(tripID, "trip"));
+		activeConversationId = conversationID;
+	}
+
+	public static void setActiveConversation(IServerController serverController, Conversation conversation) throws RemoteException {
+//		activeConversation = serverController.getConversation(conversation);
+		activeConversationId = conversation.getId();
 	}
 
 	public static List<Conversation> getUserConversations(IServerController serverController, User user) {
@@ -67,4 +77,11 @@ public class ClientMessagingHandler {
 		return null;
 	}
 
+	public static Conversation getConversation(IServerController serverController, Conversation conversation) throws RemoteException {
+		return serverController.getConversation(conversation);
+	}
+
+	public static void sendMessage(IServerController serverController, String message, User user) throws RemoteException {
+		serverController.sendMessage(new Message(user.getId(), message, activeConversationId));
+	}
 }

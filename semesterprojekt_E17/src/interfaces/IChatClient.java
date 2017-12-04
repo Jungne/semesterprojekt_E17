@@ -16,7 +16,7 @@ public interface IChatClient extends Remote {
 	 * @param message the text to be received
 	 * @throws java.rmi.RemoteException
 	 */
-	public void receiveMessage(String message) throws RemoteException;
+	public void receiveMessage(Message message) throws RemoteException;
 	
 	public int getUserId() throws RemoteException;
 	

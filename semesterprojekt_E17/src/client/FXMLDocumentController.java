@@ -127,7 +127,7 @@ public class FXMLDocumentController implements Initializable {
 	// <editor-fold defaultstate="collapsed" desc="Create Trip - Elements">
 	private boolean categoryComboboxIsDisabled = false;
 	private int currentIntructorTextOccupiers = 0;
-	
+
 	@FXML
 	private Text createTripInvalidPictureText;
 	@FXML
@@ -188,7 +188,7 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Elements">
 	private Trip viewedTrip;
-	
+
 	@FXML
 	private AnchorPane viewTripPane;
 	@FXML
@@ -237,7 +237,7 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="New Account - Elements">
 	private File newAccountProfilePictureFile;
-	
+
 	@FXML
 	private AnchorPane newAccountPane;
 	@FXML
@@ -283,7 +283,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private AnchorPane messagingPane;
 	@FXML
-	private ListView<Label> messagingConversationsListView;
+	private ListView<HBoxCell> messagingConversationsListView;
 	@FXML
 	private ListView<?> messagingActiveConversationListView;
 	@FXML
@@ -299,11 +299,11 @@ public class FXMLDocumentController implements Initializable {
 
 			newAccountImageView.setImage(new Image("default_profile_picture.png"));
 
-			myTripsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
-
+			messagingConversationsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
+				
 				@Override
 				public void changed(ObservableValue<? extends HBoxCell> observable, HBoxCell newValue, HBoxCell oldValue) {
-					int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+					int id = messagingConversationsListView.getSelectionModel().getSelectedItem().getConversationId();
 					try {
 						clientController.setCurrentConversation(id);
 					} catch (RemoteException ex) {
@@ -320,9 +320,9 @@ public class FXMLDocumentController implements Initializable {
 
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param pane
-	 * 
+	 *
 	 */
 	private void showPane(AnchorPane pane) {
 		//All panes set to invisible
@@ -339,10 +339,10 @@ public class FXMLDocumentController implements Initializable {
 
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param trips
 	 * @param listview
-	 * 
+	 *
 	 */
 	private void showTrips(List<Trip> trips, ListView listview) {
 		List<HBoxCell> list = new ArrayList<>();
@@ -352,13 +352,13 @@ public class FXMLDocumentController implements Initializable {
 		ObservableList observableList = FXCollections.observableArrayList(list);
 		listview.setItems(observableList);
 	}
-	
+
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param id
 	 * @param modifyMode
-	 * 
+	 *
 	 */
 	private void viewTrip(int id, boolean modifyMode) {
 		viewedTrip = clientController.viewTrip(id); //Should be id obtained from selected element in list view on my trips
@@ -382,7 +382,7 @@ public class FXMLDocumentController implements Initializable {
 	// <editor-fold defaultstate="collapsed" desc="Profile - Methods">
 	/**
 	 * This method
-	 * 
+	 *
 	 */
 	private void loadProfileInfo() {
 		profileNameLabel.setText(clientController.getCurrentUser().getName());
@@ -395,7 +395,7 @@ public class FXMLDocumentController implements Initializable {
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Methods">
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -409,11 +409,11 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 	// </editor-fold>
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Browse Trips - Methods">
 	/**
 	 * This method handles all the buttons on search trip pane
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -433,8 +433,8 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method checks if the price for a trip is valid     
-	 * The method is in use when a user is browsing trips
+	 * This method checks if the price for a trip is valid     The method is in
+	 * use when a user is browsing trips
 	 *
 	 * @Return boolean isTripPriceParameterValid - True if the price is valid
 	 * otherwise false    
@@ -538,7 +538,7 @@ public class FXMLDocumentController implements Initializable {
 	/**
 	 * This method is resetting the BrowseTrip Pane. Resets all the elements and
 	 * reloads all trips
-	 * 
+	 *
 	 */
 	private void resetBrowseTripPane() {
 
@@ -554,7 +554,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Gets all locations from the server and displays them in the comboBox
 		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
-		locations.add(0, new Location(-1,""));
+		locations.add(0, new Location(-1, ""));
 		searchTripsLocationComboBox.setItems(locations);
 
 		categoryComboboxIsDisabled2 = true;
@@ -572,8 +572,8 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method handles adding a category from the combobox, as a search 
-	 * parameter, when browsing for trips. Adds the category to the list 
+	 * This method handles adding a category from the combobox, as a search
+	 * parameter, when browsing for trips. Adds the category to the list
 	 *
 	 */
 	private void addCategoryListItem2() {
@@ -590,9 +590,8 @@ public class FXMLDocumentController implements Initializable {
 
 		//Adds the category to HBox
 		searchTripCategoryListHBox.getChildren().add(new CategoryListItem2(this, category));
-		
+
 		//searchTripsCategoryComboBox.getSelectionModel().clearSelection();
-	
 		//Resets current combobox value
 		categoryComboboxIsDisabled2 = true;
 		categoryComboboxIsDisabled2 = false;
@@ -600,8 +599,8 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method handles removing a category from beeing a search paramenter, 
-	 * when browsing for trips. Removes the category from the list 
+	 * This method handles removing a category from beeing a search paramenter,
+	 * when browsing for trips. Removes the category from the list
 	 *
 	 * @param categoryListItem
 	 */
@@ -613,7 +612,7 @@ public class FXMLDocumentController implements Initializable {
 	// <editor-fold defaultstate="collapsed" desc="Log in - Methods">
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -636,7 +635,7 @@ public class FXMLDocumentController implements Initializable {
 
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -666,11 +665,11 @@ public class FXMLDocumentController implements Initializable {
 		return String.format("%064x", new java.math.BigInteger(1, hashBytes)).toLowerCase();
 	}
 	// </editor-fold>
-	
+
 	// <editor-fold defaultstate="collapsed" desc="New Account - Methods">	
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -680,7 +679,7 @@ public class FXMLDocumentController implements Initializable {
 
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -692,7 +691,7 @@ public class FXMLDocumentController implements Initializable {
 
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -729,7 +728,7 @@ public class FXMLDocumentController implements Initializable {
 
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param title
 	 */
 	private File chooseImage(String title) {
@@ -738,7 +737,7 @@ public class FXMLDocumentController implements Initializable {
 		fileChooser.setTitle(title);
 		return fileChooser.showOpenDialog(stage);
 	}
-	
+
 	@FXML
 	private void handleViewTripButton(ActionEvent event) {
 		int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
@@ -746,11 +745,11 @@ public class FXMLDocumentController implements Initializable {
 		viewTrip(tripId, false);
 	}
 // </editor-fold>
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Modify Trips - Methods">
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -771,7 +770,7 @@ public class FXMLDocumentController implements Initializable {
 
 	/**
 	 * This method
-	 * 
+	 *
 	 */
 	private void resetModifyTripPane() {
 		modifyTripTitleTextField.setText("");
@@ -783,7 +782,7 @@ public class FXMLDocumentController implements Initializable {
 	// <editor-fold defaultstate="collapsed" desc="Toolbar - Methods">
 	/**
 	 * This method
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -817,8 +816,8 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="Create Trip - Methods">
 	/**
-	 * This method 
-	 * 
+	 * This method
+	 *
 	 */
 	private void resetCreateTripPane() {
 		//Disable category combobox before adjusting values
@@ -862,10 +861,10 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method 
-	 * 
+	 * This method
+	 *
 	 * @param event
-	 * 
+	 *
 	 */
 	@FXML
 	private void handleCreateTripButtons(ActionEvent event) {
@@ -890,10 +889,10 @@ public class FXMLDocumentController implements Initializable {
 			}
 		}
 	}
-	
+
 	/**
-	 * This method 
-	 * 
+	 * This method
+	 *
 	 */
 	private void addImageListItem() {
 		createTripInvalidPictureText.setVisible(false);
@@ -916,18 +915,18 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method 
-	 * 
+	 * This method
+	 *
 	 * @param imageListItem
-	 * 
+	 *
 	 */
 	protected void removeImageListItem(ImageListItem imageListItem) {
 		createTripPictureListHBox.getChildren().remove(imageListItem);
 	}
 
 	/**
-	 * This method 
-	 * 
+	 * This method
+	 *
 	 */
 	private void addCategoryListItem() {
 		if (categoryComboboxIsDisabled) {
@@ -952,10 +951,10 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method 
-	 * 
+	 * This method
+	 *
 	 * @param category
-	 * 
+	 *
 	 */
 	protected boolean hasCertificate(Category category) {
 		if (clientController.getCurrentUser().getCertificates().contains(category)) {
@@ -966,10 +965,10 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method 
-	 * 
+	 * This method
+	 *
 	 * @param category
-	 * 
+	 *
 	 */
 	private void showMessageFiveSeconds(Category category) {
 		currentIntructorTextOccupiers++;
@@ -996,8 +995,8 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method 
-	 * 
+	 * This method
+	 *
 	 */
 	protected void removeCategoryListItem(CategoryListItem categoryListItem) {
 		createTripCategoryListHBox.getChildren().remove(categoryListItem);
@@ -1008,7 +1007,7 @@ public class FXMLDocumentController implements Initializable {
 
 	/**
 	 * This method handles creating a new trip
-	 * 
+	 *
 	 */
 	private int createTrip() throws Exception {
 		//Gets all the values
@@ -1073,9 +1072,9 @@ public class FXMLDocumentController implements Initializable {
 		return clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
 	}
 
-	 /**
+	/**
 	 * This method checks if all the parameters are valid when creating a new trip
-	 * 
+	 *
 	 * @param title
 	 * @param categories
 	 * @param priceString
@@ -1083,8 +1082,9 @@ public class FXMLDocumentController implements Initializable {
 	 * @param location
 	 * @param meetingAddress
 	 * @param participantLimitString
-	 * 
-	 * @return boolean isTripParametersValid - Returns true if all parameters are valid
+	 *
+	 * @return boolean isTripParametersValid - Returns true if all parameters are
+	 * valid
 	 */
 	private boolean isTripParametersValid(String title, List<Category> categories, String priceString, LocalDate date, Location location, String meetingAddress, String participantLimitString) {
 		boolean isTripParametersValid = true;
@@ -1159,7 +1159,7 @@ public class FXMLDocumentController implements Initializable {
 	// <editor-fold defaultstate="collapsed" desc="My Trips - Methods">
 	/**
 	 * This method handles all the buttons under the MyTrips pane
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -1177,12 +1177,12 @@ public class FXMLDocumentController implements Initializable {
 			viewTrip(id, false);
 		}
 	}
-	
+
 	/**
 	 * This method loads all the trips for a specifc user under the MyTrips pane
-	 * 
+	 *
 	 */
-		private void loadMyTrips() {
+	private void loadMyTrips() {
 		Platform.runLater(() -> {
 			List<Trip> myTrips = clientController.getMyTrips();
 
@@ -1203,7 +1203,7 @@ public class FXMLDocumentController implements Initializable {
 	// <editor-fold defaultstate="collapsed" desc="Browse Users - Methods">
 	/**
 	 * This method handles the search button when browsing for users
-	 * 
+	 *
 	 * @param event
 	 */
 	@FXML
@@ -1231,21 +1231,26 @@ public class FXMLDocumentController implements Initializable {
 	}
 	// </editor-fold>
 
-	private void loadConversation(int ConversationId) {
-
+	private Conversation getConversation(Conversation conversation) {
+		try {
+			return clientController.getConversation(conversation);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
 	}
 
 	private void getUserConversations() {
 		List<Conversation> conversations = clientController.getUserConversations();
 
 		if (conversations != null) {
-			List<Label> list = new ArrayList<>();
+			List<HBoxCell> list = new ArrayList<>();
 
 			try {
 
 				for (Conversation conversation : conversations) {
 					String name = clientController.getConversationName(conversation);
-					list.add(new Label(name));
+					list.add(new HBoxCell(conversation, name));
 				}
 			} catch (RemoteException ex) {
 				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
@@ -1253,5 +1258,22 @@ public class FXMLDocumentController implements Initializable {
 			ObservableList observableList = FXCollections.observableArrayList(list);
 			messagingConversationsListView.setItems(observableList);
 		}
+	}
+	
+	private void showConversation(Conversation conversation) {
+		
+	}
+	
+	private void sendMessage(String message) {
+		try {
+			clientController.sendMessage(message);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	@FXML
+	private void handleSendMessageButton(ActionEvent event) {
+		sendMessage(messagingTextField.getText());
 	}
 }

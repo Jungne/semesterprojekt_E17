@@ -1,6 +1,7 @@
 package client;
 
 import interfaces.Conversation;
+import interfaces.Message;
 import interfaces.Trip;
 import interfaces.User;
 import java.io.ByteArrayInputStream;
@@ -81,18 +82,23 @@ public class HBoxCell extends HBox {
 		this.getChildren().addAll(imageView, title);
 	}
 	
-	public HBoxCell(Conversation conversation) {
+	public HBoxCell(Conversation conversation, String name) {
 		//Sets the padding and spacing.
 		super();
 		this.setSpacing(10);
 
 		id = conversation.getId();
 
-		title.setText(id + "");
+		title.setText(name);
 		title.setPrefWidth(150);
 //		title.setStyle("-fx-font-weight: bold");
 
 		this.getChildren().addAll(title);
+	}
+	
+	public HBoxCell(Message message) {
+		id = message.getId();
+		title.setText(message.getMessage());
 	}
 
 	public int getTripId() {
@@ -104,6 +110,10 @@ public class HBoxCell extends HBox {
 	 * @return 
 	 */
 	public int getUserId() {
+		return id;
+	}
+	
+	public int getConversationId() {
 		return id;
 	}
 
