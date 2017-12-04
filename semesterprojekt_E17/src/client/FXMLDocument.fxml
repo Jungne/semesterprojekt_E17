@@ -73,7 +73,7 @@
             </Text>
             <Button fx:id="searchTripsButton" layoutX="20.0" layoutY="511.0" mnemonicParsing="false" onAction="#handleSearchTripsButtons" prefHeight="25.0" prefWidth="109.0" text="Search" />
             <ListView fx:id="browseTripsListView" layoutX="239.0" layoutY="60.0" prefHeight="548.0" prefWidth="392.0" />
-            <Button fx:id="viewTripButton" layoutX="20.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleViewTripButton" prefHeight="25.0" prefWidth="109.0" text="View Trip" />
+            <Button fx:id="searchTripsViewTripButton" layoutX="20.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleSearchTripsButtons" prefHeight="25.0" prefWidth="109.0" text="View Trip" />
             <Label layoutX="20.0" layoutY="60.0" text="Title">
                <font>
                   <Font name="System Bold" size="13.0" />
@@ -86,7 +86,7 @@
                </font>
             </Label>
             <HBox fx:id="searchTripCategoryListHBox" layoutX="21.0" layoutY="235.0" prefHeight="22.0" prefWidth="200.0" />
-            <ComboBox fx:id="searchTripsLocationComboBox" layoutX="20.0" layoutY="141.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
+            <ComboBox fx:id="searchTripsLocationComboBox" layoutX="20.0" layoutY="141.0" prefWidth="150.0" />
             <ComboBox fx:id="searchTripsCategoryComboBox" layoutX="20.0" layoutY="199.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
             <Text fx:id="searchTripInvalidPriceText" fill="#da0303" layoutX="20.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid price!" visible="false">
                <font>
@@ -343,13 +343,13 @@
             <Button fx:id="modifyTripCancelButton" layoutX="148.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleModifyTripButtons" prefWidth="95.0" text="Cancel" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="browseUsersPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="browseUsersPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <TextField fx:id="browseUsersTextField" layoutX="32.0" layoutY="54.0" promptText="Name" />
             <ListView fx:id="browseUsersListView" layoutX="250.0" layoutY="54.0" prefHeight="477.0" prefWidth="371.0" />
             <Label layoutX="32.0" layoutY="37.0" text="Name" />
-            <Button fx:id="browseUsersSearchButton" layoutX="32.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Search" />
-            <Button fx:id="browseUsersMessageButton" layoutX="32.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Message" />
+            <Button fx:id="browseUsersSearchButton" layoutX="32.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" prefHeight="25.0" prefWidth="63.0" text="Search" />
+            <Button fx:id="browseUsersMessageButton" layoutX="33.0" layoutY="139.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Message" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="messagingPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
