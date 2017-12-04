@@ -338,16 +338,43 @@ public class ServerTripHandler {
 	}
 
 	static void modifyTrip(Trip trip) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    
 		String query = "UPDATE trips "
 						+ "SET "
 						+ "tripTitle = " + trip.getTitle() + ", "
 						+ "tripDescription = " + trip.getDescription() + ", "
-						+ "tripPrice = " + trip.getPrice() + " "
+						+ "tripPrice = " + trip.getPrice() + ", "
+            + "timeStart = " + trip.getTimeStart().format(formatter) + ", "
+            + "locationID = " + trip.getLocation().getId() + ", "
+            + "participantLimit = " + trip.getParticipantLimit() + ", "
+            + "userID = " + trip.getOrganizer().getId() + " "
 						+ "WHERE tripID = " + trip.getId() + ";";
 
 		dbm.executeUpdate(query);
+    
+    if(!trip.getCategories().isEmpty()){
+      query = "DELETE FROM CategoriesInTrip WHERE tripID = " + trip.getId() + ";";
+      dbm.executeUpdate(query);
 
-		//Need to also update trip categories and users in trip
+      for(Category category : trip.getCategories()) {
+        query = "INSERT INTO CategoriesInTrip (tripID, CategoryID) VALUES (" + trip.getId() + ", " + category.getId() + ");";
+        dbm.executeUpdate(query);
+      }
+    }
+    
+    if(!trip.getParticipants().isEmpty()){
+      query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() + ";";
+      dbm.executeUpdate(query);
+
+      for(User participant : trip.getParticipants()) {
+        query = "INSERT INTO UsersInTrips (tripID, UserID) VALUES (" + trip.getId() + ", " + participant.getId() + ");";
+        dbm.executeUpdate(query);
+      }
+    }
+    
+    //Need to be able to modify images
+    
 	}
 
 	/**
