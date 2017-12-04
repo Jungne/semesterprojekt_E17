@@ -503,7 +503,7 @@ public class ServerTripHandler {
         
         Location location = getLocation(rs.getInt("locationId"));
         int participantLimit = rs.getInt("participantLimit");
-        int organizerID = rs.getInt("userID");
+        User organizer = getUserView(rs.getInt("userID"));
         
         ArrayList<Category> categories = getCategoriesInTrip(id);
 				return new Trip(id, title, description, price, null);
