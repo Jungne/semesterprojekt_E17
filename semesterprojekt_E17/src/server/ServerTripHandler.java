@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -478,7 +479,16 @@ public class ServerTripHandler {
 	}
 
 	public static Trip viewTrip(int tripID) {
-		String query = "SELECT * FROM Trips WHERE tripID = " + tripID + ";";
+		String query = "SELECT ("
+            + "tripID"
+            + "tripTitle"
+            + "tripDescription"
+            + "tripPrice"
+            + "timeStart"
+            + "locationID"
+            + "participantLimit"
+            + "userID"
+            + ") FROM Trips WHERE tripID = " + tripID + ";";
 		ResultSet rs = dbm.executeQuery(query);
 
 		try {
@@ -487,6 +497,13 @@ public class ServerTripHandler {
 				String title = rs.getString("tripTitle");
 				String description = rs.getString("tripDescription");
 				double price = Double.parseDouble(rs.getString("tripPrice"));
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime date = LocalDateTime.parse(rs.getString("timeStart"), formatter);
+        
+        int locationID = rs.getInt("locationId");
+        int participantLimit = rs.getInt("participantLimit");
+        int organizerID = rs.getInt("userID");
 				return new Trip(id, title, description, price, null);
 			}
 		} catch (SQLException ex) {
