@@ -125,6 +125,19 @@ public class Trip implements Serializable {
 		this.images = images;
 	}
 
+  public Trip(int id, String title, String description, double price, LocalDateTime date, Location location, int participantLimit, User organizer, ArrayList<Category> categories, ArrayList<byte[]> images) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.price = price;
+    this.timeStart = date;
+    this.location = location;
+    this.participantLimit = participantLimit;
+    this.organizer = organizer;
+    this.categories = categories;
+    this.images = images;
+  }
+
 	public void participate(User user) {
 		getParticipants().add(user);
 	}
