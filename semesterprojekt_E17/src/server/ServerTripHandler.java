@@ -504,12 +504,29 @@ public class ServerTripHandler {
         int locationID = rs.getInt("locationId");
         int participantLimit = rs.getInt("participantLimit");
         int organizerID = rs.getInt("userID");
+        
+        ArrayList<Category> categories = getCategoriesInTrip(id);
 				return new Trip(id, title, description, price, null);
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return null;
+	}
+  
+ 	private static ArrayList<Category> getCategoriesInTrip(int id) {
+		String query = "SELECT categoryID, categoryName FROM CategoriesInTrips natural join categories Where tripID= " + id + ";";
+		ResultSet rs = dbm.executeQuery(query);
+
+		ArrayList<Category> categories = new ArrayList<Category>();
+		try {
+			while (rs.next()) {
+				categories.add(new Category(rs.getInt("categoryID"), rs.getString("categoryName")));
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return categories.isEmpty() ? null : categories;
 	}
 
 	public static boolean isTripFull(Trip trip) {
