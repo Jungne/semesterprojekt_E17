@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 import interfaces.Category;
+import interfaces.Conversation;
 import interfaces.FullTripException;
 import interfaces.Location;
 import interfaces.OptionalPrice;
@@ -28,7 +29,6 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -55,7 +55,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
-import javax.swing.event.ChangeEvent;
 
 public class FXMLDocumentController implements Initializable {
 
@@ -281,6 +280,16 @@ public class FXMLDocumentController implements Initializable {
 	private ListView<HBoxCell> browseUsersListView;
 	@FXML
 	private Button browseUsersMessageButton;
+	@FXML
+	private AnchorPane messagingPane;
+	@FXML
+	private ListView<Label> messagingConversationsListView;
+	@FXML
+	private ListView<?> messagingActiveConversationListView;
+	@FXML
+	private TextField messagingTextField;
+	@FXML
+	private Button messagingSendButton;
 	// </editor-fold>
 
 	@Override
@@ -629,6 +638,7 @@ public class FXMLDocumentController implements Initializable {
 			loadProfileInfo();
 			toolBarMyTripsButton.setDisable(false);
 			toolBarProfileButton.setDisable(false);
+			toolBarMessagingButton.setDisable(false);
 			toolbarLogInLogOutButton.setText("Log out");
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
@@ -778,7 +788,8 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleToolBarButtons(ActionEvent event) throws RemoteException {
 		if (event.getSource() == toolBarMessagingButton) {
-			//TODO - Go to messaging pane
+			showPane(messagingPane);
+			getUserConversations();
 		} else if (event.getSource() == toolBarBrowseTripsButton) {
 			showPane(browseTripsPane);
 			resetBrowseTripPane();
@@ -794,6 +805,7 @@ public class FXMLDocumentController implements Initializable {
 				clientController.signOut();
 				toolBarMyTripsButton.setDisable(true);
 				toolBarProfileButton.setDisable(true);
+				toolBarMessagingButton.setDisable(true);
 				toolbarLogInLogOutButton.setText("Log in");
 			}
 		} else if (event.getSource() == toolBarBrowseUsersButton) {
@@ -1221,4 +1233,27 @@ public class FXMLDocumentController implements Initializable {
 	}
 	// </editor-fold>
 
+	private void loadConversation(int ConversationId) {
+
+	}
+
+	private void getUserConversations() {
+		List<Conversation> conversations = clientController.getUserConversations();
+
+		if (conversations != null) {
+			List<Label> list = new ArrayList<>();
+
+			try {
+
+				for (Conversation conversation : conversations) {
+					String name = clientController.getConversationName(conversation);
+					list.add(new Label(name));
+				}
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			ObservableList observableList = FXCollections.observableArrayList(list);
+			messagingConversationsListView.setItems(observableList);
+		}
+	}
 }

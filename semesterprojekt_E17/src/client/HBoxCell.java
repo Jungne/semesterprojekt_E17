@@ -1,5 +1,6 @@
 package client;
 
+import interfaces.Conversation;
 import interfaces.Trip;
 import interfaces.User;
 import java.io.ByteArrayInputStream;
@@ -13,7 +14,7 @@ import javafx.scene.layout.VBox;
 public class HBoxCell extends HBox {
 
 	ImageView imageView = new ImageView();
-	Label userName = new Label();
+	Label title = new Label();
 	Label description = new Label();
 	Label price = new Label();
 	Label category = new Label();
@@ -35,15 +36,15 @@ public class HBoxCell extends HBox {
 			imageView.setImage(new Image("default.jpg")); //Add default image or not.
 		}
 
-		userName.setText(trip.getTitle());
-		userName.setPrefWidth(150);
-		userName.setStyle("-fx-font-weight: bold");
+		title.setText(trip.getTitle());
+		title.setPrefWidth(150);
+		title.setStyle("-fx-font-weight: bold");
 
 		description.setText(trip.getDescription());
 		description.setPrefWidth(150);
 
 		VBox vbox1 = new VBox();
-		vbox1.getChildren().addAll(userName, description);
+		vbox1.getChildren().addAll(title, description);
 
 		price.setText(Double.toString(trip.getPrice()) + "kr");
 
@@ -70,14 +71,28 @@ public class HBoxCell extends HBox {
 		InputStream inputStream = new ByteArrayInputStream(user.getImage());
 		imageView.setImage(new Image(inputStream));
 
-		userName.setText(user.getName());
-		userName.setPrefWidth(150);
-//		userName.setStyle("-fx-font-weight: bold");
+		title.setText(user.getName());
+		title.setPrefWidth(150);
+//		title.setStyle("-fx-font-weight: bold");
 
 		imageView.setFitWidth(100);
 		imageView.setPreserveRatio(true);
 
-		this.getChildren().addAll(imageView, userName);
+		this.getChildren().addAll(imageView, title);
+	}
+	
+	public HBoxCell(Conversation conversation) {
+		//Sets the padding and spacing.
+		super();
+		this.setSpacing(10);
+
+		id = conversation.getId();
+
+		title.setText(id + "");
+		title.setPrefWidth(150);
+//		title.setStyle("-fx-font-weight: bold");
+
+		this.getChildren().addAll(title);
 	}
 
 	public int getTripId() {
@@ -94,7 +109,7 @@ public class HBoxCell extends HBox {
 
 	@Override
 	public String toString() {
-		return id + userName.getText();
+		return id + title.getText();
 	}
 
 }
