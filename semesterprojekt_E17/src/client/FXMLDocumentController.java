@@ -898,7 +898,7 @@ public class FXMLDocumentController implements Initializable {
 		//Chooses file with FileChooser
 		File imageFile = chooseImage("Select trip picture");
 
-		new Thread(() -> {
+		Platform.runLater(() -> {
 			createTripInvalidPictureText.setVisible(false);
 			try {
 				String imageFileName = imageFile.getName();
@@ -907,13 +907,13 @@ public class FXMLDocumentController implements Initializable {
 				BufferedImage image = ImageIO.read(imageFile);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, imageFileType, baos);
-				//Inserts values in imageItem
+				//Inserts values in imageItem	
 				createTripPictureListHBox.getChildren().add(new ImageListItem(this, imageFileName, baos.toByteArray()));
 			} catch (Exception ex) {
+				System.out.println(ex.getMessage());
 				createTripInvalidPictureText.setVisible(true);
 			}
-		}).start();
-
+		});
 	}
 
 	/**
