@@ -505,6 +505,8 @@ public class ServerTripHandler {
         int participantLimit = rs.getInt("participantLimit");
         User organizer = getUserView(rs.getInt("userID"));
         
+        byte[] image = getImagesInTrip(id).get(0);
+        
         ArrayList<Category> categories = getCategoriesInTrip(id);
 				return new Trip(id, title, description, price, null);
 			}
@@ -515,10 +517,11 @@ public class ServerTripHandler {
 	}
   
  	private static ArrayList<Category> getCategoriesInTrip(int id) {
-		String query = "SELECT categoryID, categoryName FROM CategoriesInTrips natural join categories Where tripID = " + id + ";";
+		String query = "SELECT categoryID, categoryName FROM CategoriesInTrips natural join Categories WHERE tripID = " + id + ";";
 		ResultSet rs = dbm.executeQuery(query);
 
 		ArrayList<Category> categories = new ArrayList<Category>();
+    
 		try {
 			while (rs.next()) {
 				categories.add(new Category(rs.getInt("categoryID"), rs.getString("categoryName")));
@@ -526,8 +529,26 @@ public class ServerTripHandler {
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
+    
 		return categories.isEmpty() ? null : categories;
 	}
+  
+  private static ArrayList<byte[]> getImagesInTrip(int id) {
+    String query = "SELECT imageID, imageFile FROM ImagesInTrip natural join Images WHERE tripID = " + id + ";";
+    ResultSet rs = dbm.executeQuery(query);
+    
+    ArrayList<byte[]> images = new ArrayList<byte[]>();
+    
+    try {
+      while(rs.next()){
+        images.add(rs.getBytes("imageFile"));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    return images.isEmpty() ? null : images;
+  }
   
   private static Location getLocation(int id) {
     String query = "SELECT locationID, locationName FROM Locations WHERE locationID = " + id + ";";
