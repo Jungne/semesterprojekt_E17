@@ -30,6 +30,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -897,8 +898,9 @@ public class FXMLDocumentController implements Initializable {
 	private void addImageListItem() {
 		//Chooses file with FileChooser
 		File imageFile = chooseImage("Select trip picture");
+		FXMLDocumentController fxmlController = this;
 
-		Platform.runLater(() -> {
+		new Thread(() -> {
 			createTripInvalidPictureText.setVisible(false);
 			try {
 				String imageFileName = imageFile.getName();
@@ -907,13 +909,18 @@ public class FXMLDocumentController implements Initializable {
 				BufferedImage image = ImageIO.read(imageFile);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, imageFileType, baos);
-				//Inserts values in imageItem	
-				createTripPictureListHBox.getChildren().add(new ImageListItem(this, imageFileName, baos.toByteArray()));
+				//Inserts values in imageItem	new ImageListItem(fxmlController, imageFileName, baos.toByteArray())
+				ImageListItem imageListItem = new ImageListItem(fxmlController, imageFileName, baos.toByteArray());
+
+				Platform.runLater(() -> {
+					createTripPictureListHBox.getChildren().add(imageListItem);
+				});
+
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
 				createTripInvalidPictureText.setVisible(true);
 			}
-		});
+		}).start();
 	}
 
 	/**
