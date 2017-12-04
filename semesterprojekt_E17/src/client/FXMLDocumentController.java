@@ -82,8 +82,6 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Browse Trips - Elements">
-	private boolean categoryComboboxIsDisabled2 = false;
-
 	@FXML
 	private AnchorPane browseTripsPane;
 	@FXML
@@ -126,7 +124,6 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Create Trip - Elements">
-	private boolean categoryComboboxIsDisabled = false;
 	private int currentIntructorTextOccupiers = 0;
 
 	@FXML
@@ -570,12 +567,9 @@ public class FXMLDocumentController implements Initializable {
 		locations.add(0, new Location(-1, ""));
 		searchTripsLocationComboBox.setItems(locations);
 
-		categoryComboboxIsDisabled2 = true;
 		//Gets all categories from the server and displays them in the comboBox
 		ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 		searchTripsCategoryComboBox.setItems(categories);
-		searchTripsCategoryComboBox.setValue(null);
-		categoryComboboxIsDisabled2 = false;
 
 		//Resets category HBox
 		searchTripCategoryListHBox.getChildren().clear();
@@ -590,9 +584,6 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void addCategoryListItem2() {
-		if (categoryComboboxIsDisabled2) {
-			return;
-		}
 		Category category = searchTripsCategoryComboBox.getValue();
 		//Checks if category already exists in list
 		for (Node node : searchTripCategoryListHBox.getChildren()) {
@@ -603,12 +594,6 @@ public class FXMLDocumentController implements Initializable {
 
 		//Adds the category to HBox
 		searchTripCategoryListHBox.getChildren().add(new CategoryListItem2(this, category));
-
-		//searchTripsCategoryComboBox.getSelectionModel().clearSelection();
-		//Resets current combobox value
-		categoryComboboxIsDisabled2 = true;
-		categoryComboboxIsDisabled2 = false;
-
 	}
 
 	/**
@@ -821,9 +806,6 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void resetCreateTripPane() {
-		//Disable category combobox before adjusting values
-		categoryComboboxIsDisabled = true;
-
 		//Gets all categories from the server and displays them in the comboBox
 		ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 		createTripCategoryComboBox.setItems(categories);
@@ -856,9 +838,6 @@ public class FXMLDocumentController implements Initializable {
 		//Reset HBox lists
 		createTripPictureListHBox.getChildren().clear();
 		createTripCategoryListHBox.getChildren().clear();
-
-		//Activate category combobox after adjusting values
-		categoryComboboxIsDisabled = false;
 	}
 
 	/**
@@ -909,7 +888,7 @@ public class FXMLDocumentController implements Initializable {
 				BufferedImage image = ImageIO.read(imageFile);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, imageFileType, baos);
-				//Inserts values in imageItem	new ImageListItem(fxmlController, imageFileName, baos.toByteArray())
+				//Inserts values in imageItem
 				ImageListItem imageListItem = new ImageListItem(fxmlController, imageFileName, baos.toByteArray());
 
 				Platform.runLater(() -> {
@@ -938,9 +917,6 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void addCategoryListItem() {
-		if (categoryComboboxIsDisabled) {
-			return;
-		}
 		Category category = createTripCategoryComboBox.getValue();
 		//Checks if category already exists in list
 		for (Node node : createTripCategoryListHBox.getChildren()) {
@@ -952,11 +928,6 @@ public class FXMLDocumentController implements Initializable {
 		//Adds the category to HBox and reveal the instructor text
 		createTripIntructorText.setVisible(true);
 		createTripCategoryListHBox.getChildren().add(new CategoryListItem(this, category));
-
-		//Resets current combobox value
-		categoryComboboxIsDisabled = true;
-		//createTripCategoryComboBox.setValue(null);
-		categoryComboboxIsDisabled = false;
 	}
 
 	/**
