@@ -542,6 +542,20 @@ public class ServerTripHandler {
     }
     return null;
   }
+  
+  private static User getUserView(int id) {
+    String query = "SELECT userID, userName FROM Users WHERE userID = " + id + ";";
+    ResultSet rs = dbm.executeQuery(query);
+    
+    try {
+      if(rs.next()){
+        return new User(rs.getInt("userID"), rs.getString("userName"));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
+  }
 
 	public static boolean isTripFull(Trip trip) {
 		try {
