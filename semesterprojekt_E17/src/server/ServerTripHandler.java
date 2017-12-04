@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -337,16 +338,43 @@ public class ServerTripHandler {
 	}
 
 	static void modifyTrip(Trip trip) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    
 		String query = "UPDATE trips "
 						+ "SET "
 						+ "tripTitle = " + trip.getTitle() + ", "
 						+ "tripDescription = " + trip.getDescription() + ", "
-						+ "tripPrice = " + trip.getPrice() + " "
+						+ "tripPrice = " + trip.getPrice() + ", "
+            + "timeStart = " + trip.getTimeStart().format(formatter) + ", "
+            + "locationID = " + trip.getLocation().getId() + ", "
+            + "participantLimit = " + trip.getParticipantLimit() + ", "
+            + "userID = " + trip.getOrganizer().getId() + " "
 						+ "WHERE tripID = " + trip.getId() + ";";
 
 		dbm.executeUpdate(query);
+    
+    if(!trip.getCategories().isEmpty()){
+      query = "DELETE FROM CategoriesInTrip WHERE tripID = " + trip.getId() + ";";
+      dbm.executeUpdate(query);
 
-		//Need to also update trip categories and users in trip
+      for(Category category : trip.getCategories()) {
+        query = "INSERT INTO CategoriesInTrip (tripID, CategoryID) VALUES (" + trip.getId() + ", " + category.getId() + ");";
+        dbm.executeUpdate(query);
+      }
+    }
+    
+    if(!trip.getParticipants().isEmpty()){
+      query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() + ";";
+      dbm.executeUpdate(query);
+
+      for(User participant : trip.getParticipants()) {
+        query = "INSERT INTO UsersInTrips (tripID, UserID) VALUES (" + trip.getId() + ", " + participant.getId() + ");";
+        dbm.executeUpdate(query);
+      }
+    }
+    
+    //Need to be able to modify images
+    
 	}
 
 	/**
@@ -467,13 +495,90 @@ public class ServerTripHandler {
 				String title = rs.getString("tripTitle");
 				String description = rs.getString("tripDescription");
 				double price = Double.parseDouble(rs.getString("tripPrice"));
-				return new Trip(id, title, description, price, null);
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime date = LocalDateTime.parse(rs.getString("timeStart"), formatter);
+        
+        Location location = getLocation(rs.getInt("locationId"));
+        int participantLimit = rs.getInt("participantLimit");
+        User organizer = getUserView(rs.getInt("userID"));
+        
+        ArrayList<Category> categories = getCategoriesInTrip(id).isEmpty() ? null : getCategoriesInTrip(id);
+        ArrayList<byte[]> images = getImagesInTrip(id);
+        
+				return new Trip(id, title, description, price, date, location, participantLimit, organizer, categories, images);
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return null;
 	}
+  
+ 	private static ArrayList<Category> getCategoriesInTrip(int id) {
+		String query = "SELECT categoryID, categoryName FROM CategoriesInTrips natural join Categories WHERE tripID = " + id + ";";
+		ResultSet rs = dbm.executeQuery(query);
+
+		ArrayList<Category> categories = new ArrayList<Category>();
+    
+		try {
+			while (rs.next()) {
+				categories.add(new Category(rs.getInt("categoryID"), rs.getString("categoryName")));
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+    
+		return categories;
+	}
+  
+  private static ArrayList<byte[]> getImagesInTrip(int id) {
+    String query = "SELECT imageID, imageFile FROM ImagesInTrip natural join Images WHERE tripID = " + id + ";";
+    ResultSet rs = dbm.executeQuery(query);
+    
+    ArrayList<byte[]> images = new ArrayList<byte[]>();
+    
+    if(rs == null) {
+      return images;
+    }
+    
+    try {
+      while(rs.next()){
+        images.add(rs.getBytes("imageFile"));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    return images;
+  }
+  
+  private static Location getLocation(int id) {
+    String query = "SELECT locationID, locationName FROM Locations WHERE locationID = " + id + ";";
+    ResultSet rs = dbm.executeQuery(query);
+    
+    try {
+      if(rs.next()){
+        return new Location(rs.getInt("locationID"), rs.getString("locationName"));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
+  }
+  
+  private static User getUserView(int id) {
+    String query = "SELECT userID, userName FROM Users WHERE userID = " + id + ";";
+    ResultSet rs = dbm.executeQuery(query);
+    
+    try {
+      if(rs.next()){
+        return new User(rs.getInt("userID"), rs.getString("userName"));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
+  }
 
 	public static boolean isTripFull(Trip trip) {
 		try {

@@ -18,6 +18,11 @@ public class User implements Serializable {
 		this.name = name;
 		this.image = image;
 	}
+  
+	public User(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 	/**
 	 * @return the id
