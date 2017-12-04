@@ -3,6 +3,7 @@ package server;
 import interfaces.Category;
 import interfaces.Conversation;
 import interfaces.FullTripException;
+import interfaces.IChatClient;
 import interfaces.IServerController;
 import interfaces.Location;
 import interfaces.Message;
@@ -17,8 +18,10 @@ import java.util.logging.Logger;
 
 public class ServerControllerImpl extends UnicastRemoteObject implements IServerController {
 
-	public ServerControllerImpl() throws RemoteException {
+	private ServerMessagingHandler messagingHandler;
 
+	public ServerControllerImpl() throws RemoteException {
+			messagingHandler = new ServerMessagingHandler();
 	}
 
 	@Override
@@ -47,8 +50,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public List<Trip> searchTrips(String searchTitle, int category, LocalDate timedateStart, int location, double priceMAX) throws RemoteException {
-		return ServerTripHandler.searchTrip(searchTitle, category, timedateStart, location, priceMAX);
+	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
+		return ServerTripHandler.searchTrip(searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 
 	@Override
 	public void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException {
-			ServerTripHandler.participateInTrip(trip, user);
+		ServerTripHandler.participateInTrip(trip, user);
 
 	}
 
@@ -118,4 +121,27 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 		return ServerTripHandler.viewTrip(tripID);
 	}
 
+	@Override
+	public void registerClient(IChatClient client) {
+		try {
+			messagingHandler.registerClient(client);
+		} catch (RemoteException ex) {
+			Logger.getLogger(ServerControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	@Override
+	public List<User> searchUsers(String query) {
+		return ServerUserHandler.searchUsers(query);
+	}
+	
+	@Override
+	public List<Trip> getMyTrips(User user) {
+		return ServerTripHandler.getMyTrips(user);
+	}
+	
+	@Override
+	public void addActiveConversation(int tripID) {
+		messagingHandler.addActiveConversation(tripID);
+	}
 }

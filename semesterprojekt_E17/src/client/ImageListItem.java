@@ -1,5 +1,7 @@
 package client;
 
+import javafx.scene.layout.Pane;
+
 public class ImageListItem extends PaneListItem {
 
 	private FXMLDocumentController fxmlController;

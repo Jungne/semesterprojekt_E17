@@ -16,6 +16,7 @@ public class Semesterprojekt_E17_client extends Application {
 
 		stage.setScene(scene);
 		stage.show();
+		stage.setTitle("Outdoor Activity Portal");
 	}
 
 	public static void main(String[] args) {
