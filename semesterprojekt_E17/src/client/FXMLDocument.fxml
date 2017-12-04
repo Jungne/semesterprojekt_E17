@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
@@ -157,7 +158,7 @@
             <HBox fx:id="createTripCategoryListHBox" layoutX="197.0" layoutY="421.0" prefHeight="22.0" prefWidth="392.0" spacing="4.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create trip">
                <font>
@@ -176,14 +177,14 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <TextField fx:id="createTripPriceTextField" layoutX="339.0" layoutY="104.0" promptText="kr." />
-            <Text layoutX="344.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price">
+            <TextField fx:id="createTripPriceTextField" layoutX="340.0" layoutY="104.0" promptText="kr." />
+            <Text layoutX="340.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price">
                <font>
                   <Font size="10.0" />
                </font>
             </Text>
-            <DatePicker fx:id="createTripTimeStartDatePicker" layoutX="339.0" layoutY="182.0" />
-            <Text layoutX="344.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start date">
+            <DatePicker fx:id="createTripTimeStartDatePicker" layoutX="60.0" layoutY="266.0" />
+            <Text layoutX="60.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start date">
                <font>
                   <Font size="10.0" />
                </font>
@@ -196,12 +197,12 @@
             <Button fx:id="createTripCreateTripButton" layoutX="70.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Create trip" />
             <Button fx:id="createTripBackButton" layoutX="500.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Back" />
             <ComboBox fx:id="createTripLocationComboBox" layoutX="60.0" layoutY="182.0" prefWidth="150.0" promptText="Choose" />
-            <Text layoutX="60.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant limit">
+            <Text layoutX="340.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant limit">
                <font>
                   <Font size="10.0" />
                </font>
             </Text>
-            <TextField fx:id="createTripParticipantLimitTextField" layoutX="60.0" layoutY="264.0" />
+            <TextField fx:id="createTripParticipantLimitTextField" layoutX="340.0" layoutY="182.0" />
             <Text layoutX="60.0" layoutY="340.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tags (Seperate by space)">
                <font>
                   <Font size="10.0" />
@@ -213,13 +214,13 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <Text fx:id="createTripInvalidDateText" fill="#da0303" layoutX="339.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid date!" visible="false">
+            <Text fx:id="createTripInvalidDateText" fill="#da0303" layoutX="60.0" layoutY="302.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid date!" visible="false">
                <font>
                   <Font size="10.0" />
                </font>
             </Text>
             <Button fx:id="createTripCancelButton2" layoutX="465.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
-            <Text fx:id="createTripInvalidParticipantLimitText" fill="#da0303" layoutX="60.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid participant limit!" visible="false">
+            <Text fx:id="createTripInvalidParticipantLimitText" fill="#da0303" layoutX="340.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid participant limit!" visible="false">
                <font>
                   <Font size="10.0" />
                </font>
@@ -230,6 +231,18 @@
                </font>
             </Text>
             <Text fx:id="createTripInvalidMeetingAddressText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter a meeting address!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Spinner fx:id="createTripHourSpinner" layoutX="339.0" layoutY="266.0" prefHeight="25.0" prefWidth="60.0" />
+            <Spinner fx:id="createTripMinuteSpinner" layoutX="431.0" layoutY="266.0" prefHeight="25.0" prefWidth="60.0" />
+            <Text layoutX="339.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="hour">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text layoutX="431.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="minute">
                <font>
                   <Font size="10.0" />
                </font>
@@ -276,7 +289,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="logInOutPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />

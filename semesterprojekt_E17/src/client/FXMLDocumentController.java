@@ -44,6 +44,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -182,6 +184,10 @@ public class FXMLDocumentController implements Initializable {
 	private HBox createTripCategoryListHBox;
 	@FXML
 	private Text createTripIntructorText;
+	@FXML
+	private Spinner<Integer> createTripHourSpinner;
+	@FXML
+	private Spinner<Integer> createTripMinuteSpinner;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Elements">
@@ -724,7 +730,6 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
-	@FXML
 	private void handleViewTripButton(ActionEvent event) {
 		int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
 		System.out.println(tripId);
@@ -814,6 +819,8 @@ public class FXMLDocumentController implements Initializable {
 		//Gets all locations from the server and displays them in the comboBox
 		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
 		createTripLocationComboBox.setItems(locations);
+		
+		createTripHourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23));
 
 		//Reset parameters
 		createTripTitleTextField.setText(null);
