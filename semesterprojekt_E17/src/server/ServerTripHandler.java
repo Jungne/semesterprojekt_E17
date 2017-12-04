@@ -496,10 +496,10 @@ public class ServerTripHandler {
         int participantLimit = rs.getInt("participantLimit");
         User organizer = getUserView(rs.getInt("userID"));
         
-        byte[] image = getImagesInTrip(id).isEmpty() ? null : getImagesInTrip(id).get(0);
         ArrayList<Category> categories = getCategoriesInTrip(id).isEmpty() ? null : getCategoriesInTrip(id);
+        ArrayList<byte[]> images = getImagesInTrip(id);
         
-				return new Trip(id, title, description, price, null);
+				return new Trip(id, title, description, price, date, location, participantLimit, organizer, categories, images);
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
