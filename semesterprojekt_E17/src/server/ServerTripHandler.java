@@ -501,7 +501,7 @@ public class ServerTripHandler {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime date = LocalDateTime.parse(rs.getString("timeStart"), formatter);
         
-        int locationID = rs.getInt("locationId");
+        Location location = getLocation(rs.getInt("locationId"));
         int participantLimit = rs.getInt("participantLimit");
         int organizerID = rs.getInt("userID");
         
@@ -515,7 +515,7 @@ public class ServerTripHandler {
 	}
   
  	private static ArrayList<Category> getCategoriesInTrip(int id) {
-		String query = "SELECT categoryID, categoryName FROM CategoriesInTrips natural join categories Where tripID= " + id + ";";
+		String query = "SELECT categoryID, categoryName FROM CategoriesInTrips natural join categories Where tripID = " + id + ";";
 		ResultSet rs = dbm.executeQuery(query);
 
 		ArrayList<Category> categories = new ArrayList<Category>();
@@ -528,6 +528,20 @@ public class ServerTripHandler {
 		}
 		return categories.isEmpty() ? null : categories;
 	}
+  
+  private static Location getLocation(int id) {
+    String query = "SELECT locationID, locationName FROM Locations WHERE locationID = " + id + ";";
+    ResultSet rs = dbm.executeQuery(query);
+    
+    try {
+      if(rs.next()){
+        return new Location(rs.getInt("locationID"), rs.getString("locationName"));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
+  }
 
 	public static boolean isTripFull(Trip trip) {
 		try {
