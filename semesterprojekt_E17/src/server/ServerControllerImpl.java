@@ -91,11 +91,6 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public List<Conversation> getUserConversations(User user) throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
 	public Conversation getConversation(Conversation conversation) throws RemoteException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
@@ -146,9 +141,12 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public List<Conversation> loadMyConversations(User user) throws RemoteException {
-		return messagingHandler.loadMyConversations(user);
+	public List<Conversation> getUserConversations(User user) throws RemoteException {
+		return messagingHandler.getUserConversations(user);
 	}
-	
-	
+
+	@Override
+	public String getConversationName(Conversation conversation, User user) throws RemoteException {
+		return ServerMessagingHandler.getConversationName(conversation, user);
+	}	
 }

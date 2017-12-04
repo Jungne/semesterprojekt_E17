@@ -272,7 +272,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private AnchorPane messagingPane;
 	@FXML
-	private ListView<HBoxCell> messagingConversationsListView;
+	private ListView<Label> messagingConversationsListView;
 	@FXML
 	private ListView<?> messagingActiveConversationListView;
 	@FXML
@@ -663,7 +663,7 @@ public class FXMLDocumentController implements Initializable {
 	private void handleToolBarButtons(ActionEvent event) throws RemoteException {
 		if (event.getSource() == toolBarMessagingButton) {
 			showPane(messagingPane);
-			loadMyConversations();
+			getUserConversations();
 		} else if (event.getSource() == toolBarBrowseTripsButton) {
 			showPane(browseTripsPane);
 			resetBrowseTripPane();
@@ -1035,16 +1035,21 @@ public class FXMLDocumentController implements Initializable {
 
 	}
 
-	private void loadMyConversations() {
-		List<Conversation> conversations = clientController.loadMyConversations();
+	private void getUserConversations() {
+		List<Conversation> conversations = clientController.getUserConversations();
 
 		if (conversations != null) {
-			List<HBoxCell> list = new ArrayList<>();
+			List<Label> list = new ArrayList<>();
 
-			for (Conversation conversation : conversations) {
-				list.add(new HBoxCell(conversation));
+			try {
+
+				for (Conversation conversation : conversations) {
+					String name = clientController.getConversationName(conversation);
+					list.add(new Label(name));
+				}
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
-
 			ObservableList observableList = FXCollections.observableArrayList(list);
 			messagingConversationsListView.setItems(observableList);
 		}

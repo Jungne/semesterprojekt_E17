@@ -116,7 +116,11 @@ public class ClientController {
 		ClientMessagingHandler.setCurrentConversation(serverController, tripID);
 	}
 	
-	public List<Conversation> loadMyConversations() {
-		return ClientMessagingHandler.loadMyConversations(serverController, currentUser);
+	public List<Conversation> getUserConversations() {
+		return ClientMessagingHandler.getUserConversations(serverController, currentUser);
+	}
+	
+	public String getConversationName(Conversation conversation) throws RemoteException {
+		return serverController.getConversationName(conversation, currentUser);
 	}
 }

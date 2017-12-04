@@ -58,9 +58,9 @@ public class ClientMessagingHandler {
 		serverController.addActiveConversation(tripID);
 	}
 
-	public static List<Conversation> loadMyConversations(IServerController serverController, User user) {
+	public static List<Conversation> getUserConversations(IServerController serverController, User user) {
 		try {
-			return serverController.loadMyConversations(user);
+			return serverController.getUserConversations(user);
 		} catch (RemoteException ex) {
 			Logger.getLogger(ClientMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}

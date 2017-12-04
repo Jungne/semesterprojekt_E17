@@ -58,6 +58,7 @@ public class DatabaseSetup {
 	private static String createConversationsQuery
 					= "CREATE TABLE IF NOT EXISTS Conversations ("
 					+ "conversationID serial, "
+					+ "type varchar(255), "
 					+ "PRIMARY KEY (conversationID)"
 					+ ");";
 
@@ -234,7 +235,8 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2)");
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (6, 1)");
 		//Inserts conversations
-		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT)");
+		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
+		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'users')");
 		//Inserts trips
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Doc Hollywood', 'Pallor', 70.14, '2016-11-23', 1, '8 Dawn Park', 11, 2, 1);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Septien', 'Pathological fracture in oth disease, unsp ankle, init', 79.21, '2018-06-19', 1, '5 Bonner Hill', 12, 2, 1);");
