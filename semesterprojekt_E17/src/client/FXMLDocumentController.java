@@ -564,7 +564,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Gets all locations from the server and displays them in the comboBox
 		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
-		locations.add(0, new Location(-1, ""));
+		locations.add(0, new Location(-1, "All locations"));
 		searchTripsLocationComboBox.setItems(locations);
 
 		//Gets all categories from the server and displays them in the comboBox
@@ -796,6 +796,7 @@ public class FXMLDocumentController implements Initializable {
 			}
 		} else if (event.getSource() == toolBarBrowseUsersButton) {
 			showPane(browseUsersPane);
+			resetBrowseUsersPane();
 		}
 	}
 	// </editor-fold>
@@ -1189,28 +1190,41 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleBrowseUsersSearchButtons(ActionEvent event) {
 		if (event.getSource().equals(browseUsersSearchButton)) {
-			try {
-				String searchText = browseUsersTextField.getText();
-				List<User> users = clientController.searchUsers(searchText);
-				List<HBoxCell> list = new ArrayList<>();
-
-				for (User user : users) {
-					list.add(new HBoxCell(user));
-				}
-
-				ObservableList observableList = FXCollections.observableArrayList(list);
-				browseUsersListView.setItems(observableList);
-
-			} catch (RemoteException ex) {
-				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-			}
+			searchUsers();
 		} else if (event.getSource().equals(browseUsersMessageButton)) {
 			int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
 			//Use userId to open a conversation.
 		}
 	}
-	// </editor-fold>
 
+	private void searchUsers() {
+		try {
+			String searchText = browseUsersTextField.getText();
+			List<User> users = clientController.searchUsers(searchText);
+			List<HBoxCell> list = new ArrayList<>();
+
+			for (User user : users) {
+				list.add(new HBoxCell(user));
+			}
+
+			ObservableList observableList = FXCollections.observableArrayList(list);
+			browseUsersListView.setItems(observableList);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public void resetBrowseUsersPane() {
+
+		//Reset parameters for browse users
+		browseUsersTextField.clear();
+		
+		//Reload all users
+		searchUsers();
+		
+	}
+
+	// </editor-fold>
 	private void loadConversation(int ConversationId) {
 
 	}
