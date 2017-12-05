@@ -270,9 +270,11 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileNameLabel;
 	@FXML
 	private Label profileEmailLabel;
+	@FXML
+	private Button profilePaneChangePictureButton;
 	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="Browse user - Elements">
+	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
 	private AnchorPane browseUsersPane;
 	@FXML
@@ -357,7 +359,8 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This
+	 * This method handels choosing an image and is in use when creating a trip, 
+	 * creating a user and when updating the profile picture
 	 *
 	 * @param title
 	 */
@@ -405,6 +408,16 @@ public class FXMLDocumentController implements Initializable {
 		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
 		profilePictureImageView.setImage(image);
 	}
+	
+	/**
+	 * This method handels all the buttons on the profile Pane
+	 *
+	 */
+	private void handleProfileButtons() {
+		File newAccountProfilePictureFile = chooseImage("Select profile picture");
+		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
+		profilePictureImageView.setImage(profilePicture);
+	}
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Methods">
@@ -441,9 +454,12 @@ public class FXMLDocumentController implements Initializable {
 		} else if (event.getSource() == searchTripsCategoryComboBox) {
 			addCategoryListItem2();
 		} else if (event.getSource() == searchTripsViewTripButton) {
-			int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
-			System.out.println(tripId);
-			viewTrip(tripId, false);
+			if(browseTripsListView.getSelectionModel().isEmpty()){
+				//If no trip is selected, then nothing happens
+			}else{							
+				int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
+				viewTrip(tripId, false);
+			}
 		}
 	}
 
@@ -1157,13 +1173,25 @@ public class FXMLDocumentController implements Initializable {
 			resetCreateTripPane();
 			showPane(createTripPane1);
 		}
-		if (event.getSource() == myTripsModifyTripButton) {
-			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-			viewTrip(id, true);
+		else if(event.getSource() == myTripsModifyTripButton) {
+			
+			//If no trip is selected, then nothing happens
+			if(myTripsListView.getSelectionModel().isEmpty()){
+			
+			}else{
+				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+				viewTrip(id, true);
+			}	
 		}
-		if (event.getSource() == myTripsViewTripButton) {
-			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-			viewTrip(id, false);
+		else if (event.getSource() == myTripsViewTripButton) {
+			
+			//If no trip is selected, then nothing happens
+			if(myTripsListView.getSelectionModel().isEmpty()){
+			
+			}else{
+				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+				viewTrip(id, false);
+			}
 		}
 	}
 
@@ -1199,9 +1227,14 @@ public class FXMLDocumentController implements Initializable {
 	private void handleBrowseUsersSearchButtons(ActionEvent event) {
 		if (event.getSource().equals(browseUsersSearchButton)) {
 			searchUsers();
-		} else if (event.getSource().equals(browseUsersMessageButton)) {
-			int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
+		} else if (event.getSource().equals(browseUsersMessageButton)) {			
+			//Nothing happens if no user is selected
+			if(browseUsersListView.getSelectionModel().isEmpty()){
+				return;
+			}else{
+				int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
 			//Use userId to open a conversation.
+			}
 		}
 	}
 
@@ -1242,6 +1275,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// </editor-fold>
+	
 	private void loadConversation(int ConversationId) {
 
 	}
