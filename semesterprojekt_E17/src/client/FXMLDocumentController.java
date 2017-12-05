@@ -414,9 +414,12 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void handleProfileButtons() {
-		File newAccountProfilePictureFile = chooseImage("Select profile picture");
-		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
-		profilePictureImageView.setImage(profilePicture);
+		Platform.runLater(() -> {
+		File ProfilePictureFile = chooseImage("Select profile picture");
+		
+		//TODO
+		
+		});
 	}
 	// </editor-fold>
 
@@ -703,9 +706,11 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	@FXML
 	private void handleChooseProfilePictureButton(ActionEvent event) {
-		File newAccountProfilePictureFile = chooseImage("Select profile picture");
+		Platform.runLater(() -> {
+		newAccountProfilePictureFile = chooseImage("Select profile picture");
 		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
 		newAccountImageView.setImage(profilePicture);
+		});
 	}
 
 	/**
@@ -1228,9 +1233,8 @@ public class FXMLDocumentController implements Initializable {
 		if (event.getSource().equals(browseUsersSearchButton)) {
 			searchUsers();
 		} else if (event.getSource().equals(browseUsersMessageButton)) {			
-			//Nothing happens if no user is selected
 			if(browseUsersListView.getSelectionModel().isEmpty()){
-				return;
+			//Nothing happens if no user is selected
 			}else{
 				int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
 			//Use userId to open a conversation.
@@ -1248,6 +1252,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private void searchUsers() {
+		Platform.runLater(() -> {
 		try {
 			String searchText = browseUsersTextField.getText();
 			List<User> users = clientController.searchUsers(searchText);
@@ -1262,6 +1267,7 @@ public class FXMLDocumentController implements Initializable {
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
+		});
 	}
 
 	public void resetBrowseUsersPane() {
