@@ -18,6 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -125,68 +126,73 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Create Trip - Elements">
-	private int currentIntructorTextOccupiers = 0;
-
-	@FXML
-	private Text createTripInvalidPictureText;
+	// <editor-fold defaultstate="collapsed" desc="Pane 1 - Elements">
 	@FXML
 	private AnchorPane createTripPane1;
-	@FXML
-	private AnchorPane createTripPane2;
-	@FXML
-	private Button createTripNextButton;
-	@FXML
-	private Button createTripBackButton;
-	@FXML
-	private Button createTripCreateTripButton;
-	@FXML
-	private ComboBox<Category> createTripCategoryComboBox;
-	@FXML
-	private Text createTripInvalidCategoryText;
-	@FXML
-	private ComboBox<Location> createTripLocationComboBox;
 	@FXML
 	private TextField createTripTitleTextField;
 	@FXML
 	private Text createTripInvalidTitleText;
 	@FXML
+	private Button createTripAddPictureButton;
+	@FXML
+	private HBox createTripPictureListHBox;
+	@FXML
+	private Text createTripInvalidPictureText;
+	@FXML
 	private TextArea createTripDescriptionTextArea;
 	@FXML
+	private ComboBox<Category> createTripCategoryComboBox;
+	@FXML
+	private HBox createTripCategoryListHBox;
+	@FXML
+	private Text createTripInvalidCategoryText;
+	@FXML
+	private Text createTripIntructorText;
+	@FXML
+	private Button createTripCancelButton1;
+	@FXML
+	private Button createTripNextButton;
+
+	private int currentIntructorTextOccupiers = 0;
+	// </editor-fold>
+
+	// <editor-fold defaultstate="collapsed" desc="Pane 2 - Elements">
+	@FXML
+	private AnchorPane createTripPane2;
+	@FXML
 	private TextField createTripAddressTextField;
+	@FXML
+	private Text createTripInvalidMeetingAddressText;
 	@FXML
 	private TextField createTripPriceTextField;
 	@FXML
 	private Text createTripInvalidPriceText;
 	@FXML
-	private DatePicker createTripTimeStartDatePicker;
-	@FXML
-	private Text createTripInvalidDateText;
-	@FXML
-	private TextField createTripParticipantLimitTextField;
-	@FXML
-	private TextField createTripTagsTextField;
-	@FXML
-	private Text createTripInvalidParticipantLimitText;
-	@FXML
-	private Button createTripCancelButton1;
-	@FXML
-	private Button createTripCancelButton2;
+	private ComboBox<Location> createTripLocationComboBox;
 	@FXML
 	private Text createTripInvalidLocationText;
 	@FXML
-	private Button createTripAddPictureButton;
+	private TextField createTripParticipantLimitTextField;
 	@FXML
-	private HBox createTripPictureListHBox;
+	private Text createTripInvalidParticipantLimitText;
 	@FXML
-	private Text createTripInvalidMeetingAddressText;
-	@FXML
-	private HBox createTripCategoryListHBox;
-	@FXML
-	private Text createTripIntructorText;
+	private DatePicker createTripTimeStartDatePicker;
 	@FXML
 	private Spinner<Integer> createTripHourSpinner;
 	@FXML
 	private Spinner<Integer> createTripMinuteSpinner;
+	@FXML
+	private Text createTripInvalidDateText;
+	@FXML
+	private TextField createTripTagsTextField;
+	@FXML
+	private Button createTripCreateTripButton;
+	@FXML
+	private Button createTripCancelButton2;
+	@FXML
+	private Button createTripBackButton;
+	// </editor-fold>
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Elements">
@@ -231,11 +237,15 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private TextField logInEmailTextField;
 	@FXML
+	private Text logInInvalidEmailText;
+	@FXML
 	private TextField logInPasswordTextField;
 	@FXML
-	private Hyperlink newAccountButton;
+	private Text logInInvalidPasswordText;
 	@FXML
 	private Button logInButton;
+	@FXML
+	private Hyperlink newAccountButton;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="New Account - Elements">
@@ -299,6 +309,7 @@ public class FXMLDocumentController implements Initializable {
 	public void initialize(URL url, ResourceBundle rb) {
 		try {
 			clientController = new ClientController();
+			stage = null;
 
 			newAccountImageView.setImage(new Image("default_profile_picture.png"));
 
@@ -318,7 +329,6 @@ public class FXMLDocumentController implements Initializable {
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		stage = null;
 	}
 
 	/**
@@ -344,16 +354,16 @@ public class FXMLDocumentController implements Initializable {
 	 * This method
 	 *
 	 * @param trips
-	 * @param listview
+	 * @param listView
 	 *
 	 */
-	private void showTrips(List<Trip> trips, ListView listview) {
+	private void showTrips(List<Trip> trips, ListView listView) {
 		List<HBoxCell> list = new ArrayList<>();
 		for (Trip trip : trips) {
 			list.add(new HBoxCell(trip));
 		}
 		ObservableList observableList = FXCollections.observableArrayList(list);
-		listview.setItems(observableList);
+		listView.setItems(observableList);
 	}
 
 	/**
@@ -613,6 +623,10 @@ public class FXMLDocumentController implements Initializable {
 // </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Log in - Methods">
+	private void resetLogInOutPane() {
+		//TODO
+	}
+
 	/**
 	 * This method
 	 *
@@ -620,11 +634,23 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	@FXML
 	private void handleLogInButton(ActionEvent event) {
-		String username = logInEmailTextField.getText();
-		String password = hashPassword(logInPasswordTextField.getText());
+		String email = logInEmailTextField.getText();
+		String password = logInPasswordTextField.getText();
+
+		//Checks if email or password is empty
+		if (!isLogInParametersValid(email, password)) {
+			return;
+		}
 
 		try {
-			clientController.signIn(username, password);
+			if (!clientController.signIn(email, hashPassword(password))) {
+				logInInvalidEmailText.setText("Email does not match with password!");
+				logInInvalidEmailText.setVisible(true);
+				logInInvalidPasswordText.setText("Password does not match with email!");
+				logInInvalidPasswordText.setVisible(true);
+				return;
+			}
+
 			showPane(profilePane);
 			loadProfileInfo();
 			toolBarMyTripsButton.setDisable(false);
@@ -634,6 +660,28 @@ public class FXMLDocumentController implements Initializable {
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
+	}
+
+	private boolean isLogInParametersValid(String email, String password) {
+		boolean isLogInParametersValid = true;
+
+		if (email == null || email.isEmpty()) {
+			isLogInParametersValid = false;
+			logInInvalidEmailText.setText("Enter email!");
+			logInInvalidEmailText.setVisible(true);
+		} else {
+			logInInvalidEmailText.setVisible(false);
+		}
+
+		if (password == null || password.isEmpty()) {
+			isLogInParametersValid = false;
+			logInInvalidPasswordText.setText("Enter password!");
+			logInInvalidPasswordText.setVisible(true);
+		} else {
+			logInInvalidPasswordText.setVisible(false);
+		}
+
+		return isLogInParametersValid;
 	}
 
 	/**
@@ -653,6 +701,10 @@ public class FXMLDocumentController implements Initializable {
 	 * @return the hash of the password
 	 */
 	private String hashPassword(String password) {
+		if (password == null || password.length() < 4) {
+			return null;
+		}
+
 		byte[] hashBytes = null;
 		// shitty attempt at salting the password :)
 		password += password.substring(0, 4);
@@ -1019,7 +1071,7 @@ public class FXMLDocumentController implements Initializable {
 			priceString = "0";
 		}
 		//Gets date and time
-		//TODO - Should get time also
+		LocalTime time = LocalTime.of(createTripHourSpinner.getValue(), createTripMinuteSpinner.getValue());
 		LocalDate date = createTripTimeStartDatePicker.getValue();
 		//Gets location, meeting address and participant limit
 		Location location = createTripLocationComboBox.getValue();
@@ -1054,7 +1106,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Converts price, date, participant limit and image now that validation is checked
 		double price = Double.parseDouble(priceString);
-		LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 12, 0);
+		LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), time.getHour(), time.getMinute());
 		int participantLimit = Integer.parseInt(participantLimitString);
 
 		//Creates trip

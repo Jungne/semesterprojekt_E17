@@ -39,10 +39,13 @@ public class ClientController {
 		currentUser = serverController.signUp(user, password);
 	}
 
-	public void signIn(String username, String password) throws RemoteException {
-		currentUser = serverController.signIn(username, password);
+	public boolean signIn(String email, String password) throws RemoteException {
+		currentUser = serverController.signIn(email, password);
 		if (currentUser != null) {
 			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser.getId()));
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -132,8 +135,9 @@ public class ClientController {
 	public void sendMessage(String message) throws RemoteException {
 		ClientMessagingHandler.sendMessage(serverController, message, currentUser);
 	}
-	
+
 	public void setActiveConversation(Conversation conversation) throws RemoteException {
 		ClientMessagingHandler.setActiveConversation(serverController, conversation);
 	}
+
 }

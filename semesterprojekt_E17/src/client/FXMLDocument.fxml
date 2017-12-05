@@ -293,10 +293,20 @@
          <children>
             <Label layoutX="71.0" layoutY="117.0" text="Email" />
             <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />
-            <Label layoutX="71.0" layoutY="167.0" text="Password" />
-            <Hyperlink fx:id="newAccountButton" layoutX="72.0" layoutY="258.0" onAction="#handleNewAccountButton" text="Create new account" />
-            <Button fx:id="logInButton" layoutX="74.0" layoutY="218.0" mnemonicParsing="false" onAction="#handleLogInButton" text="Log In" />
-            <PasswordField fx:id="logInPasswordTextField" layoutX="71.0" layoutY="184.0" prefHeight="25.0" prefWidth="240.0" />
+						<Text fx:id="logInInvalidEmailText" fill="#da0303" layoutX="71.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter email!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Label layoutX="71.0" layoutY="177.0" text="Password" />
+						<PasswordField fx:id="logInPasswordTextField" layoutX="71.0" layoutY="194.0" prefHeight="25.0" prefWidth="240.0" />
+						<Text fx:id="logInInvalidPasswordText" fill="#da0303" layoutX="71.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter password!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Button fx:id="logInButton" layoutX="73.0" layoutY="241.0" mnemonicParsing="false" onAction="#handleLogInButton" text="Log In" />
+            <Hyperlink fx:id="newAccountButton" layoutX="71.0" layoutY="281.0" onAction="#handleNewAccountButton" text="Create new account" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="newAccountPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">

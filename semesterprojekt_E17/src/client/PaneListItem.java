@@ -8,12 +8,10 @@ import javafx.scene.layout.Pane;
 
 public class PaneListItem extends Pane {
 
-	private Pane parent;
 	private Button button;
 	private Button cancelButton;
 
 	public PaneListItem(String buttonText) {
-		this.parent = parent;
 		setUpButtons(buttonText);
 	}
 

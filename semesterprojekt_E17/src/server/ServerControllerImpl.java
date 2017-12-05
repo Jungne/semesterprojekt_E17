@@ -21,7 +21,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	private ServerMessagingHandler messagingHandler;
 
 	public ServerControllerImpl() throws RemoteException {
-			messagingHandler = new ServerMessagingHandler();
+		messagingHandler = new ServerMessagingHandler();
 	}
 
 	@Override
@@ -30,8 +30,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public User signIn(String username, String password) throws RemoteException {
-		return ServerUserHandler.signIn(username, password);
+	public User signIn(String email, String password) throws RemoteException {
+		return ServerUserHandler.signIn(email, password);
 	}
 
 	@Override
@@ -129,12 +129,12 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public List<User> searchUsers(String query) {
 		return ServerUserHandler.searchUsers(query);
 	}
-	
+
 	@Override
 	public List<Trip> getMyTrips(User user) {
 		return ServerTripHandler.getMyTrips(user);
 	}
-	
+
 	@Override
 	public void addActiveConversation(int tripID) {
 		messagingHandler.addActiveConversation(tripID);
@@ -148,5 +148,6 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	@Override
 	public String getConversationName(Conversation conversation, User user) throws RemoteException {
 		return ServerMessagingHandler.getConversationName(conversation, user);
-	}	
+	}
+	
 }
