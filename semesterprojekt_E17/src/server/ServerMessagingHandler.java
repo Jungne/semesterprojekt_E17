@@ -8,7 +8,6 @@ import interfaces.User;
 import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -209,7 +208,7 @@ public class ServerMessagingHandler {
 	public static List<Integer> loadConversationUsersIds(int conversationId) {
 		try {
 			String query = ""
-							+ "SELECT userID"
+							+ "SELECT userID "
 							+ "FROM UsersInConversations "
 							+ "WHERE conversationID = " + conversationId;
 

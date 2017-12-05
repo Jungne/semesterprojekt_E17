@@ -23,11 +23,11 @@ public class Message implements Serializable, Comparable {
 	public Message(int senderId, String message, int conversationId) {
 		this.senderId = senderId;
 		this.message = message;
-		this.conversationId = conversationId;
+		this.conversationId = conversationId;		
 	}
 
 	public int getSenderId() {
-		return sender.getId();
+		return sender != null ? sender.getId() : senderId;
 	}
 
 	public String getMessage() {
