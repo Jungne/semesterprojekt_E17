@@ -9,9 +9,11 @@ import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
@@ -249,8 +251,6 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="New Account - Elements">
-	private File newAccountProfilePictureFile;
-
 	@FXML
 	private AnchorPane newAccountPane;
 	@FXML
@@ -269,6 +269,8 @@ public class FXMLDocumentController implements Initializable {
 	private Button newAccountCreateButton;
 	@FXML
 	private Button newAccountBackButton;
+
+	private byte[] newAccountProfilePicture;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Profile - Elements">
@@ -404,6 +406,20 @@ public class FXMLDocumentController implements Initializable {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle(title);
 		return fileChooser.showOpenDialog(stage);
+	}
+
+	private void signInUpdateClient(boolean isSignIn) {
+		if (isSignIn) {
+			toolBarMyTripsButton.setDisable(false);
+			toolBarProfileButton.setDisable(false);
+			toolBarMessagingButton.setDisable(false);
+			toolbarLogInLogOutButton.setText("Log out");
+		} else {
+			toolBarMyTripsButton.setDisable(true);
+			toolBarProfileButton.setDisable(true);
+			toolBarMessagingButton.setDisable(true);
+			toolbarLogInLogOutButton.setText("Log in");
+		}
 	}
 	// </editor-fold>
 
@@ -674,10 +690,7 @@ public class FXMLDocumentController implements Initializable {
 
 			showPane(profilePane);
 			loadProfileInfo();
-			toolBarMyTripsButton.setDisable(false);
-			toolBarProfileButton.setDisable(false);
-			toolBarMessagingButton.setDisable(false);
-			toolbarLogInLogOutButton.setText("Log out");
+			signInUpdateClient(true);
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -749,6 +762,9 @@ public class FXMLDocumentController implements Initializable {
 		newAccountEmailTextField.clear();
 		newAccountPasswordTextField.clear();
 		newAccountRepeatPasswordTextField.clear();
+
+		//Resets imageFile and imageView
+		newAccountProfilePicture = null;
 		newAccountImageView.setImage(new Image("default_profile_picture.png"));
 	}
 
@@ -770,10 +786,22 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	@FXML
 	private void handleChooseProfilePictureButton(ActionEvent event) {
+		File imageFile = chooseImage("Select profile picture");
+
 		Platform.runLater(() -> {
-			newAccountProfilePictureFile = chooseImage("Select profile picture");
-			Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
-			newAccountImageView.setImage(profilePicture);
+			try {
+				String imageFileName = imageFile.getName();
+				String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
+				//Converts file to byte array
+				BufferedImage image = ImageIO.read(imageFile);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, imageFileType, baos);
+
+				newAccountProfilePicture = baos.toByteArray();
+				newAccountImageView.setImage(new Image(imageFile.toURI().toString()));
+			} catch (Exception ex) {
+				//Failed to choose valid image
+			}
 		});
 	}
 
@@ -788,17 +816,7 @@ public class FXMLDocumentController implements Initializable {
 		String email = newAccountEmailTextField.getText();
 		String password = newAccountPasswordTextField.getText();
 		String repeatPassword = newAccountRepeatPasswordTextField.getText();
-		byte[] profilePicture = null;
-
-		BufferedImage bImage = SwingFXUtils.fromFXImage(newAccountImageView.getImage(), null);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			ImageIO.write(bImage, "png", baos);
-			profilePicture = baos.toByteArray();
-			baos.close();
-		} catch (IOException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		byte[] profilePicture = newAccountProfilePicture;
 
 		if (password.equals(repeatPassword)) {
 			User user = new User(-1, email, name, profilePicture);
@@ -806,6 +824,7 @@ public class FXMLDocumentController implements Initializable {
 				clientController.signUp(user, hashPassword(password));
 				showPane(profilePane);
 				loadProfileInfo();
+				signInUpdateClient(true);
 			} catch (RemoteException ex) {
 				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -879,10 +898,7 @@ public class FXMLDocumentController implements Initializable {
 			resetLogInPane();
 			if (clientController.getCurrentUser() != null) {
 				clientController.signOut();
-				toolBarMyTripsButton.setDisable(true);
-				toolBarProfileButton.setDisable(true);
-				toolBarMessagingButton.setDisable(true);
-				toolbarLogInLogOutButton.setText("Log in");
+				signInUpdateClient(false);
 			}
 		} else if (event.getSource() == toolBarBrowseUsersButton) {
 			showPane(browseUsersPane);
@@ -972,7 +988,6 @@ public class FXMLDocumentController implements Initializable {
 	private void addImageListItem() {
 		//Chooses file with FileChooser
 		File imageFile = chooseImage("Select trip picture");
-		FXMLDocumentController fxmlController = this;
 
 		new Thread(() -> {
 			createTripInvalidPictureText.setVisible(false);
@@ -984,14 +999,13 @@ public class FXMLDocumentController implements Initializable {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, imageFileType, baos);
 				//Inserts values in imageItem
-				ImageListItem imageListItem = new ImageListItem(fxmlController, imageFileName, baos.toByteArray());
+				ImageListItem imageListItem = new ImageListItem(this, imageFileName, baos.toByteArray());
 
 				Platform.runLater(() -> {
 					createTripPictureListHBox.getChildren().add(imageListItem);
 				});
 
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
 				createTripInvalidPictureText.setVisible(true);
 			}
 		}).start();
