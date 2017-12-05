@@ -80,7 +80,7 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <TextField fx:id="searchTripsTitleTextField" layoutX="20.0" layoutY="79.0" prefHeight="27.0" prefWidth="200.0" promptText="Tiitle?" />
+            <TextField fx:id="searchTripsTitleTextField" layoutX="20.0" layoutY="79.0" prefHeight="27.0" prefWidth="200.0" promptText="Title?" />
             <Label layoutX="20.0" layoutY="180.0" text="Category">
                <font>
                   <Font name="System Bold" size="13.0" />

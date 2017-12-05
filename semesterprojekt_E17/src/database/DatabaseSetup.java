@@ -227,6 +227,7 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'julos14@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Jungne', 1);");
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lalun13@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Lasse', 1);");
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Laura', 1);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'tester', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Tim', 1);");
 		//Inserts certificates
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (1, 1)");
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (2, 2)");
