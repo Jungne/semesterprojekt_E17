@@ -233,7 +233,7 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="LogInOut - Elements">
 	@FXML
-	private AnchorPane logInOutPane;
+	private AnchorPane logInPane;
 	@FXML
 	private TextField logInEmailTextField;
 	@FXML
@@ -369,7 +369,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method handels choosing an image and is in use when creating a trip, 
+	 * This method handels choosing an image and is in use when creating a trip,
 	 * creating a user and when updating the profile picture
 	 *
 	 * @param title
@@ -418,17 +418,16 @@ public class FXMLDocumentController implements Initializable {
 		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
 		profilePictureImageView.setImage(image);
 	}
-	
+
 	/**
 	 * This method handels all the buttons on the profile Pane
 	 *
 	 */
 	private void handleProfileButtons() {
 		Platform.runLater(() -> {
-		File ProfilePictureFile = chooseImage("Select profile picture");
-		
-		//TODO
-		
+			File ProfilePictureFile = chooseImage("Select profile picture");
+
+			//TODO
 		});
 	}
 	// </editor-fold>
@@ -467,9 +466,9 @@ public class FXMLDocumentController implements Initializable {
 		} else if (event.getSource() == searchTripsCategoryComboBox) {
 			addCategoryListItem2();
 		} else if (event.getSource() == searchTripsViewTripButton) {
-			if(browseTripsListView.getSelectionModel().isEmpty()){
+			if (browseTripsListView.getSelectionModel().isEmpty()) {
 				//If no trip is selected, then nothing happens
-			}else{							
+			} else {
 				int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(tripId, false);
 			}
@@ -642,8 +641,11 @@ public class FXMLDocumentController implements Initializable {
 // </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Log in - Methods">
-	private void resetLogInOutPane() {
-		//TODO
+	private void resetLogInPane() {
+		logInEmailTextField.clear();
+		logInPasswordTextField.clear();
+		logInInvalidEmailText.setVisible(false);
+		logInInvalidPasswordText.setVisible(false);
 	}
 
 	/**
@@ -748,7 +750,7 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	@FXML
 	private void handleNewAccountBackButton(ActionEvent event) {
-		showPane(logInOutPane);
+		showPane(logInPane);
 	}
 
 	/**
@@ -759,9 +761,9 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleChooseProfilePictureButton(ActionEvent event) {
 		Platform.runLater(() -> {
-		newAccountProfilePictureFile = chooseImage("Select profile picture");
-		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
-		newAccountImageView.setImage(profilePicture);
+			newAccountProfilePictureFile = chooseImage("Select profile picture");
+			Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
+			newAccountImageView.setImage(profilePicture);
 		});
 	}
 
@@ -863,7 +865,8 @@ public class FXMLDocumentController implements Initializable {
 			showPane(profilePane);
 			loadProfileInfo();
 		} else if (event.getSource() == toolbarLogInLogOutButton) {
-			showPane(logInOutPane);
+			showPane(logInPane);
+			resetLogInPane();
 			if (clientController.getCurrentUser() != null) {
 				clientController.signOut();
 				toolBarMyTripsButton.setDisable(true);
@@ -1229,23 +1232,21 @@ public class FXMLDocumentController implements Initializable {
 		if (event.getSource() == myTripsCreateTripButton) {
 			resetCreateTripPane();
 			showPane(createTripPane1);
-		}
-		else if(event.getSource() == myTripsModifyTripButton) {
-			
+		} else if (event.getSource() == myTripsModifyTripButton) {
+
 			//If no trip is selected, then nothing happens
-			if(myTripsListView.getSelectionModel().isEmpty()){
-			
-			}else{
+			if (myTripsListView.getSelectionModel().isEmpty()) {
+
+			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(id, true);
-			}	
-		}
-		else if (event.getSource() == myTripsViewTripButton) {
-			
+			}
+		} else if (event.getSource() == myTripsViewTripButton) {
+
 			//If no trip is selected, then nothing happens
-			if(myTripsListView.getSelectionModel().isEmpty()){
-			
-			}else{
+			if (myTripsListView.getSelectionModel().isEmpty()) {
+
+			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(id, false);
 			}
@@ -1284,12 +1285,12 @@ public class FXMLDocumentController implements Initializable {
 	private void handleBrowseUsersSearchButtons(ActionEvent event) {
 		if (event.getSource().equals(browseUsersSearchButton)) {
 			searchUsers();
-		} else if (event.getSource().equals(browseUsersMessageButton)) {			
-			if(browseUsersListView.getSelectionModel().isEmpty()){
-			//Nothing happens if no user is selected
-			}else{
+		} else if (event.getSource().equals(browseUsersMessageButton)) {
+			if (browseUsersListView.getSelectionModel().isEmpty()) {
+				//Nothing happens if no user is selected
+			} else {
 				int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
-			//Use userId to open a conversation.
+				//Use userId to open a conversation.
 			}
 		}
 	}
@@ -1305,20 +1306,20 @@ public class FXMLDocumentController implements Initializable {
 
 	private void searchUsers() {
 		Platform.runLater(() -> {
-		try {
-			String searchText = browseUsersTextField.getText();
-			List<User> users = clientController.searchUsers(searchText);
-			List<HBoxCell> list = new ArrayList<>();
+			try {
+				String searchText = browseUsersTextField.getText();
+				List<User> users = clientController.searchUsers(searchText);
+				List<HBoxCell> list = new ArrayList<>();
 
-			for (User user : users) {
-				list.add(new HBoxCell(user));
+				for (User user : users) {
+					list.add(new HBoxCell(user));
+				}
+
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				browseUsersListView.setItems(observableList);
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
-
-			ObservableList observableList = FXCollections.observableArrayList(list);
-			browseUsersListView.setItems(observableList);
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		}
 		});
 	}
 
@@ -1333,7 +1334,6 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// </editor-fold>
-	
 	private void loadConversation(int ConversationId) {
 
 	}
