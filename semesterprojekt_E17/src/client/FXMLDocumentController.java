@@ -313,8 +313,6 @@ public class FXMLDocumentController implements Initializable {
 			clientController = new ClientController();
 			stage = null;
 
-			newAccountImageView.setImage(new Image("default_profile_picture.png"));
-
 			messagingConversationsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
 
 				@Override
@@ -333,6 +331,7 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
+	// <editor-fold defaultstate="collapsed" desc="Common - Methods">
 	/**
 	 * This method
 	 *
@@ -369,19 +368,6 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method handels choosing an image and is in use when creating a trip,
-	 * creating a user and when updating the profile picture
-	 *
-	 * @param title
-	 */
-	private File chooseImage(String title) {
-		stage = mainPane.getScene().getWindow();
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle(title);
-		return fileChooser.showOpenDialog(stage);
-	}
-
-	/**
 	 * This method
 	 *
 	 * @param id
@@ -406,6 +392,20 @@ public class FXMLDocumentController implements Initializable {
 			}
 		}
 	}
+
+	/**
+	 * This method handels choosing an image and is in use when creating a trip,
+	 * creating a user and when updating the profile picture
+	 *
+	 * @param title
+	 */
+	private File chooseImage(String title) {
+		stage = mainPane.getScene().getWindow();
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle(title);
+		return fileChooser.showOpenDialog(stage);
+	}
+	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Profile - Methods">
 	/**
@@ -713,6 +713,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleNewAccountButton(ActionEvent event) {
 		showPane(newAccountPane);
+		resetNewAccountPane();
 	}
 
 	/**
@@ -742,7 +743,15 @@ public class FXMLDocumentController implements Initializable {
 	}
 	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="New Account - Methods">	
+	// <editor-fold defaultstate="collapsed" desc="New Account - Methods">
+	private void resetNewAccountPane() {
+		newAccountNameTextField.clear();
+		newAccountEmailTextField.clear();
+		newAccountPasswordTextField.clear();
+		newAccountRepeatPasswordTextField.clear();
+		newAccountImageView.setImage(new Image("default_profile_picture.png"));
+	}
+
 	/**
 	 * This method
 	 *
@@ -751,6 +760,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleNewAccountBackButton(ActionEvent event) {
 		showPane(logInPane);
+		resetLogInPane();
 	}
 
 	/**
@@ -809,7 +819,7 @@ public class FXMLDocumentController implements Initializable {
 		System.out.println(tripId);
 		viewTrip(tripId, false);
 	}
-// </editor-fold>
+	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Modify Trips - Methods">
 	/**
