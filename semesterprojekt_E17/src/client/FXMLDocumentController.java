@@ -30,7 +30,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,6 +43,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -182,6 +183,10 @@ public class FXMLDocumentController implements Initializable {
 	private HBox createTripCategoryListHBox;
 	@FXML
 	private Text createTripIntructorText;
+	@FXML
+	private Spinner<Integer> createTripHourSpinner;
+	@FXML
+	private Spinner<Integer> createTripMinuteSpinner;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Elements">
@@ -265,9 +270,11 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileNameLabel;
 	@FXML
 	private Label profileEmailLabel;
+	@FXML
+	private Button profilePaneChangePictureButton;
 	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="Browse user - Elements">
+	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
 	private AnchorPane browseUsersPane;
 	@FXML
@@ -352,7 +359,8 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This
+	 * This method handels choosing an image and is in use when creating a trip, 
+	 * creating a user and when updating the profile picture
 	 *
 	 * @param title
 	 */
@@ -400,6 +408,16 @@ public class FXMLDocumentController implements Initializable {
 		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
 		profilePictureImageView.setImage(image);
 	}
+	
+	/**
+	 * This method handels all the buttons on the profile Pane
+	 *
+	 */
+	private void handleProfileButtons() {
+		File newAccountProfilePictureFile = chooseImage("Select profile picture");
+		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
+		profilePictureImageView.setImage(profilePicture);
+	}
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Methods">
@@ -436,9 +454,12 @@ public class FXMLDocumentController implements Initializable {
 		} else if (event.getSource() == searchTripsCategoryComboBox) {
 			addCategoryListItem2();
 		} else if (event.getSource() == searchTripsViewTripButton) {
-			int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
-			System.out.println(tripId);
-			viewTrip(tripId, false);
+			if(browseTripsListView.getSelectionModel().isEmpty()){
+				//If no trip is selected, then nothing happens
+			}else{							
+				int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
+				viewTrip(tripId, false);
+			}
 		}
 	}
 
@@ -724,7 +745,6 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
-	@FXML
 	private void handleViewTripButton(ActionEvent event) {
 		int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
 		System.out.println(tripId);
@@ -814,6 +834,10 @@ public class FXMLDocumentController implements Initializable {
 		//Gets all locations from the server and displays them in the comboBox
 		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
 		createTripLocationComboBox.setItems(locations);
+
+		//Sets the ValueFactory for hour and minute Spinner
+		createTripHourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
+		createTripMinuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59));
 
 		//Reset parameters
 		createTripTitleTextField.setText(null);
@@ -1149,13 +1173,25 @@ public class FXMLDocumentController implements Initializable {
 			resetCreateTripPane();
 			showPane(createTripPane1);
 		}
-		if (event.getSource() == myTripsModifyTripButton) {
-			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-			viewTrip(id, true);
+		else if(event.getSource() == myTripsModifyTripButton) {
+			
+			//If no trip is selected, then nothing happens
+			if(myTripsListView.getSelectionModel().isEmpty()){
+			
+			}else{
+				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+				viewTrip(id, true);
+			}	
 		}
-		if (event.getSource() == myTripsViewTripButton) {
-			int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-			viewTrip(id, false);
+		else if (event.getSource() == myTripsViewTripButton) {
+			
+			//If no trip is selected, then nothing happens
+			if(myTripsListView.getSelectionModel().isEmpty()){
+			
+			}else{
+				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+				viewTrip(id, false);
+			}
 		}
 	}
 
@@ -1191,9 +1227,14 @@ public class FXMLDocumentController implements Initializable {
 	private void handleBrowseUsersSearchButtons(ActionEvent event) {
 		if (event.getSource().equals(browseUsersSearchButton)) {
 			searchUsers();
-		} else if (event.getSource().equals(browseUsersMessageButton)) {
-			int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
+		} else if (event.getSource().equals(browseUsersMessageButton)) {			
+			//Nothing happens if no user is selected
+			if(browseUsersListView.getSelectionModel().isEmpty()){
+				return;
+			}else{
+				int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
 			//Use userId to open a conversation.
+			}
 		}
 	}
 
@@ -1234,6 +1275,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// </editor-fold>
+	
 	private void loadConversation(int ConversationId) {
 
 	}
