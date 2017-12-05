@@ -205,17 +205,29 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Text viewTripTitleLabel;
 	@FXML
-	private Text viewTripDescriptionLabel;
-	@FXML
-	private Text viewTripPriceLabel;
-	@FXML
 	private ListView viewListOfParticipants;
 	@FXML
 	private Button joinTripButton;
-	@FXML
-	private Text viewTripDescriptionLabel1;
+  @FXML
+  private Text viewTripParticipantsLabel;
+  @FXML
+  private ImageView viewTripPaneImageView;
+  @FXML
+  private TextArea viewTripDescriptionTextArea;
+  @FXML
+  private TextField viewTripPriceTextField;
+  @FXML
+  private TextField viewTripOrganizerTextField;
+  @FXML
+  private TextField viewTripDateTextField;
+  @FXML
+  private TextField viewTripLocationTextField;
+  @FXML
+  private Label viewTripLimitLabel;
+  @FXML
+  private TextArea viewTripCategoriesTextArea;
 	// </editor-fold>
-
+  
 	// <editor-fold defaultstate="collapsed" desc="Modify Trip - Elements">
 	@FXML
 	private AnchorPane modifyTripPane;
@@ -386,10 +398,16 @@ public class FXMLDocumentController implements Initializable {
 				modifyTripPriceTextField.setText("" + viewedTrip.getPrice());
 				showPane(modifyTripPane);
 			} else {
-				viewTripTitleLabel.setText("Trip #" + viewedTrip.getId() + " - " + viewedTrip.getTitle());
-				viewTripDescriptionLabel.setText(viewedTrip.getDescription());
-				viewTripPriceLabel.setText("Price: " + viewedTrip.getPrice());
+				viewTripTitleLabel.setText(viewedTrip.getTitle());
+				viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
+				viewTripPriceTextField.setText("" + viewedTrip.getPrice());
 				viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
+        viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
+        viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
+        viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
+        viewTripCategoriesTextArea.setText(viewedTrip.getCategories().toString());
+        viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
+        viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new Image("default.jpg") : new Image(new ByteArrayInputStream(viewedTrip.getImages().get(0))));
 				showPane(viewTripPane);
 			}
 		}

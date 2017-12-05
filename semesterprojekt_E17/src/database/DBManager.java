@@ -24,7 +24,8 @@ public class DBManager {
 		String url = "jdbc:postgresql://localhost:5432/Test";
 		String user = "postgres";
 		String password = "1234";
-		 */
+    */
+		
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {
