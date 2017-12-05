@@ -3,17 +3,18 @@ package interfaces;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Message implements Serializable {
+public class Message implements Serializable, Comparable {
 
 	private int id;
 	private int senderId;
+	private User sender;
 	private String message;
 	private LocalDateTime timestamp;
 	private int conversationId;
 
-	public Message(int id, int senderId, String message, LocalDateTime timestamp, int conversationId) {
+	public Message(int id, User sender, String message, LocalDateTime timestamp, int conversationId) {
 		this.id = id;
-		this.senderId = senderId;
+		this.sender = sender;
 		this.message = message;
 		this.timestamp = timestamp;
 		this.conversationId = conversationId;
@@ -26,7 +27,7 @@ public class Message implements Serializable {
 	}
 
 	public int getSenderId() {
-		return senderId;
+		return sender.getId();
 	}
 
 	public String getMessage() {
@@ -43,6 +44,21 @@ public class Message implements Serializable {
 
 	public int getId() {
 		return id;
+	}	
+
+	public User getSender() {
+		return sender;
 	}
 	
+	@Override
+	public int compareTo(Object o) {
+		Message m = (Message) o;
+		if (timestamp.isAfter(m.getTimestamp())) {
+			return -1;
+		} else if (timestamp.isBefore(m.getTimestamp())) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}	
 }

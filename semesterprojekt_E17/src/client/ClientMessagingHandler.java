@@ -10,6 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -20,6 +21,7 @@ public class ClientMessagingHandler {
 	private static MessageReceiver receiver = null;
 	private static Conversation activeConversation = null;
 	private static int activeConversationId;
+	private static ObservableList messagesList;
 
 	/**
 	 * Remote object that is passed to the server and used to perform callbacks
@@ -32,27 +34,31 @@ public class ClientMessagingHandler {
 	private static class MessageReceiver extends UnicastRemoteObject implements IChatClient {
 
 		private String test = "test";
-		private int userId;
+		private User user;
 
-		protected MessageReceiver(int userId) throws RemoteException {
+		protected MessageReceiver(User user) throws RemoteException {
 			super();
-			this.userId = userId;
+			this.user = user;
 		}
 
 		@Override
 		public void receiveMessage(Message message) throws RemoteException {
 			System.out.println(message.getMessage());
+
+			if (activeConversationId == message.getConversationId()) {
+				messagesList.add(new HBoxCell(message, user));
+			}
 		}
 
 		@Override
 		public int getUserId() {
-			return userId;
+			return user.getId();
 		}
 	}
 
-	public static MessageReceiver getMessagereceiverInstance(int userId) throws RemoteException {
+	public static MessageReceiver getMessagereceiverInstance(User user) throws RemoteException {
 		if (receiver == null) {
-			receiver = new MessageReceiver(userId);
+			receiver = new MessageReceiver(user);
 		}
 		return receiver;
 	}
@@ -83,5 +89,13 @@ public class ClientMessagingHandler {
 
 	public static void sendMessage(IServerController serverController, String message, User user) throws RemoteException {
 		serverController.sendMessage(new Message(user.getId(), message, activeConversationId));
+	}
+
+	public static void setMessagesList(ObservableList messagesList) {
+		ClientMessagingHandler.messagesList = messagesList;
+	}
+	
+	public static void signOut() {
+		receiver = null;
 	}
 }

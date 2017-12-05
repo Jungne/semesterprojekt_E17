@@ -25,10 +25,10 @@ public class ClientController {
 	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
-		String hostname = "localhost";
+		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
 
 		try {
-			Registry registry = LocateRegistry.getRegistry(hostname, 12345);
+			Registry registry = LocateRegistry.getRegistry(hostname, 12312);
 			serverController = (IServerController) registry.lookup("serverController");
 		} catch (RemoteException | NotBoundException ex) {
 			ex.printStackTrace();
@@ -42,7 +42,7 @@ public class ClientController {
 	public void signIn(String username, String password) throws RemoteException {
 		currentUser = serverController.signIn(username, password);
 		if (currentUser != null) {
-			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser.getId()));
+			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser));
 		}
 	}
 

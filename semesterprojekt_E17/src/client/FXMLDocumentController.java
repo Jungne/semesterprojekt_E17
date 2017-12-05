@@ -5,6 +5,7 @@ import interfaces.Category;
 import interfaces.Conversation;
 import interfaces.FullTripException;
 import interfaces.Location;
+import interfaces.Message;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
@@ -19,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -297,6 +299,8 @@ public class FXMLDocumentController implements Initializable {
 	private Button messagingSendButton;
 	// </editor-fold>
 
+	private ObservableList messagingConversationList;
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		try {
@@ -309,8 +313,10 @@ public class FXMLDocumentController implements Initializable {
 				@Override
 				public void changed(ObservableValue<? extends HBoxCell> observable, HBoxCell newValue, HBoxCell oldValue) {
 					int id = messagingConversationsListView.getSelectionModel().getSelectedItem().getConversationId();
+					String type = messagingConversationsListView.getSelectionModel().getSelectedItem().getType();
 					try {
 						clientController.setCurrentConversation(id);
+						showConversation(getConversation(new Conversation(id, type)));
 					} catch (RemoteException ex) {
 						Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 					}
@@ -359,7 +365,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method handels choosing an image and is in use when creating a trip, 
+	 * This method handels choosing an image and is in use when creating a trip,
 	 * creating a user and when updating the profile picture
 	 *
 	 * @param title
@@ -408,7 +414,7 @@ public class FXMLDocumentController implements Initializable {
 		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
 		profilePictureImageView.setImage(image);
 	}
-	
+
 	/**
 	 * This method handels all the buttons on the profile Pane
 	 *
@@ -454,9 +460,9 @@ public class FXMLDocumentController implements Initializable {
 		} else if (event.getSource() == searchTripsCategoryComboBox) {
 			addCategoryListItem2();
 		} else if (event.getSource() == searchTripsViewTripButton) {
-			if(browseTripsListView.getSelectionModel().isEmpty()){
+			if (browseTripsListView.getSelectionModel().isEmpty()) {
 				//If no trip is selected, then nothing happens
-			}else{							
+			} else {
 				int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(tripId, false);
 			}
@@ -809,6 +815,7 @@ public class FXMLDocumentController implements Initializable {
 			showPane(logInOutPane);
 			if (clientController.getCurrentUser() != null) {
 				clientController.signOut();
+				ClientMessagingHandler.signOut();
 				toolBarMyTripsButton.setDisable(true);
 				toolBarProfileButton.setDisable(true);
 				toolBarMessagingButton.setDisable(true);
@@ -1172,23 +1179,21 @@ public class FXMLDocumentController implements Initializable {
 		if (event.getSource() == myTripsCreateTripButton) {
 			resetCreateTripPane();
 			showPane(createTripPane1);
-		}
-		else if(event.getSource() == myTripsModifyTripButton) {
-			
+		} else if (event.getSource() == myTripsModifyTripButton) {
+
 			//If no trip is selected, then nothing happens
-			if(myTripsListView.getSelectionModel().isEmpty()){
-			
-			}else{
+			if (myTripsListView.getSelectionModel().isEmpty()) {
+
+			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(id, true);
-			}	
-		}
-		else if (event.getSource() == myTripsViewTripButton) {
-			
+			}
+		} else if (event.getSource() == myTripsViewTripButton) {
+
 			//If no trip is selected, then nothing happens
-			if(myTripsListView.getSelectionModel().isEmpty()){
-			
-			}else{
+			if (myTripsListView.getSelectionModel().isEmpty()) {
+
+			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(id, false);
 			}
@@ -1227,13 +1232,13 @@ public class FXMLDocumentController implements Initializable {
 	private void handleBrowseUsersSearchButtons(ActionEvent event) {
 		if (event.getSource().equals(browseUsersSearchButton)) {
 			searchUsers();
-		} else if (event.getSource().equals(browseUsersMessageButton)) {			
+		} else if (event.getSource().equals(browseUsersMessageButton)) {
 			//Nothing happens if no user is selected
-			if(browseUsersListView.getSelectionModel().isEmpty()){
+			if (browseUsersListView.getSelectionModel().isEmpty()) {
 				return;
-			}else{
+			} else {
 				int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
-			//Use userId to open a conversation.
+				//Use userId to open a conversation.
 			}
 		}
 	}
@@ -1275,33 +1280,45 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// </editor-fold>
-	
 	private void loadConversation(int ConversationId) {
 
 	}
 
 	private void getUserConversations() {
-		List<Conversation> conversations = clientController.getUserConversations();
+		Platform.runLater(() -> {
+			List<Conversation> conversations = clientController.getUserConversations();
 
-		if (conversations != null) {
-			List<HBoxCell> list = new ArrayList<>();
+			if (conversations != null) {
+				List<HBoxCell> list = new ArrayList<>();
 
-			try {
+				try {
 
-				for (Conversation conversation : conversations) {
-					String name = clientController.getConversationName(conversation);
-					list.add(new HBoxCell(conversation, name));
+					for (Conversation conversation : conversations) {
+						String name = clientController.getConversationName(conversation);
+						list.add(new HBoxCell(conversation, name));
+					}
+				} catch (RemoteException ex) {
+					Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 				}
-			} catch (RemoteException ex) {
-				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				messagingConversationsListView.setItems(observableList);
 			}
-			ObservableList observableList = FXCollections.observableArrayList(list);
-			messagingConversationsListView.setItems(observableList);
-		}
+		});
 	}
 
 	private void showConversation(Conversation conversation) {
+		List<HBoxCell> list = new ArrayList<>();
+		int userId = clientController.getCurrentUser().getId();
 
+		for (Message message : getConversation(conversation).getMessages()) {
+			list.add(new HBoxCell(message, clientController.getCurrentUser()));
+		}
+
+		Collections.reverse(list);
+		messagingConversationList = FXCollections.observableArrayList(list);
+		messagingActiveConversationListView.setItems(messagingConversationList);
+		messagingActiveConversationListView.scrollTo(messagingConversationList.size() - 1);
+		ClientMessagingHandler.setMessagesList(messagingConversationList);
 	}
 
 	private void sendMessage(String message) {
@@ -1316,4 +1333,5 @@ public class FXMLDocumentController implements Initializable {
 	private void handleSendMessageButton(ActionEvent event) {
 		sendMessage(messagingTextField.getText());
 	}
+
 }
