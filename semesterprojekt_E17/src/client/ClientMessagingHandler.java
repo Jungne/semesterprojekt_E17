@@ -23,10 +23,8 @@ public class ClientMessagingHandler {
 
 	/**
 	 * Remote object that is passed to the server and used to perform callbacks
-	 * that deliver messages into the queue object
-	 *
-	 * @author ups
-	 *
+	 * that deliver messages, represents a user on the
+	 * server.
 	 */
 	@SuppressWarnings("serial")
 	private static class MessageReceiver extends UnicastRemoteObject implements IChatClient {
