@@ -1,16 +1,15 @@
 package client;
 
-import java.io.IOException;
 import interfaces.Category;
 import interfaces.Conversation;
 import interfaces.FullTripException;
+import interfaces.Image;
 import interfaces.Location;
 import interfaces.Message;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -35,7 +34,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -53,7 +51,6 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -207,15 +204,27 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Text viewTripTitleLabel;
 	@FXML
-	private Text viewTripDescriptionLabel;
-	@FXML
-	private Text viewTripPriceLabel;
-	@FXML
 	private ListView viewListOfParticipants;
 	@FXML
 	private Button joinTripButton;
 	@FXML
-	private Text viewTripDescriptionLabel1;
+	private Text viewTripParticipantsLabel;
+	@FXML
+	private ImageView viewTripPaneImageView;
+	@FXML
+	private TextArea viewTripDescriptionTextArea;
+	@FXML
+	private TextField viewTripPriceTextField;
+	@FXML
+	private TextField viewTripOrganizerTextField;
+	@FXML
+	private TextField viewTripDateTextField;
+	@FXML
+	private TextField viewTripLocationTextField;
+	@FXML
+	private Label viewTripLimitLabel;
+	@FXML
+	private TextArea viewTripCategoriesTextArea;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Modify Trip - Elements">
@@ -272,7 +281,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button newAccountBackButton;
 
-	private byte[] newAccountProfilePicture;
+	private Image newAccountProfilePicture;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Profile - Elements">
@@ -392,10 +401,16 @@ public class FXMLDocumentController implements Initializable {
 				modifyTripPriceTextField.setText("" + viewedTrip.getPrice());
 				showPane(modifyTripPane);
 			} else {
-				viewTripTitleLabel.setText("Trip #" + viewedTrip.getId() + " - " + viewedTrip.getTitle());
-				viewTripDescriptionLabel.setText(viewedTrip.getDescription());
-				viewTripPriceLabel.setText("Price: " + viewedTrip.getPrice());
+				viewTripTitleLabel.setText(viewedTrip.getTitle());
+				viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
+				viewTripPriceTextField.setText("" + viewedTrip.getPrice());
 				viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
+				viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
+				viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
+				viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
+				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().toString());
+				viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0))));
 				showPane(viewTripPane);
 			}
 		}
@@ -437,8 +452,8 @@ public class FXMLDocumentController implements Initializable {
 	private void loadProfileInfo() {
 		profileNameLabel.setText(clientController.getCurrentUser().getName());
 		profileEmailLabel.setText(clientController.getCurrentUser().getEmail());
-		Image image = new Image(new ByteArrayInputStream(clientController.getCurrentUser().getImage()));
-		profilePictureImageView.setImage(image);
+		InputStream inputStream = new ByteArrayInputStream(clientController.getCurrentUser().getImage().getImageFile());
+		profilePictureImageView.setImage(new javafx.scene.image.Image(inputStream));
 	}
 
 	/**
@@ -771,7 +786,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Resets imageFile and imageView
 		newAccountProfilePicture = null;
-		newAccountImageView.setImage(new Image("default_profile_picture.png"));
+		newAccountImageView.setImage(new javafx.scene.image.Image("default_profile_picture.png"));
 	}
 
 	/**
@@ -803,8 +818,8 @@ public class FXMLDocumentController implements Initializable {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, imageFileType, baos);
 
-				newAccountProfilePicture = baos.toByteArray();
-				newAccountImageView.setImage(new Image(imageFile.toURI().toString()));
+				newAccountProfilePicture = new Image(imageFileName, baos.toByteArray());
+				newAccountImageView.setImage(new javafx.scene.image.Image(imageFile.toURI().toString()));
 			} catch (Exception ex) {
 				//Failed to choose valid image
 			}
@@ -822,7 +837,7 @@ public class FXMLDocumentController implements Initializable {
 		String email = newAccountEmailTextField.getText();
 		String password = newAccountPasswordTextField.getText();
 		String repeatPassword = newAccountRepeatPasswordTextField.getText();
-		byte[] profilePicture = newAccountProfilePicture;
+		Image profilePicture = newAccountProfilePicture;
 
 		if (password.equals(repeatPassword)) {
 			User user = new User(-1, email, name, profilePicture);

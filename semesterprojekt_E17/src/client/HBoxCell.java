@@ -73,12 +73,12 @@ public class HBoxCell extends HBox {
 
 		id = user.getId();
 
-		InputStream inputStream = new ByteArrayInputStream(user.getImage());
+		InputStream inputStream = new ByteArrayInputStream(user.getImage().getImageFile());
 		imageView.setImage(new Image(inputStream));
 
 		title.setText(user.getName());
 		title.setPrefWidth(150);
-//		title.setStyle("-fx-font-weight: bold");
+		//title.setStyle("-fx-font-weight: bold");
 
 		imageView.setFitWidth(100);
 		imageView.setPreserveRatio(true);
