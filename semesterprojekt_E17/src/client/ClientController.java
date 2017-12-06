@@ -26,6 +26,7 @@ public class ClientController {
 
 	public ClientController() throws RemoteException {
 		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
+//		String hostname = "localhost";
 
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12312);

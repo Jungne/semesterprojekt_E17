@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -377,9 +378,21 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	private void showTrips(List<Trip> trips, ListView listView) {
 		List<HBoxCell> list = new ArrayList<>();
-		for (Trip trip : trips) {
+		
+//		for (Trip trip : trips) {
+//			list.add(new HBoxCell(trip));
+//		}
+
+		trips.parallelStream().forEach((Trip trip) -> {
 			list.add(new HBoxCell(trip));
-		}
+		});
+			//Sorts the list
+//		list.sort(new Comparator<HBoxCell>() {		 
+//			public int compare(HBoxCell h1, HBoxCell h2) {
+//				return h1.getTripId() - h2.getTripId();
+//			}			
+//		});
+
 		ObservableList observableList = FXCollections.observableArrayList(list);
 		listView.setItems(observableList);
 	}
@@ -1356,9 +1369,13 @@ public class FXMLDocumentController implements Initializable {
 				List<User> users = clientController.searchUsers(searchText);
 				List<HBoxCell> list = new ArrayList<>();
 
-				for (User user : users) {
+//				for (User user : users) {
+//					list.add(new HBoxCell(user));
+//				}
+
+				users.parallelStream().forEach((User user) -> {
 					list.add(new HBoxCell(user));
-				}
+				});
 
 				ObservableList observableList = FXCollections.observableArrayList(list);
 				browseUsersListView.setItems(observableList);
