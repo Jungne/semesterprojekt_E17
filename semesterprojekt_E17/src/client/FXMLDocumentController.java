@@ -404,7 +404,7 @@ public class FXMLDocumentController implements Initializable {
 				viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
 				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().toString());
 				viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
-				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0))));
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
 				showPane(viewTripPane);
 			}
 		}
@@ -1014,7 +1014,7 @@ public class FXMLDocumentController implements Initializable {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, imageFileType, baos);
 				//Inserts values in imageItem
-				ImageListItem imageListItem = new ImageListItem(this, imageFileName, baos.toByteArray());
+				ImageListItem imageListItem = new ImageListItem(this, new Image(imageFileName, baos.toByteArray()));
 
 				Platform.runLater(() -> {
 					createTripPictureListHBox.getChildren().add(imageListItem);
@@ -1157,9 +1157,9 @@ public class FXMLDocumentController implements Initializable {
 			}
 		}
 		//Gets trip images
-		List<byte[]> images = new ArrayList<>();
+		List<Image> images = new ArrayList<>();
 		for (Node node : createTripPictureListHBox.getChildren()) {
-			images.add(((ImageListItem) node).getImageByteArray());
+			images.add(((ImageListItem) node).getImage());
 		}
 
 		//Checks if parameters are valid

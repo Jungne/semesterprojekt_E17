@@ -3,6 +3,7 @@ package client;
 import interfaces.Category;
 import interfaces.FullTripException;
 import interfaces.IServerController;
+import interfaces.Image;
 import interfaces.Location;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
 
 public class ClientTripHandler {
 
-	public static int createTrip(IServerController serverController, String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
+	public static int createTrip(IServerController serverController, String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<Image> images) throws Exception {
 		try {
 			return serverController.createTrip(new Trip(title, description, categories, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images));
 		} catch (RemoteException ex) {

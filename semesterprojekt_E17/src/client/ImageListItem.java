@@ -1,22 +1,24 @@
 package client;
 
+import interfaces.Image;
+
 public class ImageListItem extends PaneListItem {
 
 	private FXMLDocumentController fxmlController;
-	private byte[] imageByteArray;
+	private Image image;
 
-	public ImageListItem(FXMLDocumentController fxmlController, String imageName, byte[] imageByteArray) {
-		super(imageName);
+	public ImageListItem(FXMLDocumentController fxmlController, Image image) {
+		super(image.getTitle());
 		this.fxmlController = fxmlController;
-		this.imageByteArray = imageByteArray;
+		this.image = image;
 		setCancelButtonAction();
 	}
 
 	/**
 	 * @return the imageByteArray
 	 */
-	public byte[] getImageByteArray() {
-		return imageByteArray;
+	public Image getImage() {
+		return image;
 	}
 
 	private void setCancelButtonAction() {

@@ -7,7 +7,6 @@ import interfaces.User;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -30,11 +29,11 @@ public class HBoxCell extends HBox {
 
 		id = trip.getId();
 
-		if (trip.getImages().get(0).length > 0) {
-			InputStream inputStream = new ByteArrayInputStream(trip.getImages().get(0));
-			imageView.setImage(new Image(inputStream));
+		if (trip.getImages().get(0).getImageFile().length > 0) {
+			InputStream inputStream = new ByteArrayInputStream(trip.getImages().get(0).getImageFile());
+			imageView.setImage(new javafx.scene.image.Image(inputStream));
 		} else {
-			imageView.setImage(new Image("default.jpg")); //Add default image or not.
+			imageView.setImage(new javafx.scene.image.Image("default.jpg")); //Add default image or not.
 		}
 
 		title.setText(trip.getTitle());
@@ -70,7 +69,7 @@ public class HBoxCell extends HBox {
 		id = user.getId();
 
 		InputStream inputStream = new ByteArrayInputStream(user.getImage().getImageFile());
-		imageView.setImage(new Image(inputStream));
+		imageView.setImage(new javafx.scene.image.Image(inputStream));
 
 		title.setText(user.getName());
 		title.setPrefWidth(150);

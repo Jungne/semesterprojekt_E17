@@ -24,7 +24,7 @@ public class Trip implements Serializable {
 	private List<OptionalPrice> optionalPrices = new ArrayList<>();
 	private Conversation conversation;
 	private Set<String> tags = new HashSet<>();
-	private List<byte[]> images = new ArrayList<>();
+	private List<Image> images = new ArrayList<>();
 
 	/**
 	 * Constructor to add all information
@@ -46,7 +46,7 @@ public class Trip implements Serializable {
 	 * @param tags
 	 * @param images
 	 */
-	public Trip(int id, String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<User> participants, List<InstructorListItem> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, Set<String> tags, List<byte[]> images) {
+	public Trip(int id, String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<User> participants, List<InstructorListItem> instructors, List<OptionalPrice> optionalPrices, Conversation conversation, Set<String> tags, List<Image> images) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -70,7 +70,7 @@ public class Trip implements Serializable {
 		this.title = title;
 	}
 
-	public Trip(int id, String title, String description, double price, byte[] image) {
+	public Trip(int id, String title, String description, double price, Image image) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -78,7 +78,7 @@ public class Trip implements Serializable {
 		images.add(image);
 	}
 
-	public Trip(int id, String title, String description, List<Category> categories, double price, byte[] image) {
+	public Trip(int id, String title, String description, List<Category> categories, double price, Image image) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -106,7 +106,7 @@ public class Trip implements Serializable {
 	 * @param images
 	 * @throws java.lang.Exception
 	 */
-	public Trip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
+	public Trip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<Image> images) throws Exception {
 		this.title = title;
 		this.description = description;
 		this.categories = categories;
@@ -125,7 +125,7 @@ public class Trip implements Serializable {
 		this.images = images;
 	}
 
-  public Trip(int id, String title, String description, double price, LocalDateTime date, Location location, int participantLimit, User organizer, ArrayList<Category> categories, ArrayList<byte[]> images) {
+  public Trip(int id, String title, String description, double price, LocalDateTime date, Location location, int participantLimit, User organizer, List<Category> categories, List<Image> images) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -250,7 +250,7 @@ public class Trip implements Serializable {
 	/**
 	 * @return the images
 	 */
-	public List<byte[]> getImages() {
+	public List<Image> getImages() {
 		return images;
 	}
 
