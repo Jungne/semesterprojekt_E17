@@ -1415,6 +1415,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleSendMessageButton(ActionEvent event) {
 		sendMessage(messagingTextField.getText());
+    messagingTextField.setText("");
 	}
 
 }
