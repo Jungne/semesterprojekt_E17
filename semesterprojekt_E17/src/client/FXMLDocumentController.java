@@ -405,7 +405,7 @@ public class FXMLDocumentController implements Initializable {
 				viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
 				viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
 				viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
-				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().toString());
+				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 				viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
 				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
 				showPane(viewTripPane);
@@ -1408,6 +1408,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleSendMessageButton(ActionEvent event) {
 		sendMessage(messagingTextField.getText());
+    messagingTextField.setText("");
 	}
 
 }
