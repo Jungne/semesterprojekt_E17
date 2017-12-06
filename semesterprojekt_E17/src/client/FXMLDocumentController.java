@@ -338,8 +338,8 @@ public class FXMLDocumentController implements Initializable {
 			});
 
 			//Load all trips to browse trips, when the program starts
-			resetBrowseTripPane(); 
-			
+			resetBrowseTripPane();
+
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -786,24 +786,19 @@ public class FXMLDocumentController implements Initializable {
 		newAccountImageView.setImage(new javafx.scene.image.Image("default_profile_picture.png"));
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
 	@FXML
-	private void handleNewAccountBackButton(ActionEvent event) {
-		showPane(logInPane);
-		resetLogInPane();
+	private void handleNewAccountButtons(ActionEvent event) {
+		if (event.getSource() == newAccountProfilePictureButton) {
+			chooseProfilePicture();
+		} else if (event.getSource() == newAccountCreateButton) {
+			createAccount();
+		} else if (event.getSource() == newAccountBackButton) {
+			showPane(logInPane);
+			resetLogInPane();
+		}
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
-	@FXML
-	private void handleChooseProfilePictureButton(ActionEvent event) {
+	private void chooseProfilePicture() {
 		File imageFile = chooseImage("Select profile picture");
 
 		Platform.runLater(() -> {
@@ -828,8 +823,7 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 * @param event
 	 */
-	@FXML
-	private void handleCreateAccountButton(ActionEvent event) {
+	private void createAccount() {
 		String name = newAccountNameTextField.getText();
 		String email = newAccountEmailTextField.getText();
 		String password = newAccountPasswordTextField.getText();
@@ -837,9 +831,8 @@ public class FXMLDocumentController implements Initializable {
 		Image profilePicture = newAccountProfilePicture;
 
 		if (password.equals(repeatPassword)) {
-			User user = new User(-1, email, name, profilePicture);
 			try {
-				clientController.signUp(user, hashPassword(password));
+				clientController.signUp(email, name, profilePicture, hashPassword(password));
 				showPane(profilePane);
 				loadProfileInfo();
 				signInUpdateClient(true);

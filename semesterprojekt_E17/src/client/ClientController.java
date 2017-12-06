@@ -35,12 +35,12 @@ public class ClientController {
 		}
 	}
 
-	public void signUp(User user, String password) throws RemoteException {
-		currentUser = serverController.signUp(user, password);
+	public void signUp(String email, String name, Image profilePicture, String password) throws RemoteException {
+		currentUser = ClientUserHandler.signUp(serverController, email, name, profilePicture, password);
 	}
 
 	public boolean signIn(String email, String password) throws RemoteException {
-		currentUser = serverController.signIn(email, password);
+		currentUser = ClientUserHandler.signIn(serverController, email, password);
 		if (currentUser != null) {
 			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser.getId()));
 			return true;

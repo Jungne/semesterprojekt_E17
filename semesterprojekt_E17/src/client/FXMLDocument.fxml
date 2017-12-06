@@ -332,15 +332,15 @@
             <PasswordField fx:id="newAccountPasswordTextField" layoutX="115.0" layoutY="254.0" />
             <PasswordField fx:id="newAccountRepeatPasswordTextField" layoutX="115.0" layoutY="312.0" prefHeight="25.0" prefWidth="150.0" />
             <ImageView fx:id="newAccountImageView" fitHeight="150.0" fitWidth="200.0" layoutX="330.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" />
-            <Button fx:id="newAccountProfilePictureButton" layoutX="330.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleChooseProfilePictureButton" text="Choose image" />
+            <Button fx:id="newAccountProfilePictureButton" layoutX="330.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Choose image" />
             <Label layoutX="330.0" layoutY="154.0" text="Profile picture" />
-            <Button fx:id="newAccountCreateButton" layoutX="117.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleCreateAccountButton" text="Create account" />
-            <Button fx:id="newAccountBackButton" cancelButton="true" layoutX="223.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountBackButton" text="Back" />
+            <Button fx:id="newAccountCreateButton" layoutX="117.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Create account" />
+            <Button fx:id="newAccountBackButton" cancelButton="true" layoutX="223.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Back" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false">
          <children>
-            <Button fx:id="profilePaneChangePictureButton" layoutX="322.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleChooseProfilePictureButton" text="Change picture" />
+            <Button layoutX="322.0" layoutY="220.0" mnemonicParsing="false" text="Change picture" />
             <Label layoutX="52.0" layoutY="88.0" style="-fx-font-weight: bold;" text="Email" />
             <Label layoutX="51.0" layoutY="43.0" style="-fx-font-weight: bold;" text="Name" />
             <ImageView fx:id="profilePictureImageView" fitHeight="150.0" fitWidth="200.0" layoutX="322.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" />
