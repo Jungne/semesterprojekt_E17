@@ -1,7 +1,7 @@
 package server;
 
 import database.DBManager;
-import interfaces.Category;
+import interfaces.Image;
 import interfaces.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,36 +14,44 @@ public class ServerUserHandler {
 
 	private static DBManager dbm = DBManager.getInstance();
 
-	public static User createUser(User newUser, String password) {
-		String newUserEmail = newUser.getEmail();
-		String newUserName = newUser.getName();
-		List<Category> newUserCertificates = newUser.getCertificates();
-		byte[] newUserImage = newUser.getImage();
+	public static User createUser(User user, String password) {
+		//TODO - Should check if email is unique
+		String email = user.getEmail();
+		String name = user.getName();
+		Image profilePicture = user.getImage();
 
-		if (newUserEmail == null || newUserEmail.isEmpty()) {
+		if (email == null || email.isEmpty()) {
 			throw new IllegalArgumentException("Invalid user email.");
 		}
-		if (newUserName == null || newUserName.isEmpty()) {
-			return null;
+		if (name == null || name.isEmpty()) {
+			throw new IllegalArgumentException("Invalid user name.");
 		}
 		if (password == null || password.isEmpty()) {
-			return null;
+			throw new IllegalArgumentException("Invalid user password.");
 		}
 
+		//Inserts an image if the given image is not null
 		String sqlImageId = "null";
-		if (newUserImage != null) {
-			//Inserts the imageFile
-			String imageQuery = "INSERT INTO Images (imageTitle, imageFile) VALUES ('" + newUserName + "Image', ?)";
-			int imageId = dbm.executeImageInsertAndGetId(imageQuery, newUserImage);
-			sqlImageId = imageId + "";
+		if (profilePicture != null && profilePicture.getImageFile() != null) {
+			String sqlImageTitle;
+			if (profilePicture.getTitle() == null || profilePicture.getTitle().isEmpty()) {
+				sqlImageTitle = "null";
+			} else {
+				sqlImageTitle = "'" + profilePicture.getTitle() + "'";
+			}
+			String imageQuery = "INSERT INTO Images (imageID, imageTitle, imageFile) VALUES (DEFAULT, " + sqlImageTitle + ", ?)";
+			sqlImageId = dbm.executeImageInsertAndGetId(imageQuery, profilePicture.getImageFile()) + "";
 		}
 
 		//Inserts the new user.
+		String sqlEmail = "'" + email + "'";
+		String sqlPassword = "'" + password + "'";
+		String sqlUserName = "'" + name + "'";
 		String query = "INSERT INTO Users(email, password, userName, imageId) "
-						+ "VALUES('" + newUserEmail + "', '" + password + "', '" + newUserName + "', " + sqlImageId + ")";
+						+ "VALUES(" + sqlEmail + ", " + sqlPassword + ", " + sqlUserName + ", " + sqlImageId + ")";
 		int newUserId = dbm.executeInsertAndGetId(query);
 
-		return signIn(newUserEmail, password);
+		return signIn(email, password);
 	}
 
 	public static User signIn(String email, String password) {
@@ -59,9 +67,9 @@ public class ServerUserHandler {
 				int userId = userRs.getInt("userID");
 				String userEmail = userRs.getString("email");
 				String userName = userRs.getString("userName");
-				byte[] userImage = userRs.getBytes("imageFile");
+				byte[] userImageFile = userRs.getBytes("imageFile");
 
-				return new User(userId, userEmail, userName, userImage);
+				return new User(userId, userEmail, userName, new Image(userImageFile));
 			}
 
 		} catch (SQLException ex) {
@@ -87,9 +95,9 @@ public class ServerUserHandler {
 				int id = usersRs.getInt("userID");
 				String email = usersRs.getString("email");
 				String userName = usersRs.getString("userName");
-				byte[] image = usersRs.getBytes("imageFile");
+				byte[] imageFile = usersRs.getBytes("imageFile");
 
-				users.add(new User(id, email, userName, image));
+				users.add(new User(id, email, userName, new Image(imageFile)));
 			}
 
 			return users;

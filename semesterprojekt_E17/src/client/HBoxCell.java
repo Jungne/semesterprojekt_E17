@@ -69,19 +69,19 @@ public class HBoxCell extends HBox {
 
 		id = user.getId();
 
-		InputStream inputStream = new ByteArrayInputStream(user.getImage());
+		InputStream inputStream = new ByteArrayInputStream(user.getImage().getImageFile());
 		imageView.setImage(new Image(inputStream));
 
 		title.setText(user.getName());
 		title.setPrefWidth(150);
-//		title.setStyle("-fx-font-weight: bold");
+		//title.setStyle("-fx-font-weight: bold");
 
 		imageView.setFitWidth(100);
 		imageView.setPreserveRatio(true);
 
 		this.getChildren().addAll(imageView, title);
 	}
-	
+
 	public HBoxCell(Conversation conversation, String name) {
 		//Sets the padding and spacing.
 		super();
@@ -91,11 +91,11 @@ public class HBoxCell extends HBox {
 
 		title.setText(name);
 		title.setPrefWidth(150);
-//		title.setStyle("-fx-font-weight: bold");
+		//title.setStyle("-fx-font-weight: bold");
 
 		this.getChildren().addAll(title);
 	}
-	
+
 	public HBoxCell(Message message) {
 		id = message.getId();
 		title.setText(message.getMessage());
@@ -104,15 +104,16 @@ public class HBoxCell extends HBox {
 	public int getTripId() {
 		return id;
 	}
-	
+
 	/**
 	 * Undskyld redundans
-	 * @return 
+	 *
+	 * @return
 	 */
 	public int getUserId() {
 		return id;
 	}
-	
+
 	public int getConversationId() {
 		return id;
 	}

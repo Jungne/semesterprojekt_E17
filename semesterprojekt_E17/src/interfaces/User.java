@@ -10,15 +10,15 @@ public class User implements Serializable {
 	private String email;
 	private String name;
 	private List<Category> certificates = new ArrayList<>();
-	private byte[] image;
+	private Image image;
 
-	public User(int id, String email, String name, byte[] image) {
+	public User(int id, String email, String name, Image image) {
 		this.id = id;
 		this.email = email;
 		this.name = name;
 		this.image = image;
 	}
-  
+
 	public User(int id, String name) {
 		this.id = id;
 		this.name = name;
@@ -55,10 +55,10 @@ public class User implements Serializable {
 	/**
 	 * @return the image
 	 */
-	public byte[] getImage() {
+	public Image getImage() {
 		return image;
 	}
-	
+
 	public void promoteToInstructor(Category category) {
 		this.certificates.add(category);
 	}

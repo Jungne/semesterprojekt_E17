@@ -1,13 +1,10 @@
 package database;
 
-import com.sun.javafx.iio.ImageStorage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DatabaseSetup {
 
@@ -280,7 +277,6 @@ public class DatabaseSetup {
 		PreparedStatement imageStatement2 = dbm.getConnection().prepareStatement(imageQuery2);
 		imageStatement2.setBytes(1, defaultTripImage);
 		imageStatement2.executeUpdate();
-
 	}
 
 }
