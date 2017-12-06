@@ -337,6 +337,9 @@ public class FXMLDocumentController implements Initializable {
 				}
 			});
 
+			//Load all trips to browse trips, when the program starts
+			resetBrowseTripPane(); 
+			
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
