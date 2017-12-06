@@ -46,28 +46,29 @@ public class ServerUserHandler {
 		return signIn(newUserEmail, password);
 	}
 
-	public static User signIn(String signInEmail, String password) {
-		String query = "SELECT Users.userID, email, userName, imageFile "
-						+ "FROM Users, Images "
-						+ "WHERE email = '" + signInEmail + "' AND password = '" + password + "' AND Users.imageID = Images.imageId";
-		User user = null;
+	public static User signIn(String email, String password) {
+		String query = "SELECT userID, email, userName, imageFile "
+						+ "FROM Users "
+						+ "NATURAL JOIN Images "
+						+ "WHERE email = '" + email + "' AND password = '" + password + "';";
 
 		try {
 			ResultSet userRs = dbm.executeQuery(query);
 
-			userRs.next();
+			if (userRs.next()) {
+				int userId = userRs.getInt("userID");
+				String userEmail = userRs.getString("email");
+				String userName = userRs.getString("userName");
+				byte[] userImage = userRs.getBytes("imageFile");
 
-			int userId = userRs.getInt(1);
-			String userEmail = userRs.getString(2);
-			String userName = userRs.getString(3);
-			byte[] userImage = userRs.getBytes(4);
+				return new User(userId, userEmail, userName, userImage);
+			}
 
-			user = new User(userId, userEmail, userName, userImage);
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
-		return user;
+		return null;
 	}
 
 	public static List<User> searchUsers(String query) {
@@ -77,7 +78,7 @@ public class ServerUserHandler {
 							+ "FROM Users\n"
 							+ "INNER JOIN Images ON Users.imageID = images.imageID\n"
 							+ "WHERE LOWER(userName) LIKE LOWER('%" + query + "%')";
-			
+
 			ResultSet usersRs = dbm.executeQuery(sqlQuery);
 
 			ArrayList<User> users = new ArrayList<>();
@@ -87,7 +88,7 @@ public class ServerUserHandler {
 				String email = usersRs.getString("email");
 				String userName = usersRs.getString("userName");
 				byte[] image = usersRs.getBytes("imageFile");
-				
+
 				users.add(new User(id, email, userName, image));
 			}
 

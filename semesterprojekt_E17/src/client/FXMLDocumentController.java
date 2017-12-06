@@ -10,15 +10,18 @@ import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -127,68 +130,73 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Create Trip - Elements">
-	private int currentIntructorTextOccupiers = 0;
-
-	@FXML
-	private Text createTripInvalidPictureText;
+	// <editor-fold defaultstate="collapsed" desc="Pane 1 - Elements">
 	@FXML
 	private AnchorPane createTripPane1;
-	@FXML
-	private AnchorPane createTripPane2;
-	@FXML
-	private Button createTripNextButton;
-	@FXML
-	private Button createTripBackButton;
-	@FXML
-	private Button createTripCreateTripButton;
-	@FXML
-	private ComboBox<Category> createTripCategoryComboBox;
-	@FXML
-	private Text createTripInvalidCategoryText;
-	@FXML
-	private ComboBox<Location> createTripLocationComboBox;
 	@FXML
 	private TextField createTripTitleTextField;
 	@FXML
 	private Text createTripInvalidTitleText;
 	@FXML
+	private Button createTripAddPictureButton;
+	@FXML
+	private HBox createTripPictureListHBox;
+	@FXML
+	private Text createTripInvalidPictureText;
+	@FXML
 	private TextArea createTripDescriptionTextArea;
 	@FXML
+	private ComboBox<Category> createTripCategoryComboBox;
+	@FXML
+	private HBox createTripCategoryListHBox;
+	@FXML
+	private Text createTripInvalidCategoryText;
+	@FXML
+	private Text createTripIntructorText;
+	@FXML
+	private Button createTripCancelButton1;
+	@FXML
+	private Button createTripNextButton;
+
+	private int currentIntructorTextOccupiers = 0;
+	// </editor-fold>
+
+	// <editor-fold defaultstate="collapsed" desc="Pane 2 - Elements">
+	@FXML
+	private AnchorPane createTripPane2;
+	@FXML
 	private TextField createTripAddressTextField;
+	@FXML
+	private Text createTripInvalidMeetingAddressText;
 	@FXML
 	private TextField createTripPriceTextField;
 	@FXML
 	private Text createTripInvalidPriceText;
 	@FXML
-	private DatePicker createTripTimeStartDatePicker;
-	@FXML
-	private Text createTripInvalidDateText;
-	@FXML
-	private TextField createTripParticipantLimitTextField;
-	@FXML
-	private TextField createTripTagsTextField;
-	@FXML
-	private Text createTripInvalidParticipantLimitText;
-	@FXML
-	private Button createTripCancelButton1;
-	@FXML
-	private Button createTripCancelButton2;
+	private ComboBox<Location> createTripLocationComboBox;
 	@FXML
 	private Text createTripInvalidLocationText;
 	@FXML
-	private Button createTripAddPictureButton;
+	private TextField createTripParticipantLimitTextField;
 	@FXML
-	private HBox createTripPictureListHBox;
+	private Text createTripInvalidParticipantLimitText;
 	@FXML
-	private Text createTripInvalidMeetingAddressText;
-	@FXML
-	private HBox createTripCategoryListHBox;
-	@FXML
-	private Text createTripIntructorText;
+	private DatePicker createTripTimeStartDatePicker;
 	@FXML
 	private Spinner<Integer> createTripHourSpinner;
 	@FXML
 	private Spinner<Integer> createTripMinuteSpinner;
+	@FXML
+	private Text createTripInvalidDateText;
+	@FXML
+	private TextField createTripTagsTextField;
+	@FXML
+	private Button createTripCreateTripButton;
+	@FXML
+	private Button createTripCancelButton2;
+	@FXML
+	private Button createTripBackButton;
+	// </editor-fold>
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Elements">
@@ -229,20 +237,22 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="LogInOut - Elements">
 	@FXML
-	private AnchorPane logInOutPane;
+	private AnchorPane logInPane;
 	@FXML
 	private TextField logInEmailTextField;
 	@FXML
+	private Text logInInvalidEmailText;
+	@FXML
 	private TextField logInPasswordTextField;
 	@FXML
-	private Hyperlink newAccountButton;
+	private Text logInInvalidPasswordText;
 	@FXML
 	private Button logInButton;
+	@FXML
+	private Hyperlink newAccountButton;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="New Account - Elements">
-	private File newAccountProfilePictureFile;
-
 	@FXML
 	private AnchorPane newAccountPane;
 	@FXML
@@ -261,6 +271,8 @@ public class FXMLDocumentController implements Initializable {
 	private Button newAccountCreateButton;
 	@FXML
 	private Button newAccountBackButton;
+
+	private byte[] newAccountProfilePicture;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Profile - Elements">
@@ -305,8 +317,7 @@ public class FXMLDocumentController implements Initializable {
 	public void initialize(URL url, ResourceBundle rb) {
 		try {
 			clientController = new ClientController();
-
-			newAccountImageView.setImage(new Image("default_profile_picture.png"));
+			stage = null;
 
 			messagingConversationsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<HBoxCell>() {
 
@@ -326,9 +337,9 @@ public class FXMLDocumentController implements Initializable {
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		stage = null;
 	}
 
+	// <editor-fold defaultstate="collapsed" desc="Common - Methods">
 	/**
 	 * This method
 	 *
@@ -352,29 +363,16 @@ public class FXMLDocumentController implements Initializable {
 	 * This method
 	 *
 	 * @param trips
-	 * @param listview
+	 * @param listView
 	 *
 	 */
-	private void showTrips(List<Trip> trips, ListView listview) {
+	private void showTrips(List<Trip> trips, ListView listView) {
 		List<HBoxCell> list = new ArrayList<>();
 		for (Trip trip : trips) {
 			list.add(new HBoxCell(trip));
 		}
 		ObservableList observableList = FXCollections.observableArrayList(list);
-		listview.setItems(observableList);
-	}
-
-	/**
-	 * This method handels choosing an image and is in use when creating a trip,
-	 * creating a user and when updating the profile picture
-	 *
-	 * @param title
-	 */
-	private File chooseImage(String title) {
-		stage = mainPane.getScene().getWindow();
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle(title);
-		return fileChooser.showOpenDialog(stage);
+		listView.setItems(observableList);
 	}
 
 	/**
@@ -403,6 +401,34 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
+	/**
+	 * This method handels choosing an image and is in use when creating a trip,
+	 * creating a user and when updating the profile picture
+	 *
+	 * @param title
+	 */
+	private File chooseImage(String title) {
+		stage = mainPane.getScene().getWindow();
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle(title);
+		return fileChooser.showOpenDialog(stage);
+	}
+
+	private void signInUpdateClient(boolean isSignIn) {
+		if (isSignIn) {
+			toolBarMyTripsButton.setDisable(false);
+			toolBarProfileButton.setDisable(false);
+			toolBarMessagingButton.setDisable(false);
+			toolbarLogInLogOutButton.setText("Log out");
+		} else {
+			toolBarMyTripsButton.setDisable(true);
+			toolBarProfileButton.setDisable(true);
+			toolBarMessagingButton.setDisable(true);
+			toolbarLogInLogOutButton.setText("Log in");
+		}
+	}
+	// </editor-fold>
+
 	// <editor-fold defaultstate="collapsed" desc="Profile - Methods">
 	/**
 	 * This method
@@ -420,9 +446,11 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void handleProfileButtons() {
-		File newAccountProfilePictureFile = chooseImage("Select profile picture");
-		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
-		profilePictureImageView.setImage(profilePicture);
+		Platform.runLater(() -> {
+			File ProfilePictureFile = chooseImage("Select profile picture");
+
+			//TODO
+		});
 	}
 	// </editor-fold>
 
@@ -635,6 +663,13 @@ public class FXMLDocumentController implements Initializable {
 // </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Log in - Methods">
+	private void resetLogInPane() {
+		logInEmailTextField.clear();
+		logInPasswordTextField.clear();
+		logInInvalidEmailText.setVisible(false);
+		logInInvalidPasswordText.setVisible(false);
+	}
+
 	/**
 	 * This method
 	 *
@@ -642,20 +677,51 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	@FXML
 	private void handleLogInButton(ActionEvent event) {
-		String username = logInEmailTextField.getText();
-		String password = hashPassword(logInPasswordTextField.getText());
+		String email = logInEmailTextField.getText();
+		String password = logInPasswordTextField.getText();
+
+		//Checks if email or password is empty
+		if (!isLogInParametersValid(email, password)) {
+			return;
+		}
 
 		try {
-			clientController.signIn(username, password);
+			if (!clientController.signIn(email, hashPassword(password))) {
+				logInInvalidEmailText.setText("Email does not match with password!");
+				logInInvalidEmailText.setVisible(true);
+				logInInvalidPasswordText.setText("Password does not match with email!");
+				logInInvalidPasswordText.setVisible(true);
+				return;
+			}
+
 			showPane(profilePane);
 			loadProfileInfo();
-			toolBarMyTripsButton.setDisable(false);
-			toolBarProfileButton.setDisable(false);
-			toolBarMessagingButton.setDisable(false);
-			toolbarLogInLogOutButton.setText("Log out");
+			signInUpdateClient(true);
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
+	}
+
+	private boolean isLogInParametersValid(String email, String password) {
+		boolean isLogInParametersValid = true;
+
+		if (email == null || email.isEmpty()) {
+			isLogInParametersValid = false;
+			logInInvalidEmailText.setText("Enter email!");
+			logInInvalidEmailText.setVisible(true);
+		} else {
+			logInInvalidEmailText.setVisible(false);
+		}
+
+		if (password == null || password.isEmpty()) {
+			isLogInParametersValid = false;
+			logInInvalidPasswordText.setText("Enter password!");
+			logInInvalidPasswordText.setVisible(true);
+		} else {
+			logInInvalidPasswordText.setVisible(false);
+		}
+
+		return isLogInParametersValid;
 	}
 
 	/**
@@ -666,6 +732,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleNewAccountButton(ActionEvent event) {
 		showPane(newAccountPane);
+		resetNewAccountPane();
 	}
 
 	/**
@@ -675,6 +742,10 @@ public class FXMLDocumentController implements Initializable {
 	 * @return the hash of the password
 	 */
 	private String hashPassword(String password) {
+		if (password == null || password.length() < 4) {
+			return null;
+		}
+
 		byte[] hashBytes = null;
 		// shitty attempt at salting the password :)
 		password += password.substring(0, 4);
@@ -691,7 +762,18 @@ public class FXMLDocumentController implements Initializable {
 	}
 	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="New Account - Methods">	
+	// <editor-fold defaultstate="collapsed" desc="New Account - Methods">
+	private void resetNewAccountPane() {
+		newAccountNameTextField.clear();
+		newAccountEmailTextField.clear();
+		newAccountPasswordTextField.clear();
+		newAccountRepeatPasswordTextField.clear();
+
+		//Resets imageFile and imageView
+		newAccountProfilePicture = null;
+		newAccountImageView.setImage(new Image("default_profile_picture.png"));
+	}
+
 	/**
 	 * This method
 	 *
@@ -699,7 +781,8 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	@FXML
 	private void handleNewAccountBackButton(ActionEvent event) {
-		showPane(logInOutPane);
+		showPane(logInPane);
+		resetLogInPane();
 	}
 
 	/**
@@ -709,9 +792,23 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	@FXML
 	private void handleChooseProfilePictureButton(ActionEvent event) {
-		File newAccountProfilePictureFile = chooseImage("Select profile picture");
-		Image profilePicture = new Image(newAccountProfilePictureFile.toURI().toString());
-		newAccountImageView.setImage(profilePicture);
+		File imageFile = chooseImage("Select profile picture");
+
+		Platform.runLater(() -> {
+			try {
+				String imageFileName = imageFile.getName();
+				String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
+				//Converts file to byte array
+				BufferedImage image = ImageIO.read(imageFile);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, imageFileType, baos);
+
+				newAccountProfilePicture = baos.toByteArray();
+				newAccountImageView.setImage(new Image(imageFile.toURI().toString()));
+			} catch (Exception ex) {
+				//Failed to choose valid image
+			}
+		});
 	}
 
 	/**
@@ -725,17 +822,7 @@ public class FXMLDocumentController implements Initializable {
 		String email = newAccountEmailTextField.getText();
 		String password = newAccountPasswordTextField.getText();
 		String repeatPassword = newAccountRepeatPasswordTextField.getText();
-		byte[] profilePicture = null;
-
-		BufferedImage bImage = SwingFXUtils.fromFXImage(newAccountImageView.getImage(), null);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			ImageIO.write(bImage, "png", baos);
-			profilePicture = baos.toByteArray();
-			baos.close();
-		} catch (IOException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		byte[] profilePicture = newAccountProfilePicture;
 
 		if (password.equals(repeatPassword)) {
 			User user = new User(-1, email, name, profilePicture);
@@ -743,6 +830,7 @@ public class FXMLDocumentController implements Initializable {
 				clientController.signUp(user, hashPassword(password));
 				showPane(profilePane);
 				loadProfileInfo();
+				signInUpdateClient(true);
 			} catch (RemoteException ex) {
 				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -756,7 +844,7 @@ public class FXMLDocumentController implements Initializable {
 		System.out.println(tripId);
 		viewTrip(tripId, false);
 	}
-// </editor-fold>
+	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Modify Trips - Methods">
 	/**
@@ -812,14 +900,11 @@ public class FXMLDocumentController implements Initializable {
 			showPane(profilePane);
 			loadProfileInfo();
 		} else if (event.getSource() == toolbarLogInLogOutButton) {
-			showPane(logInOutPane);
+			showPane(logInPane);
+			resetLogInPane();
 			if (clientController.getCurrentUser() != null) {
 				clientController.signOut();
-				ClientMessagingHandler.signOut();
-				toolBarMyTripsButton.setDisable(true);
-				toolBarProfileButton.setDisable(true);
-				toolBarMessagingButton.setDisable(true);
-				toolbarLogInLogOutButton.setText("Log in");
+				signInUpdateClient(false);
 			}
 		} else if (event.getSource() == toolBarBrowseUsersButton) {
 			showPane(browseUsersPane);
@@ -909,7 +994,6 @@ public class FXMLDocumentController implements Initializable {
 	private void addImageListItem() {
 		//Chooses file with FileChooser
 		File imageFile = chooseImage("Select trip picture");
-		FXMLDocumentController fxmlController = this;
 
 		new Thread(() -> {
 			createTripInvalidPictureText.setVisible(false);
@@ -921,14 +1005,13 @@ public class FXMLDocumentController implements Initializable {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, imageFileType, baos);
 				//Inserts values in imageItem
-				ImageListItem imageListItem = new ImageListItem(fxmlController, imageFileName, baos.toByteArray());
+				ImageListItem imageListItem = new ImageListItem(this, imageFileName, baos.toByteArray());
 
 				Platform.runLater(() -> {
 					createTripPictureListHBox.getChildren().add(imageListItem);
 				});
 
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
 				createTripInvalidPictureText.setVisible(true);
 			}
 		}).start();
@@ -1042,7 +1125,7 @@ public class FXMLDocumentController implements Initializable {
 			priceString = "0";
 		}
 		//Gets date and time
-		//TODO - Should get time also
+		LocalTime time = LocalTime.of(createTripHourSpinner.getValue(), createTripMinuteSpinner.getValue());
 		LocalDate date = createTripTimeStartDatePicker.getValue();
 		//Gets location, meeting address and participant limit
 		Location location = createTripLocationComboBox.getValue();
@@ -1077,7 +1160,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Converts price, date, participant limit and image now that validation is checked
 		double price = Double.parseDouble(priceString);
-		LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 12, 0);
+		LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), time.getHour(), time.getMinute());
 		int participantLimit = Integer.parseInt(participantLimitString);
 
 		//Creates trip
@@ -1233,9 +1316,8 @@ public class FXMLDocumentController implements Initializable {
 		if (event.getSource().equals(browseUsersSearchButton)) {
 			searchUsers();
 		} else if (event.getSource().equals(browseUsersMessageButton)) {
-			//Nothing happens if no user is selected
 			if (browseUsersListView.getSelectionModel().isEmpty()) {
-				return;
+				//Nothing happens if no user is selected
 			} else {
 				int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
 				//Use userId to open a conversation.
@@ -1253,20 +1335,22 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private void searchUsers() {
-		try {
-			String searchText = browseUsersTextField.getText();
-			List<User> users = clientController.searchUsers(searchText);
-			List<HBoxCell> list = new ArrayList<>();
+		Platform.runLater(() -> {
+			try {
+				String searchText = browseUsersTextField.getText();
+				List<User> users = clientController.searchUsers(searchText);
+				List<HBoxCell> list = new ArrayList<>();
 
-			for (User user : users) {
-				list.add(new HBoxCell(user));
+				for (User user : users) {
+					list.add(new HBoxCell(user));
+				}
+
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				browseUsersListView.setItems(observableList);
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 			}
-
-			ObservableList observableList = FXCollections.observableArrayList(list);
-			browseUsersListView.setItems(observableList);
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		});
 	}
 
 	public void resetBrowseUsersPane() {

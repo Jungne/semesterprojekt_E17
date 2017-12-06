@@ -532,7 +532,7 @@ public class ServerTripHandler {
 	}
   
   private static ArrayList<byte[]> getImagesInTrip(int id) {
-    String query = "SELECT imageID, imageFile FROM ImagesInTrip natural join Images WHERE tripID = " + id + ";";
+    String query = "SELECT imageID, imageFile FROM ImagesInTrips natural join Images WHERE tripID = " + id + ";";
     ResultSet rs = dbm.executeQuery(query);
     
     ArrayList<byte[]> images = new ArrayList<byte[]>();
