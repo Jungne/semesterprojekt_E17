@@ -7,6 +7,7 @@ import interfaces.User;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,14 +15,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 
 public class HBoxCell extends HBox {
 
 	ImageView imageView = new ImageView();
-	Label title = new Label();
-	Label description = new Label();
-	Label price = new Label();
-	Label category = new Label();
+	Label label1 = new Label();
+	Label label2 = new Label();
+	Label label3 = new Label();
+	Label label4 = new Label();
 
 	private int id;
 	private String type;
@@ -41,24 +43,24 @@ public class HBoxCell extends HBox {
 			imageView.setImage(new Image("default.jpg")); //Add default image or not.
 		}
 
-		title.setText(trip.getTitle());
-		title.setPrefWidth(150);
-		title.setStyle("-fx-font-weight: bold");
+		label1.setText(trip.getTitle());
+		label1.setPrefWidth(150);
+		label1.setStyle("-fx-font-weight: bold");
 
-		description.setText(trip.getDescription());
-		description.setPrefWidth(150);
+		label2.setText(trip.getDescription());
+		label2.setPrefWidth(150);
 
 		VBox vbox1 = new VBox();
-		vbox1.getChildren().addAll(title, description);
+		vbox1.getChildren().addAll(label1, label2);
 
-		price.setText(Double.toString(trip.getPrice()) + "kr");
+		label3.setText(Double.toString(trip.getPrice()) + "kr");
 
 		/*
 		if (!trip.getCategories().isEmpty()) {
-			category.setText(trip.getCategories().get(0).getName());
+			label4.setText(trip.getCategories().get(0).getName());
 		}*/
 		VBox vbox2 = new VBox();
-		vbox2.getChildren().addAll(price, category);
+		vbox2.getChildren().addAll(label3, label4);
 
 		imageView.setFitWidth(100);
 		imageView.setPreserveRatio(true);
@@ -76,14 +78,14 @@ public class HBoxCell extends HBox {
 		InputStream inputStream = new ByteArrayInputStream(user.getImage().getImageFile());
 		imageView.setImage(new Image(inputStream));
 
-		title.setText(user.getName());
-		title.setPrefWidth(150);
+		label1.setText(user.getName());
+		label1.setPrefWidth(150);
 		//title.setStyle("-fx-font-weight: bold");
 
 		imageView.setFitWidth(100);
 		imageView.setPreserveRatio(true);
 
-		this.getChildren().addAll(imageView, title);
+		this.getChildren().addAll(imageView, label1);
 	}
 
 	public HBoxCell(Conversation conversation, String name) {
@@ -93,28 +95,39 @@ public class HBoxCell extends HBox {
 
 		id = conversation.getId();
 
-		title.setText(name);
-		title.setPrefWidth(150);
-		//		title.setStyle("-fx-font-weight: bold");
+		label1.setText(name);
+		label1.setPrefWidth(150);
+		//		label1.setStyle("-fx-font-weight: bold");
 
 		type = conversation.getType();
 
-		this.getChildren().addAll(title);
+		this.getChildren().addAll(label1);
 	}
 
 	public HBoxCell(Message message, User user) {
+		this.setPrefWidth(50);
+		
 		id = message.getId();
-		description.setText(message.getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm")));
-		title.setText(message.getSender().getName() + ": " + message.getMessage());
-
+		
+		label1.setText(message.getSender().getName() + ":");
+		label1.setStyle("-fx-font-weight: bold;");
+		
+		label2.setText(message.getMessage());
+		label2.setWrapText(true);
+		label2.setTextAlignment(TextAlignment.JUSTIFY);
+						
+		label3.setText(message.getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm")));
+		label3.setStyle("-fx-font-style: italic;");
+		
 		VBox vbox = new VBox();
-		vbox.getChildren().addAll(description, title);
+		vbox.getChildren().addAll(label1, label2, label3);
 
 		String cssLayout = "-fx-border-color: black;\n"
 						+ "-fx-border-insets: 5;\n"
-						+ "-fx-border-width: 3;\n";
+						+ "-fx-border-width: 1;\n";
 
 		vbox.setStyle(cssLayout);
+		vbox.setPadding(new Insets(3));
 
 		if (message.getSenderId() == user.getId()) {
 			Region region = new Region();
@@ -148,7 +161,7 @@ public class HBoxCell extends HBox {
 
 	@Override
 	public String toString() {
-		return id + title.getText();
+		return id + label1.getText();
 	}
 
 }

@@ -52,6 +52,7 @@ public class ClientController {
 
 	public void signOut() throws RemoteException {
 		currentUser = null;
+		ClientMessagingHandler.signOut();
 	}
 
 	public List<Trip> getAllTrips() throws RemoteException {
