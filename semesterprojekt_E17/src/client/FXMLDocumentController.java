@@ -393,14 +393,16 @@ public class FXMLDocumentController implements Initializable {
 //			list.add(new HBoxCell(trip));
 //		}
 		trips.parallelStream().forEach((Trip trip) -> {
-			list.add(new HBoxCell(trip));
+			synchronized (list) {
+				list.add(new HBoxCell(trip));
+			}
 		});
 		//Sorts the list
-//		list.sort(new Comparator<HBoxCell>() {		 
-//			public int compare(HBoxCell h1, HBoxCell h2) {
-//				return h1.getTripId() - h2.getTripId();
-//			}			
-//		});
+		list.sort(new Comparator<HBoxCell>() {
+			public int compare(HBoxCell h1, HBoxCell h2) {
+				return h1.getTripId() - h2.getTripId();
+			}
+		});
 
 		ObservableList observableList = FXCollections.observableArrayList(list);
 		listView.setItems(observableList);
@@ -1411,7 +1413,9 @@ public class FXMLDocumentController implements Initializable {
 //					list.add(new HBoxCell(user));
 //				}
 				users.parallelStream().forEach((User user) -> {
-					list.add(new HBoxCell(user));
+					synchronized (list) {
+						list.add(new HBoxCell(user));
+					}
 				});
 
 				ObservableList observableList = FXCollections.observableArrayList(list);
