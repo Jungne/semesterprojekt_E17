@@ -25,7 +25,7 @@
    <children>
       <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="644.0">
         <items>
-            <Label text="Outdoor activity portal" />
+            <ImageView fx:id="toolBarImageView" fitHeight="26.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true" />
             <Button fx:id="toolBarBrowseTripsButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse trips" />
             <Button fx:id="toolBarBrowseUsersButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse users" />
           <Button fx:id="toolBarMessagingButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Messaging" />
@@ -351,7 +351,9 @@
       </AnchorPane>
       <AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false">
          <children>
-            <Button layoutX="322.0" layoutY="220.0" mnemonicParsing="false" text="Change picture" />
+
+            <Button fx:id="handleProfileButtons" layoutX="322.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleProfileButtons" text="Change picture" />
+
             <Label layoutX="52.0" layoutY="88.0" style="-fx-font-weight: bold;" text="Email" />
             <Label layoutX="51.0" layoutY="43.0" style="-fx-font-weight: bold;" text="Name" />
             <ImageView fx:id="profilePictureImageView" fitHeight="150.0" fitWidth="200.0" layoutX="322.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" />
