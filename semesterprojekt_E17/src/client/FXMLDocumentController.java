@@ -428,7 +428,11 @@ public class FXMLDocumentController implements Initializable {
 				viewTripTitleLabel.setText(viewedTrip.getTitle());
 				viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
 				viewTripPriceTextField.setText("" + viewedTrip.getPrice());
-				viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
+//				viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
+				viewListOfParticipants.getItems().clear();
+				for (User user : viewedTrip.getParticipants()) {
+					viewListOfParticipants.getItems().add(user.getName());
+				}
 				viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
 				viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
 				viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
@@ -503,9 +507,9 @@ public class FXMLDocumentController implements Initializable {
 	private void handleJoinTripButton(ActionEvent event) {
 		try {
 			clientController.participateInTrip(viewedTrip);
+			viewTrip(viewedTrip.getId(), false);
 		} catch (FullTripException ex) {
 			//TODO popup explanation, that trip is full.
-			System.out.println("test");
 			System.out.println(ex);
 		}
 	}

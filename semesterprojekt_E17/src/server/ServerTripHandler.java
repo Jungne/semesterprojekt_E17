@@ -467,7 +467,7 @@ public class ServerTripHandler {
 						+ "    SELECT conversationID \n"
 						+ "    FROM Conversations \n"
 						+ "    NATURAL JOIN Trips \n"
-						+ "    WHERE TripID = " + tripId + " AND userID = "+ organizerId + ")";
+						+ "    WHERE TripID = " + tripId + " AND userID = " + organizerId + ")";
 
 		dbm.executeUpdate(query);
 	}
@@ -502,7 +502,7 @@ public class ServerTripHandler {
 		ResultSet rs = dbm.executeQuery(query);
 
 		try {
-			while (rs.next()) {
+			if (rs.next()) {
 				int id = rs.getInt("tripID");
 				String title = rs.getString("tripTitle");
 				String description = rs.getString("tripDescription");
@@ -517,8 +517,10 @@ public class ServerTripHandler {
 
 				List<Category> categories = getCategoriesInTrip(id).isEmpty() ? null : getCategoriesInTrip(id);
 				List<Image> images = getImagesInTrip(id);
+				
+				List<User> participants = getTripParticipants(tripID);
 
-				return new Trip(id, title, description, price, date, location, participantLimit, organizer, categories, images);
+				return new Trip(id, title, description, price, date, location, participantLimit, organizer, categories, images, participants);
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -687,6 +689,35 @@ public class ServerTripHandler {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return -1;
+	}
+
+	public static List<User> getTripParticipants(int tripId) {
+		String query = ""
+						+ "SELECT *\n"
+						+ "FROM Users\n"
+						+ "WHERE userID IN (\n"
+						+ "    SELECT UsersInTrips.userID \n"
+						+ "    FROM Trips\n"
+						+ "    INNER JOIN UsersInTrips ON Trips.tripID = UsersInTrips.tripID\n"
+						+ "    WHERE Trips.tripID = " + tripId + ")";
+
+		ResultSet participantsRs = dbm.executeQuery(query);
+
+		List<User> participants = new ArrayList<>();
+
+		try {
+			while (participantsRs.next()) {
+				int id = participantsRs.getInt("userID");
+				String userName = participantsRs.getString("userName");
+
+				participants.add(new User(id, userName));
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		return participants;
+
 	}
 
 }
