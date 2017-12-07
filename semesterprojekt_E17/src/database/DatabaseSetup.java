@@ -64,7 +64,7 @@ public class DatabaseSetup {
 					+ "conversationID int, "
 					+ "userID int, "
 					+ "PRIMARY KEY (conversationID, userID), "
-					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
+					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID) ON DELETE CASCADE, "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 
@@ -76,7 +76,7 @@ public class DatabaseSetup {
 					+ "message varchar(255), "
 					+ "time timestamp, "
 					+ "PRIMARY KEY (messageID), "
-					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID), "
+					+ "FOREIGN KEY (conversationID) REFERENCES Conversations(conversationID) ON DELETE CASCADE, "
 					+ "FOREIGN KEY (userID) REFERENCES Users(userID)"
 					+ ");";
 

@@ -227,7 +227,11 @@ public class ServerMessagingHandler {
 		return null;
 	}
 	
-	public static void deleteConversation() {
+	public static void deleteConversation(int conversationId) {
+		String query = ""
+						+ "DELETE FROM Conversations"
+						+ "WHERE conversationID = " + conversationId;
 		
+		dbm.executeUpdate(query);		
 	}
 }

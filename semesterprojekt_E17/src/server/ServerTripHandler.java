@@ -461,8 +461,13 @@ public class ServerTripHandler {
 	}
 
 	public synchronized static void deleteTrip(int tripId, int organizerId) {
-		String query = "DELETE FROM Trips WHERE tripID = " + tripId + " AND userID = " + organizerId + ";";
-//		String query = "DELETE FROM Conversations WHERE 
+		String query = "DELETE\n"
+						+ "FROM Conversations\n"
+						+ "WHERE conversationID = (\n"
+						+ "    SELECT conversationID \n"
+						+ "    FROM Conversations \n"
+						+ "    NATURAL JOIN Trips \n"
+						+ "    WHERE TripID = " + tripId + " AND userID = "+ organizerId + ")";
 
 		dbm.executeUpdate(query);
 	}
