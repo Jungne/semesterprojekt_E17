@@ -445,6 +445,7 @@ public class FXMLDocumentController implements Initializable {
 				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 				viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
 				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
+        joinTripButton.setDisable(viewedTrip.getParticipants().contains(clientController.getCurrentUser()) || viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit());
 				showPane(viewTripPane);
 			}
 		}
