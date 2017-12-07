@@ -69,6 +69,8 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private ToolBar toolBar;
 	@FXML
+	private ImageView toolBarImageView;
+	@FXML
 	private Button toolBarMessagingButton;
 	@FXML
 	private Button toolBarBrowseTripsButton;
@@ -283,6 +285,8 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Profile - Elements">
+	private Image newProfilePicture;
+
 	@FXML
 	private AnchorPane profilePane;
 	@FXML
@@ -293,8 +297,9 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileEmailLabel;
 	@FXML
 	private Button profilePaneChangePictureButton;
-	// </editor-fold>
 
+	// </editor-fold>
+	
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
 	private AnchorPane browseUsersPane;
@@ -337,9 +342,12 @@ public class FXMLDocumentController implements Initializable {
 				}
 			});
 
+			//Set toolbar picture
+			toolBarImageView.setImage(new javafx.scene.image.Image("ToolbarImage.jpg"));
+
 			//Load all trips to browse trips, when the program starts
-			resetBrowseTripPane(); 
-			
+			resetBrowseTripPane();
+
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -454,15 +462,41 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
+	 * This method handels changing an users profile picture
+	 *
+	 */
+	private void changeProfilePicture() {
+	
+	//	Image profilePicture = newProfilePicture;
+		
+	}
+	
+	/**
 	 * This method handels all the buttons on the profile Pane
 	 *
 	 */
-	private void handleProfileButtons() {
-		Platform.runLater(() -> {
-			File ProfilePictureFile = chooseImage("Select profile picture");
+	@FXML
+	private void handleProfileButtons(ActionEvent event) {
+		File profileImageFile = chooseImage("Select profile picture");
 
-			//TODO
-		});
+		/**
+		try {
+			String imageFileName = profileImageFile.getName();
+			String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
+			//Converts file to byte array
+			BufferedImage image = ImageIO.read(profileImageFile);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(image, imageFileType, baos);
+
+			newProfilePicture = new Image(imageFileName, baos.toByteArray());
+			* 
+			* 	 */
+			profilePictureImageView.setImage(new javafx.scene.image.Image(profileImageFile.toURI().toString()));
+		
+	//	} catch (Exception ex) {
+			//Failed to choose valid image
+		//}
+
 	}
 	// </editor-fold>
 
@@ -1376,6 +1410,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// </editor-fold>
+	
 	private void loadConversation(int ConversationId) {
 
 	}
@@ -1415,7 +1450,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleSendMessageButton(ActionEvent event) {
 		sendMessage(messagingTextField.getText());
-    messagingTextField.setText("");
+		messagingTextField.setText("");
 	}
 
 }
