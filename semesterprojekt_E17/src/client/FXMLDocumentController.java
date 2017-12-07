@@ -344,6 +344,9 @@ public class FXMLDocumentController implements Initializable {
 				}
 			});
 
+			//Load all trips to browse trips, when the program starts
+			resetBrowseTripPane();
+
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -421,9 +424,9 @@ public class FXMLDocumentController implements Initializable {
 				viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
 				viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
 				viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
-				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().toString());
+				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 				viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
-				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0))));
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
 				showPane(viewTripPane);
 			}
 		}
@@ -802,24 +805,19 @@ public class FXMLDocumentController implements Initializable {
 		newAccountImageView.setImage(new javafx.scene.image.Image("default_profile_picture.png"));
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
 	@FXML
-	private void handleNewAccountBackButton(ActionEvent event) {
-		showPane(logInPane);
-		resetLogInPane();
+	private void handleNewAccountButtons(ActionEvent event) {
+		if (event.getSource() == newAccountProfilePictureButton) {
+			chooseProfilePicture();
+		} else if (event.getSource() == newAccountCreateButton) {
+			createAccount();
+		} else if (event.getSource() == newAccountBackButton) {
+			showPane(logInPane);
+			resetLogInPane();
+		}
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
-	@FXML
-	private void handleChooseProfilePictureButton(ActionEvent event) {
+	private void chooseProfilePicture() {
 		File imageFile = chooseImage("Select profile picture");
 
 		Platform.runLater(() -> {
@@ -844,8 +842,7 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 * @param event
 	 */
-	@FXML
-	private void handleCreateAccountButton(ActionEvent event) {
+	private void createAccount() {
 		String name = newAccountNameTextField.getText();
 		String email = newAccountEmailTextField.getText();
 		String password = newAccountPasswordTextField.getText();
@@ -853,9 +850,8 @@ public class FXMLDocumentController implements Initializable {
 		Image profilePicture = newAccountProfilePicture;
 
 		if (password.equals(repeatPassword)) {
-			User user = new User(-1, email, name, profilePicture);
 			try {
-				clientController.signUp(user, hashPassword(password));
+				clientController.signUp(email, name, profilePicture, hashPassword(password));
 				showPane(profilePane);
 				loadProfileInfo();
 				signInUpdateClient(true);
@@ -1033,7 +1029,7 @@ public class FXMLDocumentController implements Initializable {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, imageFileType, baos);
 				//Inserts values in imageItem
-				ImageListItem imageListItem = new ImageListItem(this, imageFileName, baos.toByteArray());
+				ImageListItem imageListItem = new ImageListItem(this, new Image(imageFileName, baos.toByteArray()));
 
 				Platform.runLater(() -> {
 					createTripPictureListHBox.getChildren().add(imageListItem);
@@ -1176,9 +1172,9 @@ public class FXMLDocumentController implements Initializable {
 			}
 		}
 		//Gets trip images
-		List<byte[]> images = new ArrayList<>();
+		List<Image> images = new ArrayList<>();
 		for (Node node : createTripPictureListHBox.getChildren()) {
-			images.add(((ImageListItem) node).getImageByteArray());
+			images.add(((ImageListItem) node).getImage());
 		}
 
 		//Checks if parameters are valid
@@ -1448,6 +1444,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleSendMessageButton(ActionEvent event) {
 		sendMessage(messagingTextField.getText());
+    messagingTextField.setText("");
 	}
 
 }

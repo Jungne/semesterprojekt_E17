@@ -4,8 +4,8 @@ import interfaces.Category;
 import interfaces.Conversation;
 import interfaces.FullTripException;
 import interfaces.IServerController;
+import interfaces.Image;
 import interfaces.Location;
-import interfaces.Message;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
@@ -36,12 +36,12 @@ public class ClientController {
 		}
 	}
 
-	public void signUp(User user, String password) throws RemoteException {
-		currentUser = serverController.signUp(user, password);
+	public void signUp(String email, String name, Image profilePicture, String password) throws RemoteException {
+		currentUser = ClientUserHandler.signUp(serverController, email, name, profilePicture, password);
 	}
 
 	public boolean signIn(String email, String password) throws RemoteException {
-		currentUser = serverController.signIn(email, password);
+		currentUser = ClientUserHandler.signIn(serverController, email, password);
 		if (currentUser != null) {
 			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser));
 			return true;
@@ -75,7 +75,7 @@ public class ClientController {
 		ClientTripHandler.participateInTrip(currentUser, serverController, trip);
 	}
 
-	public int createTrip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<byte[]> images) throws Exception {
+	public int createTrip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<Image> images) throws Exception {
 		return ClientTripHandler.createTrip(serverController, title, description, categories, price, timeStart, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
 	}
 

@@ -21,13 +21,13 @@ public class ServerUserHandler {
 		Image profilePicture = user.getImage();
 
 		if (email == null || email.isEmpty()) {
-			throw new IllegalArgumentException("Invalid user email.");
+			throw new IllegalArgumentException("User email is null or empty.");
 		}
 		if (name == null || name.isEmpty()) {
-			throw new IllegalArgumentException("Invalid user name.");
+			throw new IllegalArgumentException("User name is null or empty.");
 		}
 		if (password == null || password.isEmpty()) {
-			throw new IllegalArgumentException("Invalid user password.");
+			throw new IllegalArgumentException("User password is null or empty.");
 		}
 
 		//Inserts an image if the given image is not null
