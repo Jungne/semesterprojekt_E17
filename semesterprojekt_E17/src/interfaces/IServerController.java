@@ -22,7 +22,7 @@ public interface IServerController extends Remote {
 
 	public void modifyTrip(Trip trip) throws RemoteException;
 
-	public void deleteTrip(Trip trip) throws RemoteException;
+	public void deleteTrip(int tripId, int organizerId) throws RemoteException;
 
 	public void participateInTrip(Trip trip, User user) throws FullTripException, RemoteException;
 
@@ -51,6 +51,8 @@ public interface IServerController extends Remote {
 	public List<User> searchUsers(String query) throws RemoteException;
 
 	public List<Trip> getMyTrips(User user) throws RemoteException;
+	
+	public List<Trip> getMyTrips(User user, int organizerId) throws RemoteException;
 
 	public void addActiveConversation(int tripID) throws RemoteException;
 

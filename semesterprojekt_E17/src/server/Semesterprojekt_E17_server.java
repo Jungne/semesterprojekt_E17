@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class Semesterprojekt_E17_server {
 
-	private static final int REGISTRY_PORT = 12345;
+	private static final int REGISTRY_PORT = 12312;
 	private static final String REMOTE_OBJECT_NAME = "serverController";
 
 	/**

@@ -5,6 +5,7 @@ import interfaces.Conversation;
 import interfaces.FullTripException;
 import interfaces.Image;
 import interfaces.Location;
+import interfaces.Message;
 import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
@@ -21,6 +22,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -44,10 +47,12 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -124,6 +129,14 @@ public class FXMLDocumentController implements Initializable {
 	private Button myTripsViewTripButton;
 	@FXML
 	private ListView<HBoxCell> myTripsListView;
+	@FXML
+	private Button myTripsDeleteTripButton;
+	@FXML
+	private ToggleGroup myTripsToggleGroup;
+	@FXML
+	private RadioButton myTripsToggleAll;
+	@FXML
+	private RadioButton myTripsOrganizedRadioButton;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Create Trip - Elements">
@@ -297,7 +310,6 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileEmailLabel;
 	@FXML
 	private Button profilePaneChangePictureButton;
-
 	// </editor-fold>
 	
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
@@ -323,6 +335,8 @@ public class FXMLDocumentController implements Initializable {
 	private Button messagingSendButton;
 	// </editor-fold>
 
+	private ObservableList messagingConversationList;
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		try {
@@ -334,8 +348,10 @@ public class FXMLDocumentController implements Initializable {
 				@Override
 				public void changed(ObservableValue<? extends HBoxCell> observable, HBoxCell newValue, HBoxCell oldValue) {
 					int id = messagingConversationsListView.getSelectionModel().getSelectedItem().getConversationId();
+					String type = messagingConversationsListView.getSelectionModel().getSelectedItem().getType();
 					try {
 						clientController.setCurrentConversation(id);
+						showConversation(getConversation(new Conversation(id, type)));
 					} catch (RemoteException ex) {
 						Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 					}
@@ -382,9 +398,22 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	private void showTrips(List<Trip> trips, ListView listView) {
 		List<HBoxCell> list = new ArrayList<>();
-		for (Trip trip : trips) {
-			list.add(new HBoxCell(trip));
-		}
+
+//		for (Trip trip : trips) {
+//			list.add(new HBoxCell(trip));
+//		}
+		trips.parallelStream().forEach((Trip trip) -> {
+			synchronized (list) {
+				list.add(new HBoxCell(trip));
+			}
+		});
+		//Sorts the list
+		list.sort(new Comparator<HBoxCell>() {
+			public int compare(HBoxCell h1, HBoxCell h2) {
+				return h1.getTripId() - h2.getTripId();
+			}
+		});
+
 		ObservableList observableList = FXCollections.observableArrayList(list);
 		listView.setItems(observableList);
 	}
@@ -820,24 +849,19 @@ public class FXMLDocumentController implements Initializable {
 		newAccountImageView.setImage(new javafx.scene.image.Image("default_profile_picture.png"));
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
 	@FXML
-	private void handleNewAccountBackButton(ActionEvent event) {
-		showPane(logInPane);
-		resetLogInPane();
+	private void handleNewAccountButtons(ActionEvent event) {
+		if (event.getSource() == newAccountProfilePictureButton) {
+			chooseProfilePicture();
+		} else if (event.getSource() == newAccountCreateButton) {
+			createAccount();
+		} else if (event.getSource() == newAccountBackButton) {
+			showPane(logInPane);
+			resetLogInPane();
+		}
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
-	@FXML
-	private void handleChooseProfilePictureButton(ActionEvent event) {
+	private void chooseProfilePicture() {
 		File imageFile = chooseImage("Select profile picture");
 
 		Platform.runLater(() -> {
@@ -862,8 +886,7 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 * @param event
 	 */
-	@FXML
-	private void handleCreateAccountButton(ActionEvent event) {
+	private void createAccount() {
 		String name = newAccountNameTextField.getText();
 		String email = newAccountEmailTextField.getText();
 		String password = newAccountPasswordTextField.getText();
@@ -871,9 +894,8 @@ public class FXMLDocumentController implements Initializable {
 		Image profilePicture = newAccountProfilePicture;
 
 		if (password.equals(repeatPassword)) {
-			User user = new User(-1, email, name, profilePicture);
 			try {
-				clientController.signUp(user, hashPassword(password));
+				clientController.signUp(email, name, profilePicture, hashPassword(password));
 				showPane(profilePane);
 				loadProfileInfo();
 				signInUpdateClient(true);
@@ -941,7 +963,7 @@ public class FXMLDocumentController implements Initializable {
 			resetBrowseTripPane();
 		} else if (event.getSource() == toolBarMyTripsButton) {
 			showPane(myTripsPane);
-			loadMyTrips();
+			resetMyTripsPane();
 		} else if (event.getSource() == toolBarProfileButton) {
 			showPane(profilePane);
 			loadProfileInfo();
@@ -1326,7 +1348,26 @@ public class FXMLDocumentController implements Initializable {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(id, false);
 			}
+		} else if (event.getSource() == myTripsDeleteTripButton) {
+			if (!myTripsListView.getSelectionModel().isEmpty()) {
+				clientController.deleteTrip(myTripsListView.getSelectionModel().getSelectedItem().getTripId());
+				loadMyOrganizedTrips();
+			}
+		} else if (myTripsToggleGroup.getToggles().contains(event.getSource())) {
+			if (myTripsToggleGroup.getSelectedToggle() == myTripsToggleAll) {
+				loadMyTrips();
+				myTripsDeleteTripButton.setDisable(true);
+			} else if (myTripsToggleGroup.getSelectedToggle() == myTripsOrganizedRadioButton) {
+				loadMyOrganizedTrips();
+				myTripsDeleteTripButton.setDisable(false);
+			}
 		}
+	}
+
+	private void resetMyTripsPane() {
+		loadMyTrips();
+		myTripsDeleteTripButton.setDisable(true);
+		myTripsToggleAll.setSelected(true);
 	}
 
 	/**
@@ -1336,6 +1377,23 @@ public class FXMLDocumentController implements Initializable {
 	private void loadMyTrips() {
 		Platform.runLater(() -> {
 			List<Trip> myTrips = clientController.getMyTrips();
+
+			if (myTrips != null) {
+				List<HBoxCell> list = new ArrayList<>();
+
+				for (Trip trip : myTrips) {
+					list.add(new HBoxCell(trip));
+				}
+
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				myTripsListView.setItems(observableList);
+			}
+		});
+	}
+
+	private void loadMyOrganizedTrips() {
+		Platform.runLater(() -> {
+			List<Trip> myTrips = clientController.getMyOrganizedTrips();
 
 			if (myTrips != null) {
 				List<HBoxCell> list = new ArrayList<>();
@@ -1387,9 +1445,14 @@ public class FXMLDocumentController implements Initializable {
 				List<User> users = clientController.searchUsers(searchText);
 				List<HBoxCell> list = new ArrayList<>();
 
-				for (User user : users) {
-					list.add(new HBoxCell(user));
-				}
+//				for (User user : users) {
+//					list.add(new HBoxCell(user));
+//				}
+				users.parallelStream().forEach((User user) -> {
+					synchronized (list) {
+						list.add(new HBoxCell(user));
+					}
+				});
 
 				ObservableList observableList = FXCollections.observableArrayList(list);
 				browseUsersListView.setItems(observableList);
@@ -1416,27 +1479,40 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	private void getUserConversations() {
-		List<Conversation> conversations = clientController.getUserConversations();
+		Platform.runLater(() -> {
+			List<Conversation> conversations = clientController.getUserConversations();
 
-		if (conversations != null) {
-			List<HBoxCell> list = new ArrayList<>();
+			if (conversations != null) {
+				List<HBoxCell> list = new ArrayList<>();
 
-			try {
+				try {
 
-				for (Conversation conversation : conversations) {
-					String name = clientController.getConversationName(conversation);
-					list.add(new HBoxCell(conversation, name));
+					for (Conversation conversation : conversations) {
+						String name = clientController.getConversationName(conversation);
+						list.add(new HBoxCell(conversation, name));
+					}
+				} catch (RemoteException ex) {
+					Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 				}
-			} catch (RemoteException ex) {
-				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				messagingConversationsListView.setItems(observableList);
 			}
-			ObservableList observableList = FXCollections.observableArrayList(list);
-			messagingConversationsListView.setItems(observableList);
-		}
+		});
 	}
 
 	private void showConversation(Conversation conversation) {
+		List<HBoxCell> list = new ArrayList<>();
+		int userId = clientController.getCurrentUser().getId();
 
+		for (Message message : getConversation(conversation).getMessages()) {
+			list.add(new HBoxCell(message, clientController.getCurrentUser()));
+		}
+
+		Collections.reverse(list);
+		messagingConversationList = FXCollections.observableArrayList(list);
+		messagingActiveConversationListView.setItems(messagingConversationList);
+		messagingActiveConversationListView.scrollTo(messagingConversationList.size() - 1);
+		ClientMessagingHandler.setMessagesList(messagingConversationList);
 	}
 
 	private void sendMessage(String message) {

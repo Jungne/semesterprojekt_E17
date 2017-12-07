@@ -8,7 +8,6 @@ import interfaces.User;
 import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +30,7 @@ public class ServerMessagingHandler {
 	 * All clients of the server, in the form of remote objects.
 	 */
 	private static Map<Integer, IChatClient> clientsMap = new HashMap<>();
+	private static Map<Integer, List<Integer>> conversationsMap = new HashMap<>();
 
 	/**
 	 * Register clients in the form of remote objects.
@@ -129,10 +129,12 @@ public class ServerMessagingHandler {
 		return "ConversationID: " + conversation.getId();
 	}
 
+	//Should be named getConversationMessages, change at some point for clarity
 	public static Conversation getConversation(Conversation conversation) {
 		String query = ""
-						+ "SELECT *\n"
+						+ "SELECT messageID, conversationID, userID, message, time, userName\n"
 						+ "FROM Messages\n"
+						+ "NATURAL JOIN Users\n"
 						+ "WHERE conversationID = " + conversation.getId();
 		ResultSet conversationRs = dbm.executeQuery(query);
 
@@ -141,54 +143,95 @@ public class ServerMessagingHandler {
 		try {
 			while (conversationRs.next()) {
 				int id = conversationRs.getInt("messageID");
-				int userId = conversationRs.getInt("userID");
+				User user = new User(conversationRs.getInt("userID"), conversationRs.getString("userName"));
 				String message = conversationRs.getString("message");
 				LocalDateTime timestamp = conversationRs.getTimestamp("time").toLocalDateTime();
 				int conversationId = conversationRs.getInt("conversationID");
 
-				messages.add(new Message(id, userId, message, timestamp, conversationId));
+				messages.add(new Message(id, user, message, timestamp, conversationId));
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
 		return new Conversation(conversation.getId(), conversation.getType(), null, messages); //Should also return participants at some point.
-	}
+	}	
 
 	public static void sendMessage(Message message) {
 		try {
 			String query = ""
 							+ "INSERT INTO Messages "
 							+ "VALUES (DEFAULT, " + message.getConversationId() + ", " + message.getSenderId() + ", '" + message.getMessage() + "', NOW())";
-//			String query = ""
-//							+ "INSERT INTO Messages "
-//							+ "VALUES (DEFAULT, 1, 2, 'testbesked', NOW())";
 
 			int id = dbm.executeInsertAndGetId(query);
 
-			ResultSet messageRs = dbm.executeQuery("SELECT * FROM messages WHERE messageID = " + id);
+			ResultSet messageRs = dbm.executeQuery("SELECT messageID, conversationID, userID, message, time, userName FROM messages NATURAL JOIN Users WHERE messageID = " + id);
 
 			if (messageRs.next()) {
 				int returnMessageId = messageRs.getInt("messageID");
 				int returnConversationId = messageRs.getInt("conversationID");
-				int returnSenderId = messageRs.getInt("userID");
+				User returnSender = new User(messageRs.getInt("userID"), messageRs.getString("userName"));
 				String returnMessage = messageRs.getString("message");
 				LocalDateTime returnTimestamp = messageRs.getTimestamp("time").toLocalDateTime();
-				broadcastMessage(new Message(returnMessageId, returnSenderId, returnMessage, returnTimestamp, returnConversationId));
+
+				broadcastMessage(new Message(returnMessageId, returnSender, returnMessage, returnTimestamp, returnConversationId));
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
+
 	public static void broadcastMessage(Message message) {
 		try {
 //			clientsMap.get(message.getSenderId()).receiveMessage(message);
-			for (IChatClient client : clientsMap.values()) {
-				client.receiveMessage(message);
+
+//			for (IChatClient client : clientsMap.values()) {
+//				client.receiveMessage(message);
+//			}
+			if (!conversationsMap.containsKey(message.getConversationId())) {
+				conversationsMap.put(message.getConversationId(), loadConversationUsersIds(message.getConversationId()));
 			}
+
+			System.out.println(conversationsMap.keySet());
+
+			for (int userId : conversationsMap.get(message.getConversationId())) {
+				if (clientsMap.containsKey(userId)) {
+					clientsMap.get(userId).receiveMessage(message);
+				}
+			}
+
 		} catch (RemoteException ex) {
 			Logger.getLogger(ServerMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
+	}
+
+	public static List<Integer> loadConversationUsersIds(int conversationId) {
+		try {
+			String query = ""
+							+ "SELECT userID "
+							+ "FROM UsersInConversations "
+							+ "WHERE conversationID = " + conversationId;
+
+			ResultSet usersRs = dbm.executeQuery(query);
+
+			List<Integer> users = new ArrayList<>();
+
+			while (usersRs.next()) {
+				users.add(usersRs.getInt("userID"));
+			}
+
+			return users;
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
+	
+	public static void deleteConversation(int conversationId) {
+		String query = ""
+						+ "DELETE FROM Conversations"
+						+ "WHERE conversationID = " + conversationId;
+		
+		dbm.executeUpdate(query);		
 	}
 }

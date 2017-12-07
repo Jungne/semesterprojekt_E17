@@ -55,17 +55,17 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public synchronized void modifyTrip(Trip trip) throws RemoteException {
+	public void modifyTrip(Trip trip) throws RemoteException {
 		ServerTripHandler.modifyTrip(trip);
 	}
 
 	@Override
-	public synchronized void deleteTrip(Trip trip) throws RemoteException {
-		ServerTripHandler.deleteTrip(trip);
+	public void deleteTrip(int tripId, int organizerId) throws RemoteException {
+		ServerTripHandler.deleteTrip(tripId, organizerId);
 	}
 
 	@Override
-	public synchronized void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException {
+	public void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException {
 		ServerTripHandler.participateInTrip(trip, user);
 
 	}
@@ -133,6 +133,11 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	@Override
 	public List<Trip> getMyTrips(User user) {
 		return ServerTripHandler.getMyTrips(user);
+	}
+	
+	@Override
+	public List<Trip> getMyTrips(User user, int organizerId) {
+		return ServerTripHandler.getMyTrips(user, organizerId);
 	}
 
 	@Override

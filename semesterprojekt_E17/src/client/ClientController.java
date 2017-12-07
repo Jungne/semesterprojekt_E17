@@ -25,24 +25,25 @@ public class ClientController {
 	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
-		String hostname = "localhost";
+		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
+//		String hostname = "localhost";
 
 		try {
-			Registry registry = LocateRegistry.getRegistry(hostname, 12345);
+			Registry registry = LocateRegistry.getRegistry(hostname, 12312);
 			serverController = (IServerController) registry.lookup("serverController");
 		} catch (RemoteException | NotBoundException ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	public void signUp(User user, String password) throws RemoteException {
-		currentUser = serverController.signUp(user, password);
+	public void signUp(String email, String name, Image profilePicture, String password) throws RemoteException {
+		currentUser = ClientUserHandler.signUp(serverController, email, name, profilePicture, password);
 	}
 
 	public boolean signIn(String email, String password) throws RemoteException {
-		currentUser = serverController.signIn(email, password);
+		currentUser = ClientUserHandler.signIn(serverController, email, password);
 		if (currentUser != null) {
-			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser.getId()));
+			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser));
 			return true;
 		} else {
 			return false;
@@ -51,6 +52,7 @@ public class ClientController {
 
 	public void signOut() throws RemoteException {
 		currentUser = null;
+		ClientMessagingHandler.signOut();
 	}
 
 	public List<Trip> getAllTrips() throws RemoteException {
@@ -81,8 +83,8 @@ public class ClientController {
 		ClientTripHandler.modifyTrip(trip, serverController);
 	}
 
-	public void deleteTrip(Trip trip) {
-		ClientTripHandler.deleteTrip(serverController, trip);
+	public void deleteTrip(int tripId) {
+		ClientTripHandler.deleteTrip(serverController, tripId, currentUser.getId());
 	}
 
 	public boolean instructInTrip(Trip trip, User user) {
@@ -106,12 +108,19 @@ public class ClientController {
 	}
 
 	public List<User> searchUsers(String query) throws RemoteException {
-		return serverController.searchUsers(query);
+		return ClientUserHandler.searchUsers(serverController, query);
 	}
 
 	public List<Trip> getMyTrips() {
 		if (currentUser != null) {
 			return ClientTripHandler.getMyTrips(currentUser, serverController);
+		}
+		return null;
+	}
+	
+	public List<Trip> getMyOrganizedTrips() {
+		if (currentUser != null) {
+			return ClientTripHandler.getMyTrips(currentUser, serverController, currentUser.getId());
 		}
 		return null;
 	}
@@ -125,7 +134,7 @@ public class ClientController {
 	}
 
 	public String getConversationName(Conversation conversation) throws RemoteException {
-		return serverController.getConversationName(conversation, currentUser);
+		return ClientMessagingHandler.getConversationName(serverController, conversation, currentUser);
 	}
 
 	public Conversation getConversation(Conversation conversation) throws RemoteException {
