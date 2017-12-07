@@ -215,7 +215,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Text viewTripTitleLabel;
 	@FXML
-	private ListView viewListOfParticipants;
+	private ListView<HBoxCell> viewListOfParticipants;
 	@FXML
 	private Button joinTripButton;
 	@FXML
@@ -329,6 +329,8 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	private ObservableList messagingConversationList;
+	@FXML
+	private Button viewTripKickButton;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -431,7 +433,7 @@ public class FXMLDocumentController implements Initializable {
 //				viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
 				viewListOfParticipants.getItems().clear();
 				for (User user : viewedTrip.getParticipants()) {
-					viewListOfParticipants.getItems().add(user.getName());
+					viewListOfParticipants.getItems().add(new HBoxCell(user.getId(), user.getName()));
 				}
 				viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
 				viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
@@ -439,6 +441,13 @@ public class FXMLDocumentController implements Initializable {
 				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 				viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
 				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
+				
+				if (viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId()) {
+					viewTripKickButton.setVisible(true);
+				} else {
+					viewTripKickButton.setVisible(false);
+				}
+				
 				showPane(viewTripPane);
 			}
 		}
@@ -504,13 +513,19 @@ public class FXMLDocumentController implements Initializable {
 	 * @param event
 	 */
 	@FXML
-	private void handleJoinTripButton(ActionEvent event) {
-		try {
-			clientController.participateInTrip(viewedTrip);
+	private void handleViewTripButtons(ActionEvent event) {
+		if (event.getSource() == joinTripButton) {
+			try {
+				clientController.participateInTrip(viewedTrip);
+				viewTrip(viewedTrip.getId(), false);
+			} catch (FullTripException ex) {
+				//TODO popup explanation, that trip is full.
+				System.out.println(ex);
+			}
+		} else if (event.getSource() == viewTripKickButton) {
+			int userId = viewListOfParticipants.getSelectionModel().getSelectedItem().getUserId();
+			clientController.kickParticipant(viewedTrip, userId);
 			viewTrip(viewedTrip.getId(), false);
-		} catch (FullTripException ex) {
-			//TODO popup explanation, that trip is full.
-			System.out.println(ex);
 		}
 	}
 	// </editor-fold>
@@ -1495,5 +1510,6 @@ public class FXMLDocumentController implements Initializable {
 		sendMessage(messagingTextField.getText());
 		messagingTextField.setText("");
 	}
+
 
 }

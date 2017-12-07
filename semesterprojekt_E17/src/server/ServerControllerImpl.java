@@ -76,8 +76,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public void kickParticipant(Trip trip, User user) throws RemoteException {
-		ServerTripHandler.kickParticipant(trip, user);
+	public void kickParticipant(Trip trip, int userId) throws RemoteException {
+		ServerTripHandler.kickParticipant(trip, userId);
 	}
 
 	@Override

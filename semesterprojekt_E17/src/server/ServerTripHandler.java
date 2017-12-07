@@ -484,10 +484,9 @@ public class ServerTripHandler {
 		}
 	}
 
-	public static void kickParticipant(Trip trip, User user) {
-		int tripID = trip.getId();
-		int userID = user.getId();
-		String query = "DELETE FROM UsersInTrips WHERE tripID = " + trip.getId() + "AND userID = " + userID + ";";
+	public static void kickParticipant(Trip trip, int userId) {
+		int tripId = trip.getId();
+		String query = "DELETE FROM UsersInTrips WHERE tripID = " + tripId + "AND userID = " + userId + ";";
 		dbm.executeUpdate(query);
 	}
 
