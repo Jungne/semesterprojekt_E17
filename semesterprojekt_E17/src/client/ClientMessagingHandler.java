@@ -96,4 +96,8 @@ public class ClientMessagingHandler {
 	public static void signOut() {
 		receiver = null;
 	}
+	
+	public static String getConversationName(IServerController serverController, Conversation conversation, User currentUser) throws RemoteException {
+		return serverController.getConversationName(conversation, currentUser);
+	}
 }

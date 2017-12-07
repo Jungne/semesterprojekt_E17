@@ -47,10 +47,12 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -125,6 +127,14 @@ public class FXMLDocumentController implements Initializable {
 	private Button myTripsViewTripButton;
 	@FXML
 	private ListView<HBoxCell> myTripsListView;
+	@FXML
+	private Button myTripsDeleteTripButton;
+	@FXML
+	private ToggleGroup myTripsToggleGroup;
+	@FXML
+	private RadioButton myTripsToggleAll;
+	@FXML
+	private RadioButton myTripsOrganizedRadioButton;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Create Trip - Elements">
@@ -294,9 +304,6 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileNameLabel;
 	@FXML
 	private Label profileEmailLabel;
-	@FXML
-	private Button profilePaneChangePictureButton;
-	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
@@ -381,15 +388,14 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	private void showTrips(List<Trip> trips, ListView listView) {
 		List<HBoxCell> list = new ArrayList<>();
-		
+
 //		for (Trip trip : trips) {
 //			list.add(new HBoxCell(trip));
 //		}
-
 		trips.parallelStream().forEach((Trip trip) -> {
 			list.add(new HBoxCell(trip));
 		});
-			//Sorts the list
+		//Sorts the list
 //		list.sort(new Comparator<HBoxCell>() {		 
 //			public int compare(HBoxCell h1, HBoxCell h2) {
 //				return h1.getTripId() - h2.getTripId();
@@ -919,7 +925,7 @@ public class FXMLDocumentController implements Initializable {
 			resetBrowseTripPane();
 		} else if (event.getSource() == toolBarMyTripsButton) {
 			showPane(myTripsPane);
-			loadMyTrips();
+			resetMyTripsPane();
 		} else if (event.getSource() == toolBarProfileButton) {
 			showPane(profilePane);
 			loadProfileInfo();
@@ -1304,7 +1310,26 @@ public class FXMLDocumentController implements Initializable {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(id, false);
 			}
+		} else if (event.getSource() == myTripsDeleteTripButton) {
+			if (!myTripsListView.getSelectionModel().isEmpty()) {
+				clientController.deleteTrip(myTripsListView.getSelectionModel().getSelectedItem().getTripId());
+				loadMyOrganizedTrips();
+			}
+		} else if (myTripsToggleGroup.getToggles().contains(event.getSource())) {
+			if (myTripsToggleGroup.getSelectedToggle() == myTripsToggleAll) {
+				loadMyTrips();
+				myTripsDeleteTripButton.setDisable(true);
+			} else if (myTripsToggleGroup.getSelectedToggle() == myTripsOrganizedRadioButton) {
+				loadMyOrganizedTrips();
+				myTripsDeleteTripButton.setDisable(false);
+			}
 		}
+	}
+
+	private void resetMyTripsPane() {
+		loadMyTrips();
+		myTripsDeleteTripButton.setDisable(true);
+		myTripsToggleAll.setSelected(true);
 	}
 
 	/**
@@ -1314,6 +1339,23 @@ public class FXMLDocumentController implements Initializable {
 	private void loadMyTrips() {
 		Platform.runLater(() -> {
 			List<Trip> myTrips = clientController.getMyTrips();
+
+			if (myTrips != null) {
+				List<HBoxCell> list = new ArrayList<>();
+
+				for (Trip trip : myTrips) {
+					list.add(new HBoxCell(trip));
+				}
+
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				myTripsListView.setItems(observableList);
+			}
+		});
+	}
+
+	private void loadMyOrganizedTrips() {
+		Platform.runLater(() -> {
+			List<Trip> myTrips = clientController.getMyOrganizedTrips();
 
 			if (myTrips != null) {
 				List<HBoxCell> list = new ArrayList<>();
@@ -1368,7 +1410,6 @@ public class FXMLDocumentController implements Initializable {
 //				for (User user : users) {
 //					list.add(new HBoxCell(user));
 //				}
-
 				users.parallelStream().forEach((User user) -> {
 					list.add(new HBoxCell(user));
 				});
@@ -1444,7 +1485,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private void handleSendMessageButton(ActionEvent event) {
 		sendMessage(messagingTextField.getText());
-    messagingTextField.setText("");
+		messagingTextField.setText("");
 	}
 
 }

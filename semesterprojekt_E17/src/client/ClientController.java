@@ -25,8 +25,8 @@ public class ClientController {
 	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
-		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
-//		String hostname = "localhost";
+//		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
+		String hostname = "localhost";
 
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12312);
@@ -83,8 +83,8 @@ public class ClientController {
 		ClientTripHandler.modifyTrip(trip, serverController);
 	}
 
-	public void deleteTrip(Trip trip) {
-		ClientTripHandler.deleteTrip(serverController, trip);
+	public void deleteTrip(int tripId) {
+		ClientTripHandler.deleteTrip(serverController, tripId, currentUser.getId());
 	}
 
 	public boolean instructInTrip(Trip trip, User user) {
@@ -108,12 +108,19 @@ public class ClientController {
 	}
 
 	public List<User> searchUsers(String query) throws RemoteException {
-		return serverController.searchUsers(query);
+		return ClientUserHandler.searchUsers(serverController, query);
 	}
 
 	public List<Trip> getMyTrips() {
 		if (currentUser != null) {
 			return ClientTripHandler.getMyTrips(currentUser, serverController);
+		}
+		return null;
+	}
+	
+	public List<Trip> getMyOrganizedTrips() {
+		if (currentUser != null) {
+			return ClientTripHandler.getMyTrips(currentUser, serverController, currentUser.getId());
 		}
 		return null;
 	}
@@ -127,7 +134,7 @@ public class ClientController {
 	}
 
 	public String getConversationName(Conversation conversation) throws RemoteException {
-		return serverController.getConversationName(conversation, currentUser);
+		return ClientMessagingHandler.getConversationName(serverController, conversation, currentUser);
 	}
 
 	public Conversation getConversation(Conversation conversation) throws RemoteException {

@@ -226,4 +226,8 @@ public class ServerMessagingHandler {
 		}
 		return null;
 	}
+	
+	public static void deleteConversation() {
+		
+	}
 }

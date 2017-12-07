@@ -4,6 +4,7 @@ import interfaces.IServerController;
 import interfaces.Image;
 import interfaces.User;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,10 @@ public class ClientUserHandler {
 			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 			return null;
 		}
+	}
+	
+	public static List<User> searchUsers(IServerController serverController, String query) throws RemoteException {
+		return serverController.searchUsers(query);
 	}
 
 }

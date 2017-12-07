@@ -26,9 +26,9 @@ public class ClientTripHandler {
 		}
 	}
 
-	public static void deleteTrip(IServerController serverController, Trip trip) {
+	public static void deleteTrip(IServerController serverController, int tripId, int organizerId) {
 		try {
-			serverController.deleteTrip(trip);
+			serverController.deleteTrip(tripId, organizerId);
 		} catch (RemoteException ex) {
 			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -99,6 +99,15 @@ public class ClientTripHandler {
 	public static List<Trip> getMyTrips(User user, IServerController serverController) {
 		try {
 			return serverController.getMyTrips(user);
+		} catch (RemoteException ex) {
+			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
+	
+	public static List<Trip> getMyTrips(User user, IServerController serverController, int organizerId) {
+		try {
+			return serverController.getMyTrips(user, organizerId);
 		} catch (RemoteException ex) {
 			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
