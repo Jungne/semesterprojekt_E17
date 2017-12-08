@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientController {
 
@@ -25,7 +27,6 @@ public class ClientController {
 	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
-
 		//String hostname = "tek-sb3-glo0a.tek.sdu.dk";
 		String hostname = "localhost";
 
@@ -41,14 +42,17 @@ public class ClientController {
 		currentUser = ClientUserHandler.signUp(serverController, email, name, profilePicture, password);
 	}
 
-	public boolean signIn(String email, String password) throws RemoteException {
+	public boolean signIn(String email, String password) {
 		currentUser = ClientUserHandler.signIn(serverController, email, password);
 		if (currentUser != null) {
-			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser));
-			return true;
-		} else {
-			return false;
+			try {
+				serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser));
+				return true;
+			} catch (RemoteException ex) {
+				Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
+		return false;
 	}
 
 	public void signOut() throws RemoteException {

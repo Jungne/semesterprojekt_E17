@@ -23,6 +23,23 @@ public class User implements Serializable {
 	 * @param id
 	 * @param email
 	 * @param name
+	 * @param certificates
+	 * @param image
+	 */
+	public User(int id, String email, String name, List<Category> certificates, Image image) {
+		this.id = id;
+		this.email = email;
+		this.name = name;
+		this.certificates = certificates;
+		this.image = image;
+	}
+
+	/**
+	 * Constructor to
+	 *
+	 * @param id
+	 * @param email
+	 * @param name
 	 * @param image
 	 */
 	public User(int id, String email, String name, Image image) {

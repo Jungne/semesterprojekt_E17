@@ -760,7 +760,7 @@ public class FXMLDocumentController implements Initializable {
 	protected void removeCategoryListItem2(CategoryListItem2 categoryListItem) {
 		searchTripCategoryListHBox.getChildren().remove(categoryListItem);
 	}
-// </editor-fold>
+	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Log in - Methods">
 	private void resetLogInPane() {
@@ -785,20 +785,23 @@ public class FXMLDocumentController implements Initializable {
 			return;
 		}
 
+		//Signs in and checks if it succeeded
+		boolean isSignedIn = false;
 		try {
-			if (!clientController.signIn(email, hashPassword(password))) {
-				logInInvalidEmailText.setText("Email does not match with password!");
-				logInInvalidEmailText.setVisible(true);
-				logInInvalidPasswordText.setText("Password does not match with email!");
-				logInInvalidPasswordText.setVisible(true);
-				return;
-			}
+			isSignedIn = clientController.signIn(email, hashPassword(password));
+		} catch (IllegalArgumentException ex) {
+			System.out.println(ex.getMessage());
+		}
 
+		if (isSignedIn) {
 			showPane(profilePane);
 			loadProfileInfo();
 			signInUpdateClient(true);
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		} else {
+			logInInvalidEmailText.setText("Email does not match with password!");
+			logInInvalidEmailText.setVisible(true);
+			logInInvalidPasswordText.setText("Password does not match with email!");
+			logInInvalidPasswordText.setVisible(true);
 		}
 	}
 
@@ -1461,9 +1464,6 @@ public class FXMLDocumentController implements Initializable {
 				List<User> users = clientController.searchUsers(searchText);
 				List<HBoxCell> list = new ArrayList<>();
 
-//				for (User user : users) {
-//					list.add(new HBoxCell(user));
-//				}
 				users.parallelStream().forEach((User user) -> {
 					synchronized (list) {
 						list.add(new HBoxCell(user));

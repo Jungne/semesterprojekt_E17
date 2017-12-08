@@ -210,9 +210,16 @@ public class DatabaseSetup {
 
 	private static void addTempData() {
 		//Inserts categories
-		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Bowling');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Kayaking');");
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Running');");
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Climbing');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Hiking');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Canoeing');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Skiing');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Sailing');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Backpacking');");
+		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Cycling');");
+		
 		//Inserts locations
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Jylland');");
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Fyn');");
