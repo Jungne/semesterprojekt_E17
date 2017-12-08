@@ -311,7 +311,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button profilePaneChangePictureButton;
 	// </editor-fold>
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
 	private AnchorPane browseUsersPane;
@@ -445,7 +445,7 @@ public class FXMLDocumentController implements Initializable {
 				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 				viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
 				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
-        joinTripButton.setDisable(viewedTrip.getParticipants().contains(clientController.getCurrentUser()) || viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit());
+				joinTripButton.setDisable(viewedTrip.getParticipants().contains(clientController.getCurrentUser()) || viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit());
 				showPane(viewTripPane);
 			}
 		}
@@ -496,11 +496,10 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void changeProfilePicture() {
-	
-	//	Image profilePicture = newProfilePicture;
-		
+
+		//	Image profilePicture = newProfilePicture;
 	}
-	
+
 	/**
 	 * This method handels all the buttons on the profile Pane
 	 *
@@ -510,23 +509,21 @@ public class FXMLDocumentController implements Initializable {
 		File profileImageFile = chooseImage("Select profile picture");
 
 		/**
-		try {
-			String imageFileName = profileImageFile.getName();
-			String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
-			//Converts file to byte array
-			BufferedImage image = ImageIO.read(profileImageFile);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(image, imageFileType, baos);
+		 * try { String imageFileName = profileImageFile.getName(); String
+		 * imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') +
+		 * 1); //Converts file to byte array BufferedImage image =
+		 * ImageIO.read(profileImageFile); ByteArrayOutputStream baos = new
+		 * ByteArrayOutputStream(); ImageIO.write(image, imageFileType, baos);
+		 *
+		 * newProfilePicture = new Image(imageFileName, baos.toByteArray());
+		 *
+		 *
+		 */
+		profilePictureImageView.setImage(new javafx.scene.image.Image(profileImageFile.toURI().toString()));
 
-			newProfilePicture = new Image(imageFileName, baos.toByteArray());
-			* 
-			* 	 */
-			profilePictureImageView.setImage(new javafx.scene.image.Image(profileImageFile.toURI().toString()));
-		
-	//	} catch (Exception ex) {
-			//Failed to choose valid image
+		//	} catch (Exception ex) {
+		//Failed to choose valid image
 		//}
-
 	}
 	// </editor-fold>
 
@@ -761,20 +758,23 @@ public class FXMLDocumentController implements Initializable {
 			return;
 		}
 
+		//Signs in and checks if it succeeded
+		boolean isSignedIn = false;
 		try {
-			if (!clientController.signIn(email, hashPassword(password))) {
-				logInInvalidEmailText.setText("Email does not match with password!");
-				logInInvalidEmailText.setVisible(true);
-				logInInvalidPasswordText.setText("Password does not match with email!");
-				logInInvalidPasswordText.setVisible(true);
-				return;
-			}
+			isSignedIn = clientController.signIn(email, hashPassword(password));
+		} catch (IllegalArgumentException ex) {
+			System.out.println(ex.getMessage());
+		}
 
+		if (isSignedIn) {
 			showPane(profilePane);
 			loadProfileInfo();
 			signInUpdateClient(true);
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		} else {
+			logInInvalidEmailText.setText("Email does not match with password!");
+			logInInvalidEmailText.setVisible(true);
+			logInInvalidPasswordText.setText("Password does not match with email!");
+			logInInvalidPasswordText.setVisible(true);
 		}
 	}
 
@@ -1474,7 +1474,6 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// </editor-fold>
-	
 	private void loadConversation(int ConversationId) {
 
 	}

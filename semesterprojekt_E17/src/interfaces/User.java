@@ -12,6 +12,14 @@ public class User implements Serializable {
 	private List<Category> certificates = new ArrayList<>();
 	private Image image;
 
+	public User(int id, String email, String name, List<Category> certificates, Image image) {
+		this.id = id;
+		this.email = email;
+		this.name = name;
+		this.certificates = certificates;
+		this.image = image;
+	}
+	
 	public User(int id, String email, String name, Image image) {
 		this.id = id;
 		this.email = email;
