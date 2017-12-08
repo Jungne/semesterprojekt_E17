@@ -310,9 +310,6 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileNameLabel;
 	@FXML
 	private Label profileEmailLabel;
-	@FXML
-	private Button profilePaneChangePictureButton;
-	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
@@ -341,6 +338,10 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button messagingSendButton;
 	// </editor-fold>
+	@FXML
+	private Button handleProfileButtons;
+	@FXML
+	private ListView<HBoxCell> profileCertificatesListView;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -508,6 +509,15 @@ public class FXMLDocumentController implements Initializable {
 		profileEmailLabel.setText(clientController.getCurrentUser().getEmail());
 		InputStream inputStream = new ByteArrayInputStream(clientController.getCurrentUser().getImage().getImageFile());
 		profilePictureImageView.setImage(new javafx.scene.image.Image(inputStream));
+
+		List<HBoxCell> list = new ArrayList<>();
+
+		for (Category category : clientController.getCurrentUser().getCertificates()) {
+			list.add(new HBoxCell(category.getId(), category.getName()));
+		}
+
+		ObservableList observableList = FXCollections.observableArrayList(list);
+		profileCertificatesListView.setItems(observableList);
 	}
 
 	/**

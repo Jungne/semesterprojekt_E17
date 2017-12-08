@@ -349,7 +349,7 @@
             <Button fx:id="newAccountBackButton" cancelButton="true" layoutX="223.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Back" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false">
+      <AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0">
          <children>
 
             <Button fx:id="handleProfileButtons" layoutX="322.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleProfileButtons" text="Change picture" />
@@ -360,6 +360,12 @@
             <Label layoutX="322.0" layoutY="42.0" style="-fx-font-weight: bold;" text="Profile picture" />
             <Label fx:id="profileNameLabel" layoutX="51.0" layoutY="60.0" text="Label" />
             <Label fx:id="profileEmailLabel" layoutX="52.0" layoutY="105.0" text="Label" />
+            <ListView fx:id="profileCertificatesListView" layoutX="51.0" layoutY="339.0" prefHeight="200.0" prefWidth="200.0" />
+            <Label layoutX="52.0" layoutY="322.0" text="Label">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="modifyTripPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
@@ -401,7 +407,7 @@
             <Button fx:id="browseUsersMessageButton" layoutX="33.0" layoutY="139.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Message" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="messagingPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="messagingPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <ListView fx:id="messagingConversationsListView" layoutX="14.0" layoutY="14.0" prefHeight="420.0" prefWidth="225.0" />
             <ListView fx:id="messagingActiveConversationListView" layoutX="250.0" layoutY="14.0" prefHeight="420.0" prefWidth="382.0" />
