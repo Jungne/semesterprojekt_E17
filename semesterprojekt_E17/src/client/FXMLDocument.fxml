@@ -34,7 +34,7 @@
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -272,7 +272,7 @@
             </RadioButton>
             <RadioButton fx:id="myTripsOrganizedRadioButton" layoutX="40.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" text="Organized by me" toggleGroup="$myTripsToggleGroup" />
          </children></AnchorPane>
-      <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
+      <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <Text fx:id="viewTripTitleLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
                <font>
@@ -308,7 +308,7 @@
             <TextField fx:id="viewTripLocationTextField" editable="false" layoutX="178.0" layoutY="321.0" prefHeight="25.0" prefWidth="120.0" />
             <Label fx:id="viewTripLimitLabel" layoutX="249.0" layoutY="357.0" text="Limit" />
             <Label layoutX="323.0" layoutY="357.0" text="Categories:" />
-            <TextArea fx:id="viewTripCategoriesTextArea" editable="false" layoutX="322.0" layoutY="374.0" prefHeight="188.0" prefWidth="128.0" />
+            <TextArea fx:id="viewTripCategoriesTextArea" editable="false" layoutX="322.0" layoutY="374.0" prefHeight="188.0" prefWidth="128.0" wrapText="true" />
             <Button fx:id="viewTripKickButton" layoutX="53.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Kick participant" visible="false" />
             <Button fx:id="viewTripBackButton" layoutX="322.0" layoutY="321.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefWidth="60.0" text="Back" />
          </children>
