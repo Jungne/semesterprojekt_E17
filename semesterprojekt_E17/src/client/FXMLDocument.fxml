@@ -361,6 +361,12 @@
             <Label layoutX="322.0" layoutY="42.0" style="-fx-font-weight: bold;" text="Profile picture" />
             <Label fx:id="profileNameLabel" layoutX="51.0" layoutY="60.0" text="Label" />
             <Label fx:id="profileEmailLabel" layoutX="52.0" layoutY="105.0" text="Label" />
+            <ListView fx:id="profileCertificatesListView" layoutX="51.0" layoutY="339.0" prefHeight="200.0" prefWidth="200.0" />
+            <Label layoutX="52.0" layoutY="322.0" text="Certificates">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="modifyTripPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">

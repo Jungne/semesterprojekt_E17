@@ -100,4 +100,13 @@ public class ClientMessagingHandler {
 	public static String getConversationName(IServerController serverController, Conversation conversation, User currentUser) throws RemoteException {
 		return serverController.getConversationName(conversation, currentUser);
 	}
+	
+	public static Conversation getUserConversation(IServerController serverController, int userId1, int userId2) {
+		try {
+			return serverController.getUserConversation(userId1, userId2);
+		} catch (RemoteException ex) {
+			Logger.getLogger(ClientMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
 }
