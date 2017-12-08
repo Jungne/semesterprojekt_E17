@@ -316,6 +316,11 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileNameLabel;
 	@FXML
 	private Label profileEmailLabel;
+	@FXML
+	private Button handleProfileButtons;
+	@FXML
+	private ListView<HBoxCell> profileCertificatesListView;
+
 
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
@@ -344,10 +349,6 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button messagingSendButton;
 	// </editor-fold>
-	@FXML
-	private Button handleProfileButtons;
-	@FXML
-	private ListView<HBoxCell> profileCertificatesListView;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -1605,6 +1606,5 @@ public class FXMLDocumentController implements Initializable {
 
 		showPane(messagingPane);
 	}
-
 
 }
