@@ -25,7 +25,8 @@ public class ClientController {
 	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
-//		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
+
+		//String hostname = "tek-sb3-glo0a.tek.sdu.dk";
 		String hostname = "localhost";
 
 		try {
@@ -53,6 +54,15 @@ public class ClientController {
 	public void signOut() throws RemoteException {
 		currentUser = null;
 		ClientMessagingHandler.signOut();
+	}
+
+	public void updateUser() throws RemoteException {
+		currentUser = ClientUserHandler.updateUser(serverController, currentUser.getId());
+	}
+
+	public void changeProfilePicture(Image profilePicture) throws RemoteException {
+		int currentUserID = currentUser.getId();
+		ClientUserHandler.changeProfilePicture(serverController, currentUserID, profilePicture);
 	}
 
 	public List<Trip> getAllTrips() throws RemoteException {
@@ -117,7 +127,7 @@ public class ClientController {
 		}
 		return null;
 	}
-	
+
 	public List<Trip> getMyOrganizedTrips() {
 		if (currentUser != null) {
 			return ClientTripHandler.getMyTrips(currentUser, serverController, currentUser.getId());

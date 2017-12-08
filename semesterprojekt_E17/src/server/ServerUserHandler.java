@@ -1,8 +1,10 @@
 package server;
 
+import client.ClientUserHandler;
 import database.DBManager;
 import interfaces.Image;
 import interfaces.User;
+import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -77,6 +79,70 @@ public class ServerUserHandler {
 		}
 
 		return null;
+	}
+
+	/**
+	 * This method updates the current user
+	 *
+	 * @param currentUserID
+	 * @return the current user
+	 */
+	public static User updateUser(int currentUserID) throws RemoteException {
+
+		String query = "SELECT userID, email, userName, imageFile "
+						+ "FROM Users "
+						+ "NATURAL JOIN Images "
+						+ "WHERE userID = " + currentUserID + ";";
+
+		try {
+			ResultSet userRs = dbm.executeQuery(query);
+
+			if (userRs.next()) {
+				int userId = userRs.getInt("userID");
+				String userEmail = userRs.getString("email");
+				String userName = userRs.getString("userName");
+				byte[] userImageFile = userRs.getBytes("imageFile");
+
+				return new User(userId, userEmail, userName, new Image(userImageFile));
+			}
+
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		return null;
+
+	}
+
+	/**
+	 * This method handels changing the user profile picture
+	 *
+	 * @param currentUserID
+	 * @param profilePicture
+	 */
+	public static void changeProfilePicture(int currentUserID, Image profilePicture) throws RemoteException {
+
+		//Inserts an image 
+		String sqlImageId = "null";
+		if (profilePicture != null && profilePicture.getImageFile() != null) {
+			String sqlImageTitle;
+			if (profilePicture.getTitle() == null || profilePicture.getTitle().isEmpty()) {
+				sqlImageTitle = "null";
+			} else {
+				sqlImageTitle = "'" + profilePicture.getTitle() + "'";
+			}
+			String imageQuery = "INSERT INTO Images (imageID, imageTitle, imageFile) VALUES (DEFAULT, " + sqlImageTitle + ", ?)";
+			sqlImageId = dbm.executeImageInsertAndGetId(imageQuery, profilePicture.getImageFile()) + "";
+		}
+
+		//Query to update user with new profile picture
+		String updateUserQuery = ""
+						+ "UPDATE Users "
+						+ "SET imageID = " + sqlImageId + "\n"
+						+ "WHERE userId=  " + currentUserID;
+
+		dbm.executeUpdate(updateUserQuery);
+
 	}
 
 	public static List<User> searchUsers(String query) {

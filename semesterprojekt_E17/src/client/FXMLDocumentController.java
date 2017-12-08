@@ -311,7 +311,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button profilePaneChangePictureButton;
 	// </editor-fold>
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
 	private AnchorPane browseUsersPane;
@@ -497,7 +497,7 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="Profile - Methods">
 	/**
-	 * This method
+	 * This method loads the user profile
 	 *
 	 */
 	private void loadProfileInfo() {
@@ -508,15 +508,14 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method handels changing an users profile picture
+	 * This method handels changing the user profile picture
 	 *
 	 */
-	private void changeProfilePicture() {
-	
-	//	Image profilePicture = newProfilePicture;
-		
+	private void changeProfilePicture() throws RemoteException {
+		Image profilePicture = newProfilePicture;
+		clientController.changeProfilePicture(profilePicture);
 	}
-	
+
 	/**
 	 * This method handels all the buttons on the profile Pane
 	 *
@@ -525,24 +524,24 @@ public class FXMLDocumentController implements Initializable {
 	private void handleProfileButtons(ActionEvent event) {
 		File profileImageFile = chooseImage("Select profile picture");
 
-		/**
-		try {
-			String imageFileName = profileImageFile.getName();
-			String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
-			//Converts file to byte array
-			BufferedImage image = ImageIO.read(profileImageFile);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(image, imageFileType, baos);
+		Platform.runLater(() -> {
+			try {
+				String imageFileName = profileImageFile.getName();
+				String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
+				//Converts file to byte array
+				BufferedImage image = ImageIO.read(profileImageFile);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, imageFileType, baos);
 
-			newProfilePicture = new Image(imageFileName, baos.toByteArray());
-			* 
-			* 	 */
-			profilePictureImageView.setImage(new javafx.scene.image.Image(profileImageFile.toURI().toString()));
-		
-	//	} catch (Exception ex) {
-			//Failed to choose valid image
-		//}
+				newProfilePicture = new Image(imageFileName, baos.toByteArray());
+				changeProfilePicture();
+				clientController.updateUser();
+				loadProfileInfo();
 
+			} catch (Exception ex) {
+				//Failed to choose valid image
+			}
+		});
 	}
 	// </editor-fold>
 

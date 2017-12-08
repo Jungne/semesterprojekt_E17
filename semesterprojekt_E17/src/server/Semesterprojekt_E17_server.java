@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server;
 
-import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -14,8 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * This is the server start class.
  *
- * @author jungn
+ * @author group 12
  */
 public class Semesterprojekt_E17_server {
 
@@ -28,6 +23,7 @@ public class Semesterprojekt_E17_server {
 	public static void main(String[] args) {
 
 		try {
+			//
 			ServerControllerImpl serverController = new ServerControllerImpl();
 			Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
 			registry.bind(REMOTE_OBJECT_NAME, serverController);
