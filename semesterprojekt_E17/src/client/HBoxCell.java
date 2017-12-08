@@ -174,6 +174,10 @@ public class HBoxCell extends HBox {
 	public String getType() {
 		return type;
 	}
+	
+	public String getLabel1Text() {
+		return label1.getText();
+	}
 
 	@Override
 	public String toString() {
