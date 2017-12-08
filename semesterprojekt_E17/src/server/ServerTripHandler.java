@@ -398,7 +398,7 @@ public class ServerTripHandler {
 
 		//Initializes the query string.
 		String query = "SELECT DISTINCT Trips.tripID, tripTitle, tripdescription, tripPrice, imageFile FROM Trips, ImagesInTrips, Images, CategoriesInTrips, Instructorsintrips "
-						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
+						+ "WHERE trips.tripid = imagesintrips.tripid AND images.imageID = imagesintrips.imageID AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid) AND timeStart >= NOW()";
 
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string.
 		if (!(searchTitle == null || searchTitle.isEmpty())) {
@@ -621,7 +621,7 @@ public class ServerTripHandler {
 							+ "INNER JOIN usersInTrips ON trips.tripid = usersInTrips.tripid\n"
 							+ "INNER JOIN imagesInTrips ON imagesInTrips.tripid = trips.tripid\n"
 							+ "INNER JOIN images ON images.imageid = imagesInTrips.imageid\n"
-							+ "WHERE usersInTrips.userid = " + user.getId() + " AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid)";
+							+ "WHERE usersInTrips.userid = " + user.getId() + " AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid) AND timeStart >= NOW()";
 			List<Trip> myTrips = new ArrayList<>();
 
 			ResultSet tripsRs = dbm.executeQuery(query);
