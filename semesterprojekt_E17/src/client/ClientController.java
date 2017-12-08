@@ -91,8 +91,8 @@ public class ClientController {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-	public void kickParticipant(Trip trip, User user) {
-		ClientTripHandler.kickParticipant(serverController, trip, user);
+	public void kickParticipant(Trip trip, int userId) {
+		ClientTripHandler.kickParticipant(serverController, trip, userId);
 	}
 
 	public List<Category> getCategories() {
