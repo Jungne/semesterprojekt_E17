@@ -34,7 +34,7 @@
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -251,7 +251,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
+      <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Trips">
                <font>
@@ -298,7 +298,7 @@
                </font>
             </Text>
             <ImageView fx:id="viewTripPaneImageView" fitHeight="165.0" fitWidth="280.0" layoutX="322.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true" />
-            <TextArea fx:id="viewTripDescriptionTextArea" editable="false" layoutX="42.0" layoutY="80.0" prefHeight="165.0" prefWidth="256.0" />
+            <TextArea fx:id="viewTripDescriptionTextArea" editable="false" layoutX="42.0" layoutY="80.0" prefHeight="165.0" prefWidth="256.0" wrapText="true" />
             <TextField fx:id="viewTripPriceTextField" editable="false" layoutX="43.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
             <TextField fx:id="viewTripOrganizerTextField" editable="false" layoutX="178.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
             <Label layoutX="178.0" layoutY="251.0" text="Organizer:" />
