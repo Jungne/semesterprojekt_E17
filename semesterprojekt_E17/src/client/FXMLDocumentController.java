@@ -227,6 +227,10 @@ public class FXMLDocumentController implements Initializable {
 	private ListView<HBoxCell> viewListOfParticipants;
 	@FXML
 	private Button joinTripButton;
+        @FXML
+        private Button viewTripLastButton;
+        @FXML
+        private Button viewTripNextButton;
 	@FXML
 	private Text viewTripParticipantsLabel;
 	@FXML
@@ -462,8 +466,18 @@ public class FXMLDocumentController implements Initializable {
 			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
 			viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
+                        if(viewedTrip.getImages().size()<=0){
+                           viewTripNextButton.setVisible(true);
+                           viewTripLastButton.setVisible(true);
 			viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
-
+                        }
+                        else if(viewedTrip.getImages().size()>0){
+                            viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
+                        viewTripNextButton.setVisible(true);
+                        viewTripLastButton.setVisible(true);
+                        viewTripNextButton.setDisable(true);
+                        
+                        }
 			viewTripDescriptionTextArea.setEditable(modifyMode);
 			viewTripPriceTextField.setEditable(modifyMode);
 			//viewTripOrganizerTextField.setEditable(modifyMode);
@@ -598,6 +612,49 @@ public class FXMLDocumentController implements Initializable {
 			handleSaveChanges(); 
 			showPane(myTripsPane);
 		}
+                else if(event.getSource() ==viewTripLastButton){
+                   int indexOfImage= viewedTrip.getImages().indexOf(viewTripPaneImageView.getImage());
+                        
+                    viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(indexOfImage-1).getImageFile())));
+                   indexOfImage= viewedTrip.getImages().indexOf(viewTripPaneImageView.getImage());
+                    if(indexOfImage>0&&indexOfImage<viewedTrip.getImages().size()-1){
+                        viewTripNextButton.setDisable(true);
+                        viewTripLastButton.setDisable(true);
+                    }
+                    else if(indexOfImage==0&&viewedTrip.getImages().size()>1){
+                       viewTripLastButton.setDisable(false); 
+                       viewTripNextButton.setDisable(true);
+                    }
+                    else if(indexOfImage==0&&viewedTrip.getImages().size()==1){
+                       viewTripLastButton.setDisable(false); 
+                       viewTripNextButton.setDisable(false);
+                    }
+                     else if(indexOfImage==viewedTrip.getImages().size()-1&&viewedTrip.getImages().size()>1){
+                       viewTripLastButton.setDisable(true); 
+                       viewTripNextButton.setDisable(false);
+                    }
+                     else{
+                        viewTripLastButton.setDisable(false); 
+                       viewTripNextButton.setDisable(false);
+                    }
+                }
+                else if(event.getSource() ==viewTripNextButton){
+                   int indexOfImage= viewedTrip.getImages().indexOf(viewTripPaneImageView.getImage());
+                   viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(indexOfImage+1).getImageFile())));
+                   indexOfImage= viewedTrip.getImages().indexOf(viewTripPaneImageView.getImage());
+                    if(indexOfImage>0&&indexOfImage<viewedTrip.getImages().size()-1){
+                        viewTripNextButton.setDisable(true);
+                        viewTripLastButton.setDisable(true);
+                    }
+                    else if(indexOfImage==0&&viewedTrip.getImages().size()>1){
+                       viewTripLastButton.setDisable(false); 
+                       viewTripNextButton.setDisable(true);
+                    }
+                    else{
+                        viewTripLastButton.setDisable(false); 
+                       viewTripNextButton.setDisable(false);
+                    }
+                }
 
 	}
 

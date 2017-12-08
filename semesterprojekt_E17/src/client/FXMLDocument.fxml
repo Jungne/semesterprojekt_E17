@@ -297,7 +297,7 @@
                   <Font name="System Italic" size="13.0" />
                </font>
             </Text>
-            <ImageView fx:id="viewTripPaneImageView" fitHeight="165.0" fitWidth="280.0" layoutX="322.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="viewTripPaneImageView" fitHeight="165.0" fitWidth="248.0" layoutX="344.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true" />
             <TextArea fx:id="viewTripDescriptionTextArea" editable="false" layoutX="42.0" layoutY="80.0" prefHeight="165.0" prefWidth="256.0" wrapText="true" />
             <TextField fx:id="viewTripPriceTextField" editable="false" layoutX="43.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
             <TextField fx:id="viewTripOrganizerTextField" editable="false" layoutX="178.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
@@ -312,6 +312,8 @@
             <Button fx:id="viewTripKickButton" layoutX="53.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Kick participant" visible="false" />
             <Button fx:id="viewTripBackButton" layoutX="322.0" layoutY="321.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefWidth="60.0" text="Back" />
             <Button fx:id="viewTripSaveChangesButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Save Changes" />
+            <Button fx:id="viewTripLastButton" disable="true" layoutX="304.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Last" visible="false" />
+            <Button fx:id="viewTripNextButton" disable="true" layoutX="596.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefHeight="25.0" prefWidth="43.0" text="Next" visible="false" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="logInPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
