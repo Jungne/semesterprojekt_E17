@@ -185,6 +185,21 @@ public class Trip implements Serializable {
 	}
 
 	/**
+	 * Constructor to
+	 *
+	 * @param id
+	 * @param title
+	 * @param description
+	 * @param price
+	 */
+	public Trip(int id, String title, String description, double price) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.price = price;
+	}
+
+	/**
 	 * This method adds new participants to a trip
 	 *
 	 * @param user
@@ -303,6 +318,10 @@ public class Trip implements Serializable {
 	 */
 	public List<Image> getImages() {
 		return images;
+	}
+	
+	public void addImage(Image image) {
+		images.add(image);
 	}
 
 }

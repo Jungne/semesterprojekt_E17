@@ -364,7 +364,7 @@ public class FXMLDocumentController implements Initializable {
 			});
 
 			//Set toolbar picture
-			toolBarImageView.setImage(new javafx.scene.image.Image("ToolbarImage.jpg"));
+			toolBarImageView.setImage(new javafx.scene.image.Image("default_pictures/ToolbarImage.jpg"));
 
 			//Load all trips to browse trips, when the program starts
 			resetBrowseTripPane();

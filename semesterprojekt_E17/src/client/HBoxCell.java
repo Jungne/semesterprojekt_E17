@@ -35,11 +35,11 @@ public class HBoxCell extends HBox {
 
 		id = trip.getId();
 
-		if (trip.getImages().get(0).getImageFile().length > 0) {
+		if (trip.getImages().isEmpty()) {
+			imageView.setImage(new javafx.scene.image.Image("default_pictures/default_trip_picture.png"));
+		} else {
 			InputStream inputStream = new ByteArrayInputStream(trip.getImages().get(0).getImageFile());
 			imageView.setImage(new javafx.scene.image.Image(inputStream));
-		} else {
-			imageView.setImage(new javafx.scene.image.Image("default.jpg")); //Add default image or not.
 		}
 
 		label1.setText(trip.getTitle());
@@ -74,8 +74,12 @@ public class HBoxCell extends HBox {
 
 		id = user.getId();
 
-		InputStream inputStream = new ByteArrayInputStream(user.getImage().getImageFile());
-		imageView.setImage(new javafx.scene.image.Image(inputStream));
+		if (user.getImage() == null) {
+			imageView.setImage(new javafx.scene.image.Image("default_pictures/default_profile_picture.png"));
+		} else {
+			InputStream inputStream = new ByteArrayInputStream(user.getImage().getImageFile());
+			imageView.setImage(new javafx.scene.image.Image(inputStream));
+		}
 
 		label1.setText(user.getName());
 		label1.setPrefWidth(150);
@@ -105,19 +109,19 @@ public class HBoxCell extends HBox {
 
 	public HBoxCell(Message message, User user) {
 		this.setPrefWidth(50);
-		
+
 		id = message.getId();
-		
+
 		label1.setText(message.getSender().getName() + ":");
 		label1.setStyle("-fx-font-weight: bold;");
-		
+
 		label2.setText(message.getMessage());
 		label2.setWrapText(true);
 		label2.setTextAlignment(TextAlignment.JUSTIFY);
-						
+
 		label3.setText(message.getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm")));
 		label3.setStyle("-fx-font-style: italic;");
-		
+
 		VBox vbox = new VBox();
 		vbox.getChildren().addAll(label1, label2, label3);
 
@@ -136,16 +140,17 @@ public class HBoxCell extends HBox {
 			this.getChildren().addAll(vbox);
 		}
 	}
-	
+
 	/**
 	 * HBoxCell with id and text label.
+	 *
 	 * @param id
-	 * @param text 
+	 * @param text
 	 */
-	public HBoxCell (int id, String text) {
+	public HBoxCell(int id, String text) {
 		this.id = id;
 		label1.setText(text);
-		
+
 		this.getChildren().add(label1);
 	}
 
