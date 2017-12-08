@@ -34,7 +34,7 @@
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -349,7 +349,7 @@
             <Button fx:id="newAccountBackButton" cancelButton="true" layoutX="223.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Back" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0">
+      <AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false">
          <children>
 
             <Button fx:id="handleProfileButtons" layoutX="322.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleProfileButtons" text="Change picture" />
@@ -361,7 +361,7 @@
             <Label fx:id="profileNameLabel" layoutX="51.0" layoutY="60.0" text="Label" />
             <Label fx:id="profileEmailLabel" layoutX="52.0" layoutY="105.0" text="Label" />
             <ListView fx:id="profileCertificatesListView" layoutX="51.0" layoutY="339.0" prefHeight="200.0" prefWidth="200.0" />
-            <Label layoutX="52.0" layoutY="322.0" text="Label">
+            <Label layoutX="52.0" layoutY="322.0" text="Certificates">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
