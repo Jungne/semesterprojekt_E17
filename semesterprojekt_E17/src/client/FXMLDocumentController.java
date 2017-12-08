@@ -55,6 +55,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.scene.layout.AnchorPane;
@@ -211,6 +213,7 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Elements">
 	private Trip viewedTrip;
+	private AnchorPane lastPane;
 
 	@FXML
 	private AnchorPane viewTripPane;
@@ -240,6 +243,8 @@ public class FXMLDocumentController implements Initializable {
 	private TextArea viewTripCategoriesTextArea;
 	@FXML
 	private Button viewTripKickButton;
+	@FXML
+	private Button viewTripBackButton;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Modify Trip - Elements">
@@ -431,8 +436,9 @@ public class FXMLDocumentController implements Initializable {
 	 * @param modifyMode
 	 *
 	 */
-	private void viewTrip(int id, boolean modifyMode) {
-		viewedTrip = clientController.viewTrip(id); //Should be id obtained from selected element in list view on my trips
+	private void viewTrip(int id, boolean modifyMode, AnchorPane lastPane) {
+		viewedTrip = clientController.viewTrip(id); 
+		this.lastPane = lastPane;
 		if (viewedTrip != null) {
 			viewTripTitleLabel.setText(viewedTrip.getTitle());
 			viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
@@ -459,9 +465,13 @@ public class FXMLDocumentController implements Initializable {
 
 			joinTripButton.setVisible(!modifyMode);
 
-			joinTripButton.setDisable(viewedTrip.getParticipants().contains(clientController.getCurrentUser()) || viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit() || modifyMode);
+			joinTripButton.setDisable(
+							viewedTrip.getParticipants().contains(clientController.getCurrentUser()) 
+							|| viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit() 
+							|| modifyMode 
+							|| clientController.getCurrentUser() == null);
 
-			if (viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId()) {
+			if (clientController.getCurrentUser() != null && viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId()) {
 				viewTripKickButton.setVisible(true);
 			} else {
 				viewTripKickButton.setVisible(false);
@@ -569,16 +579,19 @@ public class FXMLDocumentController implements Initializable {
 		if (event.getSource() == joinTripButton) {
 			try {
 				clientController.participateInTrip(viewedTrip);
-				viewTrip(viewedTrip.getId(), false);
+				viewTrip(viewedTrip.getId(), false, lastPane);
 			} catch (FullTripException ex) {
 				//TODO popup explanation, that trip is full.
 				System.out.println(ex);
-			}
+			} 
 		} else if (event.getSource() == viewTripKickButton) {
 			int userId = viewListOfParticipants.getSelectionModel().getSelectedItem().getUserId();
 			clientController.kickParticipant(viewedTrip, userId);
-			viewTrip(viewedTrip.getId(), false);
+			viewTrip(viewedTrip.getId(), false, lastPane);
+		} else if (event.getSource() == viewTripBackButton) {
+			showPane(lastPane);
 		}
+			
 	}
 	// </editor-fold>
 
@@ -602,7 +615,7 @@ public class FXMLDocumentController implements Initializable {
 				//If no trip is selected, then nothing happens
 			} else {
 				int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
-				viewTrip(tripId, false);
+				viewTrip(tripId, false, browseTripsPane);
 			}
 		}
 	}
@@ -944,12 +957,6 @@ public class FXMLDocumentController implements Initializable {
 		} else {
 			newAccountRepeatPasswordTextField.setStyle("-fx-text-box-border: red");
 		}
-	}
-
-	private void handleViewTripButton(ActionEvent event) {
-		int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
-		System.out.println(tripId);
-		viewTrip(tripId, false);
 	}
 	// </editor-fold>
 
@@ -1376,7 +1383,7 @@ public class FXMLDocumentController implements Initializable {
 
 			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-				viewTrip(id, true);
+				viewTrip(id, true, myTripsPane);
 			}
 		} else if (event.getSource() == myTripsViewTripButton) {
 
@@ -1385,7 +1392,7 @@ public class FXMLDocumentController implements Initializable {
 
 			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-				viewTrip(id, false);
+				viewTrip(id, false, myTripsPane);
 			}
 		} else if (event.getSource() == myTripsDeleteTripButton) {
 			if (!myTripsListView.getSelectionModel().isEmpty()) {
@@ -1407,6 +1414,16 @@ public class FXMLDocumentController implements Initializable {
 		loadMyTrips();
 		myTripsDeleteTripButton.setDisable(true);
 		myTripsToggleAll.setSelected(true);
+		myTripsModifyTripButton.setDisable(true);
+	}
+	
+	@FXML
+	private void handleMyTripsListView(MouseEvent event) {
+		if(myTripsListView.getSelectionModel().getSelectedItem() != null) {
+			int tripId = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+			int organizerId = clientController.viewTrip(tripId).getOrganizer().getId();
+			myTripsModifyTripButton.setDisable(organizerId != clientController.getCurrentUser().getId());
+		}
 	}
 
 	/**
@@ -1587,5 +1604,6 @@ public class FXMLDocumentController implements Initializable {
 
 		showPane(messagingPane);
 	}
+
 
 }
