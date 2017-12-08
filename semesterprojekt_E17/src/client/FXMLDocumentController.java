@@ -1499,6 +1499,12 @@ public class FXMLDocumentController implements Initializable {
 		//Reload all users
 		searchUsers();
 
+		//Disables the message button if not logged in
+		if (clientController.getCurrentUser() == null) {
+			browseUsersMessageButton.setDisable(true);
+		} else {
+			browseUsersMessageButton.setDisable(false);
+		}
 	}
 
 	// </editor-fold>
