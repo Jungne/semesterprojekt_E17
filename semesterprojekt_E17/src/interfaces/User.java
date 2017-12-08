@@ -17,7 +17,15 @@ public class User implements Serializable {
 	private List<Category> certificates = new ArrayList<>();
 	private Image image;
 
-<<<<<<< HEAD
+	/**
+	 * Constructor to
+	 *
+	 * @param id
+	 * @param email
+	 * @param name
+	 * @param certificates
+	 * @param image
+	 */
 	public User(int id, String email, String name, List<Category> certificates, Image image) {
 		this.id = id;
 		this.email = email;
@@ -25,8 +33,7 @@ public class User implements Serializable {
 		this.certificates = certificates;
 		this.image = image;
 	}
-	
-=======
+
 	/**
 	 * Constructor to
 	 *
@@ -35,7 +42,6 @@ public class User implements Serializable {
 	 * @param name
 	 * @param image
 	 */
->>>>>>> d386637083369d64bb606590e6c881479ceae0ab
 	public User(int id, String email, String name, Image image) {
 		this.id = id;
 		this.email = email;
