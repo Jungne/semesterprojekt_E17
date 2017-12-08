@@ -60,6 +60,15 @@ public class ClientController {
 		ClientMessagingHandler.signOut();
 	}
 
+	public void updateUser() throws RemoteException {
+		currentUser = ClientUserHandler.updateUser(serverController, currentUser.getId());
+	}
+
+	public void changeProfilePicture(Image profilePicture) throws RemoteException {
+		int currentUserID = currentUser.getId();
+		ClientUserHandler.changeProfilePicture(serverController, currentUserID, profilePicture);
+	}
+
 	public List<Trip> getAllTrips() throws RemoteException {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
@@ -96,8 +105,8 @@ public class ClientController {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-	public void kickParticipant(Trip trip, User user) {
-		ClientTripHandler.kickParticipant(serverController, trip, user);
+	public void kickParticipant(Trip trip, int userId) {
+		ClientTripHandler.kickParticipant(serverController, trip, userId);
 	}
 
 	public List<Category> getCategories() {

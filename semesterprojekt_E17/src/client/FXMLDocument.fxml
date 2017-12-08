@@ -34,7 +34,7 @@
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -251,7 +251,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
+      <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Trips">
                <font>
@@ -272,7 +272,7 @@
             </RadioButton>
             <RadioButton fx:id="myTripsOrganizedRadioButton" layoutX="40.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" text="Organized by me" toggleGroup="$myTripsToggleGroup" />
          </children></AnchorPane>
-      <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Text fx:id="viewTripTitleLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
                <font>
@@ -290,7 +290,7 @@
                   <Font name="System Italic" size="13.0" />
                </font>
             </Text>
-            <Button fx:id="joinTripButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleJoinTripButton" text="Join trip" />
+            <Button fx:id="joinTripButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Join trip" />
             <ListView fx:id="viewListOfParticipants" layoutX="43.0" layoutY="374.0" prefHeight="188.0" prefWidth="256.0" />
             <Text fx:id="viewTripParticipantsLabel" layoutX="43.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants:" wrappingWidth="91.99999879766256">
                <font>
@@ -298,7 +298,7 @@
                </font>
             </Text>
             <ImageView fx:id="viewTripPaneImageView" fitHeight="165.0" fitWidth="280.0" layoutX="322.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true" />
-            <TextArea fx:id="viewTripDescriptionTextArea" editable="false" layoutX="42.0" layoutY="80.0" prefHeight="165.0" prefWidth="256.0" />
+            <TextArea fx:id="viewTripDescriptionTextArea" editable="false" layoutX="42.0" layoutY="80.0" prefHeight="165.0" prefWidth="256.0" wrapText="true" />
             <TextField fx:id="viewTripPriceTextField" editable="false" layoutX="43.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
             <TextField fx:id="viewTripOrganizerTextField" editable="false" layoutX="178.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
             <Label layoutX="178.0" layoutY="251.0" text="Organizer:" />
@@ -309,6 +309,7 @@
             <Label fx:id="viewTripLimitLabel" layoutX="249.0" layoutY="357.0" text="Limit" />
             <Label layoutX="323.0" layoutY="357.0" text="Categories:" />
             <TextArea fx:id="viewTripCategoriesTextArea" editable="false" layoutX="322.0" layoutY="374.0" prefHeight="188.0" prefWidth="128.0" />
+            <Button fx:id="viewTripKickButton" layoutX="53.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Kick participant" visible="false" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="logInPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">

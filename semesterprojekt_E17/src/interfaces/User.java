@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The User class represents a user in the system.
+ *
+ * @author group 12
+ */
 public class User implements Serializable {
 
 	private int id;
@@ -12,6 +17,7 @@ public class User implements Serializable {
 	private List<Category> certificates = new ArrayList<>();
 	private Image image;
 
+<<<<<<< HEAD
 	public User(int id, String email, String name, List<Category> certificates, Image image) {
 		this.id = id;
 		this.email = email;
@@ -20,6 +26,16 @@ public class User implements Serializable {
 		this.image = image;
 	}
 	
+=======
+	/**
+	 * Constructor to
+	 *
+	 * @param id
+	 * @param email
+	 * @param name
+	 * @param image
+	 */
+>>>>>>> d386637083369d64bb606590e6c881479ceae0ab
 	public User(int id, String email, String name, Image image) {
 		this.id = id;
 		this.email = email;
@@ -27,12 +43,25 @@ public class User implements Serializable {
 		this.image = image;
 	}
 
+	/**
+	 * Constructor to
+	 *
+	 * @param email
+	 * @param name
+	 * @param image
+	 */
 	public User(String email, String name, Image image) {
 		this.email = email;
 		this.name = name;
 		this.image = image;
 	}
 
+	/**
+	 * Constructor to
+	 *
+	 * @param id
+	 * @param name
+	 */
 	public User(int id, String name) {
 		this.id = id;
 		this.name = name;
@@ -73,6 +102,11 @@ public class User implements Serializable {
 		return image;
 	}
 
+	/**
+	 * This method
+	 *
+	 * @param category
+	 */
 	public void promoteToInstructor(Category category) {
 		this.certificates.add(category);
 	}

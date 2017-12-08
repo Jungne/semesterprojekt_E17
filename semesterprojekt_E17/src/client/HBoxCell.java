@@ -136,6 +136,18 @@ public class HBoxCell extends HBox {
 			this.getChildren().addAll(vbox);
 		}
 	}
+	
+	/**
+	 * HBoxCell with id and text label.
+	 * @param id
+	 * @param text 
+	 */
+	public HBoxCell (int id, String text) {
+		this.id = id;
+		label1.setText(text);
+		
+		this.getChildren().add(label1);
+	}
 
 	public int getTripId() {
 		return id;

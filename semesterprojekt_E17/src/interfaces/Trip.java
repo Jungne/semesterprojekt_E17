@@ -7,6 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The Trip class represents a trip in the system.
+ *
+ * @author group 12
+ */
 public class Trip implements Serializable {
 
 	private int id;
@@ -65,11 +70,26 @@ public class Trip implements Serializable {
 		this.images = images;
 	}
 
+	/**
+	 * Constructor to
+	 *
+	 * @param id
+	 * @param title
+	 */
 	public Trip(int id, String title) {
 		this.id = id;
 		this.title = title;
 	}
 
+	/**
+	 * Constructor to
+	 *
+	 * @param id
+	 * @param title
+	 * @param description
+	 * @param price
+	 * @param image
+	 */
 	public Trip(int id, String title, String description, double price, Image image) {
 		this.id = id;
 		this.title = title;
@@ -78,6 +98,16 @@ public class Trip implements Serializable {
 		images.add(image);
 	}
 
+	/**
+	 * Constructor to
+	 *
+	 * @param id
+	 * @param title
+	 * @param description
+	 * @param categories
+	 * @param price
+	 * @param image
+	 */
 	public Trip(int id, String title, String description, List<Category> categories, double price, Image image) {
 		this.id = id;
 		this.title = title;
@@ -125,19 +155,40 @@ public class Trip implements Serializable {
 		this.images = images;
 	}
 
-  public Trip(int id, String title, String description, double price, LocalDateTime date, Location location, int participantLimit, User organizer, List<Category> categories, List<Image> images) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.price = price;
-    this.timeStart = date;
-    this.location = location;
-    this.participantLimit = participantLimit;
-    this.organizer = organizer;
-    this.categories = categories;
-    this.images = images;
-  }
+	/**
+	 * Constructor to
+	 *
+	 * @param id
+	 * @param title
+	 * @param description
+	 * @param price
+	 * @param date
+	 * @param location
+	 * @param participantLimit
+	 * @param organizer
+	 * @param categories
+	 * @param images
+	 * @param participants
+	 */
+	public Trip(int id, String title, String description, double price, LocalDateTime date, Location location, int participantLimit, User organizer, List<Category> categories, List<Image> images, List<User> participants) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.price = price;
+		this.timeStart = date;
+		this.location = location;
+		this.participantLimit = participantLimit;
+		this.organizer = organizer;
+		this.categories = categories;
+		this.images = images;
+		this.participants = participants;
+	}
 
+	/**
+	 * This method adds new participants to a trip
+	 *
+	 * @param user
+	 */
 	public void participate(User user) {
 		getParticipants().add(user);
 	}

@@ -217,7 +217,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Text viewTripTitleLabel;
 	@FXML
-	private ListView viewListOfParticipants;
+	private ListView<HBoxCell> viewListOfParticipants;
 	@FXML
 	private Button joinTripButton;
 	@FXML
@@ -336,6 +336,8 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	private ObservableList messagingConversationList;
+	@FXML
+	private Button viewTripKickButton;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -428,26 +430,40 @@ public class FXMLDocumentController implements Initializable {
 	private void viewTrip(int id, boolean modifyMode) {
 		viewedTrip = clientController.viewTrip(id); //Should be id obtained from selected element in list view on my trips
 		if (viewedTrip != null) {
-			if (modifyMode) {
-				modifyTripIDLabel.setText("Trip #" + viewedTrip.getId());
-				modifyTripTitleTextField.setText(viewedTrip.getTitle());
-				modifyTripDescriptionTextField.setText(viewedTrip.getDescription());
-				modifyTripPriceTextField.setText("" + viewedTrip.getPrice());
-				showPane(modifyTripPane);
-			} else {
-				viewTripTitleLabel.setText(viewedTrip.getTitle());
-				viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
-				viewTripPriceTextField.setText("" + viewedTrip.getPrice());
-				viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
-				viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
-				viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
-				viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
-				viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
-				viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
-				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
-				joinTripButton.setDisable(viewedTrip.getParticipants().contains(clientController.getCurrentUser()) || viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit());
-				showPane(viewTripPane);
+			viewTripTitleLabel.setText(viewedTrip.getTitle());
+			viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
+			viewTripPriceTextField.setText("" + viewedTrip.getPrice());
+
+//		viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
+			viewListOfParticipants.getItems().clear();
+			for (User user : viewedTrip.getParticipants()) {
+				viewListOfParticipants.getItems().add(new HBoxCell(user.getId(), user.getName()));
 			}
+
+			viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
+			viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
+			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
+			viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
+			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
+			viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
+
+			viewTripDescriptionTextArea.setEditable(modifyMode);
+			viewTripPriceTextField.setEditable(modifyMode);
+			viewTripOrganizerTextField.setEditable(modifyMode);
+			viewTripDateTextField.setEditable(modifyMode);
+			viewTripLocationTextField.setEditable(modifyMode);
+
+			joinTripButton.setVisible(!modifyMode);
+
+			joinTripButton.setDisable(viewedTrip.getParticipants().contains(clientController.getCurrentUser()) || viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit() || modifyMode);
+
+			if (viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId()) {
+				viewTripKickButton.setVisible(true);
+			} else {
+				viewTripKickButton.setVisible(false);
+			}
+
+			showPane(viewTripPane);
 		}
 	}
 
@@ -481,7 +497,7 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="Profile - Methods">
 	/**
-	 * This method
+	 * This method loads the user profile
 	 *
 	 */
 	private void loadProfileInfo() {
@@ -492,12 +508,12 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method handels changing an users profile picture
+	 * This method handels changing the user profile picture
 	 *
 	 */
-	private void changeProfilePicture() {
-
-		//	Image profilePicture = newProfilePicture;
+	private void changeProfilePicture() throws RemoteException {
+		Image profilePicture = newProfilePicture;
+		clientController.changeProfilePicture(profilePicture);
 	}
 
 	/**
@@ -508,22 +524,24 @@ public class FXMLDocumentController implements Initializable {
 	private void handleProfileButtons(ActionEvent event) {
 		File profileImageFile = chooseImage("Select profile picture");
 
-		/**
-		 * try { String imageFileName = profileImageFile.getName(); String
-		 * imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') +
-		 * 1); //Converts file to byte array BufferedImage image =
-		 * ImageIO.read(profileImageFile); ByteArrayOutputStream baos = new
-		 * ByteArrayOutputStream(); ImageIO.write(image, imageFileType, baos);
-		 *
-		 * newProfilePicture = new Image(imageFileName, baos.toByteArray());
-		 *
-		 *
-		 */
-		profilePictureImageView.setImage(new javafx.scene.image.Image(profileImageFile.toURI().toString()));
+		Platform.runLater(() -> {
+			try {
+				String imageFileName = profileImageFile.getName();
+				String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
+				//Converts file to byte array
+				BufferedImage image = ImageIO.read(profileImageFile);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, imageFileType, baos);
 
-		//	} catch (Exception ex) {
-		//Failed to choose valid image
-		//}
+				newProfilePicture = new Image(imageFileName, baos.toByteArray());
+				changeProfilePicture();
+				clientController.updateUser();
+				loadProfileInfo();
+
+			} catch (Exception ex) {
+				//Failed to choose valid image
+			}
+		});
 	}
 	// </editor-fold>
 
@@ -534,13 +552,19 @@ public class FXMLDocumentController implements Initializable {
 	 * @param event
 	 */
 	@FXML
-	private void handleJoinTripButton(ActionEvent event) {
-		try {
-			clientController.participateInTrip(viewedTrip);
-		} catch (FullTripException ex) {
-			//TODO popup explanation, that trip is full.
-			System.out.println("test");
-			System.out.println(ex);
+	private void handleViewTripButtons(ActionEvent event) {
+		if (event.getSource() == joinTripButton) {
+			try {
+				clientController.participateInTrip(viewedTrip);
+				viewTrip(viewedTrip.getId(), false);
+			} catch (FullTripException ex) {
+				//TODO popup explanation, that trip is full.
+				System.out.println(ex);
+			}
+		} else if (event.getSource() == viewTripKickButton) {
+			int userId = viewListOfParticipants.getSelectionModel().getSelectedItem().getUserId();
+			clientController.kickParticipant(viewedTrip, userId);
+			viewTrip(viewedTrip.getId(), false);
 		}
 	}
 	// </editor-fold>
@@ -733,7 +757,7 @@ public class FXMLDocumentController implements Initializable {
 	protected void removeCategoryListItem2(CategoryListItem2 categoryListItem) {
 		searchTripCategoryListHBox.getChildren().remove(categoryListItem);
 	}
-// </editor-fold>
+	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Log in - Methods">
 	private void resetLogInPane() {
