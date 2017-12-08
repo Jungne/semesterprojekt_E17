@@ -25,6 +25,7 @@ public class ClientController {
 	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
+
 		//String hostname = "tek-sb3-glo0a.tek.sdu.dk";
 		String hostname = "localhost";
 
@@ -100,8 +101,8 @@ public class ClientController {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-	public void kickParticipant(Trip trip, User user) {
-		ClientTripHandler.kickParticipant(serverController, trip, user);
+	public void kickParticipant(Trip trip, int userId) {
+		ClientTripHandler.kickParticipant(serverController, trip, userId);
 	}
 
 	public List<Category> getCategories() {

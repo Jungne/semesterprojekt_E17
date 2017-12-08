@@ -38,7 +38,7 @@ public interface IServerController extends Remote {
 
 	public boolean instructInTrip(Trip trip, User user) throws RemoteException;
 
-	public void kickParticipant(Trip trip, User user) throws RemoteException;
+	public void kickParticipant(Trip trip, int userId) throws RemoteException;
 
 	public List<Category> getCategories() throws RemoteException;
 

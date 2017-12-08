@@ -168,8 +168,9 @@ public class Trip implements Serializable {
 	 * @param organizer
 	 * @param categories
 	 * @param images
+	 * @param participants
 	 */
-	public Trip(int id, String title, String description, double price, LocalDateTime date, Location location, int participantLimit, User organizer, List<Category> categories, List<Image> images) {
+	public Trip(int id, String title, String description, double price, LocalDateTime date, Location location, int participantLimit, User organizer, List<Category> categories, List<Image> images, List<User> participants) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -180,6 +181,7 @@ public class Trip implements Serializable {
 		this.organizer = organizer;
 		this.categories = categories;
 		this.images = images;
+		this.participants = participants;
 	}
 
 	/**
