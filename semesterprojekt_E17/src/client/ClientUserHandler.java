@@ -27,9 +27,17 @@ public class ClientUserHandler {
 			return null;
 		}
 	}
-	
+
+	public static User updateUser(IServerController serverController, int currentUserID) throws RemoteException {
+		return serverController.updateUser(currentUserID);
+	}
+
 	public static List<User> searchUsers(IServerController serverController, String query) throws RemoteException {
 		return serverController.searchUsers(query);
+	}
+
+	public static void changeProfilePicture(IServerController serverController, int currentUserID, Image profilePicture) throws RemoteException {
+		serverController.changeProfilePicture(currentUserID, profilePicture);
 	}
 
 }
