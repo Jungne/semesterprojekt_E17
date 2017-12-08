@@ -65,10 +65,6 @@ public class ClientController {
 		ClientUserHandler.changeProfilePicture(serverController, currentUserID, profilePicture);
 	}
 
-	public List<Trip> getAllTrips() throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
 	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
 		return serverController.searchTrips(searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}

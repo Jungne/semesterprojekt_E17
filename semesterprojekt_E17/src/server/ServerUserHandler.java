@@ -1,6 +1,5 @@
 package server;
 
-import client.ClientUserHandler;
 import database.DBManager;
 import interfaces.Image;
 import interfaces.User;

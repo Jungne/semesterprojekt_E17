@@ -24,7 +24,6 @@ public interface IServerController extends Remote {
 	public void changeProfilePicture(int currentUserID, Image profilePicture) throws RemoteException;
 
 	//Trip functions    
-	public List<Trip> getAllTrips() throws RemoteException;
 
 	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException;
 
