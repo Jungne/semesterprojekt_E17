@@ -311,7 +311,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button profilePaneChangePictureButton;
 	// </editor-fold>
-	
+
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
 	private AnchorPane browseUsersPane;
@@ -430,40 +430,40 @@ public class FXMLDocumentController implements Initializable {
 	private void viewTrip(int id, boolean modifyMode) {
 		viewedTrip = clientController.viewTrip(id); //Should be id obtained from selected element in list view on my trips
 		if (viewedTrip != null) {
-      viewTripTitleLabel.setText(viewedTrip.getTitle());
-      viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
-      viewTripPriceTextField.setText("" + viewedTrip.getPrice());
-			
+			viewTripTitleLabel.setText(viewedTrip.getTitle());
+			viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
+			viewTripPriceTextField.setText("" + viewedTrip.getPrice());
+
 //		viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
 			viewListOfParticipants.getItems().clear();
 			for (User user : viewedTrip.getParticipants()) {
 				viewListOfParticipants.getItems().add(new HBoxCell(user.getId(), user.getName()));
 			}
-			
-      viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
-      viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
-      viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
-      viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
-      viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
-      viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
 
-      viewTripDescriptionTextArea.setEditable(modifyMode);
-      viewTripPriceTextField.setEditable(modifyMode);
-      viewTripOrganizerTextField.setEditable(modifyMode);
-      viewTripDateTextField.setEditable(modifyMode);
-      viewTripLocationTextField.setEditable(modifyMode);
+			viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
+			viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
+			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
+			viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
+			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
+			viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default.jpg") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
 
-      joinTripButton.setVisible(!modifyMode);
+			viewTripDescriptionTextArea.setEditable(modifyMode);
+			viewTripPriceTextField.setEditable(modifyMode);
+			viewTripOrganizerTextField.setEditable(modifyMode);
+			viewTripDateTextField.setEditable(modifyMode);
+			viewTripLocationTextField.setEditable(modifyMode);
 
-      joinTripButton.setDisable(viewedTrip.getParticipants().contains(clientController.getCurrentUser()) || viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit() || modifyMode);
-				
+			joinTripButton.setVisible(!modifyMode);
+
+			joinTripButton.setDisable(viewedTrip.getParticipants().contains(clientController.getCurrentUser()) || viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit() || modifyMode);
+
 			if (viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId()) {
 				viewTripKickButton.setVisible(true);
 			} else {
 				viewTripKickButton.setVisible(false);
 			}
-			
-      showPane(viewTripPane);
+
+			showPane(viewTripPane);
 		}
 	}
 
@@ -512,11 +512,10 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void changeProfilePicture() {
-	
-	//	Image profilePicture = newProfilePicture;
-		
+
+		//	Image profilePicture = newProfilePicture;
 	}
-	
+
 	/**
 	 * This method handels all the buttons on the profile Pane
 	 *
@@ -526,23 +525,21 @@ public class FXMLDocumentController implements Initializable {
 		File profileImageFile = chooseImage("Select profile picture");
 
 		/**
-		try {
-			String imageFileName = profileImageFile.getName();
-			String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
-			//Converts file to byte array
-			BufferedImage image = ImageIO.read(profileImageFile);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(image, imageFileType, baos);
+		 * try { String imageFileName = profileImageFile.getName(); String
+		 * imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') +
+		 * 1); //Converts file to byte array BufferedImage image =
+		 * ImageIO.read(profileImageFile); ByteArrayOutputStream baos = new
+		 * ByteArrayOutputStream(); ImageIO.write(image, imageFileType, baos);
+		 *
+		 * newProfilePicture = new Image(imageFileName, baos.toByteArray());
+		 *
+		 *
+		 */
+		profilePictureImageView.setImage(new javafx.scene.image.Image(profileImageFile.toURI().toString()));
 
-			newProfilePicture = new Image(imageFileName, baos.toByteArray());
-			* 
-			* 	 */
-			profilePictureImageView.setImage(new javafx.scene.image.Image(profileImageFile.toURI().toString()));
-		
-	//	} catch (Exception ex) {
-			//Failed to choose valid image
+		//	} catch (Exception ex) {
+		//Failed to choose valid image
 		//}
-
 	}
 	// </editor-fold>
 
@@ -760,796 +757,810 @@ public class FXMLDocumentController implements Initializable {
 	}
 // </editor-fold>
 
-  // <editor-fold defaultstate="collapsed" desc="Log in - Methods">
-  private void resetLogInPane() {
-    logInEmailTextField.clear();
-    logInPasswordTextField.clear();
-    logInInvalidEmailText.setVisible(false);
-    logInInvalidPasswordText.setVisible(false);
-  }
-
-  /**
-   * This method
-   *
-   * @param event
-   */
-  @FXML
-  private void handleLogInButton(ActionEvent event) {
-    String email = logInEmailTextField.getText();
-    String password = logInPasswordTextField.getText();
-
-    //Checks if email or password is empty
-    if (!isLogInParametersValid(email, password)) {
-      return;
-    }
-
-    try {
-      if (!clientController.signIn(email, hashPassword(password))) {
-        logInInvalidEmailText.setText("Email does not match with password!");
-        logInInvalidEmailText.setVisible(true);
-        logInInvalidPasswordText.setText("Password does not match with email!");
-        logInInvalidPasswordText.setVisible(true);
-        return;
-      }
-
-      showPane(profilePane);
-      loadProfileInfo();
-      signInUpdateClient(true);
-    } catch (RemoteException ex) {
-      Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    }
-  }
-
-  private boolean isLogInParametersValid(String email, String password) {
-    boolean isLogInParametersValid = true;
-
-    if (email == null || email.isEmpty()) {
-      isLogInParametersValid = false;
-      logInInvalidEmailText.setText("Enter email!");
-      logInInvalidEmailText.setVisible(true);
-    } else {
-      logInInvalidEmailText.setVisible(false);
-    }
-
-    if (password == null || password.isEmpty()) {
-      isLogInParametersValid = false;
-      logInInvalidPasswordText.setText("Enter password!");
-      logInInvalidPasswordText.setVisible(true);
-    } else {
-      logInInvalidPasswordText.setVisible(false);
-    }
-
-    return isLogInParametersValid;
-  }
-
-  /**
-   * This method
-   *
-   * @param event
-   */
-  @FXML
-  private void handleNewAccountButton(ActionEvent event) {
-    showPane(newAccountPane);
-    resetNewAccountPane();
-  }
-
-  /**
-   * hashes the password using the SHA-256 algorithm
-   *
-   * @param password the password to be hashed
-   * @return the hash of the password
-   */
-  private String hashPassword(String password) {
-    if (password == null || password.length() < 4) {
-      return null;
-    }
-
-    byte[] hashBytes = null;
-    // shitty attempt at salting the password :)
-    password += password.substring(0, 4);
-    MessageDigest md;
-    try {
-      md = MessageDigest.getInstance("SHA-256");
-      md.update(password.getBytes());
-      hashBytes = md.digest();
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    }
-
-    return String.format("%064x", new java.math.BigInteger(1, hashBytes)).toLowerCase();
-  }
-  // </editor-fold>
-
-  // <editor-fold defaultstate="collapsed" desc="New Account - Methods">
-  private void resetNewAccountPane() {
-    newAccountNameTextField.clear();
-    newAccountEmailTextField.clear();
-    newAccountPasswordTextField.clear();
-    newAccountRepeatPasswordTextField.clear();
-
-    //Resets imageFile and imageView
-    newAccountProfilePicture = null;
-    newAccountImageView.setImage(new javafx.scene.image.Image("default_profile_picture.png"));
-  }
-
-  @FXML
-  private void handleNewAccountButtons(ActionEvent event) {
-    if (event.getSource() == newAccountProfilePictureButton) {
-      chooseProfilePicture();
-    } else if (event.getSource() == newAccountCreateButton) {
-      createAccount();
-    } else if (event.getSource() == newAccountBackButton) {
-      showPane(logInPane);
-      resetLogInPane();
-    }
-  }
-
-  private void chooseProfilePicture() {
-    File imageFile = chooseImage("Select profile picture");
-
-    Platform.runLater(() -> {
-      try {
-        String imageFileName = imageFile.getName();
-        String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
-        //Converts file to byte array
-        BufferedImage image = ImageIO.read(imageFile);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, imageFileType, baos);
-
-        newAccountProfilePicture = new Image(imageFileName, baos.toByteArray());
-        newAccountImageView.setImage(new javafx.scene.image.Image(imageFile.toURI().toString()));
-      } catch (Exception ex) {
-        //Failed to choose valid image
-      }
-    });
-  }
-
-  /**
-   * This method
-   *
-   * @param event
-   */
-  private void createAccount() {
-    String name = newAccountNameTextField.getText();
-    String email = newAccountEmailTextField.getText();
-    String password = newAccountPasswordTextField.getText();
-    String repeatPassword = newAccountRepeatPasswordTextField.getText();
-    Image profilePicture = newAccountProfilePicture;
-
-    if (password.equals(repeatPassword)) {
-      try {
-        clientController.signUp(email, name, profilePicture, hashPassword(password));
-        showPane(profilePane);
-        loadProfileInfo();
-        signInUpdateClient(true);
-      } catch (RemoteException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-      }
-    } else {
-      newAccountRepeatPasswordTextField.setStyle("-fx-text-box-border: red");
-    }
-  }
-
-  private void handleViewTripButton(ActionEvent event) {
-    int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
-    System.out.println(tripId);
-    viewTrip(tripId, false);
-  }
-  // </editor-fold>
-
-  // <editor-fold defaultstate="collapsed" desc="Modify Trips - Methods">
-  /**
-   * This method
-   *
-   * @param event
-   */
-  @FXML
-  private void handleModifyTripButtons(ActionEvent event) {
-    if (event.getSource().equals(modifyTripSaveChangesButton)) {
-      clientController.modifyTrip(new Trip(
-              Integer.parseInt(modifyTripIDLabel.getText().substring(6)),
-              modifyTripTitleTextField.getText(),
-              modifyTripDescriptionTextField.getText(),
-              Double.parseDouble(modifyTripPriceTextField.getText()),
-              null
-      ));
-    } else if (event.getSource().equals(modifyTripCancelButton)) {
-      resetModifyTripPane();
-      showPane(myTripsPane);
-    }
-  }
-
-  /**
-   * This method
-   *
-   */
-  private void resetModifyTripPane() {
-    modifyTripTitleTextField.setText("");
-    modifyTripDescriptionTextField.setText("");
-    modifyTripPriceTextField.setText("");
-  }
-  // </editor-fold>
-
-  // <editor-fold defaultstate="collapsed" desc="Toolbar - Methods">
-  /**
-   * This method
-   *
-   * @param event
-   */
-  @FXML
-  private void handleToolBarButtons(ActionEvent event) throws RemoteException {
-    if (event.getSource() == toolBarMessagingButton) {
-      showPane(messagingPane);
-      getUserConversations();
-    } else if (event.getSource() == toolBarBrowseTripsButton) {
-      showPane(browseTripsPane);
-      resetBrowseTripPane();
-    } else if (event.getSource() == toolBarMyTripsButton) {
-      showPane(myTripsPane);
-      resetMyTripsPane();
-    } else if (event.getSource() == toolBarProfileButton) {
-      showPane(profilePane);
-      loadProfileInfo();
-    } else if (event.getSource() == toolbarLogInLogOutButton) {
-      showPane(logInPane);
-      resetLogInPane();
-      if (clientController.getCurrentUser() != null) {
-        clientController.signOut();
-        signInUpdateClient(false);
-      }
-    } else if (event.getSource() == toolBarBrowseUsersButton) {
-      showPane(browseUsersPane);
-      resetBrowseUsersPane();
-    }
-  }
-  // </editor-fold>
-
-  // <editor-fold defaultstate="collapsed" desc="Create Trip - Methods">
-  /**
-   * This method
-   *
-   */
-  private void resetCreateTripPane() {
-    //Gets all categories from the server and displays them in the comboBox
-    ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
-    createTripCategoryComboBox.setItems(categories);
-
-    //Gets all locations from the server and displays them in the comboBox
-    ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
-    createTripLocationComboBox.setItems(locations);
-
-    //Sets the ValueFactory for hour and minute Spinner
-    createTripHourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
-    createTripMinuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59));
-
-    //Reset parameters
-    createTripTitleTextField.setText(null);
-    createTripDescriptionTextArea.setText(null);
-    createTripCategoryComboBox.setValue(null);
-    createTripAddressTextField.setText(null);
-    createTripPriceTextField.setText(null);
-    createTripLocationComboBox.setValue(null);
-    createTripTimeStartDatePicker.setValue(null);
-    createTripParticipantLimitTextField.setText(null);
-    createTripTagsTextField.setText(null);
-
-    //Reset warning texts
-    createTripInvalidTitleText.setVisible(false);
-    createTripInvalidPictureText.setVisible(false);
-    createTripInvalidCategoryText.setVisible(false);
-    createTripIntructorText.setVisible(false);
-    createTripInvalidPriceText.setVisible(false);
-    createTripInvalidLocationText.setVisible(false);
-    createTripInvalidDateText.setVisible(false);
-    createTripInvalidParticipantLimitText.setVisible(false);
-
-    //Reset HBox lists
-    createTripPictureListHBox.getChildren().clear();
-    createTripCategoryListHBox.getChildren().clear();
-  }
-
-  /**
-   * This method
-   *
-   * @param event
-   *
-   */
-  @FXML
-  private void handleCreateTripButtons(ActionEvent event) {
-    if (event.getSource() == createTripAddPictureButton) {
-      addImageListItem();
-    } else if (event.getSource() == createTripCategoryComboBox) {
-      addCategoryListItem();
-    } else if (event.getSource() == createTripNextButton) {
-      showPane(createTripPane2);
-    } else if (event.getSource() == createTripBackButton) {
-      showPane(createTripPane1);
-    } else if (event.getSource() == createTripCancelButton1 || event.getSource() == createTripCancelButton2) {
-      showPane(myTripsPane);
-    } else if (event.getSource() == createTripCreateTripButton) {
-      try {
-        int tripId = createTrip();
-        if (0 < tripId) {
-          showPane(myTripsPane); //TODO - Should be changes to a pane showing the newly created trip instead
-        }
-      } catch (Exception ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-      }
-    }
-  }
-
-  /**
-   * This method
-   *
-   */
-  private void addImageListItem() {
-    //Chooses file with FileChooser
-    File imageFile = chooseImage("Select trip picture");
-
-    new Thread(() -> {
-      createTripInvalidPictureText.setVisible(false);
-      try {
-        String imageFileName = imageFile.getName();
-        String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
-        //Converts file to byte array
-        BufferedImage image = ImageIO.read(imageFile);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, imageFileType, baos);
-        //Inserts values in imageItem
-        ImageListItem imageListItem = new ImageListItem(this, new Image(imageFileName, baos.toByteArray()));
-
-        Platform.runLater(() -> {
-          createTripPictureListHBox.getChildren().add(imageListItem);
-        });
-
-      } catch (Exception ex) {
-        createTripInvalidPictureText.setVisible(true);
-      }
-    }).start();
-  }
-
-  /**
-   * This method
-   *
-   * @param imageListItem
-   *
-   */
-  protected void removeImageListItem(ImageListItem imageListItem) {
-    createTripPictureListHBox.getChildren().remove(imageListItem);
-  }
-
-  /**
-   * This method
-   *
-   */
-  private void addCategoryListItem() {
-    Category category = createTripCategoryComboBox.getValue();
-    //Checks if category already exists in list
-    for (Node node : createTripCategoryListHBox.getChildren()) {
-      if (((CategoryListItem) node).getCategory().equals(category)) {
-        return;
-      }
-    }
-
-    //Adds the category to HBox and reveal the instructor text
-    createTripIntructorText.setVisible(true);
-    createTripCategoryListHBox.getChildren().add(new CategoryListItem(this, category));
-  }
-
-  /**
-   * This method
-   *
-   * @param category
-   *
-   */
-  protected boolean hasCertificate(Category category) {
-    if (clientController.getCurrentUser().getCertificates().contains(category)) {
-      return true;
-    }
-    showMessageFiveSeconds(category);
-    return false;
-  }
-
-  /**
-   * This method
-   *
-   * @param category
-   *
-   */
-  private void showMessageFiveSeconds(Category category) {
-    currentIntructorTextOccupiers++;
-    //Show warning message
-    createTripIntructorText.setText("You do not have cerficate for '" + category.getName() + "'-instructor!");
-    createTripIntructorText.setFill(Paint.valueOf("#da0303"));
-    createTripIntructorText.setOpacity(1);
-
-    TimerTask timerTask = new TimerTask() {
-      @Override
-      public void run() {
-        //Checks if instructor text is used elsewhere
-        currentIntructorTextOccupiers--;
-        if (currentIntructorTextOccupiers != 0) {
-          return;
-        }
-        //Show default message
-        createTripIntructorText.setText("Click on categories to participate as instructor");
-        createTripIntructorText.setFill(Paint.valueOf("black"));
-        createTripIntructorText.setOpacity(0.5);
-      }
-    };
-    new java.util.Timer().schedule(timerTask, 5000);
-  }
-
-  /**
-   * This method
-   *
-   */
-  protected void removeCategoryListItem(CategoryListItem categoryListItem) {
-    createTripCategoryListHBox.getChildren().remove(categoryListItem);
-    if (createTripCategoryListHBox.getChildren().isEmpty()) {
-      createTripIntructorText.setVisible(false);
-    }
-  }
-
-  /**
-   * This method handles creating a new trip
-   *
-   */
-  private int createTrip() throws Exception {
-    //Gets all the values
-    String title = createTripTitleTextField.getText();
-    String description = createTripDescriptionTextArea.getText();
-
-    //Gets categories and categories that the organizer will instruct in
-    ArrayList<Category> categories = new ArrayList<>();
-    ArrayList<Category> organizerInstructorIn = new ArrayList<>();
-    for (Node node : createTripCategoryListHBox.getChildren()) {
-      CategoryListItem categoryListItem = (CategoryListItem) node;
-      categories.add(categoryListItem.getCategory());
-      if (categoryListItem.isInstructor()) {
-        organizerInstructorIn.add(categoryListItem.getCategory());
-      }
-    }
-    //Gets trip price
-    String priceString = createTripPriceTextField.getText();
-    if (priceString == null || priceString.isEmpty()) {
-      priceString = "0";
-    }
-    //Gets date and time
-    LocalTime time = LocalTime.of(createTripHourSpinner.getValue(), createTripMinuteSpinner.getValue());
-    LocalDate date = createTripTimeStartDatePicker.getValue();
-    //Gets location, meeting address and participant limit
-    Location location = createTripLocationComboBox.getValue();
-    String meetingAddress = createTripAddressTextField.getText();
-    String participantLimitString = createTripParticipantLimitTextField.getText();
-    if (participantLimitString == null || participantLimitString.isEmpty()) {
-      participantLimitString = "0";
-    }
-    //Get the organizer
-    User organizer = clientController.getCurrentUser();
-    //Gets optional prices
-    //TODO - Should add optional prices to GUI
-    ArrayList<OptionalPrice> optionalPrices = new ArrayList<>();
-    //Gets tags
-    HashSet<String> tags = new HashSet<>();
-    String tagsString = createTripTagsTextField.getText();
-    if (tagsString != null && !tagsString.isEmpty()) {
-      for (String tag : tagsString.split(" ")) {
-        tags.add(tag);
-      }
-    }
-    //Gets trip images
-    List<Image> images = new ArrayList<>();
-    for (Node node : createTripPictureListHBox.getChildren()) {
-      images.add(((ImageListItem) node).getImage());
-    }
-
-    //Checks if parameters are valid
-    if (!isTripParametersValid(title, categories, priceString, date, location, meetingAddress, participantLimitString)) {
-      return -1;
-    }
-
-    //Converts price, date, participant limit and image now that validation is checked
-    double price = Double.parseDouble(priceString);
-    LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), time.getHour(), time.getMinute());
-    int participantLimit = Integer.parseInt(participantLimitString);
-
-    //Creates trip
-    return clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
-  }
-
-  /**
-   * This method checks if all the parameters are valid when creating a new trip
-   *
-   * @param title
-   * @param categories
-   * @param priceString
-   * @param date
-   * @param location
-   * @param meetingAddress
-   * @param participantLimitString
-   *
-   * @return boolean isTripParametersValid - Returns true if all parameters are
-   * valid
-   */
-  private boolean isTripParametersValid(String title, List<Category> categories, String priceString, LocalDate date, Location location, String meetingAddress, String participantLimitString) {
-    boolean isTripParametersValid = true;
-    //Title check
-    if (title == null || title.isEmpty()) {
-      createTripInvalidTitleText.setVisible(true);
-      isTripParametersValid = false;
-    } else {
-      createTripInvalidTitleText.setVisible(false);
-    }
-    //category check
-    if (categories.isEmpty()) {
-      createTripInvalidCategoryText.setVisible(true);
-      isTripParametersValid = false;
-    } else {
-      createTripInvalidCategoryText.setVisible(false);
-    }
-    //price check
-    double price;
-    try {
-      price = Double.parseDouble(priceString);
-    } catch (NumberFormatException e) {
-      price = -1;
-    }
-    if (price < 0) {
-      createTripInvalidPriceText.setVisible(true);
-      isTripParametersValid = false;
-    } else {
-      createTripInvalidPriceText.setVisible(false);
-    }
-    //timeStart check
-    if (date == null || date.isBefore(LocalDate.now())) {
-      createTripInvalidDateText.setVisible(true);
-      isTripParametersValid = false;
-    } else {
-      createTripInvalidDateText.setVisible(false);
-    }
-    //location check
-    if (location == null) {
-      createTripInvalidLocationText.setVisible(true);
-      isTripParametersValid = false;
-    } else {
-      createTripInvalidLocationText.setVisible(false);
-    }
-    //meetingAddress
-    if (meetingAddress == null || meetingAddress.isEmpty()) {
-      createTripInvalidMeetingAddressText.setVisible(true);
-      isTripParametersValid = false;
-    } else {
-      createTripInvalidMeetingAddressText.setVisible(false);
-    }
-    //participantLimit check
-    int participantLimit;
-    try {
-      participantLimit = Integer.parseInt(participantLimitString);
-    } catch (NumberFormatException e) {
-      participantLimit = -1;
-    }
-    if (participantLimit < 0) {
-      createTripInvalidParticipantLimitText.setVisible(true);
-      isTripParametersValid = false;
-    } else {
-      createTripInvalidParticipantLimitText.setVisible(false);
-    }
-    //Reset picture warning
-    createTripInvalidPictureText.setVisible(false);
-
-    return isTripParametersValid;
-  }
-  // </editor-fold>
-
-  // <editor-fold defaultstate="collapsed" desc="My Trips - Methods">
-  /**
-   * This method handles all the buttons under the MyTrips pane
-   *
-   * @param event
-   */
-  @FXML
-  private void handleMyTripsButtons(ActionEvent event) {
-    if (event.getSource() == myTripsCreateTripButton) {
-      resetCreateTripPane();
-      showPane(createTripPane1);
-    } else if (event.getSource() == myTripsModifyTripButton) {
-
-      //If no trip is selected, then nothing happens
-      if (myTripsListView.getSelectionModel().isEmpty()) {
-
-      } else {
-        int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-        viewTrip(id, true);
-      }
-    } else if (event.getSource() == myTripsViewTripButton) {
-
-      //If no trip is selected, then nothing happens
-      if (myTripsListView.getSelectionModel().isEmpty()) {
-
-      } else {
-        int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-        viewTrip(id, false);
-      }
-    } else if (event.getSource() == myTripsDeleteTripButton) {
-      if (!myTripsListView.getSelectionModel().isEmpty()) {
-        clientController.deleteTrip(myTripsListView.getSelectionModel().getSelectedItem().getTripId());
-        loadMyOrganizedTrips();
-      }
-    } else if (myTripsToggleGroup.getToggles().contains(event.getSource())) {
-      if (myTripsToggleGroup.getSelectedToggle() == myTripsToggleAll) {
-        loadMyTrips();
-        myTripsDeleteTripButton.setDisable(true);
-      } else if (myTripsToggleGroup.getSelectedToggle() == myTripsOrganizedRadioButton) {
-        loadMyOrganizedTrips();
-        myTripsDeleteTripButton.setDisable(false);
-      }
-    }
-  }
-
-  private void resetMyTripsPane() {
-    loadMyTrips();
-    myTripsDeleteTripButton.setDisable(true);
-    myTripsToggleAll.setSelected(true);
-  }
-
-  /**
-   * This method loads all the trips for a specifc user under the MyTrips pane
-   *
-   */
-  private void loadMyTrips() {
-    Platform.runLater(() -> {
-      List<Trip> myTrips = clientController.getMyTrips();
-
-      if (myTrips != null) {
-        List<HBoxCell> list = new ArrayList<>();
-
-        for (Trip trip : myTrips) {
-          list.add(new HBoxCell(trip));
-        }
-
-        ObservableList observableList = FXCollections.observableArrayList(list);
-        myTripsListView.setItems(observableList);
-      }
-    });
-  }
-
-  private void loadMyOrganizedTrips() {
-    Platform.runLater(() -> {
-      List<Trip> myTrips = clientController.getMyOrganizedTrips();
-
-      if (myTrips != null) {
-        List<HBoxCell> list = new ArrayList<>();
-
-        for (Trip trip : myTrips) {
-          list.add(new HBoxCell(trip));
-        }
-
-        ObservableList observableList = FXCollections.observableArrayList(list);
-        myTripsListView.setItems(observableList);
-      }
-    });
-  }
-  // </editor-fold>
-
-  // <editor-fold defaultstate="collapsed" desc="Browse Users - Methods">
-  /**
-   * This method handles the search button when browsing for users
-   *
-   * @param event
-   */
-  @FXML
-  private void handleBrowseUsersSearchButtons(ActionEvent event) {
-    if (event.getSource().equals(browseUsersSearchButton)) {
-      searchUsers();
-    } else if (event.getSource().equals(browseUsersMessageButton)) {
-      if (browseUsersListView.getSelectionModel().isEmpty()) {
-        //Nothing happens if no user is selected
-      } else {
-        int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
-        //Use userId to open a conversation.
-      }
-    }
-  }
-
-  private Conversation getConversation(Conversation conversation) {
-    try {
-      return clientController.getConversation(conversation);
-    } catch (RemoteException ex) {
-      Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    return null;
-  }
-
-  private void searchUsers() {
-    Platform.runLater(() -> {
-      try {
-        String searchText = browseUsersTextField.getText();
-        List<User> users = clientController.searchUsers(searchText);
-        List<HBoxCell> list = new ArrayList<>();
+	// <editor-fold defaultstate="collapsed" desc="Log in - Methods">
+	private void resetLogInPane() {
+		logInEmailTextField.clear();
+		logInPasswordTextField.clear();
+		logInInvalidEmailText.setVisible(false);
+		logInInvalidPasswordText.setVisible(false);
+	}
+
+	/**
+	 * This method
+	 *
+	 * @param event
+	 */
+	@FXML
+	private void handleLogInButton(ActionEvent event) {
+		String email = logInEmailTextField.getText();
+		String password = logInPasswordTextField.getText();
+
+		//Checks if email or password is empty
+		if (!isLogInParametersValid(email, password)) {
+			return;
+		}
+
+		try {
+			if (!clientController.signIn(email, hashPassword(password))) {
+				logInInvalidEmailText.setText("Email does not match with password!");
+				logInInvalidEmailText.setVisible(true);
+				logInInvalidPasswordText.setText("Password does not match with email!");
+				logInInvalidPasswordText.setVisible(true);
+				return;
+			}
+
+			showPane(profilePane);
+			loadProfileInfo();
+			signInUpdateClient(true);
+			getUserConversations();
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	private boolean isLogInParametersValid(String email, String password) {
+		boolean isLogInParametersValid = true;
+
+		if (email == null || email.isEmpty()) {
+			isLogInParametersValid = false;
+			logInInvalidEmailText.setText("Enter email!");
+			logInInvalidEmailText.setVisible(true);
+		} else {
+			logInInvalidEmailText.setVisible(false);
+		}
+
+		if (password == null || password.isEmpty()) {
+			isLogInParametersValid = false;
+			logInInvalidPasswordText.setText("Enter password!");
+			logInInvalidPasswordText.setVisible(true);
+		} else {
+			logInInvalidPasswordText.setVisible(false);
+		}
+
+		return isLogInParametersValid;
+	}
+
+	/**
+	 * This method
+	 *
+	 * @param event
+	 */
+	@FXML
+	private void handleNewAccountButton(ActionEvent event) {
+		showPane(newAccountPane);
+		resetNewAccountPane();
+	}
+
+	/**
+	 * hashes the password using the SHA-256 algorithm
+	 *
+	 * @param password the password to be hashed
+	 * @return the hash of the password
+	 */
+	private String hashPassword(String password) {
+		if (password == null || password.length() < 4) {
+			return null;
+		}
+
+		byte[] hashBytes = null;
+		// shitty attempt at salting the password :)
+		password += password.substring(0, 4);
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+			md.update(password.getBytes());
+			hashBytes = md.digest();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+
+		return String.format("%064x", new java.math.BigInteger(1, hashBytes)).toLowerCase();
+	}
+	// </editor-fold>
+
+	// <editor-fold defaultstate="collapsed" desc="New Account - Methods">
+	private void resetNewAccountPane() {
+		newAccountNameTextField.clear();
+		newAccountEmailTextField.clear();
+		newAccountPasswordTextField.clear();
+		newAccountRepeatPasswordTextField.clear();
+
+		//Resets imageFile and imageView
+		newAccountProfilePicture = null;
+		newAccountImageView.setImage(new javafx.scene.image.Image("default_profile_picture.png"));
+	}
+
+	@FXML
+	private void handleNewAccountButtons(ActionEvent event) {
+		if (event.getSource() == newAccountProfilePictureButton) {
+			chooseProfilePicture();
+		} else if (event.getSource() == newAccountCreateButton) {
+			createAccount();
+		} else if (event.getSource() == newAccountBackButton) {
+			showPane(logInPane);
+			resetLogInPane();
+		}
+	}
+
+	private void chooseProfilePicture() {
+		File imageFile = chooseImage("Select profile picture");
+
+		Platform.runLater(() -> {
+			try {
+				String imageFileName = imageFile.getName();
+				String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
+				//Converts file to byte array
+				BufferedImage image = ImageIO.read(imageFile);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, imageFileType, baos);
+
+				newAccountProfilePicture = new Image(imageFileName, baos.toByteArray());
+				newAccountImageView.setImage(new javafx.scene.image.Image(imageFile.toURI().toString()));
+			} catch (Exception ex) {
+				//Failed to choose valid image
+			}
+		});
+	}
+
+	/**
+	 * This method
+	 *
+	 * @param event
+	 */
+	private void createAccount() {
+		String name = newAccountNameTextField.getText();
+		String email = newAccountEmailTextField.getText();
+		String password = newAccountPasswordTextField.getText();
+		String repeatPassword = newAccountRepeatPasswordTextField.getText();
+		Image profilePicture = newAccountProfilePicture;
+
+		if (password.equals(repeatPassword)) {
+			try {
+				clientController.signUp(email, name, profilePicture, hashPassword(password));
+				showPane(profilePane);
+				loadProfileInfo();
+				signInUpdateClient(true);
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		} else {
+			newAccountRepeatPasswordTextField.setStyle("-fx-text-box-border: red");
+		}
+	}
+
+	private void handleViewTripButton(ActionEvent event) {
+		int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
+		System.out.println(tripId);
+		viewTrip(tripId, false);
+	}
+	// </editor-fold>
+
+	// <editor-fold defaultstate="collapsed" desc="Modify Trips - Methods">
+	/**
+	 * This method
+	 *
+	 * @param event
+	 */
+	@FXML
+	private void handleModifyTripButtons(ActionEvent event) {
+		if (event.getSource().equals(modifyTripSaveChangesButton)) {
+			clientController.modifyTrip(new Trip(
+							Integer.parseInt(modifyTripIDLabel.getText().substring(6)),
+							modifyTripTitleTextField.getText(),
+							modifyTripDescriptionTextField.getText(),
+							Double.parseDouble(modifyTripPriceTextField.getText()),
+							null
+			));
+		} else if (event.getSource().equals(modifyTripCancelButton)) {
+			resetModifyTripPane();
+			showPane(myTripsPane);
+		}
+	}
+
+	/**
+	 * This method
+	 *
+	 */
+	private void resetModifyTripPane() {
+		modifyTripTitleTextField.setText("");
+		modifyTripDescriptionTextField.setText("");
+		modifyTripPriceTextField.setText("");
+	}
+	// </editor-fold>
+
+	// <editor-fold defaultstate="collapsed" desc="Toolbar - Methods">
+	/**
+	 * This method
+	 *
+	 * @param event
+	 */
+	@FXML
+	private void handleToolBarButtons(ActionEvent event) throws RemoteException {
+		if (event.getSource() == toolBarMessagingButton) {
+			showPane(messagingPane);
+			getUserConversations();
+		} else if (event.getSource() == toolBarBrowseTripsButton) {
+			showPane(browseTripsPane);
+			resetBrowseTripPane();
+		} else if (event.getSource() == toolBarMyTripsButton) {
+			showPane(myTripsPane);
+			resetMyTripsPane();
+		} else if (event.getSource() == toolBarProfileButton) {
+			showPane(profilePane);
+			loadProfileInfo();
+		} else if (event.getSource() == toolbarLogInLogOutButton) {
+			showPane(logInPane);
+			resetLogInPane();
+			if (clientController.getCurrentUser() != null) {
+				clientController.signOut();
+				signInUpdateClient(false);
+			}
+		} else if (event.getSource() == toolBarBrowseUsersButton) {
+			showPane(browseUsersPane);
+			resetBrowseUsersPane();
+		}
+	}
+	// </editor-fold>
+
+	// <editor-fold defaultstate="collapsed" desc="Create Trip - Methods">
+	/**
+	 * This method
+	 *
+	 */
+	private void resetCreateTripPane() {
+		//Gets all categories from the server and displays them in the comboBox
+		ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
+		createTripCategoryComboBox.setItems(categories);
+
+		//Gets all locations from the server and displays them in the comboBox
+		ObservableList<Location> locations = FXCollections.observableArrayList(clientController.getLocations());
+		createTripLocationComboBox.setItems(locations);
+
+		//Sets the ValueFactory for hour and minute Spinner
+		createTripHourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
+		createTripMinuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59));
+
+		//Reset parameters
+		createTripTitleTextField.setText(null);
+		createTripDescriptionTextArea.setText(null);
+		createTripCategoryComboBox.setValue(null);
+		createTripAddressTextField.setText(null);
+		createTripPriceTextField.setText(null);
+		createTripLocationComboBox.setValue(null);
+		createTripTimeStartDatePicker.setValue(null);
+		createTripParticipantLimitTextField.setText(null);
+		createTripTagsTextField.setText(null);
+
+		//Reset warning texts
+		createTripInvalidTitleText.setVisible(false);
+		createTripInvalidPictureText.setVisible(false);
+		createTripInvalidCategoryText.setVisible(false);
+		createTripIntructorText.setVisible(false);
+		createTripInvalidPriceText.setVisible(false);
+		createTripInvalidLocationText.setVisible(false);
+		createTripInvalidDateText.setVisible(false);
+		createTripInvalidParticipantLimitText.setVisible(false);
+
+		//Reset HBox lists
+		createTripPictureListHBox.getChildren().clear();
+		createTripCategoryListHBox.getChildren().clear();
+	}
+
+	/**
+	 * This method
+	 *
+	 * @param event
+	 *
+	 */
+	@FXML
+	private void handleCreateTripButtons(ActionEvent event) {
+		if (event.getSource() == createTripAddPictureButton) {
+			addImageListItem();
+		} else if (event.getSource() == createTripCategoryComboBox) {
+			addCategoryListItem();
+		} else if (event.getSource() == createTripNextButton) {
+			showPane(createTripPane2);
+		} else if (event.getSource() == createTripBackButton) {
+			showPane(createTripPane1);
+		} else if (event.getSource() == createTripCancelButton1 || event.getSource() == createTripCancelButton2) {
+			showPane(myTripsPane);
+		} else if (event.getSource() == createTripCreateTripButton) {
+			try {
+				int tripId = createTrip();
+				if (0 < tripId) {
+					showPane(myTripsPane); //TODO - Should be changes to a pane showing the newly created trip instead
+				}
+			} catch (Exception ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+	}
+
+	/**
+	 * This method
+	 *
+	 */
+	private void addImageListItem() {
+		//Chooses file with FileChooser
+		File imageFile = chooseImage("Select trip picture");
+
+		new Thread(() -> {
+			createTripInvalidPictureText.setVisible(false);
+			try {
+				String imageFileName = imageFile.getName();
+				String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
+				//Converts file to byte array
+				BufferedImage image = ImageIO.read(imageFile);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, imageFileType, baos);
+				//Inserts values in imageItem
+				ImageListItem imageListItem = new ImageListItem(this, new Image(imageFileName, baos.toByteArray()));
+
+				Platform.runLater(() -> {
+					createTripPictureListHBox.getChildren().add(imageListItem);
+				});
+
+			} catch (Exception ex) {
+				createTripInvalidPictureText.setVisible(true);
+			}
+		}).start();
+	}
+
+	/**
+	 * This method
+	 *
+	 * @param imageListItem
+	 *
+	 */
+	protected void removeImageListItem(ImageListItem imageListItem) {
+		createTripPictureListHBox.getChildren().remove(imageListItem);
+	}
+
+	/**
+	 * This method
+	 *
+	 */
+	private void addCategoryListItem() {
+		Category category = createTripCategoryComboBox.getValue();
+		//Checks if category already exists in list
+		for (Node node : createTripCategoryListHBox.getChildren()) {
+			if (((CategoryListItem) node).getCategory().equals(category)) {
+				return;
+			}
+		}
+
+		//Adds the category to HBox and reveal the instructor text
+		createTripIntructorText.setVisible(true);
+		createTripCategoryListHBox.getChildren().add(new CategoryListItem(this, category));
+	}
+
+	/**
+	 * This method
+	 *
+	 * @param category
+	 *
+	 */
+	protected boolean hasCertificate(Category category) {
+		if (clientController.getCurrentUser().getCertificates().contains(category)) {
+			return true;
+		}
+		showMessageFiveSeconds(category);
+		return false;
+	}
+
+	/**
+	 * This method
+	 *
+	 * @param category
+	 *
+	 */
+	private void showMessageFiveSeconds(Category category) {
+		currentIntructorTextOccupiers++;
+		//Show warning message
+		createTripIntructorText.setText("You do not have cerficate for '" + category.getName() + "'-instructor!");
+		createTripIntructorText.setFill(Paint.valueOf("#da0303"));
+		createTripIntructorText.setOpacity(1);
+
+		TimerTask timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				//Checks if instructor text is used elsewhere
+				currentIntructorTextOccupiers--;
+				if (currentIntructorTextOccupiers != 0) {
+					return;
+				}
+				//Show default message
+				createTripIntructorText.setText("Click on categories to participate as instructor");
+				createTripIntructorText.setFill(Paint.valueOf("black"));
+				createTripIntructorText.setOpacity(0.5);
+			}
+		};
+		new java.util.Timer().schedule(timerTask, 5000);
+	}
+
+	/**
+	 * This method
+	 *
+	 */
+	protected void removeCategoryListItem(CategoryListItem categoryListItem) {
+		createTripCategoryListHBox.getChildren().remove(categoryListItem);
+		if (createTripCategoryListHBox.getChildren().isEmpty()) {
+			createTripIntructorText.setVisible(false);
+		}
+	}
+
+	/**
+	 * This method handles creating a new trip
+	 *
+	 */
+	private int createTrip() throws Exception {
+		//Gets all the values
+		String title = createTripTitleTextField.getText();
+		String description = createTripDescriptionTextArea.getText();
+
+		//Gets categories and categories that the organizer will instruct in
+		ArrayList<Category> categories = new ArrayList<>();
+		ArrayList<Category> organizerInstructorIn = new ArrayList<>();
+		for (Node node : createTripCategoryListHBox.getChildren()) {
+			CategoryListItem categoryListItem = (CategoryListItem) node;
+			categories.add(categoryListItem.getCategory());
+			if (categoryListItem.isInstructor()) {
+				organizerInstructorIn.add(categoryListItem.getCategory());
+			}
+		}
+		//Gets trip price
+		String priceString = createTripPriceTextField.getText();
+		if (priceString == null || priceString.isEmpty()) {
+			priceString = "0";
+		}
+		//Gets date and time
+		LocalTime time = LocalTime.of(createTripHourSpinner.getValue(), createTripMinuteSpinner.getValue());
+		LocalDate date = createTripTimeStartDatePicker.getValue();
+		//Gets location, meeting address and participant limit
+		Location location = createTripLocationComboBox.getValue();
+		String meetingAddress = createTripAddressTextField.getText();
+		String participantLimitString = createTripParticipantLimitTextField.getText();
+		if (participantLimitString == null || participantLimitString.isEmpty()) {
+			participantLimitString = "0";
+		}
+		//Get the organizer
+		User organizer = clientController.getCurrentUser();
+		//Gets optional prices
+		//TODO - Should add optional prices to GUI
+		ArrayList<OptionalPrice> optionalPrices = new ArrayList<>();
+		//Gets tags
+		HashSet<String> tags = new HashSet<>();
+		String tagsString = createTripTagsTextField.getText();
+		if (tagsString != null && !tagsString.isEmpty()) {
+			for (String tag : tagsString.split(" ")) {
+				tags.add(tag);
+			}
+		}
+		//Gets trip images
+		List<Image> images = new ArrayList<>();
+		for (Node node : createTripPictureListHBox.getChildren()) {
+			images.add(((ImageListItem) node).getImage());
+		}
+
+		//Checks if parameters are valid
+		if (!isTripParametersValid(title, categories, priceString, date, location, meetingAddress, participantLimitString)) {
+			return -1;
+		}
+
+		//Converts price, date, participant limit and image now that validation is checked
+		double price = Double.parseDouble(priceString);
+		LocalDateTime dateTime = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), time.getHour(), time.getMinute());
+		int participantLimit = Integer.parseInt(participantLimitString);
+
+		//Creates trip
+		return clientController.createTrip(title, description, categories, price, dateTime, location, meetingAddress, participantLimit, organizer, organizerInstructorIn, optionalPrices, tags, images);
+	}
+
+	/**
+	 * This method checks if all the parameters are valid when creating a new trip
+	 *
+	 * @param title
+	 * @param categories
+	 * @param priceString
+	 * @param date
+	 * @param location
+	 * @param meetingAddress
+	 * @param participantLimitString
+	 *
+	 * @return boolean isTripParametersValid - Returns true if all parameters are
+	 * valid
+	 */
+	private boolean isTripParametersValid(String title, List<Category> categories, String priceString, LocalDate date, Location location, String meetingAddress, String participantLimitString) {
+		boolean isTripParametersValid = true;
+		//Title check
+		if (title == null || title.isEmpty()) {
+			createTripInvalidTitleText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidTitleText.setVisible(false);
+		}
+		//category check
+		if (categories.isEmpty()) {
+			createTripInvalidCategoryText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidCategoryText.setVisible(false);
+		}
+		//price check
+		double price;
+		try {
+			price = Double.parseDouble(priceString);
+		} catch (NumberFormatException e) {
+			price = -1;
+		}
+		if (price < 0) {
+			createTripInvalidPriceText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidPriceText.setVisible(false);
+		}
+		//timeStart check
+		if (date == null || date.isBefore(LocalDate.now())) {
+			createTripInvalidDateText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidDateText.setVisible(false);
+		}
+		//location check
+		if (location == null) {
+			createTripInvalidLocationText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidLocationText.setVisible(false);
+		}
+		//meetingAddress
+		if (meetingAddress == null || meetingAddress.isEmpty()) {
+			createTripInvalidMeetingAddressText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidMeetingAddressText.setVisible(false);
+		}
+		//participantLimit check
+		int participantLimit;
+		try {
+			participantLimit = Integer.parseInt(participantLimitString);
+		} catch (NumberFormatException e) {
+			participantLimit = -1;
+		}
+		if (participantLimit < 0) {
+			createTripInvalidParticipantLimitText.setVisible(true);
+			isTripParametersValid = false;
+		} else {
+			createTripInvalidParticipantLimitText.setVisible(false);
+		}
+		//Reset picture warning
+		createTripInvalidPictureText.setVisible(false);
+
+		return isTripParametersValid;
+	}
+	// </editor-fold>
+
+	// <editor-fold defaultstate="collapsed" desc="My Trips - Methods">
+	/**
+	 * This method handles all the buttons under the MyTrips pane
+	 *
+	 * @param event
+	 */
+	@FXML
+	private void handleMyTripsButtons(ActionEvent event) {
+		if (event.getSource() == myTripsCreateTripButton) {
+			resetCreateTripPane();
+			showPane(createTripPane1);
+		} else if (event.getSource() == myTripsModifyTripButton) {
+
+			//If no trip is selected, then nothing happens
+			if (myTripsListView.getSelectionModel().isEmpty()) {
+
+			} else {
+				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+				viewTrip(id, true);
+			}
+		} else if (event.getSource() == myTripsViewTripButton) {
+
+			//If no trip is selected, then nothing happens
+			if (myTripsListView.getSelectionModel().isEmpty()) {
+
+			} else {
+				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+				viewTrip(id, false);
+			}
+		} else if (event.getSource() == myTripsDeleteTripButton) {
+			if (!myTripsListView.getSelectionModel().isEmpty()) {
+				clientController.deleteTrip(myTripsListView.getSelectionModel().getSelectedItem().getTripId());
+				loadMyOrganizedTrips();
+			}
+		} else if (myTripsToggleGroup.getToggles().contains(event.getSource())) {
+			if (myTripsToggleGroup.getSelectedToggle() == myTripsToggleAll) {
+				loadMyTrips();
+				myTripsDeleteTripButton.setDisable(true);
+			} else if (myTripsToggleGroup.getSelectedToggle() == myTripsOrganizedRadioButton) {
+				loadMyOrganizedTrips();
+				myTripsDeleteTripButton.setDisable(false);
+			}
+		}
+	}
+
+	private void resetMyTripsPane() {
+		loadMyTrips();
+		myTripsDeleteTripButton.setDisable(true);
+		myTripsToggleAll.setSelected(true);
+	}
+
+	/**
+	 * This method loads all the trips for a specifc user under the MyTrips pane
+	 *
+	 */
+	private void loadMyTrips() {
+		Platform.runLater(() -> {
+			List<Trip> myTrips = clientController.getMyTrips();
+
+			if (myTrips != null) {
+				List<HBoxCell> list = new ArrayList<>();
+
+				for (Trip trip : myTrips) {
+					list.add(new HBoxCell(trip));
+				}
+
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				myTripsListView.setItems(observableList);
+			}
+		});
+	}
+
+	private void loadMyOrganizedTrips() {
+		Platform.runLater(() -> {
+			List<Trip> myTrips = clientController.getMyOrganizedTrips();
+
+			if (myTrips != null) {
+				List<HBoxCell> list = new ArrayList<>();
+
+				for (Trip trip : myTrips) {
+					list.add(new HBoxCell(trip));
+				}
+
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				myTripsListView.setItems(observableList);
+			}
+		});
+	}
+	// </editor-fold>
+
+	// <editor-fold defaultstate="collapsed" desc="Browse Users - Methods">
+	/**
+	 * This method handles the search button when browsing for users
+	 *
+	 * @param event
+	 */
+	@FXML
+	private void handleBrowseUsersSearchButtons(ActionEvent event) {
+		if (event.getSource().equals(browseUsersSearchButton)) {
+			searchUsers();
+		} else if (event.getSource().equals(browseUsersMessageButton)) {
+			if (browseUsersListView.getSelectionModel().isEmpty()) {
+				//Nothing happens if no user is selected
+			} else {
+				int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
+				goToUserConversation(userId);
+			}
+		}
+	}
+
+	private Conversation getConversation(Conversation conversation) {
+		try {
+			return clientController.getConversation(conversation);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
+
+	private void searchUsers() {
+		Platform.runLater(() -> {
+			try {
+				String searchText = browseUsersTextField.getText();
+				List<User> users = clientController.searchUsers(searchText);
+				List<HBoxCell> list = new ArrayList<>();
 
 //				for (User user : users) {
 //					list.add(new HBoxCell(user));
 //				}
-        users.parallelStream().forEach((User user) -> {
-          synchronized (list) {
-            list.add(new HBoxCell(user));
-          }
-        });
+				users.parallelStream().forEach((User user) -> {
+					synchronized (list) {
+						list.add(new HBoxCell(user));
+					}
+				});
 
-        ObservableList observableList = FXCollections.observableArrayList(list);
-        browseUsersListView.setItems(observableList);
-      } catch (RemoteException ex) {
-        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-      }
-    });
-  }
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				browseUsersListView.setItems(observableList);
+			} catch (RemoteException ex) {
+				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		});
+	}
 
-  public void resetBrowseUsersPane() {
+	public void resetBrowseUsersPane() {
 
-    //Reset parameters for browse users
-    browseUsersTextField.clear();
+		//Reset parameters for browse users
+		browseUsersTextField.clear();
 
-    //Reload all users
-    searchUsers();
+		//Reload all users
+		searchUsers();
 
-  }
+	}
 
-  // </editor-fold>
-  private void loadConversation(int ConversationId) {
+	// </editor-fold>
+	private void loadConversation(int ConversationId) {
 
-  }
+	}
 
-  private void getUserConversations() {
-    Platform.runLater(() -> {
-      List<Conversation> conversations = clientController.getUserConversations();
+	private void getUserConversations() {
+		Platform.runLater(() -> {
+			List<Conversation> conversations = clientController.getUserConversations();
 
-      if (conversations != null) {
-        List<HBoxCell> list = new ArrayList<>();
+			if (conversations != null) {
+				List<HBoxCell> list = new ArrayList<>();
 
-        try {
+				for (Conversation conversation : conversations) {
+					String name = clientController.getConversationName(conversation);
+					list.add(new HBoxCell(conversation, name));
+				}
+				ObservableList observableList = FXCollections.observableArrayList(list);
+				messagingConversationsListView.setItems(observableList);
+			}
+		});
+	}
 
-          for (Conversation conversation : conversations) {
-            String name = clientController.getConversationName(conversation);
-            list.add(new HBoxCell(conversation, name));
-          }
-        } catch (RemoteException ex) {
-          Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ObservableList observableList = FXCollections.observableArrayList(list);
-        messagingConversationsListView.setItems(observableList);
-      }
-    });
-  }
+	private void showConversation(Conversation conversation) {
+		List<HBoxCell> list = new ArrayList<>();
+		int userId = clientController.getCurrentUser().getId();
 
-  private void showConversation(Conversation conversation) {
-    List<HBoxCell> list = new ArrayList<>();
-    int userId = clientController.getCurrentUser().getId();
+		for (Message message : getConversation(conversation).getMessages()) {
+			list.add(new HBoxCell(message, clientController.getCurrentUser()));
+		}
 
-    for (Message message : getConversation(conversation).getMessages()) {
-      list.add(new HBoxCell(message, clientController.getCurrentUser()));
-    }
+		Collections.reverse(list);
+		messagingConversationList = FXCollections.observableArrayList(list);
+		messagingActiveConversationListView.setItems(messagingConversationList);
+		messagingActiveConversationListView.scrollTo(messagingConversationList.size() - 1);
+		ClientMessagingHandler.setMessagesList(messagingConversationList);
+	}
 
-    Collections.reverse(list);
-    messagingConversationList = FXCollections.observableArrayList(list);
-    messagingActiveConversationListView.setItems(messagingConversationList);
-    messagingActiveConversationListView.scrollTo(messagingConversationList.size() - 1);
-    ClientMessagingHandler.setMessagesList(messagingConversationList);
-  }
+	private void sendMessage(String message) {
+		try {
+			clientController.sendMessage(message);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
-  private void sendMessage(String message) {
-    try {
-      clientController.sendMessage(message);
-    } catch (RemoteException ex) {
-      Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-    }
-  }
+	@FXML
+	private void handleSendMessageButton(ActionEvent event) {
+		sendMessage(messagingTextField.getText());
+		messagingTextField.setText("");
+	}
 
-  @FXML
-  private void handleSendMessageButton(ActionEvent event) {
-    sendMessage(messagingTextField.getText());
-    messagingTextField.setText("");
-  }
+	private void goToUserConversation(int userId) {
+		Conversation conversation = clientController.getUserConversation(userId);
 
+		boolean conversationExists = false;
+
+		for (int i = 0; i < messagingConversationsListView.getItems().size(); i++) {
+			if (messagingConversationsListView.getItems().get(i).getConversationId() == conversation.getId()) {
+				messagingConversationsListView.getSelectionModel().clearAndSelect(i);
+				conversationExists = true;
+			}
+		}
+		if (!conversationExists) {
+			messagingConversationsListView.getItems().add(new HBoxCell(conversation, clientController.getConversationName(conversation)));
+			messagingConversationsListView.getSelectionModel().clearAndSelect(messagingConversationsListView.getItems().size() - 1);
+		}
+
+		showPane(messagingPane);
+	}
 
 }

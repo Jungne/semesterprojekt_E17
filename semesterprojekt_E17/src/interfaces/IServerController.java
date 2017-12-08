@@ -59,4 +59,6 @@ public interface IServerController extends Remote {
 	public List<Conversation> getUserConversations(User user) throws RemoteException;
 	
 	public String getConversationName(Conversation conversation, User user) throws RemoteException;
+	
+	public Conversation getUserConversation(int userId1, int userId2) throws RemoteException;
 }

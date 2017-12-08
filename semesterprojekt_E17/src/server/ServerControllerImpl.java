@@ -155,4 +155,9 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 		return ServerMessagingHandler.getConversationName(conversation, user);
 	}
 	
+	@Override
+	public Conversation getUserConversation(int userId1, int userId2) throws RemoteException {
+		return ServerMessagingHandler.getUserConversation(userId1, userId2);
+	}
+	
 }

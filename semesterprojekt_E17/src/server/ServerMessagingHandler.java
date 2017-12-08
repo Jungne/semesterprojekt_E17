@@ -155,7 +155,7 @@ public class ServerMessagingHandler {
 		}
 
 		return new Conversation(conversation.getId(), conversation.getType(), null, messages); //Should also return participants at some point.
-	}	
+	}
 
 	public static void sendMessage(Message message) {
 		try {
@@ -226,12 +226,61 @@ public class ServerMessagingHandler {
 		}
 		return null;
 	}
-	
+
 	public static void deleteConversation(int conversationId) {
 		String query = ""
 						+ "DELETE FROM Conversations"
 						+ "WHERE conversationID = " + conversationId;
-		
-		dbm.executeUpdate(query);		
+
+		dbm.executeUpdate(query);
+	}
+
+	public static Conversation getUserConversation(int userId1, int userId2) {
+//		String query = ""
+//						+ "SELECT conversationID\n"
+//						+ "FROM (SELECT COUNT(userID), conversationID\n"
+//						+ "FROM usersInConversations\n"
+//						+ "GROUP BY conversationID) AS count\n"
+//						+ "NATURAL JOIN UsersInConversations\n"
+//						+ "NATURAL JOIN Conversations\n"
+//						+ "WHERE count.count = 2 AND userID IN (" + userId1 + "," + userId2 +") AND type = 'users'";
+
+		String query = ""
+						+ "SELECT conversationID\n"
+						+ "FROM (\n"
+						+ "	SELECT COUNT(userID), conversationID \n"
+						+ "	FROM (\n"
+						+ "		SELECT userID, conversationID\n"
+						+ "		FROM UsersInConversations\n"
+						+ "		WHERE userID IN (" + userId1 + ", " + userId2 + ")) AS CommonConversations\n"
+						+ "	GROUP by conversationID) AS Count\n"
+						+ "WHERE Count.count = 2";
+
+		ResultSet conversationRs = dbm.executeQuery(query);
+
+		int conversationId = -1;
+
+		try {
+			if (conversationRs.next()) {
+				conversationId = conversationRs.getInt("conversationID");
+			} else {
+				String newConversationQuery = ""
+								+ "INSERT INTO Conversations "
+								+ "VALUES (DEFAULT, 'users'); ";
+
+				conversationId = dbm.executeInsertAndGetId(newConversationQuery);
+
+				String insertUsersQuery = "INSERT INTO UsersInConversations "
+								+ "VALUES (" + conversationId + "," + userId1 + "), (" + conversationId + ", " + userId2 + ");";
+
+				dbm.executeUpdate(insertUsersQuery);
+
+				System.out.println(conversationId);
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		return getConversation(new Conversation(conversationId, "users"));
 	}
 }
