@@ -401,7 +401,7 @@ public class ServerTripHandler {
 		//Initializes the query string
 		String query = "SELECT DISTINCT Trips.tripID, tripTitle, tripDescription, tripPrice "
 						+ "FROM Trips, CategoriesInTrips, InstructorsInTrips "
-						+ "WHERE timeStart >= NOW();";
+						+ "WHERE timeStart >= NOW()";
 
 		//These if statements checks if the different parameters are used, and adds the necessary SQL code to the query string
 		if (!(searchTitle == null || searchTitle.isEmpty())) {
@@ -475,7 +475,6 @@ public class ServerTripHandler {
 				int id = imageRs.getInt("tripID");
 				byte[] imageFile = imageRs.getBytes("imageFile");
 
-				System.out.println("id: " + id + ", file: " + imageFile);
 				tripImages.put(id, new Image(imageFile));
 			}
 		} catch (SQLException ex) {

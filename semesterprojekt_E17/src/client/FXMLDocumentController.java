@@ -119,6 +119,8 @@ public class FXMLDocumentController implements Initializable {
 	private Text searchTripInvalidPriceText;
 	@FXML
 	private Button searchTripsViewTripButton;
+
+	private boolean searchTripsCategoryComboBoxIsDisabled = false;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="My Trips - Elements">
@@ -171,6 +173,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button createTripNextButton;
 
+	private boolean createTripCategoryComboboxIsDisabled = false;
 	private int currentIntructorTextOccupiers = 0;
 	// </editor-fold>
 
@@ -320,7 +323,7 @@ public class FXMLDocumentController implements Initializable {
 	private Button handleProfileButtons;
 	@FXML
 	private ListView<HBoxCell> profileCertificatesListView;
-
+	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
@@ -439,7 +442,7 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void viewTrip(int id, boolean modifyMode, AnchorPane lastPane) {
-		viewedTrip = clientController.viewTrip(id); 
+		viewedTrip = clientController.viewTrip(id);
 		this.lastPane = lastPane;
 		if (viewedTrip != null) {
 			viewTripTitleLabel.setText(viewedTrip.getTitle());
@@ -468,9 +471,9 @@ public class FXMLDocumentController implements Initializable {
 			joinTripButton.setVisible(!modifyMode);
 
 			joinTripButton.setDisable(
-							viewedTrip.getParticipants().contains(clientController.getCurrentUser()) 
-							|| viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit() 
-							|| modifyMode 
+							viewedTrip.getParticipants().contains(clientController.getCurrentUser())
+							|| viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit()
+							|| modifyMode
 							|| clientController.getCurrentUser() == null);
 
 			if (clientController.getCurrentUser() != null && viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId()) {
@@ -585,7 +588,7 @@ public class FXMLDocumentController implements Initializable {
 			} catch (FullTripException ex) {
 				//TODO popup explanation, that trip is full.
 				System.out.println(ex);
-			} 
+			}
 		} else if (event.getSource() == viewTripKickButton) {
 			int userId = viewListOfParticipants.getSelectionModel().getSelectedItem().getUserId();
 			clientController.kickParticipant(viewedTrip, userId);
@@ -593,7 +596,7 @@ public class FXMLDocumentController implements Initializable {
 		} else if (event.getSource() == viewTripBackButton) {
 			showPane(lastPane);
 		}
-			
+
 	}
 	// </editor-fold>
 
@@ -611,6 +614,9 @@ public class FXMLDocumentController implements Initializable {
 			}
 			searchTrips();
 		} else if (event.getSource() == searchTripsCategoryComboBox) {
+			if (searchTripsCategoryComboBoxIsDisabled) {
+				return;
+			}
 			addCategoryListItem2();
 		} else if (event.getSource() == searchTripsViewTripButton) {
 			if (browseTripsListView.getSelectionModel().isEmpty()) {
@@ -731,6 +737,7 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void resetBrowseTripPane() {
+		searchTripsCategoryComboBoxIsDisabled = true;
 
 		//Reset parameters for browse trips
 		searchTripsNormalCheckBox.setSelected(false);
@@ -753,6 +760,9 @@ public class FXMLDocumentController implements Initializable {
 
 		//Resets category HBox
 		searchTripCategoryListHBox.getChildren().clear();
+
+		searchTripsCategoryComboBox.setValue(null);
+		searchTripsCategoryComboBoxIsDisabled = false;
 
 		//Reload all trips
 		searchTrips();
@@ -1035,6 +1045,8 @@ public class FXMLDocumentController implements Initializable {
 	 *
 	 */
 	private void resetCreateTripPane() {
+		createTripCategoryComboboxIsDisabled = true;
+
 		//Gets all categories from the server and displays them in the comboBox
 		ObservableList<Category> categories = FXCollections.observableArrayList(clientController.getCategories());
 		createTripCategoryComboBox.setItems(categories);
@@ -1071,6 +1083,8 @@ public class FXMLDocumentController implements Initializable {
 		//Reset HBox lists
 		createTripPictureListHBox.getChildren().clear();
 		createTripCategoryListHBox.getChildren().clear();
+
+		createTripCategoryComboboxIsDisabled = false;
 	}
 
 	/**
@@ -1084,6 +1098,9 @@ public class FXMLDocumentController implements Initializable {
 		if (event.getSource() == createTripAddPictureButton) {
 			addImageListItem();
 		} else if (event.getSource() == createTripCategoryComboBox) {
+			if (createTripCategoryComboboxIsDisabled) {
+				return;
+			}
 			addCategoryListItem();
 		} else if (event.getSource() == createTripNextButton) {
 			showPane(createTripPane2);
@@ -1418,10 +1435,10 @@ public class FXMLDocumentController implements Initializable {
 		myTripsToggleAll.setSelected(true);
 		myTripsModifyTripButton.setDisable(true);
 	}
-	
+
 	@FXML
 	private void handleMyTripsListView(MouseEvent event) {
-		if(myTripsListView.getSelectionModel().getSelectedItem() != null) {
+		if (myTripsListView.getSelectionModel().getSelectedItem() != null) {
 			int tripId = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 			int organizerId = clientController.viewTrip(tripId).getOrganizer().getId();
 			myTripsModifyTripButton.setDisable(organizerId != clientController.getCurrentUser().getId());
