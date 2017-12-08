@@ -4,11 +4,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is the Category class. Categories are used in a trip. A trip can contain
+ * many categories.
+ *
+ * @author group 12
+ */
 public class Category implements Serializable {
 
 	private int id;
 	private String name;
 
+	/**
+	 * This constructor
+	 *
+	 * @param id
+	 * @param name 
+	 */
 	public Category(int id, String name) {
 		this.id = id;
 		this.name = name;
@@ -28,10 +40,19 @@ public class Category implements Serializable {
 		return name;
 	}
 
+	/**
+	 * This method
+	 *
+	 * @return
+	 */
 	public Category clone() {
 		return new Category(id, name);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object other) {
 		if (other == null || !(other instanceof Category)) {
@@ -51,7 +72,7 @@ public class Category implements Serializable {
 	 * null just one category is null.
 	 *
 	 * @param categories
-	 * @return
+	 * @return a list of category Ids
 	 */
 	public static List<Integer> getCategoryIds(List<Category> categories) {
 		ArrayList<Integer> categoryIds = new ArrayList<>();

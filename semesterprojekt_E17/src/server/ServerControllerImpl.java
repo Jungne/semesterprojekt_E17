@@ -5,6 +5,7 @@ import interfaces.Conversation;
 import interfaces.FullTripException;
 import interfaces.IChatClient;
 import interfaces.IServerController;
+import interfaces.Image;
 import interfaces.Location;
 import interfaces.Message;
 import interfaces.Trip;
@@ -16,10 +17,20 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class is the main server controller responsible for
+ *
+ * @author group 12
+ */
 public class ServerControllerImpl extends UnicastRemoteObject implements IServerController {
 
+	//
 	private ServerMessagingHandler messagingHandler;
 
+	/**
+	 * This constructor
+	 *
+	 */
 	public ServerControllerImpl() throws RemoteException {
 		messagingHandler = new ServerMessagingHandler();
 	}
@@ -40,8 +51,13 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public List<Trip> getAllTrips() throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public User updateUser(int currentUserID) throws RemoteException {
+		return ServerUserHandler.updateUser(currentUserID);
+	}
+
+	@Override
+	public void changeProfilePicture(int currentUserID, Image profilePicture) throws RemoteException {
+		ServerUserHandler.changeProfilePicture(currentUserID, profilePicture);
 	}
 
 	@Override
@@ -134,7 +150,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public List<Trip> getMyTrips(User user) {
 		return ServerTripHandler.getMyTrips(user);
 	}
-	
+
 	@Override
 	public List<Trip> getMyTrips(User user, int organizerId) {
 		return ServerTripHandler.getMyTrips(user, organizerId);
@@ -154,10 +170,9 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public String getConversationName(Conversation conversation, User user) throws RemoteException {
 		return ServerMessagingHandler.getConversationName(conversation, user);
 	}
-	
+
 	@Override
 	public Conversation getUserConversation(int userId1, int userId2) throws RemoteException {
 		return ServerMessagingHandler.getUserConversation(userId1, userId2);
 	}
-	
 }

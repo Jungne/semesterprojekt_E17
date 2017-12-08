@@ -27,7 +27,7 @@ public class ClientController {
 	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
-//		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
+		//String hostname = "tek-sb3-glo0a.tek.sdu.dk";
 		String hostname = "localhost";
 
 		try {
@@ -42,14 +42,17 @@ public class ClientController {
 		currentUser = ClientUserHandler.signUp(serverController, email, name, profilePicture, password);
 	}
 
-	public boolean signIn(String email, String password) throws RemoteException {
+	public boolean signIn(String email, String password) {
 		currentUser = ClientUserHandler.signIn(serverController, email, password);
 		if (currentUser != null) {
-			serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser));
-			return true;
-		} else {
-			return false;
+			try {
+				serverController.registerClient(ClientMessagingHandler.getMessagereceiverInstance(currentUser));
+				return true;
+			} catch (RemoteException ex) {
+				Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
+		return false;
 	}
 
 	public void signOut() throws RemoteException {
@@ -57,8 +60,13 @@ public class ClientController {
 		ClientMessagingHandler.signOut();
 	}
 
-	public List<Trip> getAllTrips() throws RemoteException {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public void updateUser() throws RemoteException {
+		currentUser = ClientUserHandler.updateUser(serverController, currentUser.getId());
+	}
+
+	public void changeProfilePicture(Image profilePicture) throws RemoteException {
+		int currentUserID = currentUser.getId();
+		ClientUserHandler.changeProfilePicture(serverController, currentUserID, profilePicture);
 	}
 
 	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
@@ -119,7 +127,7 @@ public class ClientController {
 		}
 		return null;
 	}
-	
+
 	public List<Trip> getMyOrganizedTrips() {
 		if (currentUser != null) {
 			return ClientTripHandler.getMyTrips(currentUser, serverController, currentUser.getId());

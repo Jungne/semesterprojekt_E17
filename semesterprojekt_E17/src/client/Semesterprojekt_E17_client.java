@@ -6,6 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * This is the client start class.
+ *
+ * @author group 12
+ */
 public class Semesterprojekt_E17_client extends Application {
 
 	@Override

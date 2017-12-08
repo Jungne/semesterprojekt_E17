@@ -2,12 +2,24 @@ package interfaces;
 
 import java.io.Serializable;
 
+/**
+ * The OptionalPrice class
+ *
+ * @author group 12
+ */
 public class OptionalPrice implements Serializable {
 
 	private int id;
 	private double price;
 	private String description;
 
+	/**
+	 * This constructor
+	 *
+	 * @param id
+	 * @param price
+	 * @param description
+	 */
 	public OptionalPrice(int id, double price, String description) {
 		this.id = id;
 		this.price = price;

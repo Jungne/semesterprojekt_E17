@@ -1,17 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package interfaces;
 
 /**
+ * The FullTripException is thrown when a user tries to participate in a trip, 
+ * that has reached the maximum limit of participants.
  *
- * @author jungn
+ * @author group 12
  */
 public class FullTripException extends Exception{
 
 	public FullTripException(String message) {
 		super(message);
 	}	
+	
 }
