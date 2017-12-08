@@ -262,7 +262,7 @@
             <Button fx:id="myTripsCreateTripButton" layoutX="60.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Create Trip" />
             <Button fx:id="myTripsModifyTripButton" layoutX="60.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Modify Trip" />
             <Button fx:id="myTripsViewTripButton" layoutX="60.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="View Trip" />
-            <ListView fx:id="myTripsListView" layoutX="160.0" layoutY="100.0" prefHeight="420.0" prefWidth="420.0" />
+            <ListView fx:id="myTripsListView" layoutX="160.0" layoutY="100.0" onMouseClicked="#handleMyTripsListView" prefHeight="420.0" prefWidth="420.0" />
             <Button fx:id="myTripsDeleteTripButton" disable="true" layoutX="60.0" layoutY="221.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefHeight="25.0" prefWidth="80.0" text="Delete Trip" />
             <Label layoutX="57.0" layoutY="278.0" text="Filter" />
             <RadioButton fx:id="myTripsToggleAll" layoutX="40.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" selected="true" text="All">
@@ -290,7 +290,7 @@
                   <Font name="System Italic" size="13.0" />
                </font>
             </Text>
-            <Button fx:id="joinTripButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Join trip" />
+            <Button fx:id="joinTripButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefWidth="60.0" text="Join trip" />
             <ListView fx:id="viewListOfParticipants" layoutX="43.0" layoutY="374.0" prefHeight="188.0" prefWidth="256.0" />
             <Text fx:id="viewTripParticipantsLabel" layoutX="43.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants:" wrappingWidth="91.99999879766256">
                <font>
@@ -308,8 +308,9 @@
             <TextField fx:id="viewTripLocationTextField" editable="false" layoutX="178.0" layoutY="321.0" prefHeight="25.0" prefWidth="120.0" />
             <Label fx:id="viewTripLimitLabel" layoutX="249.0" layoutY="357.0" text="Limit" />
             <Label layoutX="323.0" layoutY="357.0" text="Categories:" />
-            <TextArea fx:id="viewTripCategoriesTextArea" editable="false" layoutX="322.0" layoutY="374.0" prefHeight="188.0" prefWidth="128.0" />
+            <TextArea fx:id="viewTripCategoriesTextArea" editable="false" layoutX="322.0" layoutY="374.0" prefHeight="188.0" prefWidth="128.0" wrapText="true" />
             <Button fx:id="viewTripKickButton" layoutX="53.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Kick participant" visible="false" />
+            <Button fx:id="viewTripBackButton" layoutX="322.0" layoutY="321.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefWidth="60.0" text="Back" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="logInPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
@@ -360,6 +361,12 @@
             <Label layoutX="322.0" layoutY="42.0" style="-fx-font-weight: bold;" text="Profile picture" />
             <Label fx:id="profileNameLabel" layoutX="51.0" layoutY="60.0" text="Label" />
             <Label fx:id="profileEmailLabel" layoutX="52.0" layoutY="105.0" text="Label" />
+            <ListView fx:id="profileCertificatesListView" layoutX="51.0" layoutY="339.0" prefHeight="200.0" prefWidth="200.0" />
+            <Label layoutX="52.0" layoutY="322.0" text="Certificates">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="modifyTripPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">

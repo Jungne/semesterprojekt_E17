@@ -21,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,6 +56,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.scene.layout.AnchorPane;
@@ -211,6 +214,7 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Elements">
 	private Trip viewedTrip;
+	private AnchorPane lastPane;
 
 	@FXML
 	private AnchorPane viewTripPane;
@@ -240,6 +244,8 @@ public class FXMLDocumentController implements Initializable {
 	private TextArea viewTripCategoriesTextArea;
 	@FXML
 	private Button viewTripKickButton;
+	@FXML
+	private Button viewTripBackButton;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Modify Trip - Elements">
@@ -310,9 +316,6 @@ public class FXMLDocumentController implements Initializable {
 	private Label profileNameLabel;
 	@FXML
 	private Label profileEmailLabel;
-	@FXML
-	private Button profilePaneChangePictureButton;
-	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Browse users - Elements">
 	@FXML
@@ -341,6 +344,10 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button messagingSendButton;
 	// </editor-fold>
+	@FXML
+	private Button handleProfileButtons;
+	@FXML
+	private ListView<HBoxCell> profileCertificatesListView;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -430,8 +437,9 @@ public class FXMLDocumentController implements Initializable {
 	 * @param modifyMode
 	 *
 	 */
-	private void viewTrip(int id, boolean modifyMode) {
-		viewedTrip = clientController.viewTrip(id); //Should be id obtained from selected element in list view on my trips
+	private void viewTrip(int id, boolean modifyMode, AnchorPane lastPane) {
+		viewedTrip = clientController.viewTrip(id); 
+		this.lastPane = lastPane;
 		if (viewedTrip != null) {
 			viewTripTitleLabel.setText(viewedTrip.getTitle());
 			viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
@@ -444,7 +452,7 @@ public class FXMLDocumentController implements Initializable {
 			}
 
 			viewTripOrganizerTextField.setText(viewedTrip.getOrganizer().getName());
-			viewTripDateTextField.setText(viewedTrip.getTimeStart().toString());
+			viewTripDateTextField.setText(viewedTrip.getTimeStart().format(DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm")));
 			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
 			viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
@@ -458,9 +466,13 @@ public class FXMLDocumentController implements Initializable {
 
 			joinTripButton.setVisible(!modifyMode);
 
-			joinTripButton.setDisable(viewedTrip.getParticipants().contains(clientController.getCurrentUser()) || viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit() || modifyMode);
+			joinTripButton.setDisable(
+							viewedTrip.getParticipants().contains(clientController.getCurrentUser()) 
+							|| viewedTrip.getParticipants().size() >= viewedTrip.getParticipantLimit() 
+							|| modifyMode 
+							|| clientController.getCurrentUser() == null);
 
-			if (viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId()) {
+			if (clientController.getCurrentUser() != null && viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId()) {
 				viewTripKickButton.setVisible(true);
 			} else {
 				viewTripKickButton.setVisible(false);
@@ -508,6 +520,15 @@ public class FXMLDocumentController implements Initializable {
 		profileEmailLabel.setText(clientController.getCurrentUser().getEmail());
 		InputStream inputStream = new ByteArrayInputStream(clientController.getCurrentUser().getImage().getImageFile());
 		profilePictureImageView.setImage(new javafx.scene.image.Image(inputStream));
+
+		List<HBoxCell> list = new ArrayList<>();
+
+		for (Category category : clientController.getCurrentUser().getCertificates()) {
+			list.add(new HBoxCell(category.getId(), category.getName()));
+		}
+
+		ObservableList observableList = FXCollections.observableArrayList(list);
+		profileCertificatesListView.setItems(observableList);
 	}
 
 	/**
@@ -559,16 +580,19 @@ public class FXMLDocumentController implements Initializable {
 		if (event.getSource() == joinTripButton) {
 			try {
 				clientController.participateInTrip(viewedTrip);
-				viewTrip(viewedTrip.getId(), false);
+				viewTrip(viewedTrip.getId(), false, lastPane);
 			} catch (FullTripException ex) {
 				//TODO popup explanation, that trip is full.
 				System.out.println(ex);
-			}
+			} 
 		} else if (event.getSource() == viewTripKickButton) {
 			int userId = viewListOfParticipants.getSelectionModel().getSelectedItem().getUserId();
 			clientController.kickParticipant(viewedTrip, userId);
-			viewTrip(viewedTrip.getId(), false);
+			viewTrip(viewedTrip.getId(), false, lastPane);
+		} else if (event.getSource() == viewTripBackButton) {
+			showPane(lastPane);
 		}
+			
 	}
 	// </editor-fold>
 
@@ -592,7 +616,7 @@ public class FXMLDocumentController implements Initializable {
 				//If no trip is selected, then nothing happens
 			} else {
 				int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
-				viewTrip(tripId, false);
+				viewTrip(tripId, false, browseTripsPane);
 			}
 		}
 	}
@@ -797,6 +821,7 @@ public class FXMLDocumentController implements Initializable {
 			showPane(profilePane);
 			loadProfileInfo();
 			signInUpdateClient(true);
+			getUserConversations();
 		} else {
 			logInInvalidEmailText.setText("Email does not match with password!");
 			logInInvalidEmailText.setVisible(true);
@@ -933,12 +958,6 @@ public class FXMLDocumentController implements Initializable {
 		} else {
 			newAccountRepeatPasswordTextField.setStyle("-fx-text-box-border: red");
 		}
-	}
-
-	private void handleViewTripButton(ActionEvent event) {
-		int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
-		System.out.println(tripId);
-		viewTrip(tripId, false);
 	}
 	// </editor-fold>
 
@@ -1365,7 +1384,7 @@ public class FXMLDocumentController implements Initializable {
 
 			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-				viewTrip(id, true);
+				viewTrip(id, true, myTripsPane);
 			}
 		} else if (event.getSource() == myTripsViewTripButton) {
 
@@ -1374,7 +1393,7 @@ public class FXMLDocumentController implements Initializable {
 
 			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
-				viewTrip(id, false);
+				viewTrip(id, false, myTripsPane);
 			}
 		} else if (event.getSource() == myTripsDeleteTripButton) {
 			if (!myTripsListView.getSelectionModel().isEmpty()) {
@@ -1396,6 +1415,16 @@ public class FXMLDocumentController implements Initializable {
 		loadMyTrips();
 		myTripsDeleteTripButton.setDisable(true);
 		myTripsToggleAll.setSelected(true);
+		myTripsModifyTripButton.setDisable(true);
+	}
+	
+	@FXML
+	private void handleMyTripsListView(MouseEvent event) {
+		if(myTripsListView.getSelectionModel().getSelectedItem() != null) {
+			int tripId = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
+			int organizerId = clientController.viewTrip(tripId).getOrganizer().getId();
+			myTripsModifyTripButton.setDisable(organizerId != clientController.getCurrentUser().getId());
+		}
 	}
 
 	/**
@@ -1452,9 +1481,18 @@ public class FXMLDocumentController implements Initializable {
 				//Nothing happens if no user is selected
 			} else {
 				int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
-				//Use userId to open a conversation.
+				goToUserConversation(userId);
 			}
 		}
+	}
+
+	private Conversation getConversation(Conversation conversation) {
+		try {
+			return clientController.getConversation(conversation);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
 	}
 
 	private void searchUsers() {
@@ -1464,6 +1502,9 @@ public class FXMLDocumentController implements Initializable {
 				List<User> users = clientController.searchUsers(searchText);
 				List<HBoxCell> list = new ArrayList<>();
 
+//				for (User user : users) {
+//					list.add(new HBoxCell(user));
+//				}
 				users.parallelStream().forEach((User user) -> {
 					synchronized (list) {
 						list.add(new HBoxCell(user));
@@ -1486,21 +1527,17 @@ public class FXMLDocumentController implements Initializable {
 		//Reload all users
 		searchUsers();
 
+		//Disables the message button if not logged in
+		if (clientController.getCurrentUser() == null) {
+			browseUsersMessageButton.setDisable(true);
+		} else {
+			browseUsersMessageButton.setDisable(false);
+		}
 	}
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="Messaging - Methods">	
+	// </editor-fold>
 	private void loadConversation(int ConversationId) {
 
-	}
-
-	private Conversation getConversation(Conversation conversation) {
-		try {
-			return clientController.getConversation(conversation);
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		return null;
 	}
 
 	private void getUserConversations() {
@@ -1510,15 +1547,11 @@ public class FXMLDocumentController implements Initializable {
 			if (conversations != null) {
 				List<HBoxCell> list = new ArrayList<>();
 
-				try {
-
-					for (Conversation conversation : conversations) {
-						String name = clientController.getConversationName(conversation);
-						list.add(new HBoxCell(conversation, name));
-					}
-				} catch (RemoteException ex) {
-					Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+				for (Conversation conversation : conversations) {
+					String name = clientController.getConversationName(conversation);
+					list.add(new HBoxCell(conversation, name));
 				}
+
 				ObservableList observableList = FXCollections.observableArrayList(list);
 				messagingConversationsListView.setItems(observableList);
 			}
@@ -1553,6 +1586,25 @@ public class FXMLDocumentController implements Initializable {
 		sendMessage(messagingTextField.getText());
 		messagingTextField.setText("");
 	}
-	// </editor-fold>
+
+	private void goToUserConversation(int userId) {
+		Conversation conversation = clientController.getUserConversation(userId);
+
+		boolean conversationExists = false;
+
+		for (int i = 0; i < messagingConversationsListView.getItems().size(); i++) {
+			if (messagingConversationsListView.getItems().get(i).getConversationId() == conversation.getId()) {
+				messagingConversationsListView.getSelectionModel().clearAndSelect(i);
+				conversationExists = true;
+			}
+		}
+		if (!conversationExists) {
+			messagingConversationsListView.getItems().add(new HBoxCell(conversation, clientController.getConversationName(conversation)));
+			messagingConversationsListView.getSelectionModel().clearAndSelect(messagingConversationsListView.getItems().size() - 1);
+		}
+
+		showPane(messagingPane);
+	}
+
 
 }
