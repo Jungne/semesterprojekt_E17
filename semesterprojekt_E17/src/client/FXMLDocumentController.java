@@ -21,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -211,7 +212,7 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="View Trip - Elements">
+	// <editor-fold defaultstate="collapsed" desc="View and Modify Trip - Elements">
 	private Trip viewedTrip;
 	private AnchorPane lastPane;
 
@@ -245,6 +246,8 @@ public class FXMLDocumentController implements Initializable {
 	private Button viewTripKickButton;
 	@FXML
 	private Button viewTripBackButton;
+	@FXML
+	private Button viewTripSaveChangesButton;
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Modify Trip - Elements">
@@ -459,11 +462,12 @@ public class FXMLDocumentController implements Initializable {
 
 			viewTripDescriptionTextArea.setEditable(modifyMode);
 			viewTripPriceTextField.setEditable(modifyMode);
-			viewTripOrganizerTextField.setEditable(modifyMode);
+			//viewTripOrganizerTextField.setEditable(modifyMode);
 			viewTripDateTextField.setEditable(modifyMode);
-			viewTripLocationTextField.setEditable(modifyMode);
+			//viewTripLocationTextField.setEditable(modifyMode);
 
 			joinTripButton.setVisible(!modifyMode);
+			viewTripSaveChangesButton.setVisible(modifyMode);
 
 			joinTripButton.setDisable(
 							viewedTrip.getParticipants().contains(clientController.getCurrentUser()) 
@@ -471,11 +475,7 @@ public class FXMLDocumentController implements Initializable {
 							|| modifyMode 
 							|| clientController.getCurrentUser() == null);
 
-			if (clientController.getCurrentUser() != null && viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId()) {
-				viewTripKickButton.setVisible(true);
-			} else {
-				viewTripKickButton.setVisible(false);
-			}
+			viewTripKickButton.setDisable(clientController.getCurrentUser() != null && viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId() && modifyMode);
 
 			showPane(viewTripPane);
 		}
@@ -589,9 +589,46 @@ public class FXMLDocumentController implements Initializable {
 			clientController.kickParticipant(viewedTrip, userId);
 			viewTrip(viewedTrip.getId(), false, lastPane);
 		} else if (event.getSource() == viewTripBackButton) {
-			showPane(lastPane);
+			showPane(lastPane); 
+		} else if (event.getSource() == viewTripSaveChangesButton) {
+			handleSaveChanges(); 
+			showPane(myTripsPane);
 		}
 			
+	}
+
+	private void handleSaveChanges() {
+		int id = viewedTrip.getId();
+		String title = viewTripTitleLabel.getText();
+		String description = viewTripDescriptionTextArea.getText();
+		double price = Double.parseDouble(viewTripPriceTextField.getText());
+		
+		List<User> participants = new ArrayList<User>();
+		
+		for (HBoxCell cell : viewListOfParticipants.getItems()) {
+			participants.add(new User(cell.getUserId(), cell.getLabel1Text()));
+		}
+		
+		//Organizer - needs update
+		User organizer = viewedTrip.getOrganizer();
+		
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime date = LocalDateTime.parse(viewTripDateTextField.getText().replace("T", " ") + ":00", formatter);
+
+		
+		//Location - needs update
+		Location location = viewedTrip.getLocation();
+		//Categories - needs update
+		List<Category> categories = viewedTrip.getCategories();
+		//ParticipantLimit - needs update
+		int participantLimit = viewedTrip.getParticipantLimit();
+		//Images - needs update
+		List<Image> images = viewedTrip.getImages();
+		
+		Trip trip = new Trip(id, title, description, price, date, location, participantLimit, organizer, categories, images, participants);
+		
+		clientController.modifyTrip(trip);
 	}
 	// </editor-fold>
 

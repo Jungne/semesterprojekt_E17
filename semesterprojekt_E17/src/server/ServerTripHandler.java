@@ -349,10 +349,10 @@ public class ServerTripHandler {
 
 		String query = "UPDATE trips "
 						+ "SET "
-						+ "tripTitle = " + trip.getTitle() + ", "
-						+ "tripDescription = " + trip.getDescription() + ", "
+						+ "tripTitle = '" + trip.getTitle() + "', "
+						+ "tripDescription = '" + trip.getDescription() + "', "
 						+ "tripPrice = " + trip.getPrice() + ", "
-						+ "timeStart = " + trip.getTimeStart().format(formatter) + ", "
+						+ "timeStart = '" + trip.getTimeStart().format(formatter) + "', "
 						+ "locationID = " + trip.getLocation().getId() + ", "
 						+ "participantLimit = " + trip.getParticipantLimit() + ", "
 						+ "userID = " + trip.getOrganizer().getId() + " "
@@ -361,11 +361,11 @@ public class ServerTripHandler {
 		dbm.executeUpdate(query);
 
 		if (!trip.getCategories().isEmpty()) {
-			query = "DELETE FROM CategoriesInTrip WHERE tripID = " + trip.getId() + ";";
+			query = "DELETE FROM CategoriesInTrips WHERE tripID = " + trip.getId() + ";";
 			dbm.executeUpdate(query);
 
 			for (Category category : trip.getCategories()) {
-				query = "INSERT INTO CategoriesInTrip (tripID, CategoryID) VALUES (" + trip.getId() + ", " + category.getId() + ");";
+				query = "INSERT INTO CategoriesInTrips (tripID, CategoryID) VALUES (" + trip.getId() + ", " + category.getId() + ");";
 				dbm.executeUpdate(query);
 			}
 		}
