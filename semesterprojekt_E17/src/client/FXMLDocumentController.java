@@ -797,6 +797,7 @@ public class FXMLDocumentController implements Initializable {
 			showPane(profilePane);
 			loadProfileInfo();
 			signInUpdateClient(true);
+			getUserConversations();
 		} else {
 			logInInvalidEmailText.setText("Email does not match with password!");
 			logInInvalidEmailText.setVisible(true);
@@ -1452,9 +1453,18 @@ public class FXMLDocumentController implements Initializable {
 				//Nothing happens if no user is selected
 			} else {
 				int userId = browseUsersListView.getSelectionModel().getSelectedItem().getUserId();
-				//Use userId to open a conversation.
+				goToUserConversation(userId);
 			}
 		}
+	}
+
+	private Conversation getConversation(Conversation conversation) {
+		try {
+			return clientController.getConversation(conversation);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
 	}
 
 	private void searchUsers() {
@@ -1464,6 +1474,9 @@ public class FXMLDocumentController implements Initializable {
 				List<User> users = clientController.searchUsers(searchText);
 				List<HBoxCell> list = new ArrayList<>();
 
+//				for (User user : users) {
+//					list.add(new HBoxCell(user));
+//				}
 				users.parallelStream().forEach((User user) -> {
 					synchronized (list) {
 						list.add(new HBoxCell(user));
@@ -1486,21 +1499,17 @@ public class FXMLDocumentController implements Initializable {
 		//Reload all users
 		searchUsers();
 
+		//Disables the message button if not logged in
+		if (clientController.getCurrentUser() == null) {
+			browseUsersMessageButton.setDisable(true);
+		} else {
+			browseUsersMessageButton.setDisable(false);
+		}
 	}
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="Messaging - Methods">	
+	// </editor-fold>
 	private void loadConversation(int ConversationId) {
 
-	}
-
-	private Conversation getConversation(Conversation conversation) {
-		try {
-			return clientController.getConversation(conversation);
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		return null;
 	}
 
 	private void getUserConversations() {
@@ -1510,15 +1519,11 @@ public class FXMLDocumentController implements Initializable {
 			if (conversations != null) {
 				List<HBoxCell> list = new ArrayList<>();
 
-				try {
-
-					for (Conversation conversation : conversations) {
-						String name = clientController.getConversationName(conversation);
-						list.add(new HBoxCell(conversation, name));
-					}
-				} catch (RemoteException ex) {
-					Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+				for (Conversation conversation : conversations) {
+					String name = clientController.getConversationName(conversation);
+					list.add(new HBoxCell(conversation, name));
 				}
+
 				ObservableList observableList = FXCollections.observableArrayList(list);
 				messagingConversationsListView.setItems(observableList);
 			}
@@ -1553,6 +1558,24 @@ public class FXMLDocumentController implements Initializable {
 		sendMessage(messagingTextField.getText());
 		messagingTextField.setText("");
 	}
-	// </editor-fold>
+
+	private void goToUserConversation(int userId) {
+		Conversation conversation = clientController.getUserConversation(userId);
+
+		boolean conversationExists = false;
+
+		for (int i = 0; i < messagingConversationsListView.getItems().size(); i++) {
+			if (messagingConversationsListView.getItems().get(i).getConversationId() == conversation.getId()) {
+				messagingConversationsListView.getSelectionModel().clearAndSelect(i);
+				conversationExists = true;
+			}
+		}
+		if (!conversationExists) {
+			messagingConversationsListView.getItems().add(new HBoxCell(conversation, clientController.getConversationName(conversation)));
+			messagingConversationsListView.getSelectionModel().clearAndSelect(messagingConversationsListView.getItems().size() - 1);
+		}
+
+		showPane(messagingPane);
+	}
 
 }

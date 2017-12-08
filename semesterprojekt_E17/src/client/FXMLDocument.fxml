@@ -34,7 +34,7 @@
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -401,7 +401,7 @@
             <Button fx:id="browseUsersMessageButton" layoutX="33.0" layoutY="139.0" mnemonicParsing="false" onAction="#handleBrowseUsersSearchButtons" text="Message" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="messagingPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <AnchorPane fx:id="messagingPane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <ListView fx:id="messagingConversationsListView" layoutX="14.0" layoutY="14.0" prefHeight="420.0" prefWidth="225.0" />
             <ListView fx:id="messagingActiveConversationListView" layoutX="250.0" layoutY="14.0" prefHeight="420.0" prefWidth="382.0" />

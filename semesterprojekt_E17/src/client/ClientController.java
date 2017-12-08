@@ -143,8 +143,13 @@ public class ClientController {
 		return ClientMessagingHandler.getUserConversations(serverController, currentUser);
 	}
 
-	public String getConversationName(Conversation conversation) throws RemoteException {
-		return ClientMessagingHandler.getConversationName(serverController, conversation, currentUser);
+	public String getConversationName(Conversation conversation){
+		try {
+			return ClientMessagingHandler.getConversationName(serverController, conversation, currentUser);
+		} catch (RemoteException ex) {
+			Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
 	}
 
 	public Conversation getConversation(Conversation conversation) throws RemoteException {
@@ -159,4 +164,8 @@ public class ClientController {
 		ClientMessagingHandler.setActiveConversation(serverController, conversation);
 	}
 
+	public Conversation getUserConversation(int userId) {
+		return ClientMessagingHandler.getUserConversation(serverController, currentUser.getId(), userId);
+	}
+	
 }
