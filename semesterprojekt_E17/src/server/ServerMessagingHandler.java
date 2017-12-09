@@ -19,8 +19,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * This class is the Server Messaging Handler responsible for managing messaging
+ * in the system on the server side. The Server Messaging Handler communicates
+ * with the Database Manager.
  *
- * @author hjaltefromholtrindom
+ * @author group 12
  */
 public class ServerMessagingHandler {
 
@@ -48,6 +51,11 @@ public class ServerMessagingHandler {
 
 	}
 
+	/**
+	 *
+	 * @param user
+	 * @return
+	 */
 	public List<Conversation> getUserConversations(User user) {
 		String query = ""
 						+ "SELECT conversationID, type\n"
@@ -78,6 +86,11 @@ public class ServerMessagingHandler {
 		return dbm.executeInsertAndGetId("INSERT INTO Conversations (conversationID, type) VALUES (DEFAULT, '" + type + "');");
 	}
 
+	/**
+	 *
+	 * @param userId
+	 * @param conversationId
+	 */
 	public static void addUserToConversation(int userId, int conversationId) {
 		String query = ""
 						+ "INSERT INTO UsersInConversations (conversationId, userId) "
@@ -86,6 +99,12 @@ public class ServerMessagingHandler {
 		dbm.executeUpdate(query);
 	}
 
+	/**
+	 *
+	 * @param conversation
+	 * @param user
+	 * @return
+	 */
 	public static String getConversationName(Conversation conversation, User user) {
 		if (conversation.getType().equals("trip")) {
 			String query = ""
@@ -129,7 +148,13 @@ public class ServerMessagingHandler {
 		return "ConversationID: " + conversation.getId();
 	}
 
-	//Should be named getConversationMessages, change at some point for clarity
+	/**
+	 *
+	 *
+	 * @param conversation
+	 * @return
+	 */
+	// Should be named getConversationMessages, change at some point for clarity
 	public static Conversation getConversation(Conversation conversation) {
 		String query = ""
 						+ "SELECT messageID, conversationID, userID, message, time, userName\n"
@@ -157,6 +182,10 @@ public class ServerMessagingHandler {
 		return new Conversation(conversation.getId(), conversation.getType(), null, messages); //Should also return participants at some point.
 	}
 
+	/**
+	 *
+	 * @param message
+	 */
 	public static void sendMessage(Message message) {
 		try {
 			String query = ""
@@ -181,6 +210,10 @@ public class ServerMessagingHandler {
 		}
 	}
 
+	/**
+	 *
+	 * @param message
+	 */
 	public static void broadcastMessage(Message message) {
 		try {
 //			clientsMap.get(message.getSenderId()).receiveMessage(message);
@@ -205,6 +238,11 @@ public class ServerMessagingHandler {
 		}
 	}
 
+	/**
+	 *
+	 * @param conversationId
+	 * @return
+	 */
 	public static List<Integer> loadConversationUsersIds(int conversationId) {
 		try {
 			String query = ""
@@ -227,6 +265,10 @@ public class ServerMessagingHandler {
 		return null;
 	}
 
+	/**
+	 *
+	 * @param conversationId
+	 */
 	public static void deleteConversation(int conversationId) {
 		String query = ""
 						+ "DELETE FROM Conversations"
@@ -235,15 +277,13 @@ public class ServerMessagingHandler {
 		dbm.executeUpdate(query);
 	}
 
+	/**
+	 *
+	 * @param userId1
+	 * @param userId2
+	 * @return
+	 */
 	public static Conversation getUserConversation(int userId1, int userId2) {
-//		String query = ""
-//						+ "SELECT conversationID\n"
-//						+ "FROM (SELECT COUNT(userID), conversationID\n"
-//						+ "FROM usersInConversations\n"
-//						+ "GROUP BY conversationID) AS count\n"
-//						+ "NATURAL JOIN UsersInConversations\n"
-//						+ "NATURAL JOIN Conversations\n"
-//						+ "WHERE count.count = 2 AND userID IN (" + userId1 + "," + userId2 +") AND type = 'users'";
 
 		String query = ""
 						+ "SELECT conversationID\n"
@@ -280,7 +320,7 @@ public class ServerMessagingHandler {
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
 		return getConversation(new Conversation(conversationId, "users"));
 	}
+
 }

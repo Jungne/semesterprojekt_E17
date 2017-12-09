@@ -10,11 +10,19 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ *
+ * @author group 12
+ */
 public class DBManager {
 
 	private Connection connection;
 	private static DBManager dbManager = null;
 
+	/**
+	 * 
+	 */
 	private DBManager() {
 
 		String url = "jdbc:postgresql://tek-mmmi-db0a.tek.c.sdu.dk/si3_2017_group_12_db";
@@ -41,6 +49,10 @@ public class DBManager {
 		}
 	}
 
+	/**
+	 * 
+	 * @return 
+	 */
 	public static DBManager getInstance() {
 		if (dbManager == null) {
 			dbManager = new DBManager();
@@ -48,6 +60,10 @@ public class DBManager {
 		return dbManager;
 	}
 
+	/**
+	 * 
+	 * @param query 
+	 */
 	public void execute(String query) {
 		try (Statement statement = connection.createStatement()) {
 			statement.execute(query);
@@ -56,6 +72,10 @@ public class DBManager {
 		}
 	}
 
+	/**
+	 * 
+	 * @param query 
+	 */
 	public void executeUpdate(String query) {
 		try (Statement statement = connection.createStatement()) {
 			statement.executeUpdate(query);
@@ -64,6 +84,11 @@ public class DBManager {
 		}
 	}
 
+	/**
+	 * 
+	 * @param query
+	 * @return 
+	 */
 	public ResultSet executeQuery(String query) {
 		try {
 			return connection.createStatement().executeQuery(query);
@@ -73,10 +98,19 @@ public class DBManager {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @return 
+	 */
 	public Connection getConnection() {
 		return connection;
 	}
 
+	/**
+	 * 
+	 * @param query
+	 * @return 
+	 */
 	public int executeInsertAndGetId(String query) {
 		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
 			statement.executeUpdate();
@@ -93,8 +127,8 @@ public class DBManager {
 	}
 
 	/**
-	 * A very specific method for executing a statement, where the first argument
-	 * an image.
+	 * A method for executing a statement, where the first argument
+	 * is an image.
 	 *
 	 * @param query
 	 * @param image
@@ -116,6 +150,11 @@ public class DBManager {
 		}
 	}
 
+	/**
+	 * 
+	 * @param query
+	 * @return 
+	 */
 	public PreparedStatement getPreparedStatement(String query) {
 		try {
 			return connection.prepareStatement(query);
@@ -124,4 +163,5 @@ public class DBManager {
 			return null;
 		}
 	}
+
 }

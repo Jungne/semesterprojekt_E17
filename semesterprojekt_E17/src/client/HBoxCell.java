@@ -16,6 +16,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * The HBoxCell
+ *
+ * @author group 12
+ */
 public class HBoxCell extends HBox {
 
 	ImageView imageView = new ImageView();
@@ -27,7 +32,11 @@ public class HBoxCell extends HBox {
 	private int id;
 	private String type;
 
-	//Creates an HBoxCell for a trip.
+	/**
+	 * Creates an HBoxCell for a trip.
+	 *
+	 * @param trip
+	 */
 	public HBoxCell(Trip trip) {
 		//Sets the padding and spacing.
 		super();
@@ -54,10 +63,6 @@ public class HBoxCell extends HBox {
 
 		label3.setText(Double.toString(trip.getPrice()) + "kr");
 
-		/*
-		if (!trip.getCategories().isEmpty()) {
-			label4.setText(trip.getCategories().get(0).getName());
-		}*/
 		VBox vbox2 = new VBox();
 		vbox2.getChildren().addAll(label3, label4);
 
@@ -67,6 +72,11 @@ public class HBoxCell extends HBox {
 		this.getChildren().addAll(imageView, vbox1, vbox2);
 	}
 
+	/**
+	 * Creates an HBoxCell for a user.
+	 *
+	 * @param user
+	 */
 	public HBoxCell(User user) {
 		//Sets the padding and spacing.
 		super();
@@ -91,6 +101,12 @@ public class HBoxCell extends HBox {
 		this.getChildren().addAll(imageView, label1);
 	}
 
+	/**
+	 * Creates an HBoxCell for a conversation.
+	 *
+	 * @param conversation
+	 * @param name
+	 */
 	public HBoxCell(Conversation conversation, String name) {
 		//Sets the padding and spacing.
 		super();
@@ -100,7 +116,6 @@ public class HBoxCell extends HBox {
 
 		label1.setText(name);
 		label1.setPrefWidth(150);
-		//		label1.setStyle("-fx-font-weight: bold");
 
 		type = conversation.getType();
 
@@ -154,27 +169,37 @@ public class HBoxCell extends HBox {
 		this.getChildren().add(label1);
 	}
 
+	/**
+	 * @return the trip ID.
+	 */
 	public int getTripId() {
 		return id;
 	}
 
 	/**
-	 * Undskyld redundans
-	 *
-	 * @return
+	 * @return the user ID.
 	 */
 	public int getUserId() {
 		return id;
 	}
 
+	/**
+	 * @return the conversation ID.
+	 */
 	public int getConversationId() {
 		return id;
 	}
 
+	/**
+	 * @return the type.
+	 */
 	public String getType() {
 		return type;
 	}
-	
+
+	/**
+	 * @return text in the label.
+	 */
 	public String getLabel1Text() {
 		return label1.getText();
 	}

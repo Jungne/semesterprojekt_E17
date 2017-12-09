@@ -18,7 +18,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This class is the main server controller responsible for
+ * This class is the Server Controller responsible for managing all
+ * communication between the server and the client. The Server Controller
+ * distributes work to the ServerUserHandler, ServerTripHandler and
+ * ServerMessagingHandler. These handlers communicate to the Database server
+ * through the Database Manager.
  *
  * @author group 12
  */
@@ -28,7 +32,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	private ServerMessagingHandler messagingHandler;
 
 	/**
-	 * This constructor
+	 * The constructor
 	 *
 	 */
 	public ServerControllerImpl() throws RemoteException {
@@ -83,7 +87,6 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	@Override
 	public void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException {
 		ServerTripHandler.participateInTrip(trip, user);
-
 	}
 
 	@Override
@@ -124,7 +127,6 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	@Override
 	public Trip showTrip(int tripsID) throws RemoteException {
 		return ServerTripHandler.showTrip(tripsID);
-
 	}
 
 	@Override
@@ -175,4 +177,5 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public Conversation getUserConversation(int userId1, int userId2) throws RemoteException {
 		return ServerMessagingHandler.getUserConversation(userId1, userId2);
 	}
+
 }

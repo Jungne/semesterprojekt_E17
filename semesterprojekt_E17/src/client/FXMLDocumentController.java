@@ -56,7 +56,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -1597,15 +1596,6 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
-	private Conversation getConversation(Conversation conversation) {
-		try {
-			return clientController.getConversation(conversation);
-		} catch (RemoteException ex) {
-			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		return null;
-	}
-
 	private void searchUsers() {
 		Platform.runLater(() -> {
 			try {
@@ -1645,12 +1635,22 @@ public class FXMLDocumentController implements Initializable {
 			browseUsersMessageButton.setDisable(false);
 		}
 	}
-
 	// </editor-fold>
+	
+	// <editor-fold defaultstate="collapsed" desc="Messaging - Methods">
 	private void loadConversation(int ConversationId) {
 
 	}
 
+	private Conversation getConversation(Conversation conversation) {
+		try {
+			return clientController.getConversation(conversation);
+		} catch (RemoteException ex) {
+			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
+	
 	private void getUserConversations() {
 		Platform.runLater(() -> {
 			List<Conversation> conversations = clientController.getUserConversations();
@@ -1716,5 +1716,6 @@ public class FXMLDocumentController implements Initializable {
 
 		showPane(messagingPane);
 	}
-
+	// </editor-fold>
+	
 }

@@ -2,11 +2,21 @@ package client;
 
 import interfaces.Image;
 
+/**
+ * The ImageListItem
+ *
+ * @author group 12
+ */
 public class ImageListItem extends PaneListItem {
 
 	private FXMLDocumentController fxmlController;
 	private Image image;
 
+	/**
+	 *
+	 * @param fxmlController
+	 * @param image
+	 */
 	public ImageListItem(FXMLDocumentController fxmlController, Image image) {
 		super(image.getTitle());
 		this.fxmlController = fxmlController;
@@ -21,6 +31,9 @@ public class ImageListItem extends PaneListItem {
 		return image;
 	}
 
+	/**
+	 *
+	 */
 	private void setCancelButtonAction() {
 		getCancelButton().setOnAction(e -> fxmlController.removeImageListItem(this));
 	}

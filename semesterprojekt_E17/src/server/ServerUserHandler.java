@@ -12,10 +12,25 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class is the Server User Handler responsible for managing all users in
+ * the system. This class handles creation of user objects to be sent to the
+ * client and storage of user objects in the database received from the client.
+ * This class also handles searching for users and log-on functionality. The
+ * Server User Handler communicates with the Database Manager
+ *
+ * @author group 12
+ */
 public class ServerUserHandler {
 
 	private static DBManager dbm = DBManager.getInstance();
 
+	/**
+	 *
+	 * @param user
+	 * @param password
+	 * @return
+	 */
 	public static User createUser(User user, String password) {
 		if (user == null) {
 			throw new IllegalArgumentException("User is null.");
@@ -62,6 +77,12 @@ public class ServerUserHandler {
 		return signIn(email, password);
 	}
 
+	/**
+	 *
+	 * @param email
+	 * @param password
+	 * @return
+	 */
 	public static User signIn(String email, String password) {
 		if (email == null || email.isEmpty()) {
 			throw new IllegalArgumentException("User email is null or empty.");
@@ -99,6 +120,11 @@ public class ServerUserHandler {
 		return null;
 	}
 
+	/**
+	 *
+	 * @param email
+	 * @return
+	 */
 	private static boolean isEmailUnique(String email) {
 		ResultSet rs = dbm.executeQuery("SELECT * FROM Users WHERE email = '" + email + "';");
 
@@ -112,6 +138,11 @@ public class ServerUserHandler {
 		return true;
 	}
 
+	/**
+	 *
+	 * @param userId
+	 * @return
+	 */
 	private static List<Category> getCertificates(int userId) {
 		List<Category> certificates = new ArrayList<>();
 		String query = "SELECT categoryID, categoryName FROM Categories NATURAL JOIN Certificates WHERE userID = " + userId + ";";
@@ -133,7 +164,7 @@ public class ServerUserHandler {
 	}
 
 	/**
-	 * This method updates the current user
+	 * This method updates the current user.
 	 *
 	 * @param currentUserID
 	 * @return the current user
@@ -165,7 +196,7 @@ public class ServerUserHandler {
 	}
 
 	/**
-	 * This method handels changing the user profile picture
+	 * This method handels changing the user profile picture.
 	 *
 	 * @param currentUserID
 	 * @param profilePicture
@@ -194,6 +225,11 @@ public class ServerUserHandler {
 		dbm.executeUpdate(updateUserQuery);
 	}
 
+	/**
+	 *
+	 * @param query
+	 * @return
+	 */
 	public static List<User> searchUsers(String query) {
 		try {
 			String sqlQuery = ""
@@ -221,4 +257,5 @@ public class ServerUserHandler {
 		}
 		return null;
 	}
+
 }

@@ -3,12 +3,22 @@ package client;
 import interfaces.Category;
 import javafx.scene.control.Button;
 
+/**
+ * This class is used for adding categories to a trip when creating a new trip.
+ *
+ * @author group 12
+ */
 public class CategoryListItem extends PaneListItem {
 
 	private FXMLDocumentController fxmlController;
 	private Category category;
 	private boolean isInstructor;
 
+	/**
+	 *
+	 * @param fxmlController
+	 * @param category
+	 */
 	public CategoryListItem(FXMLDocumentController fxmlController, Category category) {
 		super(category.getName());
 		this.fxmlController = fxmlController;
@@ -32,10 +42,16 @@ public class CategoryListItem extends PaneListItem {
 		return isInstructor;
 	}
 
+	/**
+	 *
+	 */
 	private void setCancelButtonAction() {
 		getCancelButton().setOnAction(e -> fxmlController.removeCategoryListItem(this));
 	}
 
+	/**
+	 *
+	 */
 	private void setButtonAction() {
 		Button button = getButton();
 

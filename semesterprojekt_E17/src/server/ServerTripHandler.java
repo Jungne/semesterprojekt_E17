@@ -22,9 +22,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This class handles creation of trip objects to be sent to the client. This
- * class also handles storage of trip objects in the database received from the
- * client.
+ * This class is the Server Trip Handler responsible for managing all trips in
+ * the system. The class handles creation of trip objects to be sent to the
+ * client and storage of trip objects in the database received from the client.
+ * This class also handles searching for trips and other trip related tasks. The
+ * Server Trip Handler communicates with the Database Manager.
  *
  * @author group 12
  */
@@ -157,6 +159,10 @@ public class ServerTripHandler {
 		return tripId;
 	}
 
+	/**
+	 *
+	 * @return a list of categories.
+	 */
 	public static List<Category> getCategories() {
 		ArrayList<Category> categories = new ArrayList<>();
 		ResultSet rs = dbm.executeQuery("SELECT categoryID, categoryName FROM Categories;");
@@ -190,6 +196,11 @@ public class ServerTripHandler {
 		}
 	}
 
+	/**
+	 *
+	 * @param categories
+	 * @return
+	 */
 	private static boolean categoriesExists(List<Category> categories) {
 		if (categories == null) {
 			return false;
@@ -198,6 +209,10 @@ public class ServerTripHandler {
 
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public static List<Location> getLocations() {
 		ArrayList<Location> locations = new ArrayList<>();
 		ResultSet rs = dbm.executeQuery("SELECT locationID, locationName FROM Locations;");
@@ -245,8 +260,7 @@ public class ServerTripHandler {
 	}
 
 	/**
-	 * >>>>>>> refs/remotes/origin/master Checks if the given user exists in the
-	 * database.
+	 * Checks if the given user exists in the database.
 	 *
 	 * @param user
 	 * @return true if user exist or false if user does not exist.
@@ -266,6 +280,11 @@ public class ServerTripHandler {
 		return false;
 	}
 
+	/**
+	 *
+	 * @param instructorListItem
+	 * @return
+	 */
 	private static boolean certificateExists(InstructorListItem instructorListItem) {
 		if (instructorListItem == null || instructorListItem.getUser() == null || instructorListItem.getCategory() == null) {
 			return false;
@@ -283,6 +302,11 @@ public class ServerTripHandler {
 		return false;
 	}
 
+	/**
+	 *
+	 * @param tripId
+	 * @param categoryIds
+	 */
 	private static void addCategories(int tripId, List<Integer> categoryIds) {
 		String query = "INSERT INTO CategoriesInTrips (tripID, categoryID) VALUES ";
 		String queryValues = "";
@@ -293,17 +317,33 @@ public class ServerTripHandler {
 		dbm.executeUpdate(query);
 	}
 
+	/**
+	 *
+	 * @param tripId
+	 * @param userId
+	 */
 	private static void addParticipant(int tripId, int userId) {
 		dbm.executeUpdate("INSERT INTO UsersInTrips (tripID, userID) "
 						+ "VALUES (" + tripId + ", " + userId + ");");
 		ServerMessagingHandler.addUserToConversation(userId, getConversationId(tripId));
 	}
 
+	/**
+	 *
+	 * @param tripId
+	 * @param userId
+	 * @param categoryId
+	 */
 	private static void addInstructorInTrip(int tripId, int userId, int categoryId) {
 		dbm.executeUpdate("INSERT INTO InstructorsInTrips (tripID, userID, categoryID) "
 						+ "VALUES (" + tripId + ", " + userId + ", " + categoryId + ");");
 	}
 
+	/**
+	 *
+	 * @param tripId
+	 * @param optionalPrices
+	 */
 	private static void addOptionalPrices(int tripId, List<OptionalPrice> optionalPrices) {
 		if (optionalPrices == null || optionalPrices.isEmpty()) {
 			return;
@@ -320,6 +360,11 @@ public class ServerTripHandler {
 		dbm.executeUpdate(query);
 	}
 
+	/**
+	 *
+	 * @param tripId
+	 * @param tags
+	 */
 	private static void addTags(int tripId, Set<String> tags) {
 		if (tags == null || tags.isEmpty()) {
 			return;
@@ -333,6 +378,11 @@ public class ServerTripHandler {
 		dbm.executeUpdate(query);
 	}
 
+	/**
+	 *
+	 * @param tripId
+	 * @param image
+	 */
 	private static void addImagetoTrip(int tripId, Image image) {
 		String sqlImageTitle;
 		if (image.getTitle() == null || image.getTitle().isEmpty()) {
@@ -345,6 +395,10 @@ public class ServerTripHandler {
 		dbm.executeUpdate("INSERT INTO ImagesInTrips (imageID, tripID) VALUES (" + imageId + ", " + tripId + ");");
 	}
 
+	/**
+	 *
+	 * @param trip
+	 */
 	static synchronized void modifyTrip(Trip trip) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -491,6 +545,11 @@ public class ServerTripHandler {
 		return searchResultTrips;
 	}
 
+	/**
+	 *
+	 * @param tripId
+	 * @param organizerId
+	 */
 	public synchronized static void deleteTrip(int tripId, int organizerId) {
 		String query = "DELETE "
 						+ "FROM Conversations "
@@ -503,6 +562,12 @@ public class ServerTripHandler {
 		dbm.executeUpdate(query);
 	}
 
+	/**
+	 *
+	 * @param trip
+	 * @param user
+	 * @throws FullTripException
+	 */
 	public synchronized static void participateInTrip(Trip trip, User user) throws FullTripException {
 		int tripID = trip.getId();
 		int userID = user.getId();
@@ -515,18 +580,33 @@ public class ServerTripHandler {
 		}
 	}
 
+	/**
+	 *
+	 * @param trip
+	 * @param userId
+	 */
 	public static void kickParticipant(Trip trip, int userId) {
 		int tripId = trip.getId();
 		String query = "DELETE FROM UsersInTrips WHERE tripID = " + tripId + "AND userID = " + userId + ";";
 		dbm.executeUpdate(query);
 	}
 
+	/**
+	 *
+	 * @param tripsID
+	 * @return
+	 */
 	public static Trip showTrip(int tripsID) {
 		String query = "SELECT * FROM Trips WHERE tripID = " + tripsID + ";";
 		Trip trip = (Trip) dbm.executeQuery(query);
 		return trip;
 	}
 
+	/**
+	 *
+	 * @param tripID
+	 * @return
+	 */
 	public static Trip viewTrip(int tripID) {
 		String query = "SELECT * FROM Trips WHERE tripID = " + tripID + ";";
 		ResultSet rs = dbm.executeQuery(query);
@@ -558,6 +638,11 @@ public class ServerTripHandler {
 		return null;
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
 	private static List<Category> getCategoriesInTrip(int id) {
 		String query = "SELECT categoryID, categoryName FROM CategoriesInTrips NATURAL JOIN Categories WHERE tripID = " + id + ";";
 		ResultSet rs = dbm.executeQuery(query);
@@ -575,6 +660,11 @@ public class ServerTripHandler {
 		return categories;
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
 	private static List<Image> getImagesInTrip(int id) {
 		String query = "SELECT imageID, imageTitle, imageFile FROM ImagesInTrips NATURAL JOIN Images WHERE tripID = " + id + ";";
 		ResultSet rs = dbm.executeQuery(query);
@@ -596,6 +686,11 @@ public class ServerTripHandler {
 		return images;
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
 	private static Location getLocation(int id) {
 		String query = "SELECT locationID, locationName FROM Locations WHERE locationID = " + id + ";";
 		ResultSet rs = dbm.executeQuery(query);
@@ -610,6 +705,12 @@ public class ServerTripHandler {
 		return null;
 	}
 
+	/**
+	 *
+	 *
+	 * @param id
+	 * @return
+	 */
 	private static User getUserView(int id) {
 		String query = "SELECT userID, userName FROM Users WHERE userID = " + id + ";";
 		ResultSet rs = dbm.executeQuery(query);
@@ -624,6 +725,11 @@ public class ServerTripHandler {
 		return null;
 	}
 
+	/**
+	 *
+	 * @param trip
+	 * @return
+	 */
 	public static boolean isTripFull(Trip trip) {
 		try {
 			ResultSet fullTripCheck = dbm.executeQuery("SELECT UsersInTrips.tripId, COUNT(UsersInTrips.tripId), MAX(participantLimit)\n"
@@ -645,6 +751,11 @@ public class ServerTripHandler {
 		return false;
 	}
 
+	/**
+	 *
+	 * @param user
+	 * @return
+	 */
 	public static List<Trip> getMyTrips(User user) {
 		try {
 			String query = ""
@@ -674,6 +785,12 @@ public class ServerTripHandler {
 		return null;
 	}
 
+	/**
+	 *
+	 * @param user
+	 * @param organizerId
+	 * @return
+	 */
 	public static List<Trip> getMyTrips(User user, int organizerId) {
 		try {
 			String query = ""
@@ -703,6 +820,11 @@ public class ServerTripHandler {
 		return null;
 	}
 
+	/**
+	 *
+	 * @param tripId
+	 * @return
+	 */
 	public static int getConversationId(int tripId) {
 		String query = ""
 						+ "SELECT conversationId "
@@ -721,6 +843,11 @@ public class ServerTripHandler {
 		return -1;
 	}
 
+	/**
+	 *
+	 * @param tripId
+	 * @return
+	 */
 	public static List<User> getTripParticipants(int tripId) {
 		String query = ""
 						+ "SELECT *\n"
@@ -745,9 +872,7 @@ public class ServerTripHandler {
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
 		return participants;
-
 	}
 
 }

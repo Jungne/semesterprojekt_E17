@@ -117,6 +117,11 @@ public class User implements Serializable {
 		this.certificates.add(category);
 	}
 
+	/**
+	 * 
+	 * @param other
+	 * @return 
+	 */
 	@Override
 	public boolean equals(Object other) {
 		if (other == null || !(other instanceof User)) {

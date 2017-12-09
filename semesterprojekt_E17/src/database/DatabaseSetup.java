@@ -6,6 +6,10 @@ import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ *
+ * @author group 12
+ */
 public class DatabaseSetup {
 
 	private static DBManager dbm = DBManager.getInstance();
@@ -219,7 +223,7 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Sailing');");
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Backpacking');");
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Cycling');");
-		
+
 		//Inserts locations
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Jylland');");
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Fyn');");

@@ -20,6 +20,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class is the Client Controller responsible for managing all communication
+ * between the GUI and the server. The client controller distributes work to 
+ * the clientUserHandler, clientTripHandler and clientMessagingHandler. These 
+ * handlers communicate to the server through a Server Controller stub. 
+ *
+ * @author group 12
+ */
 public class ClientController {
 
 	private IServerController serverController;

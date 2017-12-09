@@ -15,6 +15,13 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class is Client Trip Handler responsible for managing all activity
+ * regarding trips between the client and the server. Create trips, search trips
+ * view trips ect.
+ *
+ * @author group 12
+ */
 public class ClientTripHandler {
 
 	public static int createTrip(IServerController serverController, String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<Image> images) throws Exception {
@@ -104,7 +111,7 @@ public class ClientTripHandler {
 		}
 		return null;
 	}
-	
+
 	public static List<Trip> getMyTrips(User user, IServerController serverController, int organizerId) {
 		try {
 			return serverController.getMyTrips(user, organizerId);
@@ -113,4 +120,5 @@ public class ClientTripHandler {
 		}
 		return null;
 	}
+
 }

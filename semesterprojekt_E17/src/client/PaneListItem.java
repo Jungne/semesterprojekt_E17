@@ -6,23 +6,44 @@ import java.awt.geom.AffineTransform;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
+/**
+ * The PaneListItem
+ *
+ * @author group 12
+ */
 public class PaneListItem extends Pane {
 
 	private Button button;
 	private Button cancelButton;
 
+	/**
+	 *
+	 * @param buttonText
+	 */
 	public PaneListItem(String buttonText) {
 		setUpButtons(buttonText);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	protected Button getButton() {
 		return button;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	protected Button getCancelButton() {
 		return cancelButton;
 	}
 
+	/**
+	 *
+	 * @param categoryName
+	 */
 	private void setUpButtons(String categoryName) {
 		//Determines the width of the button
 		int imageNameWidth = getTextWidth(categoryName);
