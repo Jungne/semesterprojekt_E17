@@ -34,7 +34,7 @@
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -272,7 +272,7 @@
             </RadioButton>
             <RadioButton fx:id="myTripsOrganizedRadioButton" layoutX="40.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" text="Organized by me" toggleGroup="$myTripsToggleGroup" />
          </children></AnchorPane>
-      <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Text fx:id="viewTripTitleLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
                <font>
@@ -300,8 +300,8 @@
             <ImageView fx:id="viewTripPaneImageView" fitHeight="165.0" fitWidth="248.0" layoutX="344.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true" />
             <TextArea fx:id="viewTripDescriptionTextArea" editable="false" layoutX="42.0" layoutY="80.0" prefHeight="165.0" prefWidth="256.0" wrapText="true" />
             <TextField fx:id="viewTripPriceTextField" editable="false" layoutX="43.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
-            <TextField fx:id="viewTripOrganizerTextField" editable="false" layoutX="178.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
-            <Label layoutX="178.0" layoutY="251.0" text="Organizer:" />
+            <TextField fx:id="viewTripAddressTextField" editable="false" layoutX="178.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
+            <Label layoutX="178.0" layoutY="251.0" text="Address:" />
             <Label layoutX="42.0" layoutY="304.0" text="Date:" />
             <Label layoutX="178.0" layoutY="304.0" text="Location:" />
             <TextField fx:id="viewTripDateTextField" editable="false" layoutX="42.0" layoutY="321.0" prefHeight="25.0" prefWidth="120.0" />
@@ -314,6 +314,11 @@
             <Button fx:id="viewTripSaveChangesButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Save Changes" />
             <Button fx:id="viewTripLastButton" disable="true" layoutX="304.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Last" visible="false" />
             <Button fx:id="viewTripNextButton" disable="true" layoutX="596.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefHeight="25.0" prefWidth="43.0" text="Next" visible="false" />
+            <Text fx:id="viewTripOrganizerLabel" layoutX="371.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Organizer: ">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="logInPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
