@@ -358,7 +358,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button messagingSendButton;
 	// </editor-fold>
-
+        int CurrentImageIndex= 0;
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		try {
@@ -613,47 +613,50 @@ public class FXMLDocumentController implements Initializable {
 			showPane(myTripsPane);
 		}
                 else if(event.getSource() ==viewTripLastButton){
-                   int indexOfImage= viewedTrip.getImages().indexOf(viewTripPaneImageView.getImage());
-                        
-                    viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(indexOfImage-1).getImageFile())));
-                   indexOfImage= viewedTrip.getImages().indexOf(viewTripPaneImageView.getImage());
-                    if(indexOfImage>0&&indexOfImage<viewedTrip.getImages().size()-1){
-                        viewTripNextButton.setDisable(true);
-                        viewTripLastButton.setDisable(true);
+                    /*
+                    *Start
+                    */
+                    List<Image> data = viewedTrip.getImages();
+                    
+                    
+                    //Set Image.
+                    if(CurrentImageIndex != 0)
+                    {
+                        CurrentImageIndex--;
+                        viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
                     }
-                    else if(indexOfImage==0&&viewedTrip.getImages().size()>1){
-                       viewTripLastButton.setDisable(false); 
-                       viewTripNextButton.setDisable(true);
-                    }
-                    else if(indexOfImage==0&&viewedTrip.getImages().size()==1){
-                       viewTripLastButton.setDisable(false); 
-                       viewTripNextButton.setDisable(false);
-                    }
-                     else if(indexOfImage==viewedTrip.getImages().size()-1&&viewedTrip.getImages().size()>1){
-                       viewTripLastButton.setDisable(true); 
-                       viewTripNextButton.setDisable(false);
-                    }
-                     else{
-                        viewTripLastButton.setDisable(false); 
-                       viewTripNextButton.setDisable(false);
-                    }
+                    //Should our buttun be disabled ?
+                     if(CurrentImageIndex == 0)
+                     {
+                         viewTripLastButton.setDisable(true);
+                         viewTripNextButton.setDisable(false);
+                     }
+                    /*
+                    *end*/
                 }
                 else if(event.getSource() ==viewTripNextButton){
-                   int indexOfImage= viewedTrip.getImages().indexOf(viewTripPaneImageView.getImage());
-                   viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(indexOfImage+1).getImageFile())));
-                   indexOfImage= viewedTrip.getImages().indexOf(viewTripPaneImageView.getImage());
-                    if(indexOfImage>0&&indexOfImage<viewedTrip.getImages().size()-1){
-                        viewTripNextButton.setDisable(true);
-                        viewTripLastButton.setDisable(true);
+                                        /*
+                    *Start
+                    */
+                    List<Image> data = viewedTrip.getImages();
+                    int test = data.size()-1;
+                    //Set Image.
+                    if(CurrentImageIndex <= test)
+                    {
+                        CurrentImageIndex++;
+                        viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
                     }
-                    else if(indexOfImage==0&&viewedTrip.getImages().size()>1){
-                       viewTripLastButton.setDisable(false); 
-                       viewTripNextButton.setDisable(true);
-                    }
-                    else{
-                        viewTripLastButton.setDisable(false); 
-                       viewTripNextButton.setDisable(false);
-                    }
+                    //Should our buttun be disabled ?
+                    
+                     if(CurrentImageIndex == test)
+                     {
+                         viewTripLastButton.setDisable(false);
+                         viewTripNextButton.setDisable(true);
+                     }
+                    /*
+                    *end
+                     */
+                 
                 }
 
 	}
@@ -717,6 +720,10 @@ public class FXMLDocumentController implements Initializable {
 			} else {
 				int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(tripId, false, browseTripsPane);
+                                if(viewedTrip.getImages().size()>1){
+                                    viewTripNextButton.setDisable(false);
+                                }
+                                
 			}
 		}
 	}
@@ -1505,6 +1512,7 @@ public class FXMLDocumentController implements Initializable {
 			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(id, false, myTripsPane);
+                                
 			}
 		} else if (event.getSource() == myTripsDeleteTripButton) {
 			if (!myTripsListView.getSelectionModel().isEmpty()) {
