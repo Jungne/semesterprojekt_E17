@@ -226,10 +226,10 @@ public class FXMLDocumentController implements Initializable {
 	private ListView<HBoxCell> viewListOfParticipants;
 	@FXML
 	private Button joinTripButton;
-        @FXML
-        private Button viewTripLastButton;
-        @FXML
-        private Button viewTripNextButton;
+	@FXML
+  private Button viewTripLastButton;
+  @FXML
+  private Button viewTripNextButton;
 	@FXML
 	private Text viewTripParticipantsLabel;
 	@FXML
@@ -682,7 +682,7 @@ public class FXMLDocumentController implements Initializable {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime date = LocalDateTime.parse(viewTripDateTextField.getText().replace("T", " ") + ":00", formatter);
 
-		
+		String address = viewTripAddressTextField.getText();
 		//Location - needs update
 		Location location = viewedTrip.getLocation();
 		//Categories - needs update
@@ -692,7 +692,7 @@ public class FXMLDocumentController implements Initializable {
 		//Images - needs update
 		List<Image> images = viewedTrip.getImages();
 		
-		Trip trip = new Trip(id, title, description, price, date, "", location, participantLimit, organizer, categories, images, participants);
+		Trip trip = new Trip(id, title, description, price, date, address, location, participantLimit, organizer, categories, images, participants);
 		
 		clientController.modifyTrip(trip);
 	}

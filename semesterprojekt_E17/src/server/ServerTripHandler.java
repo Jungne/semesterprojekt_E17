@@ -355,6 +355,7 @@ public class ServerTripHandler {
 						+ "tripPrice = " + trip.getPrice() + ", "
 						+ "timeStart = '" + trip.getTimeStart().format(formatter) + "', "
 						+ "locationID = " + trip.getLocation().getId() + ", "
+						+ "tripAddress = '" + trip.getMeetingAddress() + "', "
 						+ "participantLimit = " + trip.getParticipantLimit() + ", "
 						+ "userID = " + trip.getOrganizer().getId() + " "
 						+ "WHERE tripID = " + trip.getId() + ";";
