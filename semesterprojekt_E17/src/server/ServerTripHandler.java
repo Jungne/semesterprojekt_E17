@@ -541,6 +541,7 @@ public class ServerTripHandler {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				LocalDateTime date = LocalDateTime.parse(rs.getString("timeStart"), formatter);
 
+				String address = rs.getString("tripAddress");
 				Location location = getLocation(rs.getInt("locationId"));
 				int participantLimit = rs.getInt("participantLimit");
 				User organizer = getUserView(rs.getInt("userID"));
@@ -550,7 +551,7 @@ public class ServerTripHandler {
 
 				List<User> participants = getTripParticipants(tripID);
 
-				return new Trip(id, title, description, price, date, location, participantLimit, organizer, categories, images, participants);
+				return new Trip(id, title, description, price, date, address, location, participantLimit, organizer, categories, images, participants);
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);

@@ -453,7 +453,7 @@ public class FXMLDocumentController implements Initializable {
 		this.lastPane = lastPane;
 		if (viewedTrip != null) {
 			viewTripTitleLabel.setText(viewedTrip.getTitle());
-			viewTripOrganizerLabel.setText(viewedTrip.getOrganizer().getName());
+			viewTripOrganizerLabel.setText("Organizer: " + viewedTrip.getOrganizer().getName());
 			viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
 			viewTripPriceTextField.setText("" + viewedTrip.getPrice());
 
@@ -463,7 +463,7 @@ public class FXMLDocumentController implements Initializable {
 				viewListOfParticipants.getItems().add(new HBoxCell(user.getId(), user.getName()));
 			}
 
-			viewTripAddressTextField.setText(viewedTrip.getOrganizer().getName());
+			viewTripAddressTextField.setText(viewedTrip.getMeetingAddress());
 			viewTripDateTextField.setText(viewedTrip.getTimeStart().format(DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm")));
 			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
 			viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
@@ -482,7 +482,7 @@ public class FXMLDocumentController implements Initializable {
                         }
 			viewTripDescriptionTextArea.setEditable(modifyMode);
 			viewTripPriceTextField.setEditable(modifyMode);
-			//viewTripOrganizerTextField.setEditable(modifyMode);
+			viewTripAddressTextField.setEditable(modifyMode);
 			viewTripDateTextField.setEditable(modifyMode);
 			//viewTripLocationTextField.setEditable(modifyMode);
 
@@ -692,7 +692,7 @@ public class FXMLDocumentController implements Initializable {
 		//Images - needs update
 		List<Image> images = viewedTrip.getImages();
 		
-		Trip trip = new Trip(id, title, description, price, date, location, participantLimit, organizer, categories, images, participants);
+		Trip trip = new Trip(id, title, description, price, date, "", location, participantLimit, organizer, categories, images, participants);
 		
 		clientController.modifyTrip(trip);
 	}
