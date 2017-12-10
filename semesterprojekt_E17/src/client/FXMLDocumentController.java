@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TimerTask;
+import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -53,6 +54,8 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
@@ -227,15 +230,17 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button joinTripButton;
 	@FXML
-  private Button viewTripLastButton;
-  @FXML
-  private Button viewTripNextButton;
+	private Button viewTripLastButton;
+	@FXML
+	private Button viewTripNextButton;
 	@FXML
 	private Text viewTripParticipantsLabel;
 	@FXML
 	private ImageView viewTripPaneImageView;
 	@FXML
 	private TextArea viewTripDescriptionTextArea;
+	@FXML
+	private Label viewTripDescriptionLengthLabel;
 	@FXML
 	private TextField viewTripPriceTextField;
 	@FXML
@@ -359,7 +364,8 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button messagingSendButton;
 	// </editor-fold>
-        int CurrentImageIndex= 0;
+	int CurrentImageIndex = 0;
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		try {
@@ -390,6 +396,7 @@ public class FXMLDocumentController implements Initializable {
 		} catch (RemoteException ex) {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
+		viewTripDescriptionTextArea.setTextFormatter(new TextFormatter(rejectChange));
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Common - Methods">
@@ -455,9 +462,10 @@ public class FXMLDocumentController implements Initializable {
 			viewTripTitleLabel.setText(viewedTrip.getTitle());
 			viewTripOrganizerLabel.setText("Organizer: " + viewedTrip.getOrganizer().getName());
 			viewTripDescriptionTextArea.setText(viewedTrip.getDescription());
+			viewTripDescriptionLengthLabel.setText(viewTripDescriptionTextArea.getText().length() + "/255");
 			viewTripPriceTextField.setText("" + viewedTrip.getPrice());
 
-//		viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
+			//viewListOfParticipants.getItems().addAll(viewedTrip.getParticipants());
 			viewListOfParticipants.getItems().clear();
 			for (User user : viewedTrip.getParticipants()) {
 				viewListOfParticipants.getItems().add(new HBoxCell(user.getId(), user.getName()));
@@ -468,18 +476,17 @@ public class FXMLDocumentController implements Initializable {
 			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
 			viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
-                        if(viewedTrip.getImages().size()<=0){
-                           viewTripNextButton.setVisible(true);
-                           viewTripLastButton.setVisible(true);
-			viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
-                        }
-                        else if(viewedTrip.getImages().size()>0){
-                            viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
-                        viewTripNextButton.setVisible(true);
-                        viewTripLastButton.setVisible(true);
-                        viewTripNextButton.setDisable(true);
-                        
-                        }
+			if (viewedTrip.getImages().size() <= 0) {
+				viewTripNextButton.setVisible(true);
+				viewTripLastButton.setVisible(true);
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
+			} else if (viewedTrip.getImages().size() > 0) {
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
+				viewTripNextButton.setVisible(true);
+				viewTripLastButton.setVisible(true);
+				viewTripNextButton.setDisable(true);
+
+			}
 			viewTripDescriptionTextArea.setEditable(modifyMode);
 			viewTripPriceTextField.setEditable(modifyMode);
 			viewTripAddressTextField.setEditable(modifyMode);
@@ -610,57 +617,50 @@ public class FXMLDocumentController implements Initializable {
 			clientController.kickParticipant(viewedTrip, userId);
 			viewTrip(viewedTrip.getId(), false, lastPane);
 		} else if (event.getSource() == viewTripBackButton) {
-			showPane(lastPane); 
+			showPane(lastPane);
 		} else if (event.getSource() == viewTripSaveChangesButton) {
-			handleSaveChanges(); 
+			handleSaveChanges();
 			showPane(myTripsPane);
-		}
-                else if(event.getSource() ==viewTripLastButton){
-                    /*
+		} else if (event.getSource() == viewTripLastButton) {
+			/*
                     *Start
-                    */
-                    List<Image> data = viewedTrip.getImages();
-                    
-                    
-                    //Set Image.
-                    if(CurrentImageIndex != 0)
-                    {
-                        CurrentImageIndex--;
-                        viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
-                    }
-                    //Should our buttun be disabled ?
-                     if(CurrentImageIndex == 0)
-                     {
-                         viewTripLastButton.setDisable(true);
-                         viewTripNextButton.setDisable(false);
-                     }
-                    /*
+			 */
+			List<Image> data = viewedTrip.getImages();
+
+			//Set Image.
+			if (CurrentImageIndex != 0) {
+				CurrentImageIndex--;
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
+			}
+			//Should our buttun be disabled ?
+			if (CurrentImageIndex == 0) {
+				viewTripLastButton.setDisable(true);
+				viewTripNextButton.setDisable(false);
+			}
+			/*
                     *end*/
-                }
-                else if(event.getSource() ==viewTripNextButton){
-                                        /*
+		} else if (event.getSource() == viewTripNextButton) {
+			/*
                     *Start
-                    */
-                    List<Image> data = viewedTrip.getImages();
-                    int test = data.size()-1;
-                    //Set Image.
-                    if(CurrentImageIndex <= test)
-                    {
-                        CurrentImageIndex++;
-                        viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
-                    }
-                    //Should our buttun be disabled ?
-                    
-                     if(CurrentImageIndex == test)
-                     {
-                         viewTripLastButton.setDisable(false);
-                         viewTripNextButton.setDisable(true);
-                     }
-                    /*
+			 */
+			List<Image> data = viewedTrip.getImages();
+			int test = data.size() - 1;
+			//Set Image.
+			if (CurrentImageIndex <= test) {
+				CurrentImageIndex++;
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
+			}
+			//Should our buttun be disabled ?
+
+			if (CurrentImageIndex == test) {
+				viewTripLastButton.setDisable(false);
+				viewTripNextButton.setDisable(true);
+			}
+			/*
                     *end
-                     */
-                 
-                }
+			 */
+
+		}
 
 	}
 
@@ -669,17 +669,16 @@ public class FXMLDocumentController implements Initializable {
 		String title = viewTripTitleLabel.getText();
 		String description = viewTripDescriptionTextArea.getText();
 		double price = Double.parseDouble(viewTripPriceTextField.getText());
-		
+
 		List<User> participants = new ArrayList<User>();
-		
+
 		for (HBoxCell cell : viewListOfParticipants.getItems()) {
 			participants.add(new User(cell.getUserId(), cell.getLabel1Text()));
 		}
-		
+
 		//Organizer - needs update
 		User organizer = viewedTrip.getOrganizer();
-		
-		
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime date = LocalDateTime.parse(viewTripDateTextField.getText().replace("T", " ") + ":00", formatter);
 
@@ -692,12 +691,12 @@ public class FXMLDocumentController implements Initializable {
 		int participantLimit = viewedTrip.getParticipantLimit();
 		//Images - needs update
 		List<Image> images = viewedTrip.getImages();
-		
+
 		Trip trip = new Trip(id, title, description, price, date, address, location, participantLimit, organizer, categories, images, participants);
-		
+
 		clientController.modifyTrip(trip);
 	}
-	
+
 	@FXML
 	private void handleViewTripListView(MouseEvent event) {
 		if (viewListOfParticipants.getSelectionModel().getSelectedItem() != null) {
@@ -706,6 +705,17 @@ public class FXMLDocumentController implements Initializable {
 			viewTripKickButton.setDisable(userId == organizerId);
 		}
 	}
+
+	UnaryOperator<Change> rejectChange = change -> {
+		if (change.isContentChange()) {
+			if (change.getControlNewText().length() > 255) {
+				viewTripDescriptionLengthLabel.setText(viewTripDescriptionTextArea.getText().length() + "/255");
+				return null;
+			}
+		}
+		viewTripDescriptionLengthLabel.setText(change.getControlNewText().length() + "/255");
+		return change;
+	};
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Browse Trips - Methods">
@@ -732,10 +742,10 @@ public class FXMLDocumentController implements Initializable {
 			} else {
 				int tripId = browseTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(tripId, false, browseTripsPane);
-                                if(viewedTrip.getImages().size()>1){
-                                    viewTripNextButton.setDisable(false);
-                                }
-                                
+				if (viewedTrip.getImages().size() > 1) {
+					viewTripNextButton.setDisable(false);
+				}
+
 			}
 		}
 	}
@@ -1524,7 +1534,7 @@ public class FXMLDocumentController implements Initializable {
 			} else {
 				int id = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 				viewTrip(id, false, myTripsPane);
-                                
+
 			}
 		} else if (event.getSource() == myTripsDeleteTripButton) {
 			if (!myTripsListView.getSelectionModel().isEmpty()) {
@@ -1667,7 +1677,6 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// </editor-fold>
-	
 	private void loadConversation(int ConversationId) {
 
 	}
