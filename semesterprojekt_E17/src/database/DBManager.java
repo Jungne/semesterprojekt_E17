@@ -16,7 +16,7 @@ public class DBManager {
 	private static DBManager dbManager = null;
 
 	private DBManager() {
-
+		
 		String url = "jdbc:postgresql://tek-mmmi-db0a.tek.c.sdu.dk/si3_2017_group_12_db";
 		String user = "si3_2017_group_12";
 		String password = "TGIF27-Ricky";
@@ -24,7 +24,7 @@ public class DBManager {
 		String url = "jdbc:postgresql://localhost:5432/Test";
 		String user = "postgres";
 		String password = "1234";
-		 */
+		*/
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {

@@ -464,7 +464,7 @@ public class FXMLDocumentController implements Initializable {
 			}
 
 			viewTripAddressTextField.setText(viewedTrip.getMeetingAddress());
-			viewTripDateTextField.setText(viewedTrip.getTimeStart().format(DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm")));
+			viewTripDateTextField.setText(viewedTrip.getTimeStart().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
 			viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
@@ -495,6 +495,7 @@ public class FXMLDocumentController implements Initializable {
 							|| modifyMode
 							|| clientController.getCurrentUser() == null);
 
+			viewTripKickButton.setVisible(modifyMode);
 			viewTripKickButton.setDisable(clientController.getCurrentUser() != null && viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId() && modifyMode);
 
 			showPane(viewTripPane);
