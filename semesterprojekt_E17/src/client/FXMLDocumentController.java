@@ -163,6 +163,8 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private TextArea createTripDescriptionTextArea;
 	@FXML
+	private Text createTripDescriptionLengthLabel;
+	@FXML
 	private ComboBox<Category> createTripCategoryComboBox;
 	@FXML
 	private HBox createTripCategoryListHBox;
@@ -397,6 +399,7 @@ public class FXMLDocumentController implements Initializable {
 			Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		viewTripDescriptionTextArea.setTextFormatter(new TextFormatter(rejectChange));
+		createTripDescriptionTextArea.setTextFormatter(new TextFormatter(rejectChange));
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Common - Methods">
@@ -708,12 +711,11 @@ public class FXMLDocumentController implements Initializable {
 
 	UnaryOperator<Change> rejectChange = change -> {
 		if (change.isContentChange()) {
+			updateDescriptionLengthLabels(change);
 			if (change.getControlNewText().length() > 255) {
-				viewTripDescriptionLengthLabel.setText(viewTripDescriptionTextArea.getText().length() + "/255");
 				return null;
 			}
 		}
-		viewTripDescriptionLengthLabel.setText(change.getControlNewText().length() + "/255");
 		return change;
 	};
 	// </editor-fold>
@@ -1184,6 +1186,7 @@ public class FXMLDocumentController implements Initializable {
 		//Reset parameters
 		createTripTitleTextField.setText(null);
 		createTripDescriptionTextArea.setText(null);
+		createTripDescriptionLengthLabel.setText("0/255");
 		createTripCategoryComboBox.setValue(null);
 		createTripAddressTextField.setText(null);
 		createTripPriceTextField.setText(null);
@@ -1745,6 +1748,17 @@ public class FXMLDocumentController implements Initializable {
 		}
 
 		showPane(messagingPane);
+	}
+
+	private void updateDescriptionLengthLabels(Change change) {
+		int newLength = change.getControlNewText().length();
+		if (newLength > 255) {
+			viewTripDescriptionLengthLabel.setText(viewTripDescriptionTextArea.getText().length() + "/255");
+			createTripDescriptionLengthLabel.setText(createTripDescriptionTextArea.getText().length() + "/255");
+		} else {
+			viewTripDescriptionLengthLabel.setText(newLength + "/255");
+			createTripDescriptionLengthLabel.setText(newLength + "/255");
+		}
 	}
 
 }

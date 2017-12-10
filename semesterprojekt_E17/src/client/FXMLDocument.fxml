@@ -127,7 +127,7 @@
                   <Font size="10.0" />
                </font>
             </Text>
-            <TextArea fx:id="createTripDescriptionTextArea" layoutX="60.0" layoutY="233.0" prefHeight="165.0" prefWidth="530.0" />
+            <TextArea fx:id="createTripDescriptionTextArea" layoutX="60.0" layoutY="233.0" prefHeight="165.0" prefWidth="530.0" wrapText="true" />
             <Text layoutX="60.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category">
                <font>
                   <Font size="10.0" />
@@ -158,6 +158,11 @@
             </Text>
             <HBox fx:id="createTripPictureListHBox" layoutX="150.0" layoutY="164.0" prefHeight="22.0" prefWidth="450.0" spacing="4.0" />
             <HBox fx:id="createTripCategoryListHBox" layoutX="197.0" layoutY="421.0" prefHeight="22.0" prefWidth="392.0" spacing="4.0" />
+            <Text fx:id="createTripDescriptionLengthLabel" layoutX="489.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0/255" textAlignment="RIGHT" wrappingWidth="99.99999183416367">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
