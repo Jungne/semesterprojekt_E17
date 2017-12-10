@@ -291,7 +291,7 @@
                </font>
             </Text>
             <Button fx:id="joinTripButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefWidth="60.0" text="Join trip" />
-            <ListView fx:id="viewListOfParticipants" layoutX="43.0" layoutY="374.0" prefHeight="188.0" prefWidth="256.0" />
+            <ListView fx:id="viewListOfParticipants" layoutX="43.0" layoutY="374.0" onMouseClicked="#handleViewTripListView" prefHeight="188.0" prefWidth="256.0" />
             <Text fx:id="viewTripParticipantsLabel" layoutX="43.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants:" wrappingWidth="91.99999879766256">
                <font>
                   <Font name="System Italic" size="13.0" />

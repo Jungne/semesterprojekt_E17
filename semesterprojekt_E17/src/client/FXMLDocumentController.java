@@ -464,7 +464,7 @@ public class FXMLDocumentController implements Initializable {
 			}
 
 			viewTripAddressTextField.setText(viewedTrip.getMeetingAddress());
-			viewTripDateTextField.setText(viewedTrip.getTimeStart().format(DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm")));
+			viewTripDateTextField.setText(viewedTrip.getTimeStart().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
 			viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
@@ -495,6 +495,7 @@ public class FXMLDocumentController implements Initializable {
 							|| modifyMode
 							|| clientController.getCurrentUser() == null);
 
+			viewTripKickButton.setVisible(modifyMode);
 			viewTripKickButton.setDisable(clientController.getCurrentUser() != null && viewedTrip.getOrganizer().getId() == clientController.getCurrentUser().getId() && modifyMode);
 
 			showPane(viewTripPane);
@@ -695,6 +696,15 @@ public class FXMLDocumentController implements Initializable {
 		Trip trip = new Trip(id, title, description, price, date, address, location, participantLimit, organizer, categories, images, participants);
 		
 		clientController.modifyTrip(trip);
+	}
+	
+	@FXML
+	private void handleViewTripListView(MouseEvent event) {
+		if (viewListOfParticipants.getSelectionModel().getSelectedItem() != null) {
+			int userId = viewListOfParticipants.getSelectionModel().getSelectedItem().getUserId();
+			int organizerId = viewedTrip.getOrganizer().getId();
+			viewTripKickButton.setDisable(userId == organizerId);
+		}
 	}
 	// </editor-fold>
 
@@ -1657,6 +1667,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// </editor-fold>
+	
 	private void loadConversation(int ConversationId) {
 
 	}
