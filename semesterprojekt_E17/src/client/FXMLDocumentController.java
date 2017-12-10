@@ -696,6 +696,15 @@ public class FXMLDocumentController implements Initializable {
 		
 		clientController.modifyTrip(trip);
 	}
+	
+	@FXML
+	private void handleViewTripListView(MouseEvent event) {
+		if (viewListOfParticipants.getSelectionModel().getSelectedItem() != null) {
+			int userId = viewListOfParticipants.getSelectionModel().getSelectedItem().getUserId();
+			int organizerId = viewedTrip.getOrganizer().getId();
+			viewTripKickButton.setDisable(userId == organizerId);
+		}
+	}
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Browse Trips - Methods">
@@ -1657,6 +1666,7 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// </editor-fold>
+	
 	private void loadConversation(int ConversationId) {
 
 	}
