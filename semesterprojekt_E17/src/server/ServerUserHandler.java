@@ -166,7 +166,7 @@ public class ServerUserHandler {
 	 * @param currentUserID
 	 * @return the current user
 	 */
-	public static User updateUser(int currentUserID) throws RemoteException {
+	public static User updateUser2(int currentUserID) throws RemoteException {
 		String query = "SELECT userID, email, userName, imageFile "
 						+ "FROM Users "
 						+ "NATURAL JOIN Images "
@@ -189,6 +189,27 @@ public class ServerUserHandler {
 		}
 
 		return null;
+	}
+
+	public static User updateUser(int userId) {
+		User user = null;
+		String query = "SELECT email, userName FROM Users WHERE userID = " + userId + ";";
+		ResultSet userRs = dbm.executeQuery(query);
+
+		try {
+			if (userRs.next()) {
+				String email = userRs.getString("email");
+				String userName = userRs.getString("userName");
+
+				List<Category> certificates = getCertificates(userId);
+				Image profilePicture = getProfilePicture(userId);
+
+				user = new User(userId, email, userName, certificates, profilePicture);
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return user;
 	}
 
 	/**
