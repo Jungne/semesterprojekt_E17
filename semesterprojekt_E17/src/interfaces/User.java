@@ -66,6 +66,19 @@ public class User implements Serializable {
 	 * Constructor to
 	 *
 	 * @param id
+	 * @param email
+	 * @param name
+	 */
+	public User(int id, String email, String name) {
+		this.id = id;
+		this.email = email;
+		this.name = name;
+	}
+
+	/**
+	 * Constructor to
+	 *
+	 * @param id
 	 * @param name
 	 */
 	public User(int id, String name) {
@@ -108,13 +121,8 @@ public class User implements Serializable {
 		return image;
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param category
-	 */
-	public void promoteToInstructor(Category category) {
-		this.certificates.add(category);
+	public void setImage(Image image) {
+		this.image = image;
 	}
 
 	@Override
@@ -124,4 +132,5 @@ public class User implements Serializable {
 		}
 		return id == ((User) other).getId();
 	}
+
 }

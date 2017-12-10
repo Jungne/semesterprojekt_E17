@@ -3,11 +3,13 @@ package server;
 import database.DBManager;
 import interfaces.Category;
 import interfaces.Image;
+import interfaces.Trip;
 import interfaces.User;
 import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -163,34 +165,9 @@ public class ServerUserHandler {
 	/**
 	 * This method updates the current user
 	 *
-	 * @param currentUserID
+	 * @param userId
 	 * @return the current user
 	 */
-	public static User updateUser2(int currentUserID) throws RemoteException {
-		String query = "SELECT userID, email, userName, imageFile "
-						+ "FROM Users "
-						+ "NATURAL JOIN Images "
-						+ "WHERE userID = " + currentUserID + ";";
-
-		try {
-			ResultSet userRs = dbm.executeQuery(query);
-
-			if (userRs.next()) {
-				int userId = userRs.getInt("userID");
-				String userEmail = userRs.getString("email");
-				String userName = userRs.getString("userName");
-				byte[] userImageFile = userRs.getBytes("imageFile");
-
-				return new User(userId, userEmail, userName, new Image(userImageFile));
-			}
-
-		} catch (SQLException ex) {
-			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
-		}
-
-		return null;
-	}
-
 	public static User updateUser(int userId) {
 		User user = null;
 		String query = "SELECT email, userName FROM Users WHERE userID = " + userId + ";";
@@ -219,7 +196,7 @@ public class ServerUserHandler {
 	 * @param profilePicture
 	 * @throws java.rmi.RemoteException
 	 */
-	public static void changeProfilePicture(int userId, Image profilePicture) throws RemoteException {
+	public static void changeProfilePicture(int userId, Image profilePicture) {
 		if (profilePicture == null || profilePicture.getImageFile() == null) {
 			throw new IllegalArgumentException("Image is null or empty.");
 		}
@@ -256,31 +233,64 @@ public class ServerUserHandler {
 	}
 
 	public static List<User> searchUsers(String query) {
+		ArrayList<User> users = new ArrayList<>();
+
+		//Gets each user excluding their profile picture based on the query
+		String sqlQuery = "SELECT userID, email, userName "
+						+ "FROM Users "
+						+ "WHERE LOWER(userName) LIKE LOWER('%" + query + "%');";
+
+		ResultSet usersRs = dbm.executeQuery(sqlQuery);
+
 		try {
-			String sqlQuery = ""
-							+ "SELECT Users.userID, email, userName, imageFile "
-							+ "FROM Users "
-							+ "INNER JOIN Images ON Users.imageID = images.imageID "
-							+ "WHERE LOWER(userName) LIKE LOWER('%" + query + "%')";
-
-			ResultSet usersRs = dbm.executeQuery(sqlQuery);
-
-			ArrayList<User> users = new ArrayList<>();
-
 			while (usersRs.next()) {
 				int id = usersRs.getInt("userID");
 				String email = usersRs.getString("email");
 				String userName = usersRs.getString("userName");
-				byte[] imageFile = usersRs.getBytes("imageFile");
 
-				users.add(new User(id, email, userName, new Image(imageFile)));
+				users.add(new User(id, email, userName));
 			}
-
-			return users;
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		return null;
+
+		//Gets the profile picture of each user
+		HashMap<Integer, Image> userImages = new HashMap<>();
+
+		String imageQuery = "SELECT userID, imageID, imageTitle, imageFile "
+						+ "FROM Images "
+						+ "NATURAL JOIN Users "
+						+ "WHERE userID IN (null";
+
+		for (User user : users) {
+			imageQuery += ", " + user.getId();
+		}
+		imageQuery += ");";
+
+		ResultSet imageRs = dbm.executeQuery(imageQuery);
+
+		try {
+			while (imageRs.next()) {
+				int userId = imageRs.getInt("userId");
+				int imageId = imageRs.getInt("imageId");
+				String imageTitle = imageRs.getString("imageTitle");
+				byte[] imageFile = imageRs.getBytes("imageFile");
+
+				userImages.put(userId, new Image(imageId, imageTitle, imageFile));
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		//Adds the profile pictures to the correct users
+		for (User user : users) {
+			Image image = userImages.get(user.getId());
+			if (image != null) {
+				user.setImage(image);
+			}
+		}
+
+		return users;
 	}
 
 }

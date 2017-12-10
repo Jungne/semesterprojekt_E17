@@ -48,7 +48,6 @@ public class UsersFunctionalityTest {
     public void promoteToInstructorTest() {
         Category cat1 = new Category (13,"SCUBA DIVING");
      User user = new User(123,"adam@hotmail.com","Adam",null); 
-     user.promoteToInstructor(cat1);
      Assert.assertEquals(cat1,user.getCertificates().get(0));
     }
 }
