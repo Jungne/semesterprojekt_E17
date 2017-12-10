@@ -192,7 +192,7 @@ public class DatabaseSetup {
 	public static void main(String[] args) throws SQLException, IOException {
 		dropTables();
 		createTables();
-		addDefaultImages();
+		//addDefaultImages();
 		addTempData();
 	}
 
@@ -225,15 +225,15 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Fyn');");
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Sjælland');");
 		//Inserts users
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'dalun12@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Daniel', 1);");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'eitho16@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Eirikur', 1);");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'hjrin15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Hjalte', 1);");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'julos14@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Jungne', 1);");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lalun13@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Lasse', 1);");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Laura', 1);");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'tester', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Tim', 1);");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'qwer', '1718c24b10aeb8099e3fc44960ab6949ab76a267352459f203ea1036bec382c2', 'Heinrich', 1);");
-		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'admin', '1718c24b10aeb8099e3fc44960ab6949ab76a267352459f203ea1036bec382c2', 'Admin', 1);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'dalun12@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Daniel', null);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'eitho16@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Eirikur', null);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'hjrin15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Hjalte', null);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'julos14@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Jungne', null);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lalun13@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Lasse', null);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Laura', null);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'tester', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Tim', null);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'qwer', '1718c24b10aeb8099e3fc44960ab6949ab76a267352459f203ea1036bec382c2', 'Heinrich', null);");
+		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'admin', '1718c24b10aeb8099e3fc44960ab6949ab76a267352459f203ea1036bec382c2', 'Admin', null);");
 		//Inserts certificates
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (1, 1)");
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (2, 2)");
@@ -267,17 +267,6 @@ public class DatabaseSetup {
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Glory to the Filmmaker! (Kantoku · Banzai!)', 'Poisoning by other systemic antibiotics, assault, sequela', 3.55, '2018-12-30', 1, '3 South Crossing', 10, 9, 8);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Time of Eve (Eve no jikan)', 'Puncture wound with foreign body of lip', 392.25, '2018-05-14', 2, '7725 Buena Vista Trail', 8, 9, 9);");
 		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Burning Hot Summer, A (Un été brûlant)', 'Wedge comprsn fx T11-T12 vertebra, subs for fx w nonunion', 437.9, '2017-06-22', 2, '056 Stuart Trail', 12, 9, 10);");
-		//Inserts ImagesInTrips
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 1)");
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 2)");
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 3)");
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 4)");
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 5)");
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 6)");
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 7)");
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 8)");
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 9)");
-		dbm.executeUpdate("INSERT INTO ImagesInTrips VALUES (2, 10)");
 		//Inserts CategoriesInTrips
 		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (1, 1)");
 		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (1, 2)");

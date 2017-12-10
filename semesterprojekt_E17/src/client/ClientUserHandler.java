@@ -36,8 +36,12 @@ public class ClientUserHandler {
 		return serverController.searchUsers(query);
 	}
 
-	public static void changeProfilePicture(IServerController serverController, int currentUserID, Image profilePicture) throws RemoteException {
-		serverController.changeProfilePicture(currentUserID, profilePicture);
+	public static void changeProfilePicture(IServerController serverController, int currentUserID, Image profilePicture) {
+		try {
+			serverController.changeProfilePicture(currentUserID, profilePicture);
+		} catch (RemoteException ex) {
+			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 
 }

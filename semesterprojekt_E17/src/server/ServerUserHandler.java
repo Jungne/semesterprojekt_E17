@@ -39,16 +39,11 @@ public class ServerUserHandler {
 		}
 
 		//Inserts an image if the given image is not null
-		String sqlImageId = "null";
-		if (profilePicture != null && profilePicture.getImageFile() != null) {
-			String sqlImageTitle;
-			if (profilePicture.getTitle() == null || profilePicture.getTitle().isEmpty()) {
-				sqlImageTitle = "null";
-			} else {
-				sqlImageTitle = "'" + profilePicture.getTitle() + "'";
-			}
-			String imageQuery = "INSERT INTO Images (imageID, imageTitle, imageFile) VALUES (DEFAULT, " + sqlImageTitle + ", ?)";
-			sqlImageId = dbm.executeImageInsertAndGetId(imageQuery, profilePicture.getImageFile()) + "";
+		String sqlImageId;
+		try {
+			sqlImageId = addImage(profilePicture) + "";
+		} catch (IllegalArgumentException ex) {
+			sqlImageId = "null";
 		}
 
 		//Inserts the new user.
@@ -73,9 +68,8 @@ public class ServerUserHandler {
 		String sqlEmail = "'" + email + "'";
 		String sqlPassword = "'" + password + "'";
 
-		String query = "SELECT userID, email, userName, imageFile "
+		String query = "SELECT userID, email, userName "
 						+ "FROM Users "
-						+ "NATURAL JOIN Images "
 						+ "WHERE email = " + sqlEmail + " AND password = " + sqlPassword + ";";
 
 		try {
@@ -85,11 +79,11 @@ public class ServerUserHandler {
 				int userId = userRs.getInt("userID");
 				String userEmail = userRs.getString("email");
 				String userName = userRs.getString("userName");
-				byte[] userImageFile = userRs.getBytes("imageFile");
 
 				List<Category> certificates = getCertificates(userId);
+				Image profilePicture = getProfilePicture(userId);
 
-				return new User(userId, userEmail, userName, certificates, new Image(userImageFile));
+				return new User(userId, userEmail, userName, certificates, profilePicture);
 			}
 
 		} catch (SQLException ex) {
@@ -132,6 +126,40 @@ public class ServerUserHandler {
 		return certificates;
 	}
 
+	private static Image getProfilePicture(int userId) {
+		Image profilePicture = null;
+		String query = "SELECT imageID, imageTitle, imageFile FROM Images NATURAL JOIN Users WHERE userID = " + userId + ";";
+
+		try {
+			ResultSet imageRs = dbm.executeQuery(query);
+
+			if (imageRs.next()) {
+				int id = imageRs.getInt("imageID");
+				String title = imageRs.getString("imageTitle");
+				byte[] imageFile = imageRs.getBytes("imageFile");
+
+				profilePicture = new Image(id, title, imageFile);
+			}
+
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		return profilePicture;
+	}
+
+	private static int addImage(Image image) {
+		if (image == null || image.getImageFile() == null) {
+			throw new IllegalArgumentException("Image is null or empty.");
+		}
+		String sqlImageTitle = "null";
+		if (image.getTitle() != null && !image.getTitle().isEmpty()) {
+			sqlImageTitle = "'" + image.getTitle() + "'";
+		}
+		String imageQuery = "INSERT INTO Images (imageID, imageTitle, imageFile) VALUES (DEFAULT, " + sqlImageTitle + ", ?)";
+		return dbm.executeImageInsertAndGetId(imageQuery, image.getImageFile());
+	}
+
 	/**
 	 * This method updates the current user
 	 *
@@ -139,7 +167,6 @@ public class ServerUserHandler {
 	 * @return the current user
 	 */
 	public static User updateUser(int currentUserID) throws RemoteException {
-
 		String query = "SELECT userID, email, userName, imageFile "
 						+ "FROM Users "
 						+ "NATURAL JOIN Images "
@@ -167,39 +194,52 @@ public class ServerUserHandler {
 	/**
 	 * This method handels changing the user profile picture
 	 *
-	 * @param currentUserID
+	 * @param userId
 	 * @param profilePicture
+	 * @throws java.rmi.RemoteException
 	 */
-	public static void changeProfilePicture(int currentUserID, Image profilePicture) throws RemoteException {
-
-		//Inserts an image 
-		String sqlImageId = "null";
-		if (profilePicture != null && profilePicture.getImageFile() != null) {
-			String sqlImageTitle;
-			if (profilePicture.getTitle() == null || profilePicture.getTitle().isEmpty()) {
-				sqlImageTitle = "null";
-			} else {
-				sqlImageTitle = "'" + profilePicture.getTitle() + "'";
-			}
-			String imageQuery = "INSERT INTO Images (imageID, imageTitle, imageFile) VALUES (DEFAULT, " + sqlImageTitle + ", ?)";
-			sqlImageId = dbm.executeImageInsertAndGetId(imageQuery, profilePicture.getImageFile()) + "";
+	public static void changeProfilePicture(int userId, Image profilePicture) throws RemoteException {
+		if (profilePicture == null || profilePicture.getImageFile() == null) {
+			throw new IllegalArgumentException("Image is null or empty.");
 		}
 
-		//Query to update user with new profile picture
-		String updateUserQuery = ""
-						+ "UPDATE Users "
-						+ "SET imageID = " + sqlImageId + "\n"
-						+ "WHERE userId=  " + currentUserID;
+		//Gets old image id as String
+		String sqlOldImageId = null;
+		String getImageIdQuery = "SELECT imageID FROM Users WHERE userID = " + userId + ";";
+		ResultSet rs = dbm.executeQuery(getImageIdQuery);
+		try {
+			if (rs.next()) {
+				sqlOldImageId = rs.getInt("imageID") + "";
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerUserHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
+		//Adds new image to database
+		int imageId;
+		try {
+			imageId = addImage(profilePicture);
+		} catch (IllegalArgumentException ex) {
+			return;
+		}
+
+		//Updates user to refer to new image instead
+		String updateUserQuery = "UPDATE Users SET imageID = " + imageId + " WHERE userID = " + userId + ";";
 		dbm.executeUpdate(updateUserQuery);
+
+		//Deletes old image from datebase
+		if (sqlOldImageId != null) {
+			String deleteImageQuery = "DELETE FROM Images WHERE imageID = " + sqlOldImageId + ";";
+			dbm.executeUpdate(deleteImageQuery);
+		}
 	}
 
 	public static List<User> searchUsers(String query) {
 		try {
 			String sqlQuery = ""
-							+ "SELECT Users.userID, email, userName, imageFile\n"
-							+ "FROM Users\n"
-							+ "INNER JOIN Images ON Users.imageID = images.imageID\n"
+							+ "SELECT Users.userID, email, userName, imageFile "
+							+ "FROM Users "
+							+ "INNER JOIN Images ON Users.imageID = images.imageID "
 							+ "WHERE LOWER(userName) LIKE LOWER('%" + query + "%')";
 
 			ResultSet usersRs = dbm.executeQuery(sqlQuery);
@@ -221,4 +261,5 @@ public class ServerUserHandler {
 		}
 		return null;
 	}
+
 }

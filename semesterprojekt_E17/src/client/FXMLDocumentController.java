@@ -323,8 +323,6 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Profile - Elements">
-	private Image newProfilePicture;
-
 	@FXML
 	private AnchorPane profilePane;
 	@FXML
@@ -334,7 +332,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Label profileEmailLabel;
 	@FXML
-	private Button handleProfileButtons;
+	private Button profileChangeProfileButton;
 	@FXML
 	private ListView<HBoxCell> profileCertificatesListView;
 	// </editor-fold>
@@ -548,26 +546,22 @@ public class FXMLDocumentController implements Initializable {
 	private void loadProfileInfo() {
 		profileNameLabel.setText(clientController.getCurrentUser().getName());
 		profileEmailLabel.setText(clientController.getCurrentUser().getEmail());
-		InputStream inputStream = new ByteArrayInputStream(clientController.getCurrentUser().getImage().getImageFile());
-		profilePictureImageView.setImage(new javafx.scene.image.Image(inputStream));
 
+		//Loads the current users image unless there isn't any. Else it loads the default profile picture
+		if (clientController.getCurrentUser().getImage() == null || clientController.getCurrentUser().getImage().getImageFile() == null) {
+			profilePictureImageView.setImage(new javafx.scene.image.Image("default_pictures/default_profile_picture.png"));
+		} else {
+			InputStream inputStream = new ByteArrayInputStream(clientController.getCurrentUser().getImage().getImageFile());
+			profilePictureImageView.setImage(new javafx.scene.image.Image(inputStream));
+		}
+
+		//Loads the current users certificates
 		List<HBoxCell> list = new ArrayList<>();
-
 		for (Category category : clientController.getCurrentUser().getCertificates()) {
 			list.add(new HBoxCell(category.getId(), category.getName()));
 		}
-
 		ObservableList observableList = FXCollections.observableArrayList(list);
 		profileCertificatesListView.setItems(observableList);
-	}
-
-	/**
-	 * This method handels changing the user profile picture
-	 *
-	 */
-	private void changeProfilePicture() throws RemoteException {
-		Image profilePicture = newProfilePicture;
-		clientController.changeProfilePicture(profilePicture);
 	}
 
 	/**
@@ -576,19 +570,29 @@ public class FXMLDocumentController implements Initializable {
 	 */
 	@FXML
 	private void handleProfileButtons(ActionEvent event) {
-		File profileImageFile = chooseImage("Select profile picture");
+		if (event.getSource() == profileChangeProfileButton) {
+			changeProfilePicture();
+		}
+	}
+
+	/**
+	 * This method handels changing the user profile picture
+	 *
+	 */
+	private void changeProfilePicture() {
+		File profilePictureFile = chooseImage("Select profile picture");
 
 		Platform.runLater(() -> {
 			try {
-				String imageFileName = profileImageFile.getName();
+				String imageFileName = profilePictureFile.getName();
 				String imageFileType = imageFileName.substring(imageFileName.lastIndexOf('.') + 1);
 				//Converts file to byte array
-				BufferedImage image = ImageIO.read(profileImageFile);
+				BufferedImage image = ImageIO.read(profilePictureFile);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(image, imageFileType, baos);
 
-				newProfilePicture = new Image(imageFileName, baos.toByteArray());
-				changeProfilePicture();
+				Image profilePicture = new Image(imageFileName, baos.toByteArray());
+				clientController.changeProfilePicture(profilePicture);
 				clientController.updateUser();
 				loadProfileInfo();
 

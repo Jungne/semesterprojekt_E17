@@ -64,7 +64,7 @@ public class ClientController {
 		currentUser = ClientUserHandler.updateUser(serverController, currentUser.getId());
 	}
 
-	public void changeProfilePicture(Image profilePicture) throws RemoteException {
+	public void changeProfilePicture(Image profilePicture) {
 		int currentUserID = currentUser.getId();
 		ClientUserHandler.changeProfilePicture(serverController, currentUserID, profilePicture);
 	}
