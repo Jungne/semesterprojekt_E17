@@ -319,6 +319,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Text>
+            <Label fx:id="viewTripDescriptionLengthLabel" alignment="CENTER_RIGHT" layoutX="218.0" layoutY="63.0" prefHeight="17.0" prefWidth="81.0" text="0/255" textAlignment="RIGHT" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="logInPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
