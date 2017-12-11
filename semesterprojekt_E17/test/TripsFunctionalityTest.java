@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 
-import interfaces.Trip;
-import interfaces.User;
+import shared.Trip;
+import shared.User;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;

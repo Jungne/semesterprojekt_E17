@@ -1,14 +1,14 @@
 package client;
 
-import interfaces.Category;
-import interfaces.Conversation;
-import interfaces.FullTripException;
-import interfaces.IServerController;
-import interfaces.Image;
-import interfaces.Location;
-import interfaces.OptionalPrice;
-import interfaces.Trip;
-import interfaces.User;
+import shared.Category;
+import shared.Conversation;
+import shared.FullTripException;
+import shared.remote.IServerController;
+import shared.Image;
+import shared.Location;
+import shared.OptionalPrice;
+import shared.Trip;
+import shared.User;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -27,8 +27,8 @@ public class ClientController {
 	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
-		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
-		//String hostname = "localhost";
+		//String hostname = "tek-sb3-glo0a.tek.sdu.dk";
+		String hostname = "localhost";
 
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12312);

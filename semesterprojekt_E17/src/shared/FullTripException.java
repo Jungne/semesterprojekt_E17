@@ -1,4 +1,4 @@
-package interfaces;
+package shared;
 
 /**
  * The FullTripException is thrown when a user tries to participate in a trip, 

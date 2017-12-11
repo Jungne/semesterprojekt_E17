@@ -1,5 +1,13 @@
-package interfaces;
+package shared.remote;
 
+import shared.Category;
+import shared.Conversation;
+import shared.FullTripException;
+import shared.Image;
+import shared.Location;
+import shared.Message;
+import shared.Trip;
+import shared.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.time.LocalDate;

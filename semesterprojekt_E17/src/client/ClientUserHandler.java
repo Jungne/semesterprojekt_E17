@@ -1,8 +1,8 @@
 package client;
 
-import interfaces.IServerController;
-import interfaces.Image;
-import interfaces.User;
+import shared.remote.IServerController;
+import shared.Image;
+import shared.User;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;

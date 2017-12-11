@@ -1,10 +1,10 @@
 package client;
 
-import interfaces.Conversation;
-import interfaces.IChatClient;
-import interfaces.IServerController;
-import interfaces.Message;
-import interfaces.User;
+import shared.Conversation;
+import shared.remote.IChatClient;
+import shared.remote.IServerController;
+import shared.Message;
+import shared.User;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;

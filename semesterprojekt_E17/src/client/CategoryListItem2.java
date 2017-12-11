@@ -1,6 +1,6 @@
 package client;
 
-import interfaces.Category;
+import shared.Category;
 
 public class CategoryListItem2 extends PaneListItem {
 

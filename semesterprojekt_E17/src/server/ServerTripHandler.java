@@ -1,14 +1,14 @@
 package server;
 
 import database.DBManager;
-import interfaces.Category;
-import interfaces.FullTripException;
-import interfaces.Image;
-import interfaces.InstructorListItem;
-import interfaces.Location;
-import interfaces.OptionalPrice;
-import interfaces.Trip;
-import interfaces.User;
+import shared.Category;
+import shared.FullTripException;
+import shared.Image;
+import shared.InstructorListItem;
+import shared.Location;
+import shared.OptionalPrice;
+import shared.Trip;
+import shared.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;

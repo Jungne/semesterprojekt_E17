@@ -1,10 +1,10 @@
 package server;
 
 import database.DBManager;
-import interfaces.Conversation;
-import interfaces.IChatClient;
-import interfaces.Message;
-import interfaces.User;
+import shared.Conversation;
+import shared.remote.IChatClient;
+import shared.Message;
+import shared.User;
 import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,13 +1,13 @@
 package client;
 
-import interfaces.Category;
-import interfaces.FullTripException;
-import interfaces.IServerController;
-import interfaces.Image;
-import interfaces.Location;
-import interfaces.OptionalPrice;
-import interfaces.Trip;
-import interfaces.User;
+import shared.Category;
+import shared.FullTripException;
+import shared.remote.IServerController;
+import shared.Image;
+import shared.Location;
+import shared.OptionalPrice;
+import shared.Trip;
+import shared.User;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

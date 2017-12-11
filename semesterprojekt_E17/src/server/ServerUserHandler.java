@@ -1,10 +1,10 @@
 package server;
 
 import database.DBManager;
-import interfaces.Category;
-import interfaces.Image;
-import interfaces.Trip;
-import interfaces.User;
+import shared.Category;
+import shared.Image;
+import shared.Trip;
+import shared.User;
 import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;

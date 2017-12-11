@@ -1,6 +1,6 @@
 package client;
 
-import interfaces.Image;
+import shared.Image;
 
 public class ImageListItem extends PaneListItem {
 
