@@ -34,7 +34,7 @@
             <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
         </items>
       </ToolBar>
-      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
          <children>
             <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
                <font>
@@ -277,7 +277,7 @@
             </RadioButton>
             <RadioButton fx:id="myTripsOrganizedRadioButton" layoutX="40.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" text="Organized by me" toggleGroup="$myTripsToggleGroup" />
          </children></AnchorPane>
-      <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+      <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
          <children>
             <Text fx:id="viewTripTitleLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
                <font>
@@ -325,6 +325,13 @@
                </font>
             </Text>
             <Label fx:id="viewTripDescriptionLengthLabel" alignment="CENTER_RIGHT" layoutX="218.0" layoutY="63.0" prefHeight="17.0" prefWidth="81.0" text="0/255" textAlignment="RIGHT" />
+            <Label fx:id="viewTripInstructorsLabel" layoutX="468.0" layoutY="357.0" text="Instructors" />
+            <ListView fx:id="viewTripInstructorsListView" layoutX="468.0" layoutY="374.0" prefHeight="188.0" prefWidth="149.0" />
+            <Label fx:id="viewTripInstructedTripLabel" layoutX="468.0" layoutY="296.0" text="Instructed">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="logInPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">

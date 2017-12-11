@@ -325,4 +325,7 @@ public class Trip implements Serializable {
 		images.add(image);
 	}
 
+	public void setInstructors(List<InstructorListItem> instructors) {
+		this.instructors = instructors;
+	}	
 }
