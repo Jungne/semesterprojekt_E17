@@ -1,5 +1,6 @@
-package interfaces;
+package shared.remote;
 
+import shared.Message;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -19,5 +20,5 @@ public interface IChatClient extends Remote {
 	public void receiveMessage(Message message) throws RemoteException;
 
 	public int getUserId() throws RemoteException;
-	
+
 }

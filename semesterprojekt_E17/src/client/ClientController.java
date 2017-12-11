@@ -1,14 +1,14 @@
 package client;
 
-import interfaces.Category;
-import interfaces.Conversation;
-import interfaces.FullTripException;
-import interfaces.IServerController;
-import interfaces.Image;
-import interfaces.Location;
-import interfaces.OptionalPrice;
-import interfaces.Trip;
-import interfaces.User;
+import shared.Category;
+import shared.Conversation;
+import shared.FullTripException;
+import shared.remote.IServerController;
+import shared.Image;
+import shared.Location;
+import shared.OptionalPrice;
+import shared.Trip;
+import shared.User;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -70,7 +70,7 @@ public class ClientController {
 	}
 
 	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
-		return ClientTripHandler.searchTrips(serverController,searchTitle, categories, timedateStart, location, priceMAX, tripType);
+		return ClientTripHandler.searchTrips(serverController, searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}
 
 	public Trip showTrip(int tripID) {
@@ -143,7 +143,7 @@ public class ClientController {
 		return ClientMessagingHandler.getUserConversations(serverController, currentUser);
 	}
 
-	public String getConversationName(Conversation conversation){
+	public String getConversationName(Conversation conversation) {
 		try {
 			return ClientMessagingHandler.getConversationName(serverController, conversation, currentUser);
 		} catch (RemoteException ex) {
@@ -167,5 +167,5 @@ public class ClientController {
 	public Conversation getUserConversation(int userId) {
 		return ClientMessagingHandler.getUserConversation(serverController, currentUser.getId(), userId);
 	}
-	
+
 }

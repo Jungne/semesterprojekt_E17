@@ -1,4 +1,4 @@
-package interfaces;
+package shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class Category implements Serializable {
 	 * This constructor
 	 *
 	 * @param id
-	 * @param name 
+	 * @param name
 	 */
 	public Category(int id, String name) {
 		this.id = id;

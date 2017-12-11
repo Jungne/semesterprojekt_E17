@@ -1,14 +1,14 @@
 package client;
 
-import interfaces.Category;
-import interfaces.Conversation;
-import interfaces.FullTripException;
-import interfaces.Image;
-import interfaces.Location;
-import interfaces.Message;
-import interfaces.OptionalPrice;
-import interfaces.Trip;
-import interfaces.User;
+import shared.Category;
+import shared.Conversation;
+import shared.FullTripException;
+import shared.Image;
+import shared.Location;
+import shared.Message;
+import shared.OptionalPrice;
+import shared.Trip;
+import shared.User;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -388,7 +388,7 @@ public class FXMLDocumentController implements Initializable {
 			});
 
 			//Set toolbar picture
-			toolBarImageView.setImage(new javafx.scene.image.Image("default_pictures/ToolbarImage.jpg"));
+			toolBarImageView.setImage(new javafx.scene.image.Image("client/default_pictures/ToolbarImage.jpg"));
 
 			//Load all trips to browse trips, when the program starts
 			resetBrowseTripPane();
@@ -480,9 +480,9 @@ public class FXMLDocumentController implements Initializable {
 			if (viewedTrip.getImages().size() <= 0) {
 				viewTripNextButton.setVisible(true);
 				viewTripLastButton.setVisible(true);
-				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("client/default_pictures/trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
 			} else if (viewedTrip.getImages().size() > 0) {
-				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("client/default_pictures/trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(0).getImageFile())));
 				viewTripNextButton.setVisible(true);
 				viewTripLastButton.setVisible(true);
 				viewTripNextButton.setDisable(true);
@@ -549,7 +549,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Loads the current users image unless there isn't any. Else it loads the default profile picture
 		if (clientController.getCurrentUser().getImage() == null || clientController.getCurrentUser().getImage().getImageFile() == null) {
-			profilePictureImageView.setImage(new javafx.scene.image.Image("default_pictures/default_profile_picture.png"));
+			profilePictureImageView.setImage(new javafx.scene.image.Image("client/default_pictures/profile_picture.png"));
 		} else {
 			InputStream inputStream = new ByteArrayInputStream(clientController.getCurrentUser().getImage().getImageFile());
 			profilePictureImageView.setImage(new javafx.scene.image.Image(inputStream));
@@ -637,7 +637,7 @@ public class FXMLDocumentController implements Initializable {
 			//Set Image.
 			if (CurrentImageIndex != 0) {
 				CurrentImageIndex--;
-				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("client/default_pictures/trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
 			}
 			//Should our buttun be disabled ?
 			if (CurrentImageIndex == 0) {
@@ -655,7 +655,7 @@ public class FXMLDocumentController implements Initializable {
 			//Set Image.
 			if (CurrentImageIndex <= test) {
 				CurrentImageIndex++;
-				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("default_pictures/default_trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
+				viewTripPaneImageView.setImage(viewedTrip.getImages().isEmpty() ? new javafx.scene.image.Image("client/default_pictures/trip_picture.png") : new javafx.scene.image.Image(new ByteArrayInputStream(viewedTrip.getImages().get(CurrentImageIndex).getImageFile())));
 			}
 			//Should our buttun be disabled ?
 
@@ -1038,7 +1038,7 @@ public class FXMLDocumentController implements Initializable {
 
 		//Resets imageFile and imageView
 		newAccountProfilePicture = null;
-		newAccountImageView.setImage(new javafx.scene.image.Image("default_profile_picture.png"));
+		newAccountImageView.setImage(new javafx.scene.image.Image("client/default_pictures/profile_picture.png"));
 	}
 
 	@FXML

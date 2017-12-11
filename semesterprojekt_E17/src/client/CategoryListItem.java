@@ -1,6 +1,6 @@
 package client;
 
-import interfaces.Category;
+import shared.Category;
 import javafx.scene.control.Button;
 
 public class CategoryListItem extends PaneListItem {

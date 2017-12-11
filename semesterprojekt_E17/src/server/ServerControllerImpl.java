@@ -1,15 +1,15 @@
 package server;
 
-import interfaces.Category;
-import interfaces.Conversation;
-import interfaces.FullTripException;
-import interfaces.IChatClient;
-import interfaces.IServerController;
-import interfaces.Image;
-import interfaces.Location;
-import interfaces.Message;
-import interfaces.Trip;
-import interfaces.User;
+import shared.Category;
+import shared.Conversation;
+import shared.FullTripException;
+import shared.remote.IChatClient;
+import shared.remote.IServerController;
+import shared.Image;
+import shared.Location;
+import shared.Message;
+import shared.Trip;
+import shared.User;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
@@ -175,4 +175,5 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	public Conversation getUserConversation(int userId1, int userId2) throws RemoteException {
 		return ServerMessagingHandler.getUserConversation(userId1, userId2);
 	}
+
 }

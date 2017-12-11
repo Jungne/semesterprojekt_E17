@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 
-import interfaces.Message;
-import interfaces.User;
+import shared.Message;
+import shared.User;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.junit.After;

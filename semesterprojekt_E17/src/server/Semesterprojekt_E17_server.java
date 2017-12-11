@@ -23,7 +23,6 @@ public class Semesterprojekt_E17_server {
 	public static void main(String[] args) {
 
 		try {
-			//
 			ServerControllerImpl serverController = new ServerControllerImpl();
 			Registry registry = LocateRegistry.createRegistry(REGISTRY_PORT);
 			registry.bind(REMOTE_OBJECT_NAME, serverController);

@@ -1,9 +1,9 @@
 package client;
 
-import interfaces.Conversation;
-import interfaces.Message;
-import interfaces.Trip;
-import interfaces.User;
+import shared.Conversation;
+import shared.Message;
+import shared.Trip;
+import shared.User;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
@@ -36,7 +36,7 @@ public class HBoxCell extends HBox {
 		id = trip.getId();
 
 		if (trip.getImages().isEmpty()) {
-			imageView.setImage(new javafx.scene.image.Image("default_pictures/default_trip_picture.png"));
+			imageView.setImage(new javafx.scene.image.Image("client/default_pictures/trip_picture.png"));
 		} else {
 			InputStream inputStream = new ByteArrayInputStream(trip.getImages().get(0).getImageFile());
 			imageView.setImage(new javafx.scene.image.Image(inputStream));
@@ -75,7 +75,7 @@ public class HBoxCell extends HBox {
 		id = user.getId();
 
 		if (user.getImage() == null) {
-			imageView.setImage(new javafx.scene.image.Image("default_pictures/default_profile_picture.png"));
+			imageView.setImage(new javafx.scene.image.Image("client/default_pictures/profile_picture.png"));
 		} else {
 			InputStream inputStream = new ByteArrayInputStream(user.getImage().getImageFile());
 			imageView.setImage(new javafx.scene.image.Image(inputStream));
@@ -174,7 +174,7 @@ public class HBoxCell extends HBox {
 	public String getType() {
 		return type;
 	}
-	
+
 	public String getLabel1Text() {
 		return label1.getText();
 	}
