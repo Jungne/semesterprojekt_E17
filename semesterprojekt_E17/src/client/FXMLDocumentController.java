@@ -4,7 +4,6 @@ import interfaces.Category;
 import interfaces.Conversation;
 import interfaces.FullTripException;
 import interfaces.Image;
-import interfaces.InstructorListItem;
 import interfaces.Location;
 import interfaces.Message;
 import interfaces.OptionalPrice;
@@ -366,12 +365,6 @@ public class FXMLDocumentController implements Initializable {
 	private Button messagingSendButton;
 	// </editor-fold>
 	int CurrentImageIndex = 0;
-	@FXML
-	private Label viewTripInstructorsLabel;
-	@FXML
-	private ListView<HBoxCell> viewTripInstructorsListView;
-	@FXML
-	private Label viewTripInstructedTripLabel;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -483,22 +476,6 @@ public class FXMLDocumentController implements Initializable {
 			viewTripDateTextField.setText(viewedTrip.getTimeStart().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
 			viewTripCategoriesTextArea.setText(viewedTrip.getCategories() == null || viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
-			
-			viewTripInstructorsListView.getItems().clear();
-			if(viewedTrip.getInstructors().isEmpty()) {
-				viewTripInstructedTripLabel.setVisible(false);
-				viewTripInstructorsLabel.setVisible(false);
-				viewTripInstructorsListView.setVisible(false);
-			} else {
-				viewTripInstructedTripLabel.setVisible(true);
-				viewTripInstructorsLabel.setVisible(true);
-				viewTripInstructorsListView.setVisible(true);	
-				
-				for(InstructorListItem instructor : viewedTrip.getInstructors()) {
-					viewTripInstructorsListView.getItems().add(new HBoxCell(0, instructor.getUser().getName() + ": " + instructor.getCategory().getName()));
-				}				
-			}
-			
 			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
 			if (viewedTrip.getImages().size() <= 0) {
 				viewTripNextButton.setVisible(true);
