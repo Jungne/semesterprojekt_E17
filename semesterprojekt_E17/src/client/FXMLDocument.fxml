@@ -22,354 +22,357 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" fx:id="mainPane" prefHeight="662.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.FXMLDocumentController">
-	<children>
-		<ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="644.0">
-			<items>
-				<ImageView fx:id="toolBarImageView" fitHeight="26.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true" />
-				<Button fx:id="toolBarBrowseTripsButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse trips" />
-				<Button fx:id="toolBarBrowseUsersButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse users" />
-				<Button fx:id="toolBarMessagingButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Messaging" />
-				<Button fx:id="toolBarMyTripsButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="My trips" />
-				<Button fx:id="toolBarProfileButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Profile" />
-				<Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
-			</items>
-		</ToolBar>
-		<AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
-			<children>
-				<Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
-					<font>
-						<Font size="17.0" />
-					</font>
-				</Label>
-				<Line endX="100.0" layoutX="109.0" layoutY="41.0" startX="-100.0" />
-				<Label layoutX="20.0" layoutY="120.0" text="Location">
-					<font>
-						<Font name="System Bold" size="13.0" />
-					</font>
-				</Label>
-				<Label layoutX="20.0" layoutY="283.0" text="Type">
-					<font>
-						<Font name="System Bold" size="13.0" />
-					</font>
-				</Label>
-				<CheckBox fx:id="searchTripsNormalCheckBox" layoutX="20.0" layoutY="308.0" mnemonicParsing="false" text="Normal" />
-				<CheckBox fx:id="searchTripsInstructorCheckBox" layoutX="20.0" layoutY="332.0" mnemonicParsing="false" text="Instructor" />
-				<Label layoutX="20.0" layoutY="369.0" text="Price">
-					<font>
-						<Font name="System Bold" size="13.0" />
-					</font>
-				</Label>
-				<TextField fx:id="searchTripsPriceTextField" layoutX="20.0" layoutY="388.0" prefHeight="27.0" prefWidth="200.0" promptText="Amount Kr." />
-				<Label layoutX="20.0" layoutY="439.0" text="Time period">
-					<font>
-						<Font name="System Bold" size="13.0" />
-					</font>
-				</Label>
-				<DatePicker fx:id="searchTripsDatePicker" layoutX="20.0" layoutY="458.0" prefHeight="27.0" prefWidth="200.0" />
-				<Text layoutX="53.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MAX.">
-					<font>
-						<Font size="7.0" />
-					</font>
-				</Text>
-				<Text layoutX="96.0" layoutY="453.0" strokeType="OUTSIDE" strokeWidth="0.0" text="START.">
-					<font>
-						<Font size="7.0" />
-					</font>
-				</Text>
-				<Button fx:id="searchTripsButton" layoutX="20.0" layoutY="511.0" mnemonicParsing="false" onAction="#handleSearchTripsButtons" prefHeight="25.0" prefWidth="109.0" text="Search" />
-				<ListView fx:id="browseTripsListView" layoutX="239.0" layoutY="60.0" prefHeight="548.0" prefWidth="392.0" />
-				<Button fx:id="searchTripsViewTripButton" layoutX="20.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleSearchTripsButtons" prefHeight="25.0" prefWidth="109.0" text="View Trip" />
-				<Label layoutX="20.0" layoutY="60.0" text="Title">
-					<font>
-						<Font name="System Bold" size="13.0" />
-					</font>
-				</Label>
-				<TextField fx:id="searchTripsTitleTextField" layoutX="20.0" layoutY="79.0" prefHeight="27.0" prefWidth="200.0" promptText="Title?" />
-				<Label layoutX="20.0" layoutY="180.0" text="Category">
-					<font>
-						<Font name="System Bold" size="13.0" />
-					</font>
-				</Label>
-				<HBox fx:id="searchTripCategoryListHBox" layoutX="21.0" layoutY="235.0" prefHeight="22.0" prefWidth="200.0" />
-				<ComboBox fx:id="searchTripsLocationComboBox" layoutX="20.0" layoutY="141.0" prefWidth="150.0" />
-				<ComboBox fx:id="searchTripsCategoryComboBox" layoutX="20.0" layoutY="199.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
-				<Text fx:id="searchTripInvalidPriceText" fill="#da0303" layoutX="20.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid price!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-			</children>
-		</AnchorPane>
-		<AnchorPane fx:id="createTripPane1" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
-			<children>
-				<Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create trip">
-					<font>
-						<Font name="System Bold" size="20.0" />
-					</font>
-				</Text>
-				<Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
-				<Text layoutX="42.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description">
-					<font>
-						<Font name="System Italic" size="13.0" />
-					</font>
-				</Text>
-				<TextField fx:id="createTripTitleTextField" layoutX="60.0" layoutY="103.0" prefHeight="27.0" prefWidth="333.0" />
-				<Text layoutX="60.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Button fx:id="createTripAddPictureButton" layoutX="60.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Add picture" />
-				<Text layoutX="60.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pictures">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Text layoutX="60.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<TextArea fx:id="createTripDescriptionTextArea" layoutX="60.0" layoutY="233.0" prefHeight="165.0" prefWidth="530.0" wrapText="true" />
-				<Text layoutX="60.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Button fx:id="createTripNextButton" layoutX="70.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Next" />
-				<ComboBox fx:id="createTripCategoryComboBox" layoutX="60.0" layoutY="420.0" onAction="#handleCreateTripButtons" prefHeight="25.0" prefWidth="120.0" promptText="Choose" />
-				<Text fx:id="createTripInvalidTitleText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter trip title!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Text fx:id="createTripInvalidCategoryText" fill="#da0303" layoutX="60.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a category!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Button fx:id="createTripCancelButton1" layoutX="465.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
-				<Text fx:id="createTripInvalidPictureText" fill="#da0303" layoutX="60.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid picture!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Text fx:id="createTripIntructorText" layoutX="197.0" layoutY="455.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Click on categories to partocipate as instructor" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<HBox fx:id="createTripPictureListHBox" layoutX="150.0" layoutY="164.0" prefHeight="22.0" prefWidth="450.0" spacing="4.0" />
-				<HBox fx:id="createTripCategoryListHBox" layoutX="197.0" layoutY="421.0" prefHeight="22.0" prefWidth="392.0" spacing="4.0" />
-				<Text fx:id="createTripDescriptionLengthLabel" layoutX="489.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0/255" textAlignment="RIGHT" wrappingWidth="99.99999183416367">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-			</children>
-		</AnchorPane>
-		<AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
-			<children>
-				<Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create trip">
-					<font>
-						<Font name="System Bold" size="20.0" />
-					</font>
-				</Text>
-				<Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
-				<Text layoutX="42.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Practical information">
-					<font>
-						<Font name="System Italic" size="13.0" />
-					</font>
-				</Text>
-				<TextField fx:id="createTripAddressTextField" layoutX="60.0" layoutY="104.0" />
-				<Text layoutX="60.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Meeting address">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<TextField fx:id="createTripPriceTextField" layoutX="340.0" layoutY="104.0" promptText="kr." />
-				<Text layoutX="340.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<DatePicker fx:id="createTripTimeStartDatePicker" layoutX="60.0" layoutY="266.0" />
-				<Text layoutX="60.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start date">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Text layoutX="60.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Button fx:id="createTripCreateTripButton" layoutX="70.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Create trip" />
-				<Button fx:id="createTripBackButton" layoutX="500.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Back" />
-				<ComboBox fx:id="createTripLocationComboBox" layoutX="60.0" layoutY="182.0" prefWidth="150.0" promptText="Choose" />
-				<Text layoutX="340.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant limit">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<TextField fx:id="createTripParticipantLimitTextField" layoutX="340.0" layoutY="182.0" />
-				<Text layoutX="60.0" layoutY="340.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tags (Seperate by space)">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<TextField fx:id="createTripTagsTextField" layoutX="60.0" layoutY="344.0" prefHeight="25.0" prefWidth="300.0" promptText="tag1 tag2 tag3" />
-				<Text fx:id="createTripInvalidPriceText" fill="#da0303" layoutX="339.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid price!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Text fx:id="createTripInvalidDateText" fill="#da0303" layoutX="60.0" layoutY="302.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid date!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Button fx:id="createTripCancelButton2" layoutX="465.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
-				<Text fx:id="createTripInvalidParticipantLimitText" fill="#da0303" layoutX="340.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid participant limit!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Text fx:id="createTripInvalidLocationText" fill="#da0303" layoutX="60.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a location!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Text fx:id="createTripInvalidMeetingAddressText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter a meeting address!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Spinner fx:id="createTripHourSpinner" layoutX="339.0" layoutY="266.0" prefHeight="25.0" prefWidth="60.0" />
-				<Spinner fx:id="createTripMinuteSpinner" layoutX="431.0" layoutY="266.0" prefHeight="25.0" prefWidth="60.0" />
-				<Text layoutX="339.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="hour">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Text layoutX="431.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="minute">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-			</children>
-		</AnchorPane>
-		<AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
-			<children>
-				<Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Trips">
-					<font>
-						<Font name="System Bold" size="20.0" />
-					</font>
-				</Text>
-				<Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
-				<Button fx:id="myTripsCreateTripButton" layoutX="60.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Create Trip" />
-				<Button fx:id="myTripsModifyTripButton" disable="true" layoutX="60.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Modify Trip" />
-				<Button fx:id="myTripsViewTripButton" disable="true" layoutX="60.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="View Trip" />
-				<ListView fx:id="myTripsListView" layoutX="160.0" layoutY="100.0" onMouseClicked="#handleMyTripsListView" prefHeight="420.0" prefWidth="420.0" />
-				<Button fx:id="myTripsDeleteTripButton" disable="true" layoutX="60.0" layoutY="221.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefHeight="25.0" prefWidth="80.0" text="Delete Trip" />
-				<Label layoutX="57.0" layoutY="278.0" text="Filter" />
-				<RadioButton fx:id="myTripsToggleAll" layoutX="40.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" selected="true" text="All">
-					<toggleGroup>
-						<ToggleGroup fx:id="myTripsToggleGroup" />
-					</toggleGroup>
-				</RadioButton>
-				<RadioButton fx:id="myTripsOrganizedRadioButton" layoutX="40.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" text="Organized by me" toggleGroup="$myTripsToggleGroup" />
-			</children>
-		</AnchorPane>
-		<AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
-			<children>
-				<Text fx:id="viewTripTitleLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
-					<font>
-						<Font name="System Bold" size="20.0" />
-					</font>
-				</Text>
-				<Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
-				<Text layoutX="42.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" wrappingWidth="279.9999995599501">
-					<font>
-						<Font name="System Italic" size="13.0" />
-					</font>
-				</Text>
-				<Text layoutX="42.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price:">
-					<font>
-						<Font name="System Italic" size="13.0" />
-					</font>
-				</Text>
-				<Button fx:id="joinTripButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefWidth="60.0" text="Join trip" />
-				<ListView fx:id="viewListOfParticipants" layoutX="43.0" layoutY="374.0" onMouseClicked="#handleViewTripListView" prefHeight="188.0" prefWidth="256.0" />
-				<Text fx:id="viewTripParticipantsLabel" layoutX="43.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants:" wrappingWidth="91.99999879766256">
-					<font>
-						<Font name="System Italic" size="13.0" />
-					</font>
-				</Text>
-				<ImageView fx:id="viewTripPaneImageView" fitHeight="165.0" fitWidth="248.0" layoutX="344.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true" />
-				<TextArea fx:id="viewTripDescriptionTextArea" editable="false" layoutX="42.0" layoutY="80.0" prefHeight="165.0" prefWidth="256.0" wrapText="true" />
-				<TextField fx:id="viewTripPriceTextField" editable="false" layoutX="43.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
-				<TextField fx:id="viewTripAddressTextField" editable="false" layoutX="178.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
-				<Label layoutX="178.0" layoutY="251.0" text="Address:" />
-				<Label layoutX="42.0" layoutY="304.0" text="Date:" />
-				<Label layoutX="178.0" layoutY="304.0" text="Location:" />
-				<TextField fx:id="viewTripDateTextField" editable="false" layoutX="42.0" layoutY="321.0" prefHeight="25.0" prefWidth="120.0" />
-				<TextField fx:id="viewTripLocationTextField" editable="false" layoutX="178.0" layoutY="321.0" prefHeight="25.0" prefWidth="120.0" />
-				<Label fx:id="viewTripLimitLabel" layoutX="249.0" layoutY="357.0" text="Limit" />
-				<Label layoutX="323.0" layoutY="357.0" text="Categories:" />
-				<TextArea fx:id="viewTripCategoriesTextArea" editable="false" layoutX="322.0" layoutY="374.0" prefHeight="188.0" prefWidth="128.0" wrapText="true" />
-				<Button fx:id="viewTripKickButton" layoutX="53.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Kick participant" visible="false" />
-				<Button fx:id="viewTripBackButton" layoutX="322.0" layoutY="321.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefWidth="60.0" text="Back" />
-				<Button fx:id="viewTripSaveChangesButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Save Changes" />
-				<Button fx:id="viewTripLastButton" disable="true" layoutX="304.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Last" visible="false" />
-				<Button fx:id="viewTripNextButton" disable="true" layoutX="596.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefHeight="25.0" prefWidth="43.0" text="Next" visible="false" />
-				<Text fx:id="viewTripOrganizerLabel" layoutX="371.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Organizer: ">
-					<font>
-						<Font name="System Bold" size="16.0" />
-					</font>
-				</Text>
-				<Label fx:id="viewTripDescriptionLengthLabel" alignment="CENTER_RIGHT" layoutX="218.0" layoutY="63.0" prefHeight="17.0" prefWidth="81.0" text="0/255" textAlignment="RIGHT" />
-			</children>
-		</AnchorPane>
-		<AnchorPane fx:id="logInPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
-			<children>
-				<Label layoutX="71.0" layoutY="117.0" text="Email" />
-				<TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />
-				<Text fx:id="logInInvalidEmailText" fill="#da0303" layoutX="71.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter email!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Label layoutX="71.0" layoutY="177.0" text="Password" />
-				<PasswordField fx:id="logInPasswordTextField" layoutX="71.0" layoutY="194.0" prefHeight="25.0" prefWidth="240.0" />
-				<Text fx:id="logInInvalidPasswordText" fill="#da0303" layoutX="71.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter password!" visible="false">
-					<font>
-						<Font size="10.0" />
-					</font>
-				</Text>
-				<Button fx:id="logInButton" layoutX="73.0" layoutY="241.0" mnemonicParsing="false" onAction="#handleLogInButton" text="Log In" />
-				<Hyperlink fx:id="newAccountButton" layoutX="71.0" layoutY="281.0" onAction="#handleNewAccountButton" text="Create new account" />
-			</children>
-		</AnchorPane>
-		<AnchorPane fx:id="newAccountPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
-			<children>
-				<Label layoutX="115.0" layoutY="128.0" text="Name" />
-				<Label layoutX="115.0" layoutY="237.0" text="Password" />
-				<Label layoutX="115.0" layoutY="182.0" text="Email" />
-				<TextField fx:id="newAccountNameTextField" layoutX="115.0" layoutY="145.0" />
-				<TextField fx:id="newAccountEmailTextField" layoutX="115.0" layoutY="199.0" />
-				<Label layoutX="115.0" layoutY="295.0" text="Repeat password" />
-				<PasswordField fx:id="newAccountPasswordTextField" layoutX="115.0" layoutY="254.0" />
-				<PasswordField fx:id="newAccountRepeatPasswordTextField" layoutX="115.0" layoutY="312.0" prefHeight="25.0" prefWidth="150.0" />
-				<ImageView fx:id="newAccountImageView" fitHeight="150.0" fitWidth="200.0" layoutX="330.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" />
-				<Button fx:id="newAccountProfilePictureButton" layoutX="330.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Choose image" />
-				<Label layoutX="330.0" layoutY="154.0" text="Profile picture" />
-				<Button fx:id="newAccountCreateButton" layoutX="117.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Create account" />
-				<Button fx:id="newAccountBackButton" cancelButton="true" layoutX="223.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Back" />
-			</children>
-		</AnchorPane>
-		<AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false">
-			<children>
+   <children>
+      <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="644.0">
+        <items>
+            <ImageView fx:id="toolBarImageView" fitHeight="26.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="toolBarBrowseTripsButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse trips" />
+            <Button fx:id="toolBarBrowseUsersButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Browse users" />
+          <Button fx:id="toolBarMessagingButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Messaging" />
+            <Button fx:id="toolBarMyTripsButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="My trips" />
+            <Button fx:id="toolBarProfileButton" disable="true" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Profile" />
+            <Button fx:id="toolbarLogInLogOutButton" mnemonicParsing="false" onAction="#handleToolBarButtons" text="Log in" />
+        </items>
+      </ToolBar>
+      <AnchorPane fx:id="browseTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+         <children>
+            <Label layoutX="80.0" layoutY="14.0" prefHeight="27.0" prefWidth="58.0" text="Filters" textAlignment="CENTER">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Line endX="100.0" layoutX="109.0" layoutY="41.0" startX="-100.0" />
+            <Label layoutX="20.0" layoutY="120.0" text="Location">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="20.0" layoutY="283.0" text="Type">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <CheckBox fx:id="searchTripsNormalCheckBox" layoutX="20.0" layoutY="308.0" mnemonicParsing="false" text="Normal" />
+            <CheckBox fx:id="searchTripsInstructorCheckBox" layoutX="20.0" layoutY="332.0" mnemonicParsing="false" text="Instructor" />
+            <Label layoutX="20.0" layoutY="369.0" text="Price">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <TextField fx:id="searchTripsPriceTextField" layoutX="20.0" layoutY="388.0" prefHeight="27.0" prefWidth="200.0" promptText="Amount Kr." />
+            <Label layoutX="20.0" layoutY="439.0" text="Time period">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <DatePicker fx:id="searchTripsDatePicker" layoutX="20.0" layoutY="458.0" prefHeight="27.0" prefWidth="200.0" />
+            <Text layoutX="53.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MAX.">
+               <font>
+                  <Font size="7.0" />
+               </font>
+            </Text>
+            <Text layoutX="96.0" layoutY="453.0" strokeType="OUTSIDE" strokeWidth="0.0" text="START.">
+               <font>
+                  <Font size="7.0" />
+               </font>
+            </Text>
+            <Button fx:id="searchTripsButton" layoutX="20.0" layoutY="511.0" mnemonicParsing="false" onAction="#handleSearchTripsButtons" prefHeight="25.0" prefWidth="109.0" text="Search" />
+            <ListView fx:id="browseTripsListView" layoutX="239.0" layoutY="60.0" prefHeight="548.0" prefWidth="392.0" />
+            <Button fx:id="searchTripsViewTripButton" layoutX="20.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleSearchTripsButtons" prefHeight="25.0" prefWidth="109.0" text="View Trip" />
+            <Label layoutX="20.0" layoutY="60.0" text="Title">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <TextField fx:id="searchTripsTitleTextField" layoutX="20.0" layoutY="79.0" prefHeight="27.0" prefWidth="200.0" promptText="Title?" />
+            <Label layoutX="20.0" layoutY="180.0" text="Category">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <HBox fx:id="searchTripCategoryListHBox" layoutX="21.0" layoutY="235.0" prefHeight="22.0" prefWidth="200.0" />
+            <ComboBox fx:id="searchTripsLocationComboBox" layoutX="20.0" layoutY="141.0" prefWidth="150.0" />
+            <ComboBox fx:id="searchTripsCategoryComboBox" layoutX="20.0" layoutY="199.0" onAction="#handleSearchTripsButtons" prefWidth="150.0" />
+            <Text fx:id="searchTripInvalidPriceText" fill="#da0303" layoutX="20.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid price!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="createTripPane1" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+         <children>
+            <Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create trip">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Text>
+            <Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
+            <Text layoutX="42.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
+            <TextField fx:id="createTripTitleTextField" layoutX="60.0" layoutY="103.0" prefHeight="27.0" prefWidth="333.0" />
+            <Text layoutX="60.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Button fx:id="createTripAddPictureButton" layoutX="60.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Add picture" />
+            <Text layoutX="60.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pictures">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text layoutX="60.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <TextArea fx:id="createTripDescriptionTextArea" layoutX="60.0" layoutY="233.0" prefHeight="165.0" prefWidth="530.0" wrapText="true" />
+            <Text layoutX="60.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Button fx:id="createTripNextButton" layoutX="70.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Next" />
+            <ComboBox fx:id="createTripCategoryComboBox" layoutX="60.0" layoutY="420.0" onAction="#handleCreateTripButtons" prefHeight="25.0" prefWidth="120.0" promptText="Choose" />
+            <Text fx:id="createTripInvalidTitleText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter trip title!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidCategoryText" fill="#da0303" layoutX="60.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a category!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Button fx:id="createTripCancelButton1" layoutX="465.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
+            <Text fx:id="createTripInvalidPictureText" fill="#da0303" layoutX="60.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid picture!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripIntructorText" layoutX="197.0" layoutY="455.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Click on categories to partocipate as instructor" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <HBox fx:id="createTripPictureListHBox" layoutX="150.0" layoutY="164.0" prefHeight="22.0" prefWidth="450.0" spacing="4.0" />
+            <HBox fx:id="createTripCategoryListHBox" layoutX="197.0" layoutY="421.0" prefHeight="22.0" prefWidth="392.0" spacing="4.0" />
+            <Text fx:id="createTripDescriptionLengthLabel" layoutX="489.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0/255" textAlignment="RIGHT" wrappingWidth="99.99999183416367">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="createTripPane2" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+         <children>
+            <Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create trip">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Text>
+            <Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
+            <Text layoutX="42.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Practical information">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
+            <TextField fx:id="createTripAddressTextField" layoutX="60.0" layoutY="104.0" />
+            <Text layoutX="60.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Meeting address">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <TextField fx:id="createTripPriceTextField" layoutX="340.0" layoutY="104.0" promptText="kr." />
+            <Text layoutX="340.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <DatePicker fx:id="createTripTimeStartDatePicker" layoutX="60.0" layoutY="266.0" />
+            <Text layoutX="60.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start date">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text layoutX="60.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Button fx:id="createTripCreateTripButton" layoutX="70.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Create trip" />
+            <Button fx:id="createTripBackButton" layoutX="500.0" layoutY="516.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" text="Back" />
+            <ComboBox fx:id="createTripLocationComboBox" layoutX="60.0" layoutY="182.0" prefWidth="150.0" promptText="Choose" />
+            <Text layoutX="340.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participant limit">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <TextField fx:id="createTripParticipantLimitTextField" layoutX="340.0" layoutY="182.0" />
+            <Text layoutX="60.0" layoutY="340.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tags (Seperate by space)">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <TextField fx:id="createTripTagsTextField" layoutX="60.0" layoutY="344.0" prefHeight="25.0" prefWidth="300.0" promptText="tag1 tag2 tag3" />
+            <Text fx:id="createTripInvalidPriceText" fill="#da0303" layoutX="339.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid price!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidDateText" fill="#da0303" layoutX="60.0" layoutY="302.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid date!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Button fx:id="createTripCancelButton2" layoutX="465.0" layoutY="482.0" mnemonicParsing="false" onAction="#handleCreateTripButtons" prefWidth="76.0" text="Cancel" />
+            <Text fx:id="createTripInvalidParticipantLimitText" fill="#da0303" layoutX="340.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter valid participant limit!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidLocationText" fill="#da0303" layoutX="60.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a location!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="createTripInvalidMeetingAddressText" fill="#da0303" layoutX="60.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter a meeting address!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Spinner fx:id="createTripHourSpinner" layoutX="339.0" layoutY="266.0" prefHeight="25.0" prefWidth="60.0" />
+            <Spinner fx:id="createTripMinuteSpinner" layoutX="431.0" layoutY="266.0" prefHeight="25.0" prefWidth="60.0" />
+            <Text layoutX="339.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="hour">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text layoutX="431.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="minute">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="myTripsPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false">
+         <children>
+            <Text layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Trips">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Text>
+            <Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
+            <Button fx:id="myTripsCreateTripButton" layoutX="60.0" layoutY="100.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Create Trip" />
+            <Button fx:id="myTripsModifyTripButton" disable="true" layoutX="60.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="Modify Trip" />
+            <Button fx:id="myTripsViewTripButton" disable="true" layoutX="60.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefWidth="80.0" text="View Trip" />
+            <ListView fx:id="myTripsListView" layoutX="160.0" layoutY="100.0" onMouseClicked="#handleMyTripsListView" prefHeight="420.0" prefWidth="420.0" />
+            <Button fx:id="myTripsDeleteTripButton" disable="true" layoutX="60.0" layoutY="221.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" prefHeight="25.0" prefWidth="80.0" text="Delete Trip" />
+            <Label layoutX="57.0" layoutY="278.0" text="Filter" />
+            <RadioButton fx:id="myTripsToggleAll" layoutX="40.0" layoutY="303.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" selected="true" text="All">
+               <toggleGroup>
+                  <ToggleGroup fx:id="myTripsToggleGroup" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="myTripsOrganizedRadioButton" layoutX="40.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleMyTripsButtons" text="Organized by me" toggleGroup="$myTripsToggleGroup" />
+         </children></AnchorPane>
+      <AnchorPane fx:id="viewTripPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0">
+         <children>
+            <Text fx:id="viewTripTitleLabel" layoutX="42.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Text>
+            <Line endX="460.0" layoutX="143.0" layoutY="48.0" startX="-100.0" />
+            <Text layoutX="42.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" wrappingWidth="279.9999995599501">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
+            <Text layoutX="42.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price:">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
+            <Button fx:id="joinTripButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefWidth="60.0" text="Join trip" />
+            <ListView fx:id="viewListOfParticipants" layoutX="43.0" layoutY="374.0" onMouseClicked="#handleViewTripListView" prefHeight="188.0" prefWidth="256.0" />
+            <Text fx:id="viewTripParticipantsLabel" layoutX="43.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants:" wrappingWidth="91.99999879766256">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
+            <ImageView fx:id="viewTripPaneImageView" fitHeight="165.0" fitWidth="248.0" layoutX="344.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true" />
+            <TextArea fx:id="viewTripDescriptionTextArea" editable="false" layoutX="42.0" layoutY="80.0" prefHeight="165.0" prefWidth="256.0" wrapText="true" />
+            <TextField fx:id="viewTripPriceTextField" editable="false" layoutX="43.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
+            <TextField fx:id="viewTripAddressTextField" editable="false" layoutX="178.0" layoutY="269.0" prefHeight="25.0" prefWidth="120.0" />
+            <Label layoutX="178.0" layoutY="251.0" text="Address:" />
+            <Label layoutX="42.0" layoutY="304.0" text="Date:" />
+            <Label layoutX="178.0" layoutY="304.0" text="Location:" />
+            <TextField fx:id="viewTripDateTextField" editable="false" layoutX="42.0" layoutY="321.0" prefHeight="25.0" prefWidth="120.0" />
+            <TextField fx:id="viewTripLocationTextField" editable="false" layoutX="178.0" layoutY="321.0" prefHeight="25.0" prefWidth="120.0" />
+            <Label fx:id="viewTripLimitLabel" layoutX="249.0" layoutY="357.0" text="Limit" />
+            <Label layoutX="323.0" layoutY="357.0" text="Categories:" />
+            <TextArea fx:id="viewTripCategoriesTextArea" editable="false" layoutX="322.0" layoutY="374.0" prefHeight="188.0" prefWidth="128.0" wrapText="true" />
+            <Button fx:id="viewTripKickButton" layoutX="53.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Kick participant" visible="false" />
+            <Button fx:id="viewTripBackButton" layoutX="322.0" layoutY="321.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefWidth="60.0" text="Back" />
+            <Button fx:id="viewTripSaveChangesButton" layoutX="322.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Save Changes" />
+            <Button fx:id="viewTripLastButton" disable="true" layoutX="304.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleViewTripButtons" text="Last" visible="false" />
+            <Button fx:id="viewTripNextButton" disable="true" layoutX="596.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleViewTripButtons" prefHeight="25.0" prefWidth="43.0" text="Next" visible="false" />
+            <Text fx:id="viewTripOrganizerLabel" layoutX="371.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Organizer: ">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Text>
+            <Label fx:id="viewTripDescriptionLengthLabel" alignment="CENTER_RIGHT" layoutX="218.0" layoutY="63.0" prefHeight="17.0" prefWidth="81.0" text="0/255" textAlignment="RIGHT" />
+            <Label fx:id="viewTripInstructorsLabel" layoutX="468.0" layoutY="357.0" text="Instructors" />
+            <ListView fx:id="viewTripInstructorsListView" layoutX="468.0" layoutY="374.0" prefHeight="188.0" prefWidth="149.0" />
+            <Label fx:id="viewTripInstructedTripLabel" layoutX="468.0" layoutY="296.0" text="Instructed">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="logInPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <Label layoutX="71.0" layoutY="117.0" text="Email" />
+            <TextField fx:id="logInEmailTextField" layoutX="71.0" layoutY="134.0" prefHeight="25.0" prefWidth="240.0" />
+						<Text fx:id="logInInvalidEmailText" fill="#da0303" layoutX="71.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter email!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Label layoutX="71.0" layoutY="177.0" text="Password" />
+						<PasswordField fx:id="logInPasswordTextField" layoutX="71.0" layoutY="194.0" prefHeight="25.0" prefWidth="240.0" />
+						<Text fx:id="logInInvalidPasswordText" fill="#da0303" layoutX="71.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter password!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Button fx:id="logInButton" layoutX="73.0" layoutY="241.0" mnemonicParsing="false" onAction="#handleLogInButton" text="Log In" />
+            <Hyperlink fx:id="newAccountButton" layoutX="71.0" layoutY="281.0" onAction="#handleNewAccountButton" text="Create new account" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="newAccountPane" layoutY="40.0" prefHeight="623.0" prefWidth="644.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <Label layoutX="115.0" layoutY="128.0" text="Name" />
+            <Label layoutX="115.0" layoutY="237.0" text="Password" />
+            <Label layoutX="115.0" layoutY="182.0" text="Email" />
+            <TextField fx:id="newAccountNameTextField" layoutX="115.0" layoutY="145.0" />
+            <TextField fx:id="newAccountEmailTextField" layoutX="115.0" layoutY="199.0" />
+            <Label layoutX="115.0" layoutY="295.0" text="Repeat password" />
+            <PasswordField fx:id="newAccountPasswordTextField" layoutX="115.0" layoutY="254.0" />
+            <PasswordField fx:id="newAccountRepeatPasswordTextField" layoutX="115.0" layoutY="312.0" prefHeight="25.0" prefWidth="150.0" />
+            <ImageView fx:id="newAccountImageView" fitHeight="150.0" fitWidth="200.0" layoutX="330.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="newAccountProfilePictureButton" layoutX="330.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Choose image" />
+            <Label layoutX="330.0" layoutY="154.0" text="Profile picture" />
+            <Button fx:id="newAccountCreateButton" layoutX="117.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Create account" />
+            <Button fx:id="newAccountBackButton" cancelButton="true" layoutX="223.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Back" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false">
+         <children>
 
 				<Button fx:id="profileChangeProfileButton" layoutX="322.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleProfileButtons" text="Change picture" />
 

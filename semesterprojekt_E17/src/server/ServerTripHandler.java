@@ -431,9 +431,9 @@ public class ServerTripHandler {
 		}
 
 		if (tripType.equals("NORMAL")) {
-			query += " AND NOT InstructorsInTrips.tripID = trips.tripID";
+			query += " AND NOT trips.tripID IN (SELECT tripID FROM InstructorsInTrips)";
 		} else if (tripType.equals("INSTRUCTOR")) {
-			query += " AND InstructorsInTrips.tripID = trips.tripID";
+			query += " AND trips.tripID IN (SELECT tripID FROM InstructorsInTrips)";
 		}
 
 		//Initializes a ResultSet and an ArrayList for handling the creation of trips to be returned
@@ -450,7 +450,10 @@ public class ServerTripHandler {
 				String description = searchResult.getString("tripDescription");
 				double price = searchResult.getDouble("tripPrice");
 
-				searchResultTrips.add(new Trip(id, title, description, price));
+				Trip trip = new Trip(id, title, description, price);
+				trip.setInstructors(getTripInstructors(id));
+
+				searchResultTrips.add(trip);
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -749,6 +752,41 @@ public class ServerTripHandler {
 		}
 
 		return participants;
+	}
+
+	private static List<InstructorListItem> getTripInstructors(int tripId) {
+		String query = ""
+						+ "SELECT userID, userName, categoryID, categoryName\n"
+						+ "FROM Users\n"
+						+ "NATURAL JOIN certificates\n"
+						+ "NATURAL JOIN categories\n"
+						+ "WHERE userID IN (\n"
+						+ "    SELECT InstructorsInTrips.userID \n"
+						+ "    FROM Trips\n"
+						+ "    NATURAL JOIN InstructorsInTrips\n"
+						+ "    WHERE Trips.tripID = " + tripId + ")";
+
+		ResultSet instructorsRs = dbm.executeQuery(query);
+
+		List<InstructorListItem> instructors = new ArrayList<>();
+
+		try {
+			while (instructorsRs.next()) {
+				int userId = instructorsRs.getInt("userID");
+				String userName = instructorsRs.getString("userName");
+				int categoryId = instructorsRs.getInt("categoryID");
+				String categoryName = instructorsRs.getString("categoryName");
+
+				User user = new User(userId, userName);
+				Category category = new Category(categoryId, categoryName);
+				
+				instructors.add(new InstructorListItem(user, category));
+			}
+		} catch (SQLException ex) {
+			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		return instructors;
 	}
 
 }

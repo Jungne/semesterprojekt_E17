@@ -54,6 +54,11 @@ public class HBoxCell extends HBox {
 
 		label3.setText(Double.toString(trip.getPrice()) + "kr");
 
+		if (!trip.getInstructors().isEmpty()) {
+			label4.setText("Instructed");
+			label4.setStyle("-fx-font-weight: bold");
+		}
+
 		/*
 		if (!trip.getCategories().isEmpty()) {
 			label4.setText(trip.getCategories().get(0).getName());
