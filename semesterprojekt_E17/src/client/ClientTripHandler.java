@@ -9,6 +9,7 @@ import interfaces.OptionalPrice;
 import interfaces.Trip;
 import interfaces.User;
 import java.rmi.RemoteException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +27,10 @@ public class ClientTripHandler {
 		}
 	}
 
+	public static List<Trip> searchTrips(IServerController serverController, String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
+		return serverController.searchTrips(searchTitle, categories, timedateStart, location, priceMAX, tripType);
+	}
+	
 	public static void deleteTrip(IServerController serverController, int tripId, int organizerId) {
 		try {
 			serverController.deleteTrip(tripId, organizerId);

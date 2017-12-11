@@ -70,7 +70,7 @@ public class ClientController {
 	}
 
 	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
-		return serverController.searchTrips(searchTitle, categories, timedateStart, location, priceMAX, tripType);
+		return ClientTripHandler.searchTrips(serverController,searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}
 
 	public Trip showTrip(int tripID) {
