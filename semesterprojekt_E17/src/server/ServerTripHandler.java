@@ -749,7 +749,6 @@ public class ServerTripHandler {
 		}
 
 		return participants;
-
 	}
 
 }

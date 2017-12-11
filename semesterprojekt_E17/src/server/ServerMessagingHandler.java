@@ -283,4 +283,5 @@ public class ServerMessagingHandler {
 
 		return getConversation(new Conversation(conversationId, "users"));
 	}
+
 }

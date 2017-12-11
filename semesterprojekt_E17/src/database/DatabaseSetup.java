@@ -219,7 +219,7 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Sailing');");
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Backpacking');");
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Cycling');");
-		
+
 		//Inserts locations
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Northern Jutland');");
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Central Jutland');");

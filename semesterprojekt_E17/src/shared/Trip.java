@@ -320,7 +320,7 @@ public class Trip implements Serializable {
 	public List<Image> getImages() {
 		return images;
 	}
-	
+
 	public void addImage(Image image) {
 		images.add(image);
 	}

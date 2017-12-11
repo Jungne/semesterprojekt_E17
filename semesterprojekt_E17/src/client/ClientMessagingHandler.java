@@ -25,8 +25,7 @@ public class ClientMessagingHandler {
 
 	/**
 	 * Remote object that is passed to the server and used to perform callbacks
-	 * that deliver messages, represents a user on the
-	 * server.
+	 * that deliver messages, represents a user on the server.
 	 */
 	@SuppressWarnings("serial")
 	private static class MessageReceiver extends UnicastRemoteObject implements IChatClient {
@@ -92,15 +91,15 @@ public class ClientMessagingHandler {
 	public static void setMessagesList(ObservableList messagesList) {
 		ClientMessagingHandler.messagesList = messagesList;
 	}
-	
+
 	public static void signOut() {
 		receiver = null;
 	}
-	
+
 	public static String getConversationName(IServerController serverController, Conversation conversation, User currentUser) throws RemoteException {
 		return serverController.getConversationName(conversation, currentUser);
 	}
-	
+
 	public static Conversation getUserConversation(IServerController serverController, int userId1, int userId2) {
 		try {
 			return serverController.getUserConversation(userId1, userId2);
@@ -109,4 +108,5 @@ public class ClientMessagingHandler {
 		}
 		return null;
 	}
+
 }

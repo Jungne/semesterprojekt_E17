@@ -27,8 +27,8 @@ public class ClientController {
 	private Conversation activeConversation;
 
 	public ClientController() throws RemoteException {
-		//String hostname = "tek-sb3-glo0a.tek.sdu.dk";
-		String hostname = "localhost";
+		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
+		//String hostname = "localhost";
 
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12312);
@@ -70,7 +70,7 @@ public class ClientController {
 	}
 
 	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
-		return ClientTripHandler.searchTrips(serverController,searchTitle, categories, timedateStart, location, priceMAX, tripType);
+		return ClientTripHandler.searchTrips(serverController, searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}
 
 	public Trip showTrip(int tripID) {
@@ -143,7 +143,7 @@ public class ClientController {
 		return ClientMessagingHandler.getUserConversations(serverController, currentUser);
 	}
 
-	public String getConversationName(Conversation conversation){
+	public String getConversationName(Conversation conversation) {
 		try {
 			return ClientMessagingHandler.getConversationName(serverController, conversation, currentUser);
 		} catch (RemoteException ex) {
@@ -167,5 +167,5 @@ public class ClientController {
 	public Conversation getUserConversation(int userId) {
 		return ClientMessagingHandler.getUserConversation(serverController, currentUser.getId(), userId);
 	}
-	
+
 }

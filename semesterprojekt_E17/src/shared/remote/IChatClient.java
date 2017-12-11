@@ -20,5 +20,5 @@ public interface IChatClient extends Remote {
 	public void receiveMessage(Message message) throws RemoteException;
 
 	public int getUserId() throws RemoteException;
-	
+
 }

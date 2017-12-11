@@ -30,7 +30,7 @@ public class ClientTripHandler {
 	public static List<Trip> searchTrips(IServerController serverController, String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
 		return serverController.searchTrips(searchTitle, categories, timedateStart, location, priceMAX, tripType);
 	}
-	
+
 	public static void deleteTrip(IServerController serverController, int tripId, int organizerId) {
 		try {
 			serverController.deleteTrip(tripId, organizerId);
@@ -109,7 +109,7 @@ public class ClientTripHandler {
 		}
 		return null;
 	}
-	
+
 	public static List<Trip> getMyTrips(User user, IServerController serverController, int organizerId) {
 		try {
 			return serverController.getMyTrips(user, organizerId);
@@ -118,4 +118,5 @@ public class ClientTripHandler {
 		}
 		return null;
 	}
+
 }
