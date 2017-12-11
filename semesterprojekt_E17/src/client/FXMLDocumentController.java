@@ -483,22 +483,22 @@ public class FXMLDocumentController implements Initializable {
 			viewTripDateTextField.setText(viewedTrip.getTimeStart().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
 			viewTripCategoriesTextArea.setText(viewedTrip.getCategories() == null || viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
-			
+
 			viewTripInstructorsListView.getItems().clear();
-			if(viewedTrip.getInstructors().isEmpty()) {
+			if (viewedTrip.getInstructors().isEmpty()) {
 				viewTripInstructedTripLabel.setVisible(false);
 				viewTripInstructorsLabel.setVisible(false);
 				viewTripInstructorsListView.setVisible(false);
 			} else {
 				viewTripInstructedTripLabel.setVisible(true);
 				viewTripInstructorsLabel.setVisible(true);
-				viewTripInstructorsListView.setVisible(true);	
-				
-				for(InstructorListItem instructor : viewedTrip.getInstructors()) {
+				viewTripInstructorsListView.setVisible(true);
+
+				for (InstructorListItem instructor : viewedTrip.getInstructors()) {
 					viewTripInstructorsListView.getItems().add(new HBoxCell(0, instructor.getUser().getName() + ": " + instructor.getCategory().getName()));
-				}				
+				}
 			}
-			
+
 			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
 			if (viewedTrip.getImages().size() <= 0) {
 				viewTripNextButton.setVisible(true);
@@ -745,6 +745,17 @@ public class FXMLDocumentController implements Initializable {
 		}
 		return change;
 	};
+
+	private void updateDescriptionLengthLabels(Change change) {
+		int newLength = change.getControlNewText().length();
+		if (newLength > 255) {
+			viewTripDescriptionLengthLabel.setText(viewTripDescriptionTextArea.getText().length() + "/255");
+			createTripDescriptionLengthLabel.setText(createTripDescriptionTextArea.getText().length() + "/255");
+		} else {
+			viewTripDescriptionLengthLabel.setText(newLength + "/255");
+			createTripDescriptionLengthLabel.setText(newLength + "/255");
+		}
+	}
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Browse Trips - Methods">
@@ -1709,12 +1720,9 @@ public class FXMLDocumentController implements Initializable {
 			browseUsersMessageButton.setDisable(false);
 		}
 	}
-
 	// </editor-fold>
-	private void loadConversation(int ConversationId) {
 
-	}
-
+	// <editor-fold defaultstate="collapsed" desc="Messaging - Methods">
 	private void getUserConversations() {
 		Platform.runLater(() -> {
 			List<Conversation> conversations = clientController.getUserConversations();
@@ -1780,16 +1788,6 @@ public class FXMLDocumentController implements Initializable {
 
 		showPane(messagingPane);
 	}
-
-	private void updateDescriptionLengthLabels(Change change) {
-		int newLength = change.getControlNewText().length();
-		if (newLength > 255) {
-			viewTripDescriptionLengthLabel.setText(viewTripDescriptionTextArea.getText().length() + "/255");
-			createTripDescriptionLengthLabel.setText(createTripDescriptionTextArea.getText().length() + "/255");
-		} else {
-			viewTripDescriptionLengthLabel.setText(newLength + "/255");
-			createTripDescriptionLengthLabel.setText(newLength + "/255");
-		}
-	}
+	// </editor-fold>
 
 }
