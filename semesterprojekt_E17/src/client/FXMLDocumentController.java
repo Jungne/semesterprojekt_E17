@@ -475,7 +475,7 @@ public class FXMLDocumentController implements Initializable {
 			viewTripAddressTextField.setText(viewedTrip.getMeetingAddress());
 			viewTripDateTextField.setText(viewedTrip.getTimeStart().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 			viewTripLocationTextField.setText(viewedTrip.getLocation().getName());
-			viewTripCategoriesTextArea.setText(viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
+			viewTripCategoriesTextArea.setText(viewedTrip.getCategories() == null || viewedTrip.getCategories().isEmpty() ? "" : viewedTrip.getCategories().toString());
 			viewTripLimitLabel.setText(viewedTrip.getParticipants().size() + "/" + viewedTrip.getParticipantLimit());
 			if (viewedTrip.getImages().size() <= 0) {
 				viewTripNextButton.setVisible(true);
@@ -1549,12 +1549,13 @@ public class FXMLDocumentController implements Initializable {
 				loadMyOrganizedTrips();
 			}
 		} else if (myTripsToggleGroup.getToggles().contains(event.getSource())) {
+			myTripsDeleteTripButton.setDisable(true);
+			myTripsModifyTripButton.setDisable(true);
+			myTripsViewTripButton.setDisable(true);
 			if (myTripsToggleGroup.getSelectedToggle() == myTripsToggleAll) {
 				loadMyTrips();
-				myTripsDeleteTripButton.setDisable(true);
 			} else if (myTripsToggleGroup.getSelectedToggle() == myTripsOrganizedRadioButton) {
 				loadMyOrganizedTrips();
-				myTripsDeleteTripButton.setDisable(false);
 			}
 		}
 	}
@@ -1564,6 +1565,7 @@ public class FXMLDocumentController implements Initializable {
 		myTripsDeleteTripButton.setDisable(true);
 		myTripsToggleAll.setSelected(true);
 		myTripsModifyTripButton.setDisable(true);
+		myTripsViewTripButton.setDisable(true);
 	}
 
 	@FXML
@@ -1572,6 +1574,8 @@ public class FXMLDocumentController implements Initializable {
 			int tripId = myTripsListView.getSelectionModel().getSelectedItem().getTripId();
 			int organizerId = clientController.viewTrip(tripId).getOrganizer().getId();
 			myTripsModifyTripButton.setDisable(organizerId != clientController.getCurrentUser().getId());
+			myTripsDeleteTripButton.setDisable(organizerId != clientController.getCurrentUser().getId());
+			myTripsViewTripButton.setDisable(false);
 		}
 	}
 
