@@ -327,9 +327,9 @@
             <Label fx:id="viewTripDescriptionLengthLabel" alignment="CENTER_RIGHT" layoutX="218.0" layoutY="63.0" prefHeight="17.0" prefWidth="81.0" text="0/255" textAlignment="RIGHT" />
             <Label fx:id="viewTripInstructorsLabel" layoutX="468.0" layoutY="357.0" text="Instructors" />
             <ListView fx:id="viewTripInstructorsListView" layoutX="468.0" layoutY="374.0" prefHeight="188.0" prefWidth="149.0" />
-            <Label fx:id="viewTripInstructedTripLabel" layoutX="468.0" layoutY="296.0" text="Instructed">
+            <Label fx:id="viewTripInstructedTripLabel" layoutX="468.0" layoutY="287.0" text="Instructed">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="24.0" />
                </font>
             </Label>
          </children>

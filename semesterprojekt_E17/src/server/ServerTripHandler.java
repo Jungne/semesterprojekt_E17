@@ -554,8 +554,12 @@ public class ServerTripHandler {
 				List<Image> images = getImagesInTrip(id);
 
 				List<User> participants = getTripParticipants(tripID);
+				List<InstructorListItem> instructors = getTripInstructors(tripID);
 
-				return new Trip(id, title, description, price, date, address, location, participantLimit, organizer, categories, images, participants);
+				Trip trip = new Trip(id, title, description, price, date, address, location, participantLimit, organizer, categories, images, participants);
+				trip.setInstructors(instructors);
+				
+				return trip;
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
