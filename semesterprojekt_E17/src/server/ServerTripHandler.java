@@ -42,31 +42,31 @@ public class ServerTripHandler {
 	public static int createTrip(Trip newTrip) {
 		//Checks if category ids exists
 		if (!categoriesExists(newTrip.getCategories())) {
-			return -1;
+			throw new IllegalArgumentException("Category does not exist.");
 		}
 
 		//Checks if location id exists
 		if (!locationExists(newTrip.getLocation())) {
-			return -1;
+			throw new IllegalArgumentException("Location does not exist.");
 		}
 
 		//Checks if organizer id exists
 		if (!userExists(newTrip.getOrganizer())) {
-			return -1;
+			throw new IllegalArgumentException("Organizer does not exist.");
 		}
 
 		//Checks if organizer have the required certificates
 		if (newTrip.getInstructors() != null) {
 			for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
 				if (!certificateExists(instructorListItem)) {
-					return -1;
+					throw new IllegalArgumentException("Certificate does not exist.");
 				}
 			}
 		}
 
 		//Checks if values are valid and then converts values to SQL values
 		if (newTrip.getTitle() == null || newTrip.getTitle().isEmpty()) {
-			return -1;
+			throw new IllegalArgumentException("Trip title is null or empty.");
 		}
 		String sqlTripTitle = "'" + newTrip.getTitle() + "'";
 
@@ -78,26 +78,26 @@ public class ServerTripHandler {
 		}
 
 		if (newTrip.getPrice() < 0) {
-			return -1;
+			throw new IllegalArgumentException("Trip price is less than zero.");
 		}
 		String sqlTripPrice = newTrip.getPrice() + "";
 
 		if (newTrip.getTimeStart() == null || newTrip.getTimeStart().isBefore(LocalDateTime.now())) {
-			return -1;
+			throw new IllegalArgumentException("Trip timeStart is null or before now.");
 		}
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String sqlTimeStart = "'" + newTrip.getTimeStart().format(formatter) + "'";
 
 		String sqlTripAddress;
 		if (newTrip.getMeetingAddress() == null || newTrip.getMeetingAddress().isEmpty()) {
-			return -1;
+			throw new IllegalArgumentException("Trip meeting address is null or empty.");
 		} else {
 			sqlTripAddress = "'" + newTrip.getMeetingAddress() + "'";
 		}
 
 		String sqlParticipantLimit;
 		if (newTrip.getParticipantLimit() < 0) {
-			return -1;
+			throw new IllegalArgumentException("Participant limit is less than zero.");
 		}
 		if (newTrip.getParticipantLimit() == 0) {
 			sqlParticipantLimit = "null";
@@ -107,9 +107,7 @@ public class ServerTripHandler {
 
 		//Creates the group conversation and returnes the conversation id. -1 is returned if it failed
 		int sqlConversationId = ServerMessagingHandler.addConversation("trip");
-		if (sqlConversationId == -1) {
-			return -1;
-		}
+
 		//Adds a trip to the database and returnes its id
 		int tripId = dbm.executeInsertAndGetId("INSERT INTO "
 						+ "Trips (tripID, tripTitle, tripDescription, tripPrice, timeStart, "
@@ -513,7 +511,6 @@ public class ServerTripHandler {
 
 		if (!isTripFull(trip)) {
 			addParticipant(tripID, userID);
-			System.out.println("Joined trip");
 		} else {
 			throw new FullTripException("Trip is full.");
 		}
@@ -558,7 +555,7 @@ public class ServerTripHandler {
 
 				Trip trip = new Trip(id, title, description, price, date, address, location, participantLimit, organizer, categories, images, participants);
 				trip.setInstructors(instructors);
-				
+
 				return trip;
 			}
 		} catch (SQLException ex) {
@@ -635,15 +632,14 @@ public class ServerTripHandler {
 
 	public static boolean isTripFull(Trip trip) {
 		try {
-			ResultSet fullTripCheck = dbm.executeQuery("SELECT UsersInTrips.tripId, COUNT(UsersInTrips.tripId), MAX(participantLimit)\n"
-							+ "FROM UsersInTrips\n"
-							+ "INNER JOIN Trips On UsersInTrips.tripId = Trips.tripID\n"
-							+ "WHERE UsersInTrips.tripId = " + trip.getId() + "\n"
-							+ "GROUP BY UsersInTrips.tripId");
+			ResultSet fullTripCheck = dbm.executeQuery("SELECT UsersInTrips.tripID, COUNT(UsersInTrips.tripID), MAX(participantLimit) "
+							+ "FROM UsersInTrips "
+							+ "INNER JOIN Trips On UsersInTrips.tripID = Trips.tripID "
+							+ "WHERE UsersInTrips.tripID = " + trip.getId() + " "
+							+ "GROUP BY UsersInTrips.tripID");
 			if (fullTripCheck.next()) {
 				int usersInTrip = (int) fullTripCheck.getLong("count");
 				int participantLimit = fullTripCheck.getInt("max");
-				System.out.println(usersInTrip >= participantLimit);
 				return usersInTrip >= participantLimit;
 			} else {
 				return false;
@@ -657,12 +653,14 @@ public class ServerTripHandler {
 	public static List<Trip> getMyTrips(User user) {
 		try {
 			String query = ""
-							+ "SELECT trips.tripid, triptitle, tripdescription, tripprice, imagefile\n"
-							+ "FROM trips\n"
-							+ "INNER JOIN usersInTrips ON trips.tripid = usersInTrips.tripid\n"
-							+ "INNER JOIN imagesInTrips ON imagesInTrips.tripid = trips.tripid\n"
-							+ "INNER JOIN images ON images.imageid = imagesInTrips.imageid\n"
-							+ "WHERE usersInTrips.userid = " + user.getId() + " AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid) AND timeStart >= NOW()";
+							+ "SELECT Trips.tripID, tripTitle, tripDescription, tripPrice, imageFile "
+							+ "FROM Trips "
+							+ "INNER JOIN UsersInTrips ON Trips.tripID = UsersInTrips.tripID "
+							+ "INNER JOIN ImagesInTrips ON ImagesInTrips.tripID = Trips.tripID "
+							+ "INNER JOIN Images ON Images.imageID = ImagesInTrips.imageID "
+							+ "WHERE UsersInTrips.userID = " + user.getId() + " "
+							+ "AND ImagesInTrips.imageID IN (SELECT MIN(imageID) FROM ImagesInTrips GROUP BY tripID) "
+							+ "AND timeStart >= NOW();";
 			List<Trip> myTrips = new ArrayList<>();
 
 			ResultSet tripsRs = dbm.executeQuery(query);
@@ -686,12 +684,14 @@ public class ServerTripHandler {
 	public static List<Trip> getMyTrips(User user, int organizerId) {
 		try {
 			String query = ""
-							+ "SELECT trips.tripid, triptitle, tripdescription, tripprice, imagefile\n"
-							+ "FROM trips\n"
-							+ "INNER JOIN usersInTrips ON trips.tripid = usersInTrips.tripid\n"
-							+ "INNER JOIN imagesInTrips ON imagesInTrips.tripid = trips.tripid\n"
-							+ "INNER JOIN images ON images.imageid = imagesInTrips.imageid\n"
-							+ "WHERE usersInTrips.userid = " + user.getId() + " AND imagesintrips.imageid IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripid) AND trips.userID = " + organizerId;
+							+ "SELECT Trips.tripid, tripTitle, tripDescription, tripPrice, imageFile "
+							+ "FROM Trips "
+							+ "INNER JOIN UsersInTrips ON Trips.tripID = UsersInTrips.tripID "
+							+ "INNER JOIN ImagesInTrips ON ImagesInTrips.tripID = Trips.tripID "
+							+ "INNER JOIN Images ON Images.imageID = ImagesInTrips.imageID "
+							+ "WHERE UsersInTrips.userID = " + user.getId() + " "
+							+ "AND ImagesInTrips.imageID IN (SELECT MIN(imageID) FROM ImagesInTrips GROUP BY tripID) "
+							+ "AND Trips.userID = " + organizerId + ";";
 			List<Trip> myTrips = new ArrayList<>();
 
 			ResultSet tripsRs = dbm.executeQuery(query);
@@ -714,15 +714,15 @@ public class ServerTripHandler {
 
 	public static int getConversationId(int tripId) {
 		String query = ""
-						+ "SELECT conversationId "
+						+ "SELECT conversationID "
 						+ "FROM Trips "
-						+ "WHERE tripId = " + tripId;
+						+ "WHERE tripID = " + tripId;
 
 		ResultSet conversationIdRs = dbm.executeQuery(query);
 
 		try {
 			if (conversationIdRs.next()) {
-				return conversationIdRs.getInt("conversationId");
+				return conversationIdRs.getInt("conversationID");
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -732,13 +732,13 @@ public class ServerTripHandler {
 
 	public static List<User> getTripParticipants(int tripId) {
 		String query = ""
-						+ "SELECT *\n"
-						+ "FROM Users\n"
-						+ "WHERE userID IN (\n"
-						+ "    SELECT UsersInTrips.userID \n"
-						+ "    FROM Trips\n"
-						+ "    INNER JOIN UsersInTrips ON Trips.tripID = UsersInTrips.tripID\n"
-						+ "    WHERE Trips.tripID = " + tripId + ")";
+						+ "SELECT * "
+						+ "FROM Users "
+						+ "WHERE userID IN ("
+						+ "    SELECT UsersInTrips.userID "
+						+ "    FROM Trips "
+						+ "    INNER JOIN UsersInTrips ON Trips.tripID = UsersInTrips.tripID "
+						+ "    WHERE Trips.tripID = " + tripId + ");";
 
 		ResultSet participantsRs = dbm.executeQuery(query);
 
@@ -760,15 +760,15 @@ public class ServerTripHandler {
 
 	private static List<InstructorListItem> getTripInstructors(int tripId) {
 		String query = ""
-						+ "SELECT userID, userName, categoryID, categoryName\n"
-						+ "FROM Users\n"
-						+ "NATURAL JOIN certificates\n"
-						+ "NATURAL JOIN categories\n"
-						+ "WHERE userID IN (\n"
-						+ "    SELECT InstructorsInTrips.userID \n"
-						+ "    FROM Trips\n"
-						+ "    NATURAL JOIN InstructorsInTrips\n"
-						+ "    WHERE Trips.tripID = " + tripId + ")";
+						+ "SELECT userID, userName, categoryID, categoryName "
+						+ "FROM Users "
+						+ "NATURAL JOIN Certificates "
+						+ "NATURAL JOIN Categories "
+						+ "WHERE userID IN ("
+						+ "    SELECT InstructorsInTrips.userID "
+						+ "    FROM Trips "
+						+ "    NATURAL JOIN InstructorsInTrips "
+						+ "    WHERE Trips.tripID = " + tripId + ");";
 
 		ResultSet instructorsRs = dbm.executeQuery(query);
 
@@ -783,7 +783,7 @@ public class ServerTripHandler {
 
 				User user = new User(userId, userName);
 				Category category = new Category(categoryId, categoryName);
-				
+
 				instructors.add(new InstructorListItem(user, category));
 			}
 		} catch (SQLException ex) {

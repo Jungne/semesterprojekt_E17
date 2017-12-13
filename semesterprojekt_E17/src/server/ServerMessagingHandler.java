@@ -34,25 +34,28 @@ public class ServerMessagingHandler {
 
 	/**
 	 * Register clients in the form of remote objects.
+	 *
+	 * @param client
+	 * @throws java.rmi.RemoteException
 	 */
 	public void registerClient(IChatClient client) throws RemoteException {
 		clientsMap.put(client.getUserId(), client);
-		System.out.println(client.getUserId());
 	}
 
 	/**
 	 * Register the active conversations.
+	 *
+	 * @param conversationID
 	 */
 	public void addActiveConversation(int conversationID) {
 		System.out.print(conversationID);
-
 	}
 
 	public List<Conversation> getUserConversations(User user) {
 		String query = ""
-						+ "SELECT conversationID, type\n"
-						+ "FROM UsersInConversations\n"
-						+ "NATURAL JOIN Conversations\n"
+						+ "SELECT conversationID, type "
+						+ "FROM UsersInConversations "
+						+ "NATURAL JOIN Conversations "
 						+ "WHERE userID = " + user.getId() + ";";
 
 		ResultSet conversationsRs = dbm.executeQuery(query);
@@ -192,8 +195,6 @@ public class ServerMessagingHandler {
 				conversationsMap.put(message.getConversationId(), loadConversationUsersIds(message.getConversationId()));
 			}
 
-			System.out.println(conversationsMap.keySet());
-
 			for (int userId : conversationsMap.get(message.getConversationId())) {
 				if (clientsMap.containsKey(userId)) {
 					clientsMap.get(userId).receiveMessage(message);
@@ -246,14 +247,14 @@ public class ServerMessagingHandler {
 //						+ "WHERE count.count = 2 AND userID IN (" + userId1 + "," + userId2 +") AND type = 'users'";
 
 		String query = ""
-						+ "SELECT conversationID\n"
-						+ "FROM (\n"
-						+ "	SELECT COUNT(userID), conversationID \n"
-						+ "	FROM (\n"
-						+ "		SELECT userID, conversationID\n"
-						+ "		FROM UsersInConversations\n"
-						+ "		WHERE userID IN (" + userId1 + ", " + userId2 + ")) AS CommonConversations\n"
-						+ "	GROUP by conversationID) AS Count\n"
+						+ "SELECT conversationID "
+						+ "FROM ("
+						+ "	SELECT COUNT(userID), conversationID "
+						+ "	FROM ("
+						+ "		SELECT userID, conversationID "
+						+ "		FROM UsersInConversations "
+						+ "		WHERE userID IN (" + userId1 + ", " + userId2 + ")) AS CommonConversations "
+						+ "	GROUP by conversationID) AS Count "
 						+ "WHERE Count.count = 2";
 
 		ResultSet conversationRs = dbm.executeQuery(query);
@@ -264,9 +265,7 @@ public class ServerMessagingHandler {
 			if (conversationRs.next()) {
 				conversationId = conversationRs.getInt("conversationID");
 			} else {
-				String newConversationQuery = ""
-								+ "INSERT INTO Conversations "
-								+ "VALUES (DEFAULT, 'users'); ";
+				String newConversationQuery = "INSERT INTO Conversations VALUES (DEFAULT, 'users'); ";
 
 				conversationId = dbm.executeInsertAndGetId(newConversationQuery);
 
@@ -274,8 +273,6 @@ public class ServerMessagingHandler {
 								+ "VALUES (" + conversationId + "," + userId1 + "), (" + conversationId + ", " + userId2 + ");";
 
 				dbm.executeUpdate(insertUsersQuery);
-
-				System.out.println(conversationId);
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
