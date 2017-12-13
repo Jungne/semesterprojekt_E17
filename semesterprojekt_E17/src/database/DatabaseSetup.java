@@ -149,7 +149,7 @@ public class DatabaseSetup {
 					= "CREATE TABLE IF NOT EXISTS ImagesIntrips ("
 					+ "imageID int, "
 					+ "tripID int, "
-					//					+ "PRIMARY KEY (imageID, tripID), "
+					+ "PRIMARY KEY (imageID, tripID), "
 					+ "FOREIGN KEY (imageID) REFERENCES Images(imageID), "
 					+ "FOREIGN KEY (tripID) REFERENCES Trips(tripID) ON DELETE CASCADE"
 					+ ");";
