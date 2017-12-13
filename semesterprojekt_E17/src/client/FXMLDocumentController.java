@@ -68,6 +68,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
+import shared.IllegalEmailException;
 
 public class FXMLDocumentController implements Initializable {
 
@@ -306,11 +307,19 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private TextField newAccountNameTextField;
 	@FXML
+	private Text newAccountInvalidNameText;
+	@FXML
 	private TextField newAccountEmailTextField;
+	@FXML
+	private Text newAccountInvalidEmailText;
 	@FXML
 	private PasswordField newAccountPasswordTextField;
 	@FXML
+	private Text newAccountInvalidPasswordText;
+	@FXML
 	private PasswordField newAccountRepeatPasswordTextField;
+	@FXML
+	private Text newAccountInvalidRepeatPasswordText;
 	@FXML
 	private ImageView newAccountImageView;
 	@FXML
@@ -365,6 +374,7 @@ public class FXMLDocumentController implements Initializable {
 	@FXML
 	private Button messagingSendButton;
 	// </editor-fold>
+
 	int CurrentImageIndex = 0;
 	@FXML
 	private Label viewTripInstructorsLabel;
@@ -546,7 +556,7 @@ public class FXMLDocumentController implements Initializable {
 		return fileChooser.showOpenDialog(stage);
 	}
 
-	private void signInUpdateClient(boolean isSignIn) {
+	private void enableToolbar(boolean isSignIn) {
 		if (isSignIn) {
 			toolBarMyTripsButton.setDisable(false);
 			toolBarProfileButton.setDisable(false);
@@ -993,7 +1003,7 @@ public class FXMLDocumentController implements Initializable {
 		if (isSignedIn) {
 			showPane(profilePane);
 			loadProfileInfo();
-			signInUpdateClient(true);
+			enableToolbar(true);
 			getUserConversations();
 		} else {
 			logInInvalidEmailText.setText("Email does not match with password!");
@@ -1065,14 +1075,27 @@ public class FXMLDocumentController implements Initializable {
 
 	// <editor-fold defaultstate="collapsed" desc="New Account - Methods">
 	private void resetNewAccountPane() {
+		//Resets text and style
 		newAccountNameTextField.clear();
+		newAccountNameTextField.setStyle(null);
 		newAccountEmailTextField.clear();
+		newAccountEmailTextField.setStyle(null);
 		newAccountPasswordTextField.clear();
+		newAccountPasswordTextField.setStyle(null);
 		newAccountRepeatPasswordTextField.clear();
+		newAccountRepeatPasswordTextField.setStyle(null);
+
+		//Resets warning texts
+		newAccountInvalidNameText.setVisible(false);
+		newAccountInvalidEmailText.setVisible(false);
+		newAccountInvalidPasswordText.setVisible(false);
+		newAccountInvalidRepeatPasswordText.setVisible(false);
 
 		//Resets imageFile and imageView
 		newAccountProfilePicture = null;
 		newAccountImageView.setImage(new javafx.scene.image.Image("client/default_pictures/profile_picture.png"));
+
+		newAccountRepeatPasswordTextField.setStyle(null);
 	}
 
 	@FXML
@@ -1119,18 +1142,65 @@ public class FXMLDocumentController implements Initializable {
 		String repeatPassword = newAccountRepeatPasswordTextField.getText();
 		Image profilePicture = newAccountProfilePicture;
 
-		if (password.equals(repeatPassword)) {
-			try {
-				clientController.signUp(email, name, profilePicture, hashPassword(password));
-				showPane(profilePane);
-				loadProfileInfo();
-				signInUpdateClient(true);
-			} catch (RemoteException ex) {
-				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		} else {
-			newAccountRepeatPasswordTextField.setStyle("-fx-text-box-border: red");
+		if (!isNewAccountParametersValid(name, email, password, repeatPassword)) {
+			return;
 		}
+
+		try {
+			clientController.signUp(email, name, profilePicture, hashPassword(password));
+			showPane(profilePane);
+			loadProfileInfo();
+			enableToolbar(true);
+			newAccountInvalidEmailText.setVisible(false);
+		} catch (IllegalEmailException ex) {
+			newAccountInvalidEmailText.setText("Email is already in use!");
+			newAccountInvalidEmailText.setVisible(true);
+		}
+
+	}
+
+	private boolean isNewAccountParametersValid(String name, String email, String password, String repeatPassword) {
+		boolean isNewAccountParametersValid = true;
+
+		//Checks if name is valid
+		if (name == null || name.isEmpty()) {
+			isNewAccountParametersValid = false;
+			newAccountInvalidEmailText.setText("Enter email!");
+			newAccountInvalidNameText.setVisible(true);
+		} else {
+			newAccountInvalidNameText.setVisible(false);
+		}
+		//Checks if email is valid
+		if (email == null || email.isEmpty()) {
+			isNewAccountParametersValid = false;
+			newAccountInvalidEmailText.setVisible(true);
+		} else {
+			newAccountInvalidEmailText.setVisible(false);
+		}
+		//Checks if password is valid
+		boolean isPasswordValid = true;
+		if (password == null || password.isEmpty()) {
+			isNewAccountParametersValid = false;
+			isPasswordValid = false;
+			newAccountInvalidPasswordText.setText("Enter password!");
+			newAccountInvalidPasswordText.setVisible(true);
+		} else if (password.length() < 6) {
+			isNewAccountParametersValid = false;
+			isPasswordValid = false;
+			newAccountInvalidPasswordText.setText("Password must be at least 6 characters");
+			newAccountInvalidPasswordText.setVisible(true);
+		} else {
+			newAccountInvalidPasswordText.setVisible(false);
+		}
+		//Checks if repeated password is valid
+		if (repeatPassword == null || !repeatPassword.equals(password) && isPasswordValid) {
+			isNewAccountParametersValid = false;
+			newAccountInvalidRepeatPasswordText.setVisible(true);
+		} else {
+			newAccountInvalidRepeatPasswordText.setVisible(false);
+		}
+
+		return isNewAccountParametersValid;
 	}
 	// </editor-fold>
 
@@ -1192,7 +1262,7 @@ public class FXMLDocumentController implements Initializable {
 			resetLogInPane();
 			if (clientController.getCurrentUser() != null) {
 				clientController.signOut();
-				signInUpdateClient(false);
+				enableToolbar(false);
 			}
 		} else if (event.getSource() == toolBarBrowseUsersButton) {
 			showPane(browseUsersPane);

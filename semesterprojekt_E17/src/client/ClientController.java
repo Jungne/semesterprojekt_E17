@@ -4,6 +4,7 @@ import shared.Category;
 import shared.Conversation;
 import shared.FullTripException;
 import shared.remote.IServerController;
+import shared.IllegalEmailException;
 import shared.Image;
 import shared.Location;
 import shared.OptionalPrice;
@@ -38,7 +39,7 @@ public class ClientController {
 		}
 	}
 
-	public void signUp(String email, String name, Image profilePicture, String password) throws RemoteException {
+	public void signUp(String email, String name, Image profilePicture, String password) throws IllegalEmailException {
 		currentUser = ClientUserHandler.signUp(serverController, email, name, profilePicture, password);
 	}
 

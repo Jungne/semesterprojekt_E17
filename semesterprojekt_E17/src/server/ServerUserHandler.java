@@ -13,12 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import shared.IllegalEmailException;
 
 public class ServerUserHandler {
 
 	private static DBManager dbm = DBManager.getInstance();
 
-	public static User createUser(User user, String password) {
+	public static User createUser(User user, String password) throws IllegalEmailException {
 		if (user == null) {
 			throw new IllegalArgumentException("User is null.");
 		}
@@ -37,7 +38,7 @@ public class ServerUserHandler {
 			throw new IllegalArgumentException("User password is null or empty.");
 		}
 		if (!isEmailUnique(email)) {
-			throw new IllegalArgumentException("User email is not unique.");
+			throw new IllegalEmailException("User email is not unique.");
 		}
 
 		//Inserts an image if the given image is not null

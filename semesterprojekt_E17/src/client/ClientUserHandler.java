@@ -1,6 +1,7 @@
 package client;
 
 import shared.remote.IServerController;
+import shared.IllegalEmailException;
 import shared.Image;
 import shared.User;
 import java.rmi.RemoteException;
@@ -10,7 +11,7 @@ import java.util.logging.Logger;
 
 public class ClientUserHandler {
 
-	public static User signUp(IServerController serverController, String email, String name, Image profilePicture, String password) {
+	public static User signUp(IServerController serverController, String email, String name, Image profilePicture, String password) throws IllegalEmailException {
 		try {
 			return serverController.signUp(new User(email, name, profilePicture), password);
 		} catch (RemoteException ex) {

@@ -3,6 +3,7 @@ package shared.remote;
 import shared.Category;
 import shared.Conversation;
 import shared.FullTripException;
+import shared.IllegalEmailException;
 import shared.Image;
 import shared.Location;
 import shared.Message;
@@ -21,7 +22,7 @@ import java.util.List;
 public interface IServerController extends Remote {
 
 	//User functions
-	public User signUp(User user, String password) throws RemoteException;
+	public User signUp(User user, String password) throws RemoteException, IllegalEmailException;
 
 	public User signIn(String username, String password) throws RemoteException;
 
@@ -40,7 +41,7 @@ public interface IServerController extends Remote {
 
 	public void deleteTrip(int tripId, int organizerId) throws RemoteException;
 
-	public void participateInTrip(Trip trip, User user) throws FullTripException, RemoteException;
+	public void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException;
 
 	public boolean instructInTrip(Trip trip, User user) throws RemoteException;
 

@@ -369,6 +369,26 @@
             <Label layoutX="330.0" layoutY="154.0" text="Profile picture" />
             <Button fx:id="newAccountCreateButton" layoutX="117.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Create account" />
             <Button fx:id="newAccountBackButton" cancelButton="true" layoutX="223.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleNewAccountButtons" text="Back" />
+            <Text fx:id="newAccountInvalidNameText" fill="#da0303" layoutX="115.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter name!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="newAccountInvalidEmailText" fill="#da0303" layoutX="115.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter email!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="newAccountInvalidPasswordText" fill="#da0303" layoutX="115.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter password!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
+            <Text fx:id="newAccountInvalidRepeatPasswordText" fill="#da0303" layoutX="115.0" layoutY="346.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The password does not match!" visible="false">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="profilePane" layoutY="40.0" prefHeight="628.0" prefWidth="649.0" visible="false">

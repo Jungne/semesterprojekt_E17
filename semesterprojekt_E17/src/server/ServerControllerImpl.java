@@ -3,6 +3,7 @@ package server;
 import shared.Category;
 import shared.Conversation;
 import shared.FullTripException;
+import shared.IllegalEmailException;
 import shared.remote.IChatClient;
 import shared.remote.IServerController;
 import shared.Image;
@@ -36,7 +37,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public User signUp(User user, String password) throws RemoteException {
+	public User signUp(User user, String password) throws RemoteException, IllegalEmailException {
 		return ServerUserHandler.createUser(user, password);
 	}
 
