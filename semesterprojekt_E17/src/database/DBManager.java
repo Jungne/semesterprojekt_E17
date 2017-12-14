@@ -73,10 +73,6 @@ public class DBManager {
 		return null;
 	}
 
-	public Connection getConnection() {
-		return connection;
-	}
-
 	public int executeInsertAndGetId(String query) {
 		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
 			statement.executeUpdate();
