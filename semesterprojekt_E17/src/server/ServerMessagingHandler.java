@@ -38,22 +38,12 @@ public class ServerMessagingHandler {
 	 * @param client
 	 * @throws java.rmi.RemoteException
 	 */
-	public void registerClient(IChatClient client) throws RemoteException {
+	public static void registerClient(IChatClient client) throws RemoteException {
 		clientsMap.put(client.getUserId(), client);
 	}
 
-	/**
-	 * Register the active conversations.
-	 *
-	 * @param conversationID
-	 */
-	public void addActiveConversation(int conversationID) {
-		System.out.print(conversationID);
-	}
-
-	public List<Conversation> getUserConversations(User user) {
-		String query = ""
-						+ "SELECT conversationID, type "
+	public static List<Conversation> getUserConversations(User user) {
+		String query = "SELECT conversationID, type "
 						+ "FROM UsersInConversations "
 						+ "NATURAL JOIN Conversations "
 						+ "WHERE userID = " + user.getId() + ";";
@@ -83,8 +73,8 @@ public class ServerMessagingHandler {
 
 	public static void addUserToConversation(int userId, int conversationId) {
 		String query = ""
-						+ "INSERT INTO UsersInConversations (conversationId, userId) "
-						+ "VALUES (" + conversationId + "," + userId + ")";
+						+ "INSERT INTO UsersInConversations (conversationID, userID) "
+						+ "VALUES (" + conversationId + ", " + userId + ");";
 
 		dbm.executeUpdate(query);
 	}
@@ -92,9 +82,9 @@ public class ServerMessagingHandler {
 	public static String getConversationName(Conversation conversation, User user) {
 		if (conversation.getType().equals("trip")) {
 			String query = ""
-							+ "SELECT triptitle\n"
-							+ "FROM trips\n"
-							+ "WHERE conversationID = " + conversation.getId();
+							+ "SELECT tripTitle "
+							+ "FROM Trips "
+							+ "WHERE conversationID = " + conversation.getId() + ";";
 
 			ResultSet conversationNameRs = dbm.executeQuery(query);
 
@@ -106,11 +96,11 @@ public class ServerMessagingHandler {
 				Logger.getLogger(ServerMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		} else if (conversation.getType().equals("users")) {
-			String query = ""
-							+ "SELECT userName\n"
-							+ "FROM UsersInConversations\n"
-							+ "NATURAL JOIN Users\n"
-							+ "WHERE conversationId = " + conversation.getId() + " AND NOT Users.userId = " + user.getId();
+			String query = "SELECT userName "
+							+ "FROM UsersInConversations "
+							+ "NATURAL JOIN Users "
+							+ "WHERE conversationID = " + conversation.getId() + " "
+							+ "AND NOT userID = " + user.getId() + ";";
 
 			ResultSet conversationNameRs = dbm.executeQuery(query);
 
@@ -134,11 +124,11 @@ public class ServerMessagingHandler {
 
 	//Should be named getConversationMessages, change at some point for clarity
 	public static Conversation getConversation(Conversation conversation) {
-		String query = ""
-						+ "SELECT messageID, conversationID, userID, message, time, userName\n"
-						+ "FROM Messages\n"
-						+ "NATURAL JOIN Users\n"
-						+ "WHERE conversationID = " + conversation.getId();
+		String query = "SELECT messageID, conversationID, userID, message, time, userName "
+						+ "FROM Messages "
+						+ "NATURAL JOIN Users "
+						+ "WHERE conversationID = " + conversation.getId() + ";";
+
 		ResultSet conversationRs = dbm.executeQuery(query);
 
 		Set<Message> messages = new TreeSet<>();
@@ -162,13 +152,17 @@ public class ServerMessagingHandler {
 
 	public static void sendMessage(Message message) {
 		try {
-			String query = ""
-							+ "INSERT INTO Messages "
+			String query = "INSERT INTO Messages "
 							+ "VALUES (DEFAULT, " + message.getConversationId() + ", " + message.getSenderId() + ", '" + message.getMessage() + "', NOW())";
 
 			int id = dbm.executeInsertAndGetId(query);
 
-			ResultSet messageRs = dbm.executeQuery("SELECT messageID, conversationID, userID, message, time, userName FROM messages NATURAL JOIN Users WHERE messageID = " + id);
+			String query2 = "SELECT messageID, conversationID, userID, message, time, userName "
+							+ "FROM Messages "
+							+ "NATURAL JOIN Users "
+							+ "WHERE messageID = " + id + ";";
+
+			ResultSet messageRs = dbm.executeQuery(query2);
 
 			if (messageRs.next()) {
 				int returnMessageId = messageRs.getInt("messageID");
@@ -208,10 +202,9 @@ public class ServerMessagingHandler {
 
 	public static List<Integer> loadConversationUsersIds(int conversationId) {
 		try {
-			String query = ""
-							+ "SELECT userID "
+			String query = "SELECT userID "
 							+ "FROM UsersInConversations "
-							+ "WHERE conversationID = " + conversationId;
+							+ "WHERE conversationID = " + conversationId + ";";
 
 			ResultSet usersRs = dbm.executeQuery(query);
 
@@ -229,9 +222,8 @@ public class ServerMessagingHandler {
 	}
 
 	public static void deleteConversation(int conversationId) {
-		String query = ""
-						+ "DELETE FROM Conversations"
-						+ "WHERE conversationID = " + conversationId;
+		String query = "DELETE FROM Conversations "
+						+ "WHERE conversationID = " + conversationId + ";";
 
 		dbm.executeUpdate(query);
 	}
@@ -255,7 +247,7 @@ public class ServerMessagingHandler {
 						+ "		FROM UsersInConversations "
 						+ "		WHERE userID IN (" + userId1 + ", " + userId2 + ")) AS CommonConversations "
 						+ "	GROUP by conversationID) AS Count "
-						+ "WHERE Count.count = 2";
+						+ "WHERE Count.count = 2;";
 
 		ResultSet conversationRs = dbm.executeQuery(query);
 

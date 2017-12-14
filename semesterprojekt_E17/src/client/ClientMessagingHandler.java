@@ -40,8 +40,6 @@ public class ClientMessagingHandler {
 
 		@Override
 		public void receiveMessage(Message message) throws RemoteException {
-			System.out.println(message.getMessage());
-
 			if (activeConversationId == message.getConversationId()) {
 				messagesList.add(new HBoxCell(message, user));
 			}
@@ -61,7 +59,6 @@ public class ClientMessagingHandler {
 	}
 
 	public static void setCurrentConversation(IServerController serverController, int conversationID) throws RemoteException {
-		serverController.addActiveConversation(conversationID);
 //		activeConversation = serverController.getConversation(new Conversation(tripID, "trip"));
 		activeConversationId = conversationID;
 	}

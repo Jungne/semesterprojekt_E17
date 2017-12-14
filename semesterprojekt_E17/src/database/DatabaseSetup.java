@@ -192,7 +192,6 @@ public class DatabaseSetup {
 	public static void main(String[] args) throws SQLException, IOException {
 		dropTables();
 		createTables();
-		//addDefaultImages();
 		addTempData();
 	}
 
@@ -292,21 +291,6 @@ public class DatabaseSetup {
 //		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (10, 3)");
 		//Inserts InstructosInTrips
 //		dbm.executeUpdate("INSERT INTO InstructorsInTrips VALUES (3, 4, 3)");
-	}
-
-	private static void addDefaultImages() throws IOException, SQLException {
-		byte[] defaultProfilePicture = Files.readAllBytes(new File("src/default_profile_picture.png").toPath());
-		byte[] defaultTripImage = Files.readAllBytes(new File("src/default.jpg").toPath());
-
-		//Inserts the imageFile
-		String imageQuery1 = "INSERT INTO Images (imageTitle, imageFile) VALUES ('DefaultProfilePicture', ?)";
-		PreparedStatement imageStatement1 = dbm.getConnection().prepareStatement(imageQuery1);
-		imageStatement1.setBytes(1, defaultProfilePicture);
-		imageStatement1.executeUpdate();
-		String imageQuery2 = "INSERT INTO Images (imageTitle, imageFile) VALUES ('DefaultTripImage', ?)";
-		PreparedStatement imageStatement2 = dbm.getConnection().prepareStatement(imageQuery2);
-		imageStatement2.setBytes(1, defaultTripImage);
-		imageStatement2.executeUpdate();
 	}
 
 }
