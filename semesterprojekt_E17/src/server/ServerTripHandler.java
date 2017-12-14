@@ -457,14 +457,20 @@ public class ServerTripHandler {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
+		attachTripThumbnail(searchResultTrips);
+
+		return searchResultTrips;
+	}
+
+	private static void attachTripThumbnail(List<Trip> trips) {
 		//Gets the first image of each trip
-		String imageQuery = "SELECT tripID, imageFile "
+		String imageQuery = "SELECT tripID, imageID, imageTitle, imageFile "
 						+ "FROM Images "
 						+ "NATURAL JOIN ImagesInTrips "
 						+ "WHERE ImagesInTrips.imageID IN (SELECT MIN(imageid) FROM imagesintrips GROUP BY tripID) "
 						+ "AND tripID IN (null";
 
-		for (Trip trip : searchResultTrips) {
+		for (Trip trip : trips) {
 			imageQuery += ", " + trip.getId();
 		}
 		imageQuery += ");";
@@ -483,14 +489,12 @@ public class ServerTripHandler {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
-		for (Trip trip : searchResultTrips) {
+		for (Trip trip : trips) {
 			Image image = tripImages.get(trip.getId());
 			if (image != null) {
 				trip.addImage(image);
 			}
 		}
-
-		return searchResultTrips;
 	}
 
 	public synchronized static void deleteTrip(int tripId, int organizerId) {
@@ -651,65 +655,61 @@ public class ServerTripHandler {
 	}
 
 	public static List<Trip> getMyTrips(User user) {
+		List<Trip> myTrips = new ArrayList<>();
+
+		String query = ""
+						+ "SELECT tripID, tripTitle, tripDescription, tripPrice "
+						+ "FROM Trips "
+						+ "NATURAL JOIN UsersInTrips "
+						+ "WHERE timeStart >= NOW() "
+						+ "AND UsersInTrips.userID = " + user.getId() + ";";
+
+		ResultSet tripsRs = dbm.executeQuery(query);
+
 		try {
-			String query = ""
-							+ "SELECT Trips.tripID, tripTitle, tripDescription, tripPrice, imageFile "
-							+ "FROM Trips "
-							+ "INNER JOIN UsersInTrips ON Trips.tripID = UsersInTrips.tripID "
-							+ "INNER JOIN ImagesInTrips ON ImagesInTrips.tripID = Trips.tripID "
-							+ "INNER JOIN Images ON Images.imageID = ImagesInTrips.imageID "
-							+ "WHERE UsersInTrips.userID = " + user.getId() + " "
-							+ "AND ImagesInTrips.imageID IN (SELECT MIN(imageID) FROM ImagesInTrips GROUP BY tripID) "
-							+ "AND timeStart >= NOW();";
-			List<Trip> myTrips = new ArrayList<>();
-
-			ResultSet tripsRs = dbm.executeQuery(query);
-
 			while (tripsRs.next()) {
-				int id = tripsRs.getInt(1);
-				String title = tripsRs.getString(2);
-				String description = tripsRs.getString(3);
-				double price = tripsRs.getDouble(4);
-				byte[] imageFile = tripsRs.getBytes(5);
-				myTrips.add(new Trip(id, title, description, price, new Image(imageFile)));
+				int id = tripsRs.getInt("tripID");
+				String title = tripsRs.getString("tripTitle");
+				String description = tripsRs.getString("tripDescription");
+				double price = tripsRs.getDouble("tripPrice");
+				myTrips.add(new Trip(id, title, description, price));
 			}
-
-			return myTrips;
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		return null;
+
+		attachTripThumbnail(myTrips);
+
+		return myTrips;
 	}
 
 	public static List<Trip> getMyTrips(User user, int organizerId) {
+		List<Trip> myTrips = new ArrayList<>();
+
+		String query = ""
+						+ "SELECT tripID, tripTitle, tripDescription, tripPrice "
+						+ "FROM Trips "
+						+ "NATURAL JOIN UsersInTrips "
+						+ "WHERE UsersInTrips.userID = " + user.getId() + " "
+						+ "AND Trips.userID = " + organizerId + ";";
+
+		ResultSet tripsRs = dbm.executeQuery(query);
+
 		try {
-			String query = ""
-							+ "SELECT Trips.tripid, tripTitle, tripDescription, tripPrice, imageFile "
-							+ "FROM Trips "
-							+ "INNER JOIN UsersInTrips ON Trips.tripID = UsersInTrips.tripID "
-							+ "INNER JOIN ImagesInTrips ON ImagesInTrips.tripID = Trips.tripID "
-							+ "INNER JOIN Images ON Images.imageID = ImagesInTrips.imageID "
-							+ "WHERE UsersInTrips.userID = " + user.getId() + " "
-							+ "AND ImagesInTrips.imageID IN (SELECT MIN(imageID) FROM ImagesInTrips GROUP BY tripID) "
-							+ "AND Trips.userID = " + organizerId + ";";
-			List<Trip> myTrips = new ArrayList<>();
-
-			ResultSet tripsRs = dbm.executeQuery(query);
-
 			while (tripsRs.next()) {
-				int id = tripsRs.getInt(1);
-				String title = tripsRs.getString(2);
-				String description = tripsRs.getString(3);
-				double price = tripsRs.getDouble(4);
-				byte[] imageFile = tripsRs.getBytes(5);
-				myTrips.add(new Trip(id, title, description, price, new Image(imageFile)));
+				int id = tripsRs.getInt("tripID");
+				String title = tripsRs.getString("tripTitle");
+				String description = tripsRs.getString("tripDescription");
+				double price = tripsRs.getDouble("tripPrice");
+				myTrips.add(new Trip(id, title, description, price));
 			}
-
-			return myTrips;
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		return null;
+
+		attachTripThumbnail(myTrips);
+
+		return myTrips;
 	}
 
 	public static int getConversationId(int tripId) {
