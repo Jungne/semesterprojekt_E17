@@ -38,13 +38,12 @@ public class ServerMessagingHandler {
 	 * @param client
 	 * @throws java.rmi.RemoteException
 	 */
-	public void registerClient(IChatClient client) throws RemoteException {
+	public static void registerClient(IChatClient client) throws RemoteException {
 		clientsMap.put(client.getUserId(), client);
 	}
 
-	public List<Conversation> getUserConversations(User user) {
-		String query = ""
-						+ "SELECT conversationID, type "
+	public static List<Conversation> getUserConversations(User user) {
+		String query = "SELECT conversationID, type "
 						+ "FROM UsersInConversations "
 						+ "NATURAL JOIN Conversations "
 						+ "WHERE userID = " + user.getId() + ";";
@@ -125,8 +124,7 @@ public class ServerMessagingHandler {
 
 	//Should be named getConversationMessages, change at some point for clarity
 	public static Conversation getConversation(Conversation conversation) {
-		String query = ""
-						+ "SELECT messageID, conversationID, userID, message, time, userName "
+		String query = "SELECT messageID, conversationID, userID, message, time, userName "
 						+ "FROM Messages "
 						+ "NATURAL JOIN Users "
 						+ "WHERE conversationID = " + conversation.getId() + ";";

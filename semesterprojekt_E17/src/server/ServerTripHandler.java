@@ -133,7 +133,7 @@ public class ServerTripHandler {
 		//Adds a instructor in the trip for each instructorListItem
 		if (newTrip.getInstructors() != null) {
 			for (InstructorListItem instructorListItem : newTrip.getInstructors()) {
-				addInstructorInTrip(tripId, instructorListItem.getUser().getId(), instructorListItem.getCategory().getId());
+				addInstructorToTrip(tripId, instructorListItem.getUser().getId(), instructorListItem.getCategory().getId());
 			}
 		}
 
@@ -147,7 +147,7 @@ public class ServerTripHandler {
 		if (newTrip.getImages() != null) {
 			for (Image image : newTrip.getImages()) {
 				if (image != null && image.getImageFile() != null) {
-					addImagetoTrip(tripId, image);
+					addImageToTrip(tripId, image);
 				}
 			}
 		}
@@ -201,7 +201,7 @@ public class ServerTripHandler {
 		ResultSet rs = dbm.executeQuery("SELECT locationID, locationName FROM Locations;");
 		try {
 			while (rs.next()) {
-				locations.add(new Location(rs.getInt(1), rs.getString(2)));
+				locations.add(new Location(rs.getInt("locationID"), rs.getString("locationName")));
 			}
 			return locations;
 		} catch (SQLException ex) {
@@ -220,7 +220,7 @@ public class ServerTripHandler {
 		ResultSet rs = dbm.executeQuery("SELECT locationID FROM Locations;");
 		try {
 			while (rs.next()) {
-				locationIds.add(rs.getInt(1));
+				locationIds.add(rs.getInt("locationID"));
 			}
 			return locationIds;
 		} catch (SQLException ex) {
@@ -297,7 +297,7 @@ public class ServerTripHandler {
 		ServerMessagingHandler.addUserToConversation(userId, getConversationId(tripId));
 	}
 
-	private static void addInstructorInTrip(int tripId, int userId, int categoryId) {
+	private static void addInstructorToTrip(int tripId, int userId, int categoryId) {
 		dbm.executeUpdate("INSERT INTO InstructorsInTrips (tripID, userID, categoryID) "
 						+ "VALUES (" + tripId + ", " + userId + ", " + categoryId + ");");
 	}
@@ -331,7 +331,7 @@ public class ServerTripHandler {
 		dbm.executeUpdate(query);
 	}
 
-	private static void addImagetoTrip(int tripId, Image image) {
+	private static void addImageToTrip(int tripId, Image image) {
 		String sqlImageTitle;
 		if (image.getTitle() == null || image.getTitle().isEmpty()) {
 			sqlImageTitle = "null";
@@ -343,7 +343,7 @@ public class ServerTripHandler {
 		dbm.executeUpdate("INSERT INTO ImagesInTrips (imageID, tripID) VALUES (" + imageId + ", " + tripId + ");");
 	}
 
-	static synchronized void modifyTrip(Trip trip) {
+	public static synchronized void modifyTrip(Trip trip) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 		String query = "UPDATE trips "
@@ -389,13 +389,13 @@ public class ServerTripHandler {
 	 *
 	 * @param searchTitle used for a regex.
 	 * @param categories
-	 * @param timedateStart
-	 * @param location
+	 * @param timeDateStart
+	 * @param locationId
 	 * @param priceMAX
 	 * @param tripType
 	 * @return list of trips matching search parameters.
 	 */
-	public static List<Trip> searchTrip(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) {
+	public static List<Trip> searchTrip(String searchTitle, List<Category> categories, LocalDate timeDateStart, int locationId, double priceMAX, String tripType) {
 
 		//Initializes the query string
 		String query = "SELECT DISTINCT Trips.tripID, tripTitle, tripDescription, tripPrice "
@@ -416,12 +416,12 @@ public class ServerTripHandler {
 			query = query.substring(0, query.length() - 1) + ")";
 		}
 
-		if (timedateStart != null) {
-			query += " AND timeStart >= '" + timedateStart + "'";
+		if (timeDateStart != null) {
+			query += " AND timeStart >= '" + timeDateStart + "'";
 		}
 
-		if (location > 0) {
-			query += " AND locationID = '" + location + "'";
+		if (locationId > 0) {
+			query += " AND locationID = '" + locationId + "'";
 		}
 
 		if (priceMAX >= 0) {
@@ -509,12 +509,9 @@ public class ServerTripHandler {
 		dbm.executeUpdate(query);
 	}
 
-	public synchronized static void participateInTrip(Trip trip, User user) throws FullTripException {
-		int tripID = trip.getId();
-		int userID = user.getId();
-
-		if (!isTripFull(trip)) {
-			addParticipant(tripID, userID);
+	public synchronized static void participateInTrip(int tripId, int userId) throws FullTripException {
+		if (!isTripFull(tripId)) {
+			addParticipant(tripId, userId);
 		} else {
 			throw new FullTripException("Trip is full.");
 		}
@@ -526,14 +523,14 @@ public class ServerTripHandler {
 		dbm.executeUpdate(query);
 	}
 
-	public static Trip showTrip(int tripsID) {
-		String query = "SELECT * FROM Trips WHERE tripID = " + tripsID + ";";
+	public static Trip showTrip(int tripId) {
+		String query = "SELECT * FROM Trips WHERE tripID = " + tripId + ";";
 		Trip trip = (Trip) dbm.executeQuery(query);
 		return trip;
 	}
 
-	public static Trip viewTrip(int tripID) {
-		String query = "SELECT * FROM Trips WHERE tripID = " + tripID + ";";
+	public static Trip viewTrip(int tripId) {
+		String query = "SELECT * FROM Trips WHERE tripID = " + tripId + ";";
 		ResultSet rs = dbm.executeQuery(query);
 
 		try {
@@ -554,8 +551,8 @@ public class ServerTripHandler {
 				List<Category> categories = getCategoriesInTrip(id).isEmpty() ? null : getCategoriesInTrip(id);
 				List<Image> images = getImagesInTrip(id);
 
-				List<User> participants = getTripParticipants(tripID);
-				List<InstructorListItem> instructors = getTripInstructors(tripID);
+				List<User> participants = getTripParticipants(tripId);
+				List<InstructorListItem> instructors = getTripInstructors(tripId);
 
 				Trip trip = new Trip(id, title, description, price, date, address, location, participantLimit, organizer, categories, images, participants);
 				trip.setInstructors(instructors);
@@ -568,8 +565,8 @@ public class ServerTripHandler {
 		return null;
 	}
 
-	private static List<Category> getCategoriesInTrip(int id) {
-		String query = "SELECT categoryID, categoryName FROM CategoriesInTrips NATURAL JOIN Categories WHERE tripID = " + id + ";";
+	private static List<Category> getCategoriesInTrip(int tripId) {
+		String query = "SELECT categoryID, categoryName FROM CategoriesInTrips NATURAL JOIN Categories WHERE tripID = " + tripId + ";";
 		ResultSet rs = dbm.executeQuery(query);
 
 		ArrayList<Category> categories = new ArrayList<>();
@@ -606,8 +603,8 @@ public class ServerTripHandler {
 		return images;
 	}
 
-	private static Location getLocation(int id) {
-		String query = "SELECT locationID, locationName FROM Locations WHERE locationID = " + id + ";";
+	private static Location getLocation(int locationId) {
+		String query = "SELECT locationID, locationName FROM Locations WHERE locationID = " + locationId + ";";
 		ResultSet rs = dbm.executeQuery(query);
 
 		try {
@@ -620,8 +617,8 @@ public class ServerTripHandler {
 		return null;
 	}
 
-	private static User getUserView(int id) {
-		String query = "SELECT userID, userName FROM Users WHERE userID = " + id + ";";
+	private static User getUserView(int userId) {
+		String query = "SELECT userID, userName FROM Users WHERE userID = " + userId + ";";
 		ResultSet rs = dbm.executeQuery(query);
 
 		try {
@@ -634,12 +631,12 @@ public class ServerTripHandler {
 		return null;
 	}
 
-	public static boolean isTripFull(Trip trip) {
+	public static boolean isTripFull(int tripId) {
 		try {
 			ResultSet fullTripCheck = dbm.executeQuery("SELECT UsersInTrips.tripID, COUNT(UsersInTrips.tripID), MAX(participantLimit) "
 							+ "FROM UsersInTrips "
 							+ "INNER JOIN Trips On UsersInTrips.tripID = Trips.tripID "
-							+ "WHERE UsersInTrips.tripID = " + trip.getId() + " "
+							+ "WHERE UsersInTrips.tripID = " + tripId + " "
 							+ "GROUP BY UsersInTrips.tripID");
 			if (fullTripCheck.next()) {
 				int usersInTrip = (int) fullTripCheck.getLong("count");
@@ -654,15 +651,14 @@ public class ServerTripHandler {
 		return false;
 	}
 
-	public static List<Trip> getMyTrips(User user) {
+	public static List<Trip> getMyTrips(int userId) {
 		List<Trip> myTrips = new ArrayList<>();
 
-		String query = ""
-						+ "SELECT tripID, tripTitle, tripDescription, tripPrice "
+		String query = "SELECT Trips.tripID, tripTitle, tripDescription, tripPrice "
 						+ "FROM Trips "
-						+ "NATURAL JOIN UsersInTrips "
+						+ "INNER JOIN UsersInTrips ON Trips.tripID = UsersInTrips.tripID "
 						+ "WHERE timeStart >= NOW() "
-						+ "AND UsersInTrips.userID = " + user.getId() + ";";
+						+ "AND UsersInTrips.userID = " + userId + ";";
 
 		ResultSet tripsRs = dbm.executeQuery(query);
 
@@ -683,15 +679,12 @@ public class ServerTripHandler {
 		return myTrips;
 	}
 
-	public static List<Trip> getMyTrips(User user, int organizerId) {
+	public static List<Trip> getMyOrganizedTrips(int userId) {
 		List<Trip> myTrips = new ArrayList<>();
 
-		String query = ""
-						+ "SELECT tripID, tripTitle, tripDescription, tripPrice "
+		String query = "SELECT tripID, tripTitle, tripDescription, tripPrice "
 						+ "FROM Trips "
-						+ "NATURAL JOIN UsersInTrips "
-						+ "WHERE UsersInTrips.userID = " + user.getId() + " "
-						+ "AND Trips.userID = " + organizerId + ";";
+						+ "WHERE userID = " + userId + ";";
 
 		ResultSet tripsRs = dbm.executeQuery(query);
 
@@ -713,10 +706,9 @@ public class ServerTripHandler {
 	}
 
 	public static int getConversationId(int tripId) {
-		String query = ""
-						+ "SELECT conversationID "
+		String query = "SELECT conversationID "
 						+ "FROM Trips "
-						+ "WHERE tripID = " + tripId;
+						+ "WHERE tripID = " + tripId + ";";
 
 		ResultSet conversationIdRs = dbm.executeQuery(query);
 

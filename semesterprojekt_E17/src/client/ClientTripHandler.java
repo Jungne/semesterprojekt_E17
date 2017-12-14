@@ -39,9 +39,9 @@ public class ClientTripHandler {
 		}
 	}
 
-	public static void participateInTrip(User user, IServerController serverController, Trip trip) throws FullTripException {
+	public static void participateInTrip(IServerController serverController, int tripId, int userId) throws FullTripException {
 		try {
-			serverController.participateInTrip(trip, user);
+			serverController.participateInTrip(tripId, userId);
 		} catch (RemoteException ex) {
 			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -101,18 +101,18 @@ public class ClientTripHandler {
 		}
 	}
 
-	public static List<Trip> getMyTrips(User user, IServerController serverController) {
+	public static List<Trip> getMyTrips(IServerController serverController, int userId) {
 		try {
-			return serverController.getMyTrips(user);
+			return serverController.getMyTrips(userId);
 		} catch (RemoteException ex) {
 			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return null;
 	}
 
-	public static List<Trip> getMyTrips(User user, IServerController serverController, int organizerId) {
+	public static List<Trip> getMyOrganizedTrips(IServerController serverController, int userId) {
 		try {
-			return serverController.getMyTrips(user, organizerId);
+			return serverController.getMyOrganizedTrips(userId);
 		} catch (RemoteException ex) {
 			Logger.getLogger(ClientTripHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}

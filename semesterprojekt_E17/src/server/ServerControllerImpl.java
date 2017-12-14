@@ -15,8 +15,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class is the main server controller responsible for
@@ -25,15 +23,12 @@ import java.util.logging.Logger;
  */
 public class ServerControllerImpl extends UnicastRemoteObject implements IServerController {
 
-	//
-	private ServerMessagingHandler messagingHandler;
-
 	/**
 	 * This constructor
 	 *
 	 */
 	public ServerControllerImpl() throws RemoteException {
-		messagingHandler = new ServerMessagingHandler();
+		
 	}
 
 	@Override
@@ -57,8 +52,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public void changeProfilePicture(int currentUserID, Image profilePicture) throws RemoteException {
-		ServerUserHandler.changeProfilePicture(currentUserID, profilePicture);
+	public void changeProfilePicture(int userId, Image profilePicture) throws RemoteException {
+		ServerUserHandler.changeProfilePicture(userId, profilePicture);
 	}
 
 	@Override
@@ -67,8 +62,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException {
-		return ServerTripHandler.searchTrip(searchTitle, categories, timedateStart, location, priceMAX, tripType);
+	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timeDateStart, int locationId, double priceMAX, String tripType) throws RemoteException {
+		return ServerTripHandler.searchTrip(searchTitle, categories, timeDateStart, locationId, priceMAX, tripType);
 	}
 
 	@Override
@@ -82,9 +77,8 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException {
-		ServerTripHandler.participateInTrip(trip, user);
-
+	public void participateInTrip(int tripId, int userId) throws RemoteException, FullTripException {
+		ServerTripHandler.participateInTrip(tripId, userId);
 	}
 
 	@Override
@@ -123,43 +117,39 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public Trip showTrip(int tripsID) throws RemoteException {
-		return ServerTripHandler.showTrip(tripsID);
+	public Trip showTrip(int tripId) throws RemoteException {
+		return ServerTripHandler.showTrip(tripId);
 
 	}
 
 	@Override
-	public Trip viewTrip(int tripID) throws RemoteException {
-		return ServerTripHandler.viewTrip(tripID);
+	public Trip viewTrip(int tripId) throws RemoteException {
+		return ServerTripHandler.viewTrip(tripId);
 	}
 
 	@Override
-	public void registerClient(IChatClient client) {
-		try {
-			messagingHandler.registerClient(client);
-		} catch (RemoteException ex) {
-			Logger.getLogger(ServerControllerImpl.class.getName()).log(Level.SEVERE, null, ex);
-		}
+	public void registerClient(IChatClient client) throws RemoteException {
+		ServerMessagingHandler.registerClient(client);
 	}
 
 	@Override
-	public List<User> searchUsers(String query) {
+	public List<User> searchUsers(String query) throws RemoteException {
 		return ServerUserHandler.searchUsers(query);
 	}
 
 	@Override
-	public List<Trip> getMyTrips(User user) {
-		return ServerTripHandler.getMyTrips(user);
+	public List<Trip> getMyTrips(int userId) throws RemoteException {
+		return ServerTripHandler.getMyTrips(userId);
 	}
 
 	@Override
-	public List<Trip> getMyTrips(User user, int organizerId) {
-		return ServerTripHandler.getMyTrips(user, organizerId);
+	public List<Trip> getMyOrganizedTrips(int userId) throws RemoteException {
+		return ServerTripHandler.getMyOrganizedTrips(userId);
 	}
 
 	@Override
 	public List<Conversation> getUserConversations(User user) throws RemoteException {
-		return messagingHandler.getUserConversations(user);
+		return ServerMessagingHandler.getUserConversations(user);
 	}
 
 	@Override

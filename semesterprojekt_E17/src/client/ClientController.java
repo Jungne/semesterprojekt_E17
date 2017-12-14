@@ -82,8 +82,8 @@ public class ClientController {
 		return ClientTripHandler.viewTrip(tripID, serverController);
 	}
 
-	public void participateInTrip(Trip trip) throws FullTripException {
-		ClientTripHandler.participateInTrip(currentUser, serverController, trip);
+	public void participateInTrip(int tripId) throws FullTripException {
+		ClientTripHandler.participateInTrip(serverController, currentUser.getId(), tripId);
 	}
 
 	public int createTrip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<Image> images) throws Exception {
@@ -124,14 +124,14 @@ public class ClientController {
 
 	public List<Trip> getMyTrips() {
 		if (currentUser != null) {
-			return ClientTripHandler.getMyTrips(currentUser, serverController);
+			return ClientTripHandler.getMyTrips(serverController, currentUser.getId());
 		}
 		return null;
 	}
 
 	public List<Trip> getMyOrganizedTrips() {
 		if (currentUser != null) {
-			return ClientTripHandler.getMyTrips(currentUser, serverController, currentUser.getId());
+			return ClientTripHandler.getMyOrganizedTrips(serverController, currentUser.getId());
 		}
 		return null;
 	}

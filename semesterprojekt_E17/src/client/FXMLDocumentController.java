@@ -646,7 +646,7 @@ public class FXMLDocumentController implements Initializable {
 	private void handleViewTripButtons(ActionEvent event) {
 		if (event.getSource() == joinTripButton) {
 			try {
-				clientController.participateInTrip(viewedTrip);
+				clientController.participateInTrip(viewedTrip.getId());
 				viewTrip(viewedTrip.getId(), false, lastPane);
 			} catch (FullTripException ex) {
 				//TODO popup explanation, that trip is full.

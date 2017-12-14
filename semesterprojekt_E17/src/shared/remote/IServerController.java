@@ -30,10 +30,10 @@ public interface IServerController extends Remote {
 
 	public User updateUser(int currentUserID) throws RemoteException;
 
-	public void changeProfilePicture(int currentUserID, Image profilePicture) throws RemoteException;
+	public void changeProfilePicture(int userID, Image profilePicture) throws RemoteException;
 
 	//Trip functions
-	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timedateStart, int location, double priceMAX, String tripType) throws RemoteException;
+	public List<Trip> searchTrips(String searchTitle, List<Category> categories, LocalDate timeDateStart, int locationId, double priceMAX, String tripType) throws RemoteException;
 
 	public int createTrip(Trip newTrip) throws RemoteException;
 
@@ -41,7 +41,7 @@ public interface IServerController extends Remote {
 
 	public void deleteTrip(int tripId, int organizerId) throws RemoteException;
 
-	public void participateInTrip(Trip trip, User user) throws RemoteException, FullTripException;
+	public void participateInTrip(int tripId, int userId) throws RemoteException, FullTripException;
 
 	public boolean instructInTrip(Trip trip, User user) throws RemoteException;
 
@@ -51,7 +51,7 @@ public interface IServerController extends Remote {
 
 	public List<Location> getLocations() throws RemoteException;
 
-	public Trip viewTrip(int tripID) throws RemoteException;
+	public Trip viewTrip(int tripId) throws RemoteException;
 
 	//Messaging functions
 	public Conversation getConversation(Conversation conversation) throws RemoteException;
@@ -60,15 +60,15 @@ public interface IServerController extends Remote {
 
 	public void updateConversation(Conversation conversation) throws RemoteException;
 
-	public Trip showTrip(int tripsID) throws RemoteException;
+	public Trip showTrip(int tripId) throws RemoteException;
 
 	public void registerClient(IChatClient client) throws RemoteException;
 
 	public List<User> searchUsers(String query) throws RemoteException;
 
-	public List<Trip> getMyTrips(User user) throws RemoteException;
+	public List<Trip> getMyTrips(int userId) throws RemoteException;
 
-	public List<Trip> getMyTrips(User user, int organizerId) throws RemoteException;
+	public List<Trip> getMyOrganizedTrips(int userId) throws RemoteException;
 
 	public List<Conversation> getUserConversations(User user) throws RemoteException;
 
