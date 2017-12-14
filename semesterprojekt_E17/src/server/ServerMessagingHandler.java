@@ -67,11 +67,11 @@ public class ServerMessagingHandler {
 	 * @param type of trip
 	 * @return ID of created conversation
 	 */
-	public static int addConversation(String type) {
+	protected static int addConversation(String type) {
 		return dbm.executeInsertAndGetId("INSERT INTO Conversations (conversationID, type) VALUES (DEFAULT, '" + type + "');");
 	}
 
-	public static void addUserToConversation(int userId, int conversationId) {
+	protected static void addUserToConversation(int userId, int conversationId) {
 		String query = ""
 						+ "INSERT INTO UsersInConversations (conversationID, userID) "
 						+ "VALUES (" + conversationId + ", " + userId + ");";
@@ -178,7 +178,7 @@ public class ServerMessagingHandler {
 		}
 	}
 
-	public static void broadcastMessage(Message message) {
+	private static void broadcastMessage(Message message) {
 		try {
 //			clientsMap.get(message.getSenderId()).receiveMessage(message);
 
@@ -200,7 +200,7 @@ public class ServerMessagingHandler {
 		}
 	}
 
-	public static List<Integer> loadConversationUsersIds(int conversationId) {
+	private static List<Integer> loadConversationUsersIds(int conversationId) {
 		try {
 			String query = "SELECT userID "
 							+ "FROM UsersInConversations "
@@ -219,13 +219,6 @@ public class ServerMessagingHandler {
 			Logger.getLogger(ServerMessagingHandler.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return null;
-	}
-
-	public static void deleteConversation(int conversationId) {
-		String query = "DELETE FROM Conversations "
-						+ "WHERE conversationID = " + conversationId + ";";
-
-		dbm.executeUpdate(query);
 	}
 
 	public static Conversation getUserConversation(int userId1, int userId2) {
