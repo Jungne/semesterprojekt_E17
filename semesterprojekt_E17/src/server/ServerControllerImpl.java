@@ -158,11 +158,6 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public void addActiveConversation(int tripID) {
-		messagingHandler.addActiveConversation(tripID);
-	}
-
-	@Override
 	public List<Conversation> getUserConversations(User user) throws RemoteException {
 		return messagingHandler.getUserConversations(user);
 	}

@@ -70,8 +70,6 @@ public interface IServerController extends Remote {
 
 	public List<Trip> getMyTrips(User user, int organizerId) throws RemoteException;
 
-	public void addActiveConversation(int tripID) throws RemoteException;
-
 	public List<Conversation> getUserConversations(User user) throws RemoteException;
 
 	public String getConversationName(Conversation conversation, User user) throws RemoteException;
