@@ -83,7 +83,7 @@ public class ClientController {
 	}
 
 	public void participateInTrip(int tripId) throws FullTripException {
-		ClientTripHandler.participateInTrip(serverController, currentUser.getId(), tripId);
+		ClientTripHandler.participateInTrip(serverController, tripId, currentUser.getId());
 	}
 
 	public int createTrip(String title, String description, List<Category> categories, double price, LocalDateTime timeStart, Location location, String meetingAddress, int participantLimit, User organizer, List<Category> organizerInstructorIn, List<OptionalPrice> optionalPrices, Set<String> tags, List<Image> images) throws Exception {

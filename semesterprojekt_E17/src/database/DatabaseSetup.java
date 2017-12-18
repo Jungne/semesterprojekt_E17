@@ -1,9 +1,6 @@
 package database;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseSetup {

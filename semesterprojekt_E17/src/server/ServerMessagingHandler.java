@@ -72,8 +72,7 @@ public class ServerMessagingHandler {
 	}
 
 	protected static void addUserToConversation(int userId, int conversationId) {
-		String query = ""
-						+ "INSERT INTO UsersInConversations (conversationID, userID) "
+		String query = "INSERT INTO UsersInConversations (conversationID, userID) "
 						+ "VALUES (" + conversationId + ", " + userId + ");";
 
 		dbm.executeUpdate(query);
@@ -81,8 +80,7 @@ public class ServerMessagingHandler {
 
 	public static String getConversationName(Conversation conversation, User user) {
 		if (conversation.getType().equals("trip")) {
-			String query = ""
-							+ "SELECT tripTitle "
+			String query = "SELECT tripTitle "
 							+ "FROM Trips "
 							+ "WHERE conversationID = " + conversation.getId() + ";";
 
