@@ -21,6 +21,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * ClientController is responsible for managing all communication between the
+ * GUI and the server. The client controller distributes work to the
+ * clientUserHandler, clientTripHandler and clientMessagingHandler. These
+ * handlers communicate to the server through a Server Controller stub.
+ *
+ * @author group 12
+ */
 public class ClientController {
 
 	private IServerController serverController;
@@ -28,6 +36,7 @@ public class ClientController {
 
 	public ClientController() throws RemoteException {
 		String hostname = "tek-sb3-glo0a.tek.sdu.dk";
+		//String hostname = "localhost";
 
 		try {
 			Registry registry = LocateRegistry.getRegistry(hostname, 12312);

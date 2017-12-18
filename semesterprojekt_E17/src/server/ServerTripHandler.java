@@ -22,9 +22,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This class handles creation of trip objects to be sent to the client. This
- * class also handles storage of trip objects in the database received from the
- * client.
+ * ServerTripHandler is responsible for managing all trip related tasks in the
+ * system. The class handles creation of trip objects to be sent to the client
+ * and storage of trip objects in the database received from the client. This
+ * class also handles searching for trips and other trip related tasks. The
+ * Server Trip Handler communicates with the Database Manager.
  *
  * @author group 12
  */
@@ -481,9 +483,11 @@ public class ServerTripHandler {
 		try {
 			while (imageRs.next()) {
 				int id = imageRs.getInt("tripID");
+				int imageId = imageRs.getInt("imageID");
+				String imageTitle = imageRs.getString("imageTitle");
 				byte[] imageFile = imageRs.getBytes("imageFile");
 
-				tripImages.put(id, new Image(imageFile));
+				tripImages.put(id, new Image(imageId, imageTitle, imageFile));
 			}
 		} catch (SQLException ex) {
 			Logger.getLogger(ServerTripHandler.class.getName()).log(Level.SEVERE, null, ex);

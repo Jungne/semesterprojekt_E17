@@ -1,8 +1,8 @@
 package shared;
 
 /**
- * The FullTripException is thrown when a user tries to participate in a trip,
- * that has reached the maximum limit of participants.
+ * FullTripException is thrown when a user tries to participate in a trip, that
+ * has reached the maximum limit of participants.
  *
  * @author group 12
  */

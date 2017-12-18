@@ -16,6 +16,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
+/**
+ *
+ * @author group 12
+ */
 public class HBoxCell extends HBox {
 
 	ImageView imageView = new ImageView();

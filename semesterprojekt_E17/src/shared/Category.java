@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is the Category class. Categories are used in a trip. A trip can contain
- * many categories.
+ * Category is used by Trip and User.
  *
  * @author group 12
  */
@@ -15,12 +14,6 @@ public class Category implements Serializable {
 	private int id;
 	private String name;
 
-	/**
-	 * This constructor
-	 *
-	 * @param id
-	 * @param name
-	 */
 	public Category(int id, String name) {
 		this.id = id;
 		this.name = name;

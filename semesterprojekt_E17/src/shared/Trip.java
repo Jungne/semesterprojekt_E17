@@ -70,49 +70,10 @@ public class Trip implements Serializable {
 		this.images = images;
 	}
 
-	/**
-	 * Constructor to
-	 *
-	 * @param id
-	 * @param title
-	 */
-	public Trip(int id, String title) {
-		this.id = id;
-		this.title = title;
-	}
-
-	/**
-	 * Constructor to
-	 *
-	 * @param id
-	 * @param title
-	 * @param description
-	 * @param price
-	 * @param image
-	 */
 	public Trip(int id, String title, String description, double price, Image image) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
-		this.price = price;
-		images.add(image);
-	}
-
-	/**
-	 * Constructor to
-	 *
-	 * @param id
-	 * @param title
-	 * @param description
-	 * @param categories
-	 * @param price
-	 * @param image
-	 */
-	public Trip(int id, String title, String description, List<Category> categories, double price, Image image) {
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.categories = categories;
 		this.price = price;
 		images.add(image);
 	}
@@ -155,21 +116,6 @@ public class Trip implements Serializable {
 		this.images = images;
 	}
 
-	/**
-	 * Constructor to
-	 *
-	 * @param id
-	 * @param title
-	 * @param description
-	 * @param price
-	 * @param date
-	 * @param location
-	 * @param participantLimit
-	 * @param organizer
-	 * @param categories
-	 * @param images
-	 * @param participants
-	 */
 	public Trip(int id, String title, String description, double price, LocalDateTime date, String meetingAddress, Location location, int participantLimit, User organizer, List<Category> categories, List<Image> images, List<User> participants) {
 		this.id = id;
 		this.title = title;
@@ -185,14 +131,6 @@ public class Trip implements Serializable {
 		this.participants = participants;
 	}
 
-	/**
-	 * Constructor to
-	 *
-	 * @param id
-	 * @param title
-	 * @param description
-	 * @param price
-	 */
 	public Trip(int id, String title, String description, double price) {
 		this.id = id;
 		this.title = title;
@@ -327,5 +265,5 @@ public class Trip implements Serializable {
 
 	public void setInstructors(List<InstructorListItem> instructors) {
 		this.instructors = instructors;
-	}	
+	}
 }

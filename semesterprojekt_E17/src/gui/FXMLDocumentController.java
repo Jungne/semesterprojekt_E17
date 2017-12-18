@@ -420,12 +420,6 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="Common - Methods">
-	/**
-	 * This method
-	 *
-	 * @param pane
-	 *
-	 */
 	private void showPane(AnchorPane pane) {
 		//All panes set to invisible
 		for (Node node : mainPane.getChildren()) {
@@ -439,19 +433,9 @@ public class FXMLDocumentController implements Initializable {
 		pane.setVisible(true);
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param trips
-	 * @param listView
-	 *
-	 */
 	private void showTrips(List<Trip> trips, ListView listView) {
 		List<HBoxCell> list = new ArrayList<>();
 
-//		for (Trip trip : trips) {
-//			list.add(new HBoxCell(trip));
-//		}
 		trips.parallelStream().forEach((Trip trip) -> {
 			synchronized (list) {
 				list.add(new HBoxCell(trip));
@@ -468,13 +452,6 @@ public class FXMLDocumentController implements Initializable {
 		listView.setItems(observableList);
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param tripId
-	 * @param modifyMode
-	 *
-	 */
 	private void viewTrip(int tripId, boolean modifyMode, AnchorPane lastPane) {
 		viewedTrip = clientController.viewTrip(tripId);
 		this.lastPane = lastPane;
@@ -639,11 +616,6 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="View Trip - Methods">
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
 	@FXML
 	private void handleViewTripButtons(ActionEvent event) {
 		if (event.getSource() == joinTripButton) {
@@ -803,8 +775,8 @@ public class FXMLDocumentController implements Initializable {
 	}
 
 	/**
-	 * This method checks if the price for a trip is valid     The method is in
-	 * use when a user is browsing trips
+	 * This method checks if the price for a trip is valid. The method is in use
+	 * when a user is browsing trips
 	 *
 	 * @Return boolean isTripPriceParameterValid - True if the price is valid
 	 * otherwise false    
@@ -979,11 +951,6 @@ public class FXMLDocumentController implements Initializable {
 		logInInvalidPasswordText.setVisible(false);
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
 	@FXML
 	private void handleLogInButton(ActionEvent event) {
 		String email = logInEmailTextField.getText();
@@ -1037,11 +1004,6 @@ public class FXMLDocumentController implements Initializable {
 		return isLogInParametersValid;
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
 	@FXML
 	private void handleNewAccountButton(ActionEvent event) {
 		showPane(newAccountPane);
@@ -1132,11 +1094,6 @@ public class FXMLDocumentController implements Initializable {
 		});
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
 	private void createAccount() {
 		String name = newAccountNameTextField.getText();
 		String email = newAccountEmailTextField.getText();
@@ -1207,11 +1164,6 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Modify Trips - Methods">
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
 	@FXML
 	private void handleModifyTripButtons(ActionEvent event) {
 		if (event.getSource().equals(modifyTripSaveChangesButton)) {
@@ -1228,10 +1180,6 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
-	/**
-	 * This method
-	 *
-	 */
 	private void resetModifyTripPane() {
 		modifyTripTitleTextField.setText("");
 		modifyTripDescriptionTextField.setText("");
@@ -1240,11 +1188,6 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Toolbar - Methods">
-	/**
-	 * This method
-	 *
-	 * @param event
-	 */
 	@FXML
 	private void handleToolBarButtons(ActionEvent event) throws RemoteException {
 		if (event.getSource() == toolBarMessagingButton) {
@@ -1274,10 +1217,6 @@ public class FXMLDocumentController implements Initializable {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Create Trip - Methods">
-	/**
-	 * This method
-	 *
-	 */
 	private void resetCreateTripPane() {
 		createTripCategoryComboboxIsDisabled = true;
 
@@ -1322,12 +1261,6 @@ public class FXMLDocumentController implements Initializable {
 		createTripCategoryComboboxIsDisabled = false;
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param event
-	 *
-	 */
 	@FXML
 	private void handleCreateTripButtons(ActionEvent event) {
 		if (event.getSource() == createTripAddPictureButton) {
@@ -1355,10 +1288,6 @@ public class FXMLDocumentController implements Initializable {
 		}
 	}
 
-	/**
-	 * This method
-	 *
-	 */
 	private void addImageListItem() {
 		//Chooses file with FileChooser
 		File imageFile = chooseImage("Select trip picture");
@@ -1385,20 +1314,10 @@ public class FXMLDocumentController implements Initializable {
 		}).start();
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param imageListItem
-	 *
-	 */
 	protected void removeImageListItem(ImageListItem imageListItem) {
 		createTripPictureListHBox.getChildren().remove(imageListItem);
 	}
 
-	/**
-	 * This method
-	 *
-	 */
 	private void addCategoryListItem() {
 		Category category = createTripCategoryComboBox.getValue();
 		//Checks if category already exists in list
@@ -1413,12 +1332,6 @@ public class FXMLDocumentController implements Initializable {
 		createTripCategoryListHBox.getChildren().add(new CategoryListItem(this, category));
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param category
-	 *
-	 */
 	protected boolean hasCertificate(Category category) {
 		if (clientController.getCurrentUser().getCertificates().contains(category)) {
 			return true;
@@ -1427,12 +1340,6 @@ public class FXMLDocumentController implements Initializable {
 		return false;
 	}
 
-	/**
-	 * This method
-	 *
-	 * @param category
-	 *
-	 */
 	private void showMessageFiveSeconds(Category category) {
 		currentIntructorTextOccupiers++;
 		//Show warning message
@@ -1457,10 +1364,6 @@ public class FXMLDocumentController implements Initializable {
 		new java.util.Timer().schedule(timerTask, 5000);
 	}
 
-	/**
-	 * This method
-	 *
-	 */
 	protected void removeCategoryListItem(CategoryListItem categoryListItem) {
 		createTripCategoryListHBox.getChildren().remove(categoryListItem);
 		if (createTripCategoryListHBox.getChildren().isEmpty()) {

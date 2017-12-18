@@ -13,36 +13,14 @@ public class Image implements Serializable {
 	private String title;
 	private byte[] imageFile;
 
-	/**
-	 * This constructor
-	 *
-	 * @parm id
-	 * @param title
-	 * @param imageFile
-	 */
 	public Image(int id, String title, byte[] imageFile) {
 		this.id = id;
 		this.title = title;
 		this.imageFile = imageFile;
 	}
 
-	/**
-	 * This constructor
-	 *
-	 * @param title
-	 * @param imageFile
-	 */
 	public Image(String title, byte[] imageFile) {
 		this.title = title;
-		this.imageFile = imageFile;
-	}
-
-	/**
-	 * This constructor
-	 *
-	 * @param imageFile
-	 */
-	public Image(byte[] imageFile) {
 		this.imageFile = imageFile;
 	}
 

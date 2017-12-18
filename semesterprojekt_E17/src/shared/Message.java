@@ -17,15 +17,6 @@ public class Message implements Serializable, Comparable {
 	private LocalDateTime timestamp;
 	private int conversationId;
 
-	/**
-	 * This constructor
-	 *
-	 * @param id
-	 * @param sender
-	 * @param message
-	 * @param timestamp
-	 * @param conversationId
-	 */
 	public Message(int id, User sender, String message, LocalDateTime timestamp, int conversationId) {
 		this.id = id;
 		this.sender = sender;
@@ -34,13 +25,6 @@ public class Message implements Serializable, Comparable {
 		this.conversationId = conversationId;
 	}
 
-	/**
-	 * This constructor
-	 *
-	 * @param senderId
-	 * @param message
-	 * @param conversationId
-	 */
 	public Message(int senderId, String message, int conversationId) {
 		this.senderId = senderId;
 		this.message = message;

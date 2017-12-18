@@ -1,10 +1,13 @@
 package gui;
 
-import gui.PaneListItem;
-import gui.FXMLDocumentController;
 import shared.Category;
 import javafx.scene.control.Button;
 
+/**
+ * CategoryListItem is used for holding a Category for when creating a new trip.
+ *
+ * @author group 12
+ */
 public class CategoryListItem extends PaneListItem {
 
 	private FXMLDocumentController fxmlController;

@@ -3,6 +3,10 @@ package database;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ *
+ * @author group 12
+ */
 public class DatabaseSetup {
 
 	private static DBManager dbm = DBManager.getInstance();
@@ -215,7 +219,6 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Sailing');");
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Backpacking');");
 		dbm.executeUpdate("INSERT INTO Categories VALUES (DEFAULT, 'Cycling');");
-
 		//Inserts locations
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Northern Jutland');");
 		dbm.executeUpdate("INSERT INTO Locations VALUES (DEFAULT, 'Central Jutland');");
@@ -230,8 +233,6 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'julos14@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Jungne', null);");
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lalun13@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Lasse', null);");
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'lawar15@student.sdu.dk', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Laura', null);");
-//		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'tester', '462ddb9fa125fdac01fe132e057295c3b8fd1946f394b12c382ec4ab43b25cf5', 'Tim', null);");
-//		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'qwer', '1718c24b10aeb8099e3fc44960ab6949ab76a267352459f203ea1036bec382c2', 'Heinrich', null);");
 		dbm.executeUpdate("INSERT INTO Users VALUES (DEFAULT, 'admin', '1718c24b10aeb8099e3fc44960ab6949ab76a267352459f203ea1036bec382c2', 'Admin', null);");
 		//Inserts certificates
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (1, 1)");
@@ -240,54 +241,6 @@ public class DatabaseSetup {
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (4, 3)");
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (5, 2)");
 		dbm.executeUpdate("INSERT INTO Certificates VALUES (6, 1)");
-		//Inserts conversations
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'trip')");
-//		dbm.executeUpdate("INSERT INTO Conversations VALUES (DEFAULT, 'users')");
-		//Inserts UsersInConversations
-//		dbm.executeUpdate("INSERT INTO UsersInConversations VALUES (11,4)");
-//		dbm.executeUpdate("INSERT INTO UsersInConversations VALUES (11,5)");
-		//Inserts trips
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Doc Hollywood', 'Pallor', 70.14, '2016-11-23', 1, '8 Dawn Park', 11, 9, 1);");
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Septien', 'Pathological fracture in oth disease, unsp ankle, init', 79.21, '2018-06-19', 1, '5 Bonner Hill', 12, 9, 2);");
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Hours', 'Dislocation of unsp interphaln joint of l rng fngr, init', 276.2, '2017-06-07', 3, '829 Sullivan Circle', 14, 9, 3);");
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Citizen Gangster ', 'Nail disorders in diseases classified elsewhere', 236.97, '2018-04-15', 1, '17 Dahle Alley', 11, 9, 4);");
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Maid in Sweden', 'Unsp inj unsp musc/fasc/tend at thi lev, unsp thigh, sequela', 417.63, '2016-11-17', 2, '73400 Sauthoff Pass', 12, 9, 5);");
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Whatever Happened to Harold Smith?', 'Other prurigo', 5.15, '2017-08-29', 1, '93070 Brown Terrace', 17, 9, 6);");
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Anything But Love (a.k.a. Standard Time)', 'Oth physl fx upr end rad, unsp arm, subs for fx w delay heal', 233.64, '2017-01-04', 2, '4 Crowley Road', 2, 9, 7);");
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Glory to the Filmmaker! (Kantoku · Banzai!)', 'Poisoning by other systemic antibiotics, assault, sequela', 3.55, '2018-12-30', 1, '3 South Crossing', 10, 9, 8);");
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Time of Eve (Eve no jikan)', 'Puncture wound with foreign body of lip', 392.25, '2018-05-14', 2, '7725 Buena Vista Trail', 8, 9, 9);");
-//		dbm.executeUpdate("insert into trips (tripid, triptitle, tripdescription, tripprice, timestart, locationid, tripaddress, participantlimit, userid, conversationid) values (DEFAULT, 'Burning Hot Summer, A (Un été brûlant)', 'Wedge comprsn fx T11-T12 vertebra, subs for fx w nonunion', 437.9, '2017-06-22', 2, '056 Stuart Trail', 12, 9, 10);");
-		//Inserts CategoriesInTrips
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (1, 1)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (1, 2)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (1, 3)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (2, 1)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (2, 2)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (2, 3)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (3, 1)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (3, 3)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (4, 2)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (4, 3)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (5, 1)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (5, 2)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (6, 1)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (7, 2)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (8, 3)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (9, 1)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (10, 1)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (10, 2)");
-//		dbm.executeUpdate("INSERT INTO CategoriesInTrips VALUES (10, 3)");
-		//Inserts InstructosInTrips
-//		dbm.executeUpdate("INSERT INTO InstructorsInTrips VALUES (3, 4, 3)");
 	}
 
 }

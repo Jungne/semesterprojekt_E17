@@ -13,13 +13,6 @@ public class OptionalPrice implements Serializable {
 	private double price;
 	private String description;
 
-	/**
-	 * This constructor
-	 *
-	 * @param id
-	 * @param price
-	 * @param description
-	 */
 	public OptionalPrice(int id, double price, String description) {
 		this.id = id;
 		this.price = price;

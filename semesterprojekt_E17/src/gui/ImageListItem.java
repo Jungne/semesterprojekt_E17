@@ -1,9 +1,12 @@
 package gui;
 
-import gui.PaneListItem;
-import gui.FXMLDocumentController;
 import shared.Image;
 
+/**
+ * ImageListItem is used for holding an Image for when creating a new trip.
+ *
+ * @author group 12
+ */
 public class ImageListItem extends PaneListItem {
 
 	private FXMLDocumentController fxmlController;

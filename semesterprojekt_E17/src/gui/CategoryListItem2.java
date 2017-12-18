@@ -1,9 +1,12 @@
 package gui;
 
-import gui.PaneListItem;
-import gui.FXMLDocumentController;
 import shared.Category;
 
+/**
+ * CategoryListItem2 is used for holding a Category for when browsing trips.
+ *
+ * @author group 12
+ */
 public class CategoryListItem2 extends PaneListItem {
 
 	private FXMLDocumentController fxmlController;

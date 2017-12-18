@@ -14,8 +14,10 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 
 /**
+ * ClientMessagingHandler is responsible for managing all messaging activity
+ * between the client and the server.
  *
- * @author hjaltefromholtrindom
+ * @author group 12
  */
 public class ClientMessagingHandler {
 
@@ -60,12 +62,10 @@ public class ClientMessagingHandler {
 	}
 
 	public static void setCurrentConversation(IServerController serverController, int conversationID) throws RemoteException {
-//		activeConversation = serverController.getConversation(new Conversation(tripID, "trip"));
 		activeConversationId = conversationID;
 	}
 
 	public static void setActiveConversation(IServerController serverController, Conversation conversation) throws RemoteException {
-//		activeConversation = serverController.getConversation(conversation);
 		activeConversationId = conversation.getId();
 	}
 

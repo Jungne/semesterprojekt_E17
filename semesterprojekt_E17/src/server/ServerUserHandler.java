@@ -13,6 +13,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import shared.IllegalEmailException;
 
+/**
+ * ServerUserHandler is responsible for managing all user related tasks in the
+ * system. This class handles creation of user objects to be sent to the client
+ * and storage of user objects in the database received from the client. This
+ * class also handles searching for users and log-on functionality. The Server
+ * User Handler communicates with the Database Manager
+ *
+ * @author group 12
+ */
 public class ServerUserHandler {
 
 	private static DBManager dbm = DBManager.getInstance();

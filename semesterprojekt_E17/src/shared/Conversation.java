@@ -6,8 +6,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The Conversation class is used for a trip group chat and messaging user to
- * user. A Conversation holds the messages.
+ * Conversation holds the messages and the participants of the conversation.
+ * Conversation is used by trip as a group conversation and is also used when
+ * users directly message each other.
  *
  * @author group 12
  */
@@ -18,15 +19,6 @@ public class Conversation implements Serializable {
 	private Set<User> participants = new HashSet<>();
 	private Set<Message> messages = new TreeSet<>();
 
-	/**
-	 * This constructor
-	 *
-	 * @parm id
-	 * @param type
-	 * @param participants
-	 * @param messages
-	 *
-	 */
 	public Conversation(int id, String type, Set<User> participants, Set<Message> messages) {
 		this.id = id;
 		this.type = type;
@@ -34,12 +26,6 @@ public class Conversation implements Serializable {
 		this.messages = messages;
 	}
 
-	/**
-	 * This constructor
-	 *
-	 * @parm id
-	 * @param type
-	 */
 	public Conversation(int id, String type) {
 		this.id = id;
 		this.type = type;

@@ -17,7 +17,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * This class is the main server controller responsible for
+ * ServerControllerImpl is responsible for managing all communication between
+ * the server and the client. ServerControllerImpl distributes work to the
+ * ServerUserHandler, ServerTripHandler and ServerMessagingHandler. These
+ * handlers communicate to the Database server through the Database Manager.
  *
  * @author group 12
  */
@@ -28,7 +31,7 @@ public class ServerControllerImpl extends UnicastRemoteObject implements IServer
 	 *
 	 */
 	public ServerControllerImpl() throws RemoteException {
-		
+
 	}
 
 	@Override

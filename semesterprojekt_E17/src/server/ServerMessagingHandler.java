@@ -19,8 +19,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * ServerMessagingHandler is responsible for managing messaging in the system on
+ * the server side. The Server Messaging Handler communicates with the Database
+ * Manager.
  *
- * @author hjaltefromholtrindom
+ * @author group 12
  */
 public class ServerMessagingHandler {
 

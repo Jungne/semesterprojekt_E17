@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * ClientUserHandler is responsible for managing all activity regarding users
+ * between the client and the server. Sign up, sign in, search users ect.
+ *
+ * @author group 12
+ */
 public class ClientUserHandler {
 
 	public static User signUp(IServerController serverController, String email, String name, Image profilePicture, String password) throws IllegalEmailException {

@@ -6,6 +6,10 @@ import java.awt.geom.AffineTransform;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
+/**
+ *
+ * @author group 12
+ */
 public class PaneListItem extends Pane {
 
 	private Button button;
