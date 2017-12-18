@@ -1,5 +1,7 @@
-package client;
+package gui;
 
+import gui.PaneListItem;
+import gui.FXMLDocumentController;
 import shared.Category;
 
 public class CategoryListItem2 extends PaneListItem {

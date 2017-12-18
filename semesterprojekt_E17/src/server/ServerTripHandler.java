@@ -498,8 +498,7 @@ public class ServerTripHandler {
 	}
 
 	public synchronized static void deleteTrip(int tripId, int organizerId) {
-		String query = "DELETE "
-						+ "FROM Conversations "
+		String query = "DELETE FROM Conversations "
 						+ "WHERE conversationID = ("
 						+ "    SELECT conversationID "
 						+ "    FROM Conversations "

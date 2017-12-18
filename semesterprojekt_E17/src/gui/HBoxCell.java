@@ -1,4 +1,4 @@
-package client;
+package gui;
 
 import shared.Conversation;
 import shared.Message;

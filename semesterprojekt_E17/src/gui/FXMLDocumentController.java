@@ -1,5 +1,7 @@
-package client;
+package gui;
 
+import client.ClientController;
+import client.ClientMessagingHandler;
 import shared.Category;
 import shared.Conversation;
 import shared.FullTripException;
@@ -469,12 +471,12 @@ public class FXMLDocumentController implements Initializable {
 	/**
 	 * This method
 	 *
-	 * @param id
+	 * @param tripId
 	 * @param modifyMode
 	 *
 	 */
-	private void viewTrip(int id, boolean modifyMode, AnchorPane lastPane) {
-		viewedTrip = clientController.viewTrip(id);
+	private void viewTrip(int tripId, boolean modifyMode, AnchorPane lastPane) {
+		viewedTrip = clientController.viewTrip(tripId);
 		this.lastPane = lastPane;
 		if (viewedTrip != null) {
 			viewTripTitleLabel.setText(viewedTrip.getTitle());
@@ -1345,7 +1347,7 @@ public class FXMLDocumentController implements Initializable {
 			try {
 				int tripId = createTrip();
 				if (0 < tripId) {
-					showPane(myTripsPane); //TODO - Should be changes to a pane showing the newly created trip instead
+					viewTrip(tripId, true, myTripsPane);
 				}
 			} catch (Exception ex) {
 				Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,4 +1,4 @@
-package client;
+package gui;
 
 import java.awt.Font;
 import java.awt.font.FontRenderContext;

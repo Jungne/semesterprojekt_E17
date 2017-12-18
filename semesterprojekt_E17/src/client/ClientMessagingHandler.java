@@ -1,5 +1,6 @@
 package client;
 
+import gui.HBoxCell;
 import shared.Conversation;
 import shared.remote.IChatClient;
 import shared.remote.IServerController;
